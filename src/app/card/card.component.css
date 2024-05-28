@@ -1,0 +1,11 @@
+.selected {
+  border: 3px solid blue;
+}
+
+.correct {
+  border: 3px solid green;
+}
+
+.incorrect {
+  border: 3px solid red;
+}

@@ -1,0 +1,55 @@
+<!--ion-content>
+  <ion-card>
+    <ion-card-header>
+      {{ currentQuestion.question }}
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let answer of currentQuestion.answers">
+          <ion-button (click)="checkAnswers(answer)" [color]="selectedAnswers.includes(answer) ? 'primary' : 'light'">
+            {{ answer }}
+          </ion-button>
+        </ion-item>
+      </ion-list>
+      <ion-button (click)="showCorrectAnswers()">Auflösen</ion-button>
+      <span *ngIf="showResult && !checkAnswers(selectedAnswers)">
+        Falsch! Die richtige Antwort(en) ist/sind: {{ showCorrectAnswers() }}
+      </span>
+    </ion-card-content>
+  </ion-card>
+</ion-content-->
+
+<ion-content
+  *ngIf="currentQuestion.question">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" class="ion-text-end">
+        <ion-button color="danger" (click)="resetQuiz()">Zurücksetzen</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-card>
+    <ion-card-header>
+      {{ currentQuestion.question }}
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item
+          *ngFor="let answer of currentQuestion.answers"
+          [ngClass]="{
+            'selected': selectedAnswers.includes(answer),
+            'correct': showResult && currentQuestion.correctAnswer.includes(answer),
+            'incorrect': showResult && !currentQuestion.correctAnswer.includes(answer) && selectedAnswers.includes(answer)
+          }"
+          (click)="toggleAnswer(answer)"
+        >
+          {{ answer }}
+        </ion-item>
+      </ion-list>
+      <ion-button *ngIf="!showResult" (click)="checkAnswers()">Check Answer</ion-button>
+      <ion-button *ngIf="showResult" (click)="getNextQuestion()">Next Question</ion-button>
+      <p *ngIf="showResult && !isAnswerCorrect">Falsch! Die richtige(n) Antwort(en) ist/sind: {{ currentQuestion.correctAnswer.join(', ') }}</p>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
