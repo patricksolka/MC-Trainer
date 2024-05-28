@@ -1,0 +1,7 @@
+{
+  "name": "ema-jhpt04-u1",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
