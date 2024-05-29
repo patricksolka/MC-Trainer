@@ -10,6 +10,7 @@ const routes: Routes = [
   { path: 'about', component: AboutComponent },
   { path: 'cards', component: CardComponent },
   { path: 'stats', component: StatsComponent },
+  { path: 'quiz', component: CardComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'home' }
 ];
