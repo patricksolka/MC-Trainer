@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-import {CommonModule} from "@angular/common";
-import { CardComponent} from "./card/card.component";
+import { CommonModule } from "@angular/common";
 
 @Component({
   selector: 'app-stats',
   templateUrl: './stats.component.html',
-//  styleUrls: ['./stats.component.css'],
   standalone: true,
   imports: [CommonModule, IonicModule]
 })
@@ -25,20 +23,15 @@ export class StatsComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Lade die korrekten und falschen Antworten aus dem Routing-Zustand
-   const state = window.history.state;
+    const state = window.history.state;
     this.correctAnswers = state && state.correctAnswers ? state.correctAnswers : 0;
     this.incorrectAnswers = state && state.incorrectAnswers ? state.incorrectAnswers : 0;
   }
 
-
-  resetQuizStats() {
-    // Setze die Statistiken zurück und navigiere zur Quizseite
-  /*  this.correctAnswers = 0;
+  resetQuizHome() {
+    // Setze die Statistiken zurück und navigiere zur Startseite
+    this.correctAnswers = 0;
     this.incorrectAnswers = 0;
-    // Füge hier den Code zum Zurücksetzen des Quiz hinzu, falls nötig
-    this.router.navigate(['/cards']);
-   */
-
+    this.router.navigate(['/home']);
   }
 }

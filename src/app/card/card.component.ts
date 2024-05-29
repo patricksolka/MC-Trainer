@@ -11,8 +11,11 @@ import {
   IonList, IonRow
 } from "@ionic/angular/standalone";
 import {NgForOf, NgIf, NgClass} from "@angular/common";
-import {IonApp, IonRouterOutlet} from "@ionic/angular/standalone";
-import { Router } from '@angular/router'; // Import Router
+import {IonApp, IonRouterOutlet, IonAlert,} from "@ionic/angular/standalone";
+import { Router } from '@angular/router';
+import {AchievementService} from "../achievements/achievement.service"; // Import Router
+import { ViewChild } from '@angular/core';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-card',
@@ -20,6 +23,7 @@ import { Router } from '@angular/router'; // Import Router
   standalone: true,
   imports: [
     NgIf,
+    IonAlert,
     IonApp,
     IonRouterOutlet,
     IonCard,
@@ -47,8 +51,13 @@ export class CardComponent implements OnInit {
   isAnswerCorrect: boolean = false;
   correctAnswersCount: number = 0;
   incorrectAnswersCount: number = 0;
+  totalQuestions: number = 0;
+  completedQuizzes: number = 0;
 
-  constructor(private cardService: CardService, private router: Router) {
+  constructor(private cardService: CardService, private router: Router,
+              private achievementService: AchievementService,
+              private alertController: AlertController) {
+
     this.resetQuiz();
   }
 
@@ -76,12 +85,30 @@ export class CardComponent implements OnInit {
     }
   }
 
-  checkAnswers() {
+  async checkAnswers() {
     this.isAnswerCorrect = this.selectedAnswers.every(answer => this.currentQuestion.correctAnswer.includes(answer)) &&
       this.currentQuestion.correctAnswer.every(answer => this.selectedAnswers.includes(answer));
     this.showResult = true;
     this.addToStats();
+
+    this.completedQuizzes++;
+    const stats = {
+      completedQuizzes: this.completedQuizzes,
+      correctAnswers: this.correctAnswersCount,
+      totalQuestions: this.totalQuestions,
+    };
+
+    const newAchievements = this.achievementService.checkAchievements(stats);
+    if (newAchievements.length) {
+      const alert = await this.alertController.create({
+        header: 'New Achievements',
+        message: `New Achievements: ${newAchievements.map(a => a.name).join(', ')}`,
+        buttons: ['OK']
+      });
+      await alert.present();
+    }
   }
+
   addToStats() {
     let isCorrect = true;
     // Überprüfe jede ausgewählte Antwort
