@@ -71,3 +71,4 @@ fabric.properties
 .www
 .app-debug.apk
 .angular
+.package-lock.json
