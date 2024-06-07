@@ -1,13 +1,35 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>registration</ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title>Register</ion-title>
+    </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">registration</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+    <ion-list>
+        <ion-item>
+            <ion-label position="floating">First Name</ion-label>
+            <ion-input [(ngModel)]="firstname"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label position="floating">Last Name</ion-label>
+            <ion-input [(ngModel)]="lastname"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label position="floating">Username</ion-label>
+            <ion-input [(ngModel)]="username"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label position="floating">Password</ion-label>
+            <ion-input [(ngModel)]="password" type="password"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label position="floating">Email</ion-label>
+            <ion-input [(ngModel)]="email" type="email"></ion-input>
+        </ion-item>
+    </ion-list>
+    <ion-button expand="full" (click)="register()">Register</ion-button>
+    <ion-button expand="full" fill="outline" routerLink="/login">Login</ion-button>
 </ion-content>
