@@ -1,6 +1,6 @@
 .home-container {
     text-align: center;
-    margin-top: 50px;
+    /* margin-top: 50px; */
 }
 
 h1 {
@@ -16,4 +16,8 @@ p {
 ion-button {
     margin-top: 20px;
     font-size: 1.2em;
+}
+
+*{
+    border: #2dd36f 1px solid;
 }
