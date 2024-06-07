@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ACHIEVEMENTS } from './achievements';
+import { ACHIEVEMENTS } from '../components/achievements/achievements';
 
 @Injectable({
     providedIn: 'root',

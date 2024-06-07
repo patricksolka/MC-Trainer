@@ -1,4 +1,4 @@
-import { Stats } from './stats.interface';
+import { Stats } from '../../models/stats.model';
 
 export const ACHIEVEMENTS = [
     { id: 1, name: 'First Step', description: 'Complete your first quiz', condition:

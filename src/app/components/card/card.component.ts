@@ -13,7 +13,7 @@ import {
 import {NgForOf, NgIf, NgClass} from "@angular/common";
 import {IonApp, IonRouterOutlet, IonAlert,} from "@ionic/angular/standalone";
 import { Router } from '@angular/router';
-import {AchievementService} from "../achievements/achievement.service"; // Import Router
+import {AchievementService} from "../../services/achievement.service"; // Import Router
 import { AlertController } from '@ionic/angular';
 
 @Component({
