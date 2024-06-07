@@ -69,6 +69,6 @@ fabric.properties
 .node_modules
 .dist
 .www
-.app-debug.apk
 .angular
-.package-lock.json
+app-debug.apk
+package-lock.json
