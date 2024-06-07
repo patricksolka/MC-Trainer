@@ -21,5 +21,18 @@ export const routes: Routes = [
   {
     path: 'achievements',
     loadComponent: () => import('./components/achievements/achievements.component').then( m => m.AchievementsComponent)
-  }
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./page/login/login.page').then( m => m.LoginPage)
+  },
+  {
+    path: 'registration',
+    loadComponent: () => import('./page/registration/registration.page').then( m => m.RegistrationPage)
+  },
+  {
+    path: 'forgot-password',
+    loadComponent: () => import('./page/forgot-password/forgot-password.page').then( m => m.ForgotPasswordPage)
+  },
+
 ];
