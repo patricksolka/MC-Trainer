@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CardService } from './card.service';
-import { Question } from '../question.model';
+import { Question } from '../../models/question.model';
 import {
   IonButton,
   IonCard,
@@ -14,7 +14,6 @@ import {NgForOf, NgIf, NgClass} from "@angular/common";
 import {IonApp, IonRouterOutlet, IonAlert,} from "@ionic/angular/standalone";
 import { Router } from '@angular/router';
 import {AchievementService} from "../achievements/achievement.service"; // Import Router
-import { ViewChild } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 
 @Component({
