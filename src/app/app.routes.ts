@@ -1,15 +1,25 @@
-// app.routes.ts
 import { Routes } from '@angular/router';
-import { HomeComponent } from './components/home/home.component';
-import { CardComponent } from './components/card/card.component';
-import { StatsComponent } from './components/stats/stats.component';
-import {AchievementsComponent} from "./components/achievements/achievements.component";
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent },
-  { path: 'cards', component: CardComponent },
-  { path: 'stats', component: StatsComponent },
-  { path: 'achievements', component: AchievementsComponent },
-  { path: '**', redirectTo: 'home' },
+  {
+    path: '',
+    redirectTo: 'home',
+    pathMatch: 'full',
+  },
+  {
+    path: 'home',
+    loadComponent: () => import('./components/home/home.component').then( m => m.HomeComponent)
+  },
+  {
+    path: 'cards',
+    loadComponent: () => import('./components/card/card.component').then( m => m.CardComponent)
+  },
+  {
+    path: 'stats',
+    loadComponent: () => import('./components/stats/stats.component').then( m => m.StatsComponent)
+  },
+  {
+    path: 'achievements',
+    loadComponent: () => import('./components/achievements/achievements.component').then( m => m.AchievementsComponent)
+  }
 ];
