@@ -66,9 +66,9 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 
 # Node Modules, Dist, app-debug.apk, angular und www
-.node_modules
-.dist
-.www
-.app-debug.apk
+node_modules
+dist
+www
+app-debug.apk
 .angular
-.package-lock.json
+package-lock.json
