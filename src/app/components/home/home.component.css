@@ -21,3 +21,14 @@ ion-button {
 *{
     border: #2dd36f 1px solid;
 }
+
+.forgot-password-link {
+    color: #3880ff; /* Farbe anpassen */
+    text-decoration: none; /* Unterstreichung */
+    cursor: pointer;
+}
+
+span a{
+    color: #FFC33F;
+    text-decoration: none;
+}

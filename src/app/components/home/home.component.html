@@ -1,5 +1,4 @@
-
- <ion-header>
+<ion-header [translucent]="true">
         <ion-toolbar>
             <ion-title>
                 Ionic Form
@@ -7,17 +6,13 @@
         </ion-toolbar>
     </ion-header>
 
-    <ion-content class="auth-form">
+    <ion-content class="auth-form" [fullscreen]="false">
         <ion-grid>
             <ion-row>
                 <ion-col align-self-center>
-                    <ion-button [routerLink]="['/registration']" expand="block" color="primary">Register</ion-button>
-
-                    <span class="divider line one-line">or</span>
-
-                    <span class="already">Already a user?</span>
-
-                    <ion-button [routerLink]="['/login']" expand="block" color="danger">Sign In</ion-button>
+                    <ion-button [routerLink]="['/registration']" expand="block" color="primary">Registrieren</ion-button>
+                    <span class="already"><a href="/forgot-password" class="forgot-password-link">Passwort vergessen?</a></span>
+                    <ion-button [routerLink]="['/login']" color="danger" expand="block">Anmelden</ion-button>
                 </ion-col>
             </ion-row>
         </ion-grid>
