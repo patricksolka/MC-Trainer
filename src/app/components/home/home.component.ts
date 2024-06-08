@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
-import {RouterModule} from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -10,6 +10,4 @@ import {RouterModule} from '@angular/router';
   standalone: true,
   imports: [IonicModule, CommonModule, RouterModule]
 })
-export class HomeComponent {
-
-}
+export class HomeComponent { }

@@ -4,7 +4,7 @@ import { User } from '../models/user.model';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
 })
 export class AuthService {
     private users: User[] = [];
@@ -14,10 +14,10 @@ export class AuthService {
         this.loadUsers();
     }
 
-    private loadUsers(){
+    private loadUsers() {
         this.http.get<User[]>('assets/users.json').subscribe((data: User[]) => {
             this.users = data;
-        })
+        });
     }
 
     register(user: User): boolean {
