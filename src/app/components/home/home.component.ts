@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
-import {Router, RouterModule} from '@angular/router';
+import {RouterModule} from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -13,3 +13,5 @@ import {Router, RouterModule} from '@angular/router';
 export class HomeComponent {
 
 }
+
+
