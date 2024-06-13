@@ -11,7 +11,7 @@ import {Router} from "@angular/router";
     IonRouterOutlet,
     IonApp
   ],
-  standalone: true // Markiere die Komponente als eigenständig
+  standalone: true
 })
 export class AppComponent {
   constructor(private router: Router) {
