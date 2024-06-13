@@ -1,0 +1,30 @@
+[
+  {
+    "username": "dimi",
+    "password": "dimi",
+    "email": "dimitrios.paliouras@mni.thm.de",
+    "firstname": "Dimitrios",
+    "lastname": "Paliouras"
+  },
+  {
+    "username": "patrick",
+    "password": "patrick",
+    "email": "patrick.solka@mni.thm.de",
+    "firstname": "Patrick",
+    "lastname": "Solka"
+  },
+  {
+    "username": "julia",
+    "password": "julia",
+    "email": "julia.haupt@mni.thm.de",
+    "firstname": "Julia",
+    "lastname": "Haupt"
+  },
+  {
+    "username": "rafat",
+    "password": "rafat",
+    "email": "Rafat.khalid.ahmed.Ibrahim@mni.thm.de",
+    "firstname": "Rafat Khalid Ahmed",
+    "lastname": "Ibrahim"
+  }
+]

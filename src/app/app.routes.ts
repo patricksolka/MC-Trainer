@@ -23,16 +23,16 @@ export const routes: Routes = [
     loadComponent: () => import('./components/achievements/achievements.component').then( m => m.AchievementsComponent)
   },
   {
-    path: 'login',
-    loadComponent: () => import('./page/login/login.page').then( m => m.LoginPage)
-  },
-  {
-    path: 'registration',
-    loadComponent: () => import('./page/registration/registration.page').then( m => m.RegistrationPage)
-  },
-  {
     path: 'forgot-password',
-    loadComponent: () => import('./page/forgot-password/forgot-password.page').then( m => m.ForgotPasswordPage)
+    loadComponent: () => import('./components/auth/forgot-password/forgot-password.page').then(m => m.ForgotPasswordPage)
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./components/auth/login/login.page').then(m => m.LoginPage)
+  },
+  {
+    path: 'register',
+    loadComponent: () => import('./components/auth/registration/registration.page').then(m => m.RegistrationPage)
   },
 
 ];

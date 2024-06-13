@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
-import {IonApp, IonRouterOutlet} from "@ionic/angular/standalone";
+import {IonApp, IonRouterOutlet, NavController} from "@ionic/angular/standalone";
+import {addIcons} from "ionicons";
+import {personOutline, chevronForward,lockClosedOutline,mailOutline, home, book, addCircle, statsChart, person} from "ionicons/icons";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-root',
@@ -8,8 +11,11 @@ import {IonApp, IonRouterOutlet} from "@ionic/angular/standalone";
     IonRouterOutlet,
     IonApp
   ],
-  standalone: true // Markiere die Komponente als eigenständig
+  standalone: true
 })
 export class AppComponent {
-  constructor() {}
+  constructor(private router: Router) {
+  addIcons({personOutline, chevronForward, lockClosedOutline, mailOutline, home, book, addCircle, statsChart, person});
+  }
 }
+
