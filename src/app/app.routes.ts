@@ -18,6 +18,10 @@ export const routes: Routes = [
     path: 'stats',
     loadComponent: () => import('./components/stats/stats.component').then( m => m.StatsComponent)
   },
+  { path: 'total-stats',
+    loadComponent: () => import('./components/total-stats/total-stats.component').then( m => m.TotalStatsComponent)
+  },
+
   {
     path: 'achievements',
     loadComponent: () => import('./components/achievements/achievements.component').then( m => m.AchievementsComponent)
