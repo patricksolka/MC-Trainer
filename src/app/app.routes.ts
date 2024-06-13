@@ -24,15 +24,15 @@ export const routes: Routes = [
   },
   {
     path: 'forgot-password',
-    loadComponent: () => import('./pages/forgot-password/forgot-password.page').then( m => m.ForgotPasswordPage)
+    loadComponent: () => import('./components/auth/forgot-password/forgot-password.page').then(m => m.ForgotPasswordPage)
   },
   {
     path: 'login',
-    loadComponent: () => import('./pages/login/login.page').then( m => m.LoginPage)
+    loadComponent: () => import('./components/auth/login/login.page').then(m => m.LoginPage)
   },
   {
     path: 'registration',
-    loadComponent: () => import('./pages/registration/registration.page').then( m => m.RegistrationPage)
+    loadComponent: () => import('./components/auth/registration/registration.page').then(m => m.RegistrationPage)
   },
 
 ];
