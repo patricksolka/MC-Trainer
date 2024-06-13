@@ -72,3 +72,7 @@ www
 .angular
 app-debug.apk
 package-lock.json
+# Firebase
+.firebase
+*-debug.log
+.runtimeconfig.json
