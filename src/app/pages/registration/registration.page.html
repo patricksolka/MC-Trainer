@@ -1,0 +1,44 @@
+<ion-header [translucent]="true">
+    <ion-toolbar>
+        <ion-title>Registrieren</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+    <div class="headerContent">
+    <ion-title class="title">Willkommen</ion-title>
+        <p class="subTitle">Registriere dich jetzt</p>
+    </div>
+    <form>
+        <div class="ion-padding">
+            <ion-item>
+                <ion-input placeholder="Vorname" class="input"></ion-input>
+                <!-- <ion-icon name="person-outline"></ion-icon> -->
+            </ion-item>
+            <ion-item>
+                <ion-input placeholder="Nachname" class="input"></ion-input>
+               <!-- <ion-icon name="person-outline"></ion-icon> -->
+            </ion-item>
+            <ion-item>
+                <ion-input placeholder="Username" class="input"></ion-input>
+                <ion-icon name="person-outline"></ion-icon>
+            </ion-item>
+            <ion-item>
+                <ion-input placeholder="E-Mail" class="input"></ion-input>
+                <ion-icon name="mail-outline"></ion-icon>
+            </ion-item>
+            <ion-item>
+                <ion-input placeholder="Password" class="input"></ion-input>
+                <ion-icon name="lock-closed-outline"></ion-icon>
+            </ion-item>
+            <div class="signinLink">
+                <p class=""> Already a member? <a [routerLink]="['/login']" style="color: #FFC33F">Signin up</a></p>
+            </div>
+            <ion-fab vertical="bottom" horizontal="end" style="margin-bottom: 1px">
+                <ion-fab-button [routerLink]="['/home']">
+                    <ion-icon name="chevron-forward"></ion-icon>
+                </ion-fab-button>
+            </ion-fab>
+        </div>
+    </form>
+</ion-content>
