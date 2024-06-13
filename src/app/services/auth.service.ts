@@ -1,12 +1,51 @@
-// src/app/services/auth.service.ts
 import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
 import { HttpClient } from '@angular/common/http';
+import {
+    Auth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut
+} from '@angular/fire/auth';
 
 @Injectable({
     providedIn: 'root'
 })
+
 export class AuthService {
+    constructor(private auth: Auth) {}
+
+    async register( email: string, password: string ) {
+        try {
+           const user= createUserWithEmailAndPassword(
+               this.auth,
+               email,
+               password
+           );
+           return user;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    async login(email: string, password: string) {
+        try {
+            const user= signInWithEmailAndPassword(
+                this.auth,
+                email,
+                password
+            );
+            return user;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    logout(){
+        signOut(this.auth)
+    }
+
+    /*
     private users: User[] = [];
     private currentUser: User | null = null;
 
@@ -53,4 +92,7 @@ export class AuthService {
     isAuthenticated(): boolean {
         return this.currentUser !== null;
     }
+}
+*/
+
 }
