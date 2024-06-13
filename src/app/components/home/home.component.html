@@ -1,33 +1,47 @@
-<div>
- <ion-header>
-        <ion-toolbar>
-            <ion-title>
-                Ionic Form
-            </ion-title>
-        </ion-toolbar>
-    </ion-header>
+<ion-header>
+    <h1>Hallo, <br> User!</h1>
+    <ion-img class="user-image" [src]="" alt="pp"></ion-img>
+</ion-header>
 
-    <ion-content class="auth-form">
-        <ion-grid>
-            <ion-row>
-                <ion-col align-self-center>
-                    <ion-button [routerLink]="['/registration']" expand="block" color="primary">Register</ion-button>
+<ion-content style ="--background: #1F1F39;">
+    <div class="progress">
+        <div class="container-pr">
+            <p style="flex: auto">Überprüfe deinen Lernfortschritt und schaue dir deine Achievements an</p>
+            <ion-img class="achi" [src]="" alt="achi"></ion-img>
+        </div>
+        <ion-button routerLink="/achievements"  class="achievements-button" style ="--background: #FF6905;">Achievements</ion-button>
+        <ion-button routerLink="/stats"  class="stats-button" style ="--background: #FF6905;">Statistics</ion-button>
+    </div>
+    <div class="entdecken">
 
-                    <span class="divider line one-line">or</span>
+    </div>
+    <div class="Module">
 
-                    <span class="already">Already a user?</span>
+    </div>
+</ion-content>
+<ion-footer>
+    <ion-tab-bar style ="--background: #1F1F39;">
+        <ion-tab-button tab="home">
+            <ion-icon name="home"></ion-icon>
+            <ion-label>Home</ion-label>
+        </ion-tab-button>
+        <ion-tab-button tab="modules">
+            <ion-icon name="book"></ion-icon>
+            <ion-label>Module</ion-label>
+        </ion-tab-button>
+        <ion-tab-button tab="add">
+            <ion-icon name="add-circle"></ion-icon>
+            <ion-label>Hinzufügen</ion-label>
+        </ion-tab-button>
+        <ion-tab-button tab="progress">
+            <ion-icon name="stats-chart"></ion-icon>
+            <ion-label>Fortschritt</ion-label>
+        </ion-tab-button>
+        <ion-tab-button tab="profile">
+            <ion-icon name="person"></ion-icon>
+            <ion-label>Profil</ion-label>
+        </ion-tab-button>
+    </ion-tab-bar>
+</ion-footer>
 
-                    <ion-button [routerLink]="['/login']" expand="block" color="danger">Sign In</ion-button>
-                </ion-col>
-            </ion-row>
-        </ion-grid>
-    </ion-content>
-</div>
-<!-- <div class="home-container">
-    <h1>Welcome to the Home Page!</h1>
-    <p>Start your quiz journey now!</p>
-    <ion-button routerLink="/cards">Start Quiz</ion-button>
-    <ion-button routerLink="/achievements">View Achievements</ion-button>
-</div>
 
--->
