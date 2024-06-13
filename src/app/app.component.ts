@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component} from '@angular/core';
 import { IonApp, IonRouterOutlet } from "@ionic/angular/standalone";
 import { HttpClientModule } from '@angular/common/http';
 import { CardService } from './services/card.service';
@@ -13,7 +13,6 @@ import {addIcons} from 'ionicons';
   sync,
   tabletLandscapeOutline, volumeMediumSharp
 } from "ionicons/icons";
-
  */
 
 import {personOutline, chevronForward,lockClosedOutline,mailOutline,
@@ -29,15 +28,12 @@ import {personOutline, chevronForward,lockClosedOutline,mailOutline,
   providers: [ HttpClientModule],
   standalone: true // Markiere die Komponente als eigenständig
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   questions: Question[] = []; // Initialisiere die Variable mit einem leeren Array
 
   constructor(private cardService: CardService) {
     addIcons({personOutline, chevronForward, lockClosedOutline, mailOutline,
       home, book, addCircle, statsChart, person});
-  }
-
-  ngOnInit() {
     this.cardService.getQuestions().subscribe(data => {
       this.questions = data;
     });
