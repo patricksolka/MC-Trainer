@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {Form, FormsModule} from '@angular/forms';
 import {
   IonContent,
   IonFab, IonFabButton,
@@ -11,7 +11,8 @@ import {
   IonTitle,
   IonToolbar
 } from '@ionic/angular/standalone';
-import {RouterLink} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
+import {AuthService} from "../../../services/auth.service";
 
 @Component({
   selector: 'app-login',
@@ -20,11 +21,12 @@ import {RouterLink} from "@angular/router";
   standalone: true,
   imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonInput, IonIcon, IonItem, RouterLink, IonFab, IonFabButton]
 })
-export class LoginPage implements OnInit {
+export class LoginPage  {
 
-  constructor() { }
 
-  ngOnInit() {
-  }
+  constructor(
+      private authService: AuthService,
+      private router : Router
+  ) { }
 
 }
