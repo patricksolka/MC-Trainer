@@ -8,7 +8,7 @@ import {
   IonFabButton,
   IonHeader,
   IonIcon,
-  IonInput, IonItem, IonNote,
+  IonInput, IonItem, IonNote, IonText,
   IonTitle,
   IonToolbar
 } from '@ionic/angular/standalone';
@@ -21,7 +21,7 @@ import {AuthService} from "../../../services/auth.service";
   templateUrl: './registration.page.html',
   styleUrls: ['./registration.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonFab, IonFabButton, IonIcon, IonInput, IonItem, RouterLink, IonButton, IonNote, ReactiveFormsModule]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonFab, IonFabButton, IonIcon, IonInput, IonItem, RouterLink, IonButton, IonNote, ReactiveFormsModule, IonText]
 })
 export class RegistrationPage  {
 
