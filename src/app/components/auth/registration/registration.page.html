@@ -4,7 +4,7 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<!-- <ion-content [fullscreen]="true">
     <div class="headerContent">
     <ion-title class="title">Willkommen</ion-title>
         <p class="subTitle">Registriere dich jetzt</p>
@@ -12,12 +12,12 @@
     <form>
         <div class="ion-padding">
             <ion-item>
-                <ion-input placeholder="Vorname" class="input"></ion-input>
-                <!-- <ion-icon name="person-outline"></ion-icon> -->
+                <ion-input placeholder="Vorname" class="input"></ion-input> -->
+             <!-- <ion-icon name="person-outline"></ion-icon>
             </ion-item>
             <ion-item>
                 <ion-input placeholder="Nachname" class="input"></ion-input>
-               <!-- <ion-icon name="person-outline"></ion-icon> -->
+              //  <ion-icon name="person-outline"></ion-icon>
             </ion-item>
             <ion-item>
                 <ion-input placeholder="Username" class="input"></ion-input>
@@ -40,5 +40,29 @@
                 </ion-fab-button>
             </ion-fab>
         </div>
+    </form>
+</ion-content>
+-->
+
+<ion-content class="ion-padding">
+    <form (ngSubmit)="register()" [formGroup]="credentials">
+        <ion-item fill="solid" class="ion-margin-bottom">
+            <ion-input placeholder="Vorname" formControlName="firstName" ></ion-input>
+        </ion-item>
+
+        <ion-item fill="solid" class="ion-margin-bottom">
+            <ion-input placeholder="Nachname" formControlName="lastName"></ion-input>
+        </ion-item>
+
+        <ion-item fill="solid" class="ion-margin-bottom">
+            <ion-input type="email" placeholder="Email" formControlName="email"></ion-input>
+            <ion-note slot="error" *ngIf="(email.dirty || email.touched) && email.errors">Email is invalid</ion-note>
+        </ion-item>
+
+        <ion-item fill="solid" class="ion-margin-bottom">
+            <ion-input type="password" placeholder="Password" formControlName="password"></ion-input>
+            <ion-note slot="error" *ngIf="(password.dirty || password.touched) && password.errors">Password needs to be 6 characters</ion-note>
+        </ion-item>
+        <ion-button type="submit" expand="block" color="primary" (click)="register()">Registrieren</ion-button>
     </form>
 </ion-content>
