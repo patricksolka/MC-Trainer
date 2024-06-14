@@ -31,7 +31,6 @@ export class AuthService {
             });
             return user;
             } catch (e) {
-            throw new Error (e);
             return null;
         }
     }

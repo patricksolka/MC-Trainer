@@ -46,23 +46,25 @@
 
 <ion-content class="ion-padding">
     <form (ngSubmit)="register()" [formGroup]="credentials">
-        <ion-item fill="solid" class="ion-margin-bottom">
-            <ion-input placeholder="Vorname" formControlName="firstName" ></ion-input>
+        <ion-item  class="ion-margin-bottom">
+            <ion-input fill="solid" placeholder="Vorname" formControlName="firstName" ></ion-input>
         </ion-item>
 
-        <ion-item fill="solid" class="ion-margin-bottom">
-            <ion-input placeholder="Nachname" formControlName="lastName"></ion-input>
+        <ion-item  class="ion-margin-bottom">
+            <ion-input fill="solid" placeholder="Nachname" formControlName="lastName"></ion-input>
         </ion-item>
 
-        <ion-item fill="solid" class="ion-margin-bottom">
-            <ion-input type="email" placeholder="Email" formControlName="email"></ion-input>
+        <ion-item  class="ion-margin-bottom">
+            <ion-input fill="solid" type="email" placeholder="Email" formControlName="email"></ion-input>
             <ion-note slot="error" *ngIf="(email.dirty || email.touched) && email.errors">Email is invalid</ion-note>
         </ion-item>
 
-        <ion-item fill="solid" class="ion-margin-bottom">
-            <ion-input type="password" placeholder="Password" formControlName="password"></ion-input>
+        <ion-item  class="ion-margin-bottom">
+            <ion-input fill="solid" type="password" placeholder="Password"
+                      formControlName="password"></ion-input>
             <ion-note slot="error" *ngIf="(password.dirty || password.touched) && password.errors">Password needs to be 6 characters</ion-note>
         </ion-item>
-        <ion-button type="submit" expand="block" color="primary" (click)="register()">Registrieren</ion-button>
+        <ion-button type="button" expand="block" color="primary" (click)="register()">Registrieren
+        </ion-button>
     </form>
 </ion-content>
