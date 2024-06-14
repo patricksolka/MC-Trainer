@@ -51,28 +51,33 @@ export class RegistrationPage  {
     return this.credentials.get('password');
   }
 
-  async register(){
+  async register() {
     const loading = await this.loadingController.create();
     await loading.present();
-    //const { firstName, lastName, email, password } = this.credentials.value;
+    const {firstName, lastName, email, password } = this.credentials.value;
     const user = await this.authService.register(this.credentials.value);
     await loading.dismiss();
-    console.log(this.credentials.value);
-    console.log(this.credentials.valid);
 
     if (user) {
-      await this.router.navigateByUrl('/home', { replaceUrl: true });
+      this.router.navigateByUrl('/home', { replaceUrl: true });
     } else {
-      console.log('alert called')
-      await this.showAlert('Registrieren fehlgeschlagen' , 'Please try again!');
+      this.showAlertRegister('Registrierung fehlgeschlagen', 'Versuche es erneut!');
     }
   }
 
-  async showAlert(header: string, message: string) {
+
+  async showAlertRegister(header: string, message: string) {
     const alert = await this.alertController.create({
       header,
       message,
-      buttons: ['OK']
+      buttons: [
+        {
+          text: 'OK',
+          handler: () => {
+            this.credentials.reset();
+          },
+        },
+      ],
     });
     await alert.present();
   }

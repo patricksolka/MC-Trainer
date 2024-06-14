@@ -80,7 +80,7 @@ export class LoginPage  {
     if (user) {
       await this.router.navigateByUrl('/home', { replaceUrl: true });
     } else {
-      await this.showAlert('Login failed' , 'Please try again!');
+      await this.showAlert('Login fehlgeschlagen' , 'Versuche es erneut!');
     }
   }
 

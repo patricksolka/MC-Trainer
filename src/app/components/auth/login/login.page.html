@@ -59,7 +59,7 @@
                 invalid</ion-note>
         </ion-item>
 
-        <ion-button type="submit">Login</ion-button>
+        <ion-button type="submit" expand="block" [disabled]="!credentials.valid">Login</ion-button>
 
     </form>
 </ion-content>
