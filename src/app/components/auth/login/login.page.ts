@@ -14,7 +14,7 @@ import {
   IonHeader,
   IonIcon,
   IonInput,
-  IonItem, IonNote,
+  IonItem, IonLabel, IonNote, IonText,
   IonTitle,
   IonToolbar
 } from '@ionic/angular/standalone';
@@ -42,7 +42,7 @@ import {AlertController, LoadingController} from "@ionic/angular";
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterLink,]
+    RouterLink, IonText, IonLabel,]
 })
 export class LoginPage  {
   credentials: FormGroup;
