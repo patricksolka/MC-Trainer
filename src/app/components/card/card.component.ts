@@ -51,6 +51,7 @@ export class CardComponent implements OnInit {
   isAnswerCorrect: boolean = false;
   correctAnswersCount: number = 0;
   incorrectAnswersCount: number = 0;
+  correctAnswersInARow: number = 0; // Neu hinzugefügt
   totalQuestions: number = 0;
   completedQuizzes: number = 0;
 
@@ -82,6 +83,7 @@ export class CardComponent implements OnInit {
   resetQuiz() {
     this.correctAnswersCount = 0;
     this.incorrectAnswersCount = 0;
+    this.correctAnswersInARow = 0; // Neu hinzugefügt
     this.currentQuestionIndex = 0;
     this.selectedAnswers = [];
     this.showResult = false;
@@ -108,6 +110,7 @@ export class CardComponent implements OnInit {
     const stats = {
       completedQuizzes: this.completedQuizzes,
       correctAnswers: this.correctAnswersCount,
+      correctAnswersInARow: this.correctAnswersInARow, // Neu hinzugefügt
       totalQuestions: this.totalQuestions,
     };
 
@@ -140,8 +143,10 @@ export class CardComponent implements OnInit {
 
     if (isCorrect) {
       this.correctAnswersCount++;
+      this.correctAnswersInARow++; // Neu hinzugefügt
     } else {
       this.incorrectAnswersCount++;
+      this.correctAnswersInARow = 0; // Zurücksetzen bei falscher Antwort
     }
   }
 

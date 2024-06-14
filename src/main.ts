@@ -7,9 +7,9 @@ import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 import { environment } from './environments/environment';
 // Swiper Init
-import { register as registerSwiperElements} from  'swiper/element/bundle';
+//import { register as registerSwiperElements} from  'swiper/element/bundle';
 
-registerSwiperElements();
+// registerSwiperElements();
 
 if (environment.production) {
   enableProdMode();
