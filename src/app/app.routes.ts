@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import {CategoriesComponent} from "./components/categories/categories.component";
 
 export const routes: Routes = [
   {
@@ -33,6 +34,10 @@ export const routes: Routes = [
   {
     path: 'register',
     loadComponent: () => import('./components/auth/registration/registration.page').then(m => m.RegistrationPage)
+  },
+  {
+    path: 'categories',
+    loadComponent: () => import('./components/categories/categories.component').then(m => m.CategoriesComponent)
   },
 
 ];
