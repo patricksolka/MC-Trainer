@@ -10,5 +10,5 @@ export const environment = {
     measurementId: "G-ZDKT9D95PM",
     // @ts-ignore
     locationId: 'europe-west'
-  }
+  },
 };
