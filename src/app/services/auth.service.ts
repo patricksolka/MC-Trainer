@@ -1,36 +1,45 @@
-import { Injectable } from '@angular/core';
-import { User } from '../models/user.model';
-import { HttpClient } from '@angular/common/http';
+import {Injectable} from '@angular/core';
+//import { User } from '../models/user.model';
+//import { HttpClient } from '@angular/common/http';
 import {
     Auth,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     signOut
 } from '@angular/fire/auth';
+import {doc, Firestore, getDoc, setDoc} from "@angular/fire/firestore";
+
 
 @Injectable({
     providedIn: 'root'
 })
 
 export class AuthService {
-    constructor(private auth: Auth) {}
+    constructor(private auth: Auth, private firestore: Firestore) {}
 
-    async register( email: string, password: string ) {
+    async register({ firstName, lastName, email, password }) {
         try {
-           const user= createUserWithEmailAndPassword(
-               this.auth,
-               email,
-               password
-           );
-           return user;
-        } catch (e) {
+            const userCredential= await createUserWithEmailAndPassword(this.auth, email, password);
+            const user = userCredential.user;
+
+            const userRef = doc(this.firestore, `users/${user.uid}`);
+            await setDoc(userRef, {
+                uid: user.uid,
+                email: user.email,
+                firstName,
+                lastName,
+            });
+            return user;
+            } catch (e) {
+            throw new Error (e);
             return null;
         }
     }
 
-    async login(email: string, password: string) {
+
+    async login({email, password}) {
         try {
-            const user= signInWithEmailAndPassword(
+            const user= await signInWithEmailAndPassword(
                 this.auth,
                 email,
                 password
@@ -44,6 +53,7 @@ export class AuthService {
     logout(){
         signOut(this.auth)
     }
+
 
     /*
     private users: User[] = [];
