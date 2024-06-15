@@ -50,8 +50,24 @@ export class RegistrationPage  {
   get password(){
     return this.credentials.get('password');
   }
-
   async register() {
+    if (this.credentials.valid) {
+      const loading = await this.loadingController.create();
+      await loading.present();
+      const {firstName, lastName, email, password } = this.credentials.value;
+      const user = await this.authService.register(this.credentials.value);
+      await loading.dismiss();
+
+      if (user) {
+        this.router.navigateByUrl('/home', { replaceUrl: true });
+      } else {
+        this.showAlertRegister('Registrierung fehlgeschlagen', 'Versuche es erneut!');
+      }
+    } else {
+      this.showAlertRegister('Registrierung fehlgeschlagen', 'Bitte füllen Sie alle erforderlichen Felder aus!');
+    }
+  }
+  /*async register() {
     const loading = await this.loadingController.create();
     await loading.present();
     const {firstName, lastName, email, password } = this.credentials.value;
@@ -63,7 +79,7 @@ export class RegistrationPage  {
     } else {
       this.showAlertRegister('Registrierung fehlgeschlagen', 'Versuche es erneut!');
     }
-  }
+  }*/
 
 
   async showAlertRegister(header: string, message: string) {
@@ -74,7 +90,7 @@ export class RegistrationPage  {
         {
           text: 'OK',
           handler: () => {
-            this.credentials.reset();
+            //this.credentials.reset();
           },
         },
       ],

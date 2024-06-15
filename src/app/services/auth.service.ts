@@ -3,11 +3,11 @@ import { User } from '../models/user.model';
 //import { HttpClient } from '@angular/common/http';
 import {
     Auth,
-    createUserWithEmailAndPassword,
+    createUserWithEmailAndPassword, deleteUser,
     signInWithEmailAndPassword,
     signOut
 } from '@angular/fire/auth';
-import {doc, Firestore, setDoc} from "@angular/fire/firestore";
+import {deleteDoc, doc, Firestore, setDoc} from "@angular/fire/firestore";
 
 
 @Injectable({
@@ -15,7 +15,7 @@ import {doc, Firestore, setDoc} from "@angular/fire/firestore";
 })
 
 export class AuthService {
-    constructor(private auth: Auth, private firestore: Firestore) {}
+    constructor(public auth: Auth, private firestore: Firestore) {}
 
     async register({ firstName, lastName, email, password }) {
         try {
@@ -77,6 +77,39 @@ export class AuthService {
     logout(){
         signOut(this.auth)
     }
+
+    async deleteAccount(uid: string) {
+        try {
+            const userRef = doc(this.firestore, `users/${uid}`);
+            await deleteDoc(userRef);
+            await deleteUser(this.auth.currentUser);
+        }
+        catch(e){
+            console.error("Fehler beim Löschen des Benutzers: ", e);
+            return null;
+        }
+    }
+   /* async deleteAccount(uid: string) {
+        try{
+            const userRef = doc(this.firestore, `users/${uid}`);
+            await deleteDoc(userRef);
+            await deleteUser(this.auth.currentUser);
+        }
+        catch(e){
+            return null;
+        }
+    }*/
+//evtl um Änderungen in der db zu beobachten
+   /* const unsubscribe = onSnapshot(userRef, (docSnapshot) => {
+        if (!docSnapshot.exists()) {
+            // Das Dokument wurde gelöscht, löschen Sie den Benutzer aus der Authentifizierung
+            deleteUser(this.auth.currentUser).catch((error) => {
+                console.error("Fehler beim Löschen des Benutzers aus der Authentifizierung: ", error);
+            });
+            // Beenden Sie das Abhören von Änderungen, nachdem der Benutzer gelöscht wurde
+            unsubscribe();
+        }
+    });*/
 
 
     /*
