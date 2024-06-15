@@ -57,5 +57,10 @@ export const routes: Routes = [
     loadComponent: () => import('./components/auth/forgot-password/forgot-password.page').then(m => m.ForgotPasswordPage),
     //...canActivate(redirectUnauthorizedToLogin)
   },
+  {
+    path: 'profile',
+    loadComponent: () => import('./components/profile/profile.page').then(m => m.ProfilePage),
+    ...canActivate(redirectUnauthorizedToLogin)
+  },
 
 ];

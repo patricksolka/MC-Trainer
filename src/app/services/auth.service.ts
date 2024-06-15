@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-//import { User } from '../models/user.model';
+import { User } from '../models/user.model';
 //import { HttpClient } from '@angular/common/http';
 import {
     Auth,
@@ -7,7 +7,7 @@ import {
     signInWithEmailAndPassword,
     signOut
 } from '@angular/fire/auth';
-import {doc, Firestore, getDoc, setDoc} from "@angular/fire/firestore";
+import {doc, Firestore, setDoc} from "@angular/fire/firestore";
 
 
 @Injectable({
@@ -18,6 +18,31 @@ export class AuthService {
     constructor(private auth: Auth, private firestore: Firestore) {}
 
     async register({ firstName, lastName, email, password }) {
+        try {
+            const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
+            const firebaseUser = userCredential.user;
+
+            const user: User = {
+                uid: firebaseUser.uid,
+                email: firebaseUser.email,
+                firstName,
+                lastName,
+                stats: {
+                    completedQuizzes: 0,
+                    correctAnswers: 0,
+                    totalQuestions: 0,
+                }
+            };
+
+            const userRef = doc(this.firestore, `users/${user.uid}`);
+            await setDoc(userRef, user);
+
+            return user;
+        } catch (e) {
+            return null;
+        }
+    }
+    /*async register({ firstName, lastName, email, password }) {
         try {
             const userCredential= await createUserWithEmailAndPassword(this.auth, email, password);
             const user = userCredential.user;
@@ -33,7 +58,7 @@ export class AuthService {
             } catch (e) {
             return null;
         }
-    }
+    }*/
 
 
     async login({email, password}) {
