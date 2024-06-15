@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { Question } from '../models/question.model';
 
 @Injectable({
@@ -6,6 +8,17 @@ import { Question } from '../models/question.model';
 })
 export class CardService {
 
+  private questionsUrl = 'assets/questions.json'; // Pfad zu deiner JSON-Datei
+
+  constructor(private http: HttpClient) { }
+
+  getQuestions(): Observable<Question[]> {
+    return this.http.get<Question[]>(this.questionsUrl);
+  }
+}
+
+
+/*
   private questions: Question[] = [
     {
       question: 'What is the capital of Germany?',
@@ -36,3 +49,5 @@ export class CardService {
     return this.questions;
   }
 }
+
+ */
