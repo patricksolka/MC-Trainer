@@ -53,6 +53,16 @@ export class AuthService {
         signOut(this.auth)
     }
 
+    async getUserDetails(uid: string): Promise<any> {
+        const userRef = doc(this.firestore, `users/${uid}`);
+        const userDoc = await getDoc(userRef);
+        if (userDoc.exists()) {
+            return userDoc.data();
+        } else {
+            return null;
+        }
+    }
+
 
     /*
     private users: User[] = [];
