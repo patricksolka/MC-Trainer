@@ -1,6 +1,9 @@
 
 ion-content {
   --background: #1F1F39;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .main-title{
