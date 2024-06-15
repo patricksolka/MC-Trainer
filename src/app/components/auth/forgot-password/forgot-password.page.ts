@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -20,11 +20,9 @@ import {RouterLink} from "@angular/router";
   standalone: true,
   imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonItem, IonInput, IonIcon, IonFab, IonFabButton, RouterLink]
 })
-export class ForgotPasswordPage implements OnInit {
+export class ForgotPasswordPage {
 
   constructor() { }
 
-  ngOnInit() {
-  }
 
 }

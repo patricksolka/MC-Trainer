@@ -13,8 +13,9 @@ import {
 import {NgForOf, NgIf, NgClass} from "@angular/common";
 import {IonApp, IonRouterOutlet, IonAlert,} from "@ionic/angular/standalone";
 import { Router } from '@angular/router';
-import {AchievementService} from "../../services/achievement.service"; // Import Router
+import { AchievementService } from "../../services/achievement.service";
 import { AlertController } from '@ionic/angular';
+import { TotalStatsService } from '../../services/total-stats.service'; // Importiere den TotalStatsService
 
 @Component({
   selector: 'app-card',
@@ -43,7 +44,7 @@ import { AlertController } from '@ionic/angular';
 export class CardComponent implements OnInit {
   questions: Question[] = [];
   currentQuestionIndex: number = 0;
-  currentQuestion: Question = {question: '', answers: [], correctAnswer: []}; // Ändern Sie dies zu einem Array von Strings
+  currentQuestion: Question = { question: '', answers: [], correctAnswer: [] };
   selectedAnswers: string[] = [];
   isAnswerRevealed: boolean = false;
   showResult: boolean = false;
@@ -53,16 +54,29 @@ export class CardComponent implements OnInit {
   totalQuestions: number = 0;
   completedQuizzes: number = 0;
 
-  constructor(private cardService: CardService, private router: Router,
-              private achievementService: AchievementService,
-              private alertController: AlertController) {
+  constructor(
+      private cardService: CardService,
+      private router: Router,
+      private achievementService: AchievementService,
+      private alertController: AlertController,
+      private totalStatsService: TotalStatsService // Füge den TotalStatsService hinzu
 
-    this.resetQuiz();
-  }
+  ) {}
 
   ngOnInit() {
-    this.questions = this.cardService.getQuestions();
-    this.currentQuestion = this.questions[this.currentQuestionIndex];
+    this.cardService.getQuestions().subscribe(data => {
+      this.questions = data;
+      this.shuffleQuestions(); // Fragen und Antworten zufällig sortieren
+      this.currentQuestion = this.questions[this.currentQuestionIndex];
+    });
+  }
+  shuffleQuestions() {
+    // Fragen zufällig sortieren
+    this.questions = this.questions.sort(() => Math.random() - 0.5);
+    // Antworten zufällig sortieren
+    this.questions.forEach(question => {
+      question.answers = question.answers.sort(() => Math.random() - 0.5);
+    });
   }
 
   resetQuiz() {
@@ -71,9 +85,9 @@ export class CardComponent implements OnInit {
     this.currentQuestionIndex = 0;
     this.selectedAnswers = [];
     this.showResult = false;
-  //  this.currentQuestion = this.questions[this.currentQuestionIndex];
-    this.currentQuestion = this.questions[0];
-
+    if (this.questions.length > 0) {
+      this.currentQuestion = this.questions[0];
+    }
   }
 
   toggleAnswer(answer: string) {
@@ -86,7 +100,7 @@ export class CardComponent implements OnInit {
 
   async checkAnswers() {
     this.isAnswerCorrect = this.selectedAnswers.every(answer => this.currentQuestion.correctAnswer.includes(answer)) &&
-      this.currentQuestion.correctAnswer.every(answer => this.selectedAnswers.includes(answer));
+        this.currentQuestion.correctAnswer.every(answer => this.selectedAnswers.includes(answer));
     this.showResult = true;
     this.addToStats();
 
@@ -110,30 +124,26 @@ export class CardComponent implements OnInit {
 
   addToStats() {
     let isCorrect = true;
-    // Überprüfe jede ausgewählte Antwort
     for (const selectedAnswer of this.selectedAnswers) {
       if (!this.currentQuestion.correctAnswer.includes(selectedAnswer)) {
-        isCorrect = false; // Wenn eine ausgewählte Antwort nicht in den richtigen Antworten enthalten ist, ist die gesamte Antwort falsch
-        break; // Beende die Schleife, da bereits eine falsche Antwort gefunden wurde
+        isCorrect = false;
+        break;
       }
     }
 
-    // Überprüfe, ob alle richtigen Antworten ausgewählt wurden
     for (const correctAnswer of this.currentQuestion.correctAnswer) {
       if (!this.selectedAnswers.includes(correctAnswer)) {
-        isCorrect = false; // Wenn nicht alle richtigen Antworten ausgewählt wurden, ist die gesamte Antwort falsch
-        break; // Beende die Schleife, da nicht alle richtigen Antworten ausgewählt wurden
+        isCorrect = false;
+        break;
       }
     }
 
-    // Erhöhe den Zähler basierend auf dem Ergebnis
     if (isCorrect) {
       this.correctAnswersCount++;
     } else {
       this.incorrectAnswersCount++;
     }
   }
-
 
   getNextQuestion() {
     this.showResult = false;
@@ -142,6 +152,9 @@ export class CardComponent implements OnInit {
     if (this.currentQuestionIndex < this.questions.length) {
       this.currentQuestion = this.questions[this.currentQuestionIndex];
     } else {
+      // Aktualisiere die Gesamtstatistik
+      this.totalStatsService.updateStats(this.correctAnswersCount, this.incorrectAnswersCount);
+
       // Navigiere zur Statistikseite und übergebe die Ergebnisse
       this.router.navigate(['/stats'], {
         state: {
@@ -152,6 +165,7 @@ export class CardComponent implements OnInit {
     }
   }
 }
+
 
 // funktioniert:
 /*
@@ -165,8 +179,8 @@ export class CardComponent implements OnInit {
       this.showResult = false;
       this.selectedAnswers = [];
       this.currentQuestionIndex++;
-      if (this.currentQuestionIndex < this.questions.length) {
-        this.currentQuestion = this.questions[this.currentQuestionIndex];
+      if (this.currentQuestionIndex < this.questions.json.length) {
+        this.currentQuestion = this.questions.json[this.currentQuestionIndex];
       } else {
         // Navigiere zur Statistikseite und übergebe die Ergebnisse
         this.router.navigate(['/stats'], {
@@ -195,8 +209,8 @@ export class CardComponent implements OnInit {
 
   getNextQuestion() {
     this.currentQuestionIndex++;
-    if (this.currentQuestionIndex < this.questions.length) {
-      this.currentQuestion = this.questions[this.currentQuestionIndex];
+    if (this.currentQuestionIndex < this.questions.json.length) {
+      this.currentQuestion = this.questions.json[this.currentQuestionIndex];
       this.selectedAnswer = null;
       this.isAnswerRevealed = false;
     } else {
@@ -224,8 +238,8 @@ export class CardComponent implements OnInit {
 
   getNextQuestion() {
     this.currentQuestionIndex++;
-    if (this.currentQuestionIndex < this.questions.length) {
-      this.currentQuestion = this.questions[this.currentQuestionIndex];
+    if (this.currentQuestionIndex < this.questions.json.length) {
+      this.currentQuestion = this.questions.json[this.currentQuestionIndex];
     } else {
       // Wenn alle Fragen beantwortet wurden, könntest du hier eine entsprechende Logik implementieren
       console.log("Alle Fragen wurden beantwortet!");

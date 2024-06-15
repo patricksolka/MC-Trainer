@@ -13,6 +13,7 @@ export class StatsComponent implements OnInit {
   correctAnswers: number = 0;
   incorrectAnswers: number = 0;
 
+  /*
   constructor(private router: Router) {
     const navigation = this.router.getCurrentNavigation();
     const state = navigation?.extras.state as { correctAnswers: number; incorrectAnswers: number };
@@ -26,6 +27,18 @@ export class StatsComponent implements OnInit {
     const state = window.history.state;
     this.correctAnswers = state && state.correctAnswers ? state.correctAnswers : 0;
     this.incorrectAnswers = state && state.incorrectAnswers ? state.incorrectAnswers : 0;
+  }
+  */
+
+  constructor(private router: Router) {}
+
+  ngOnInit() {
+    const navigation = this.router.getCurrentNavigation();
+    const state = navigation?.extras.state as { correctAnswers: number; incorrectAnswers: number };
+    if (state) {
+      this.correctAnswers = state.correctAnswers;
+      this.incorrectAnswers = state.incorrectAnswers;
+    }
   }
 
   resetQuizHome() {

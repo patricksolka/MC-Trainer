@@ -38,10 +38,17 @@ export const routes: Routes = [
     loadComponent: () => import('./components/stats/stats.component').then(m => m.StatsComponent),
     ...canActivate(redirectUnauthorizedToLogin)
   },
+  { path: 'total-stats',
+    loadComponent: () => import('./components/total-stats/total-stats.component').then( m => m.TotalStatsComponent)
+  },
   {
     path: 'achievements',
     loadComponent: () => import('./components/achievements/achievements.component').then(m => m.AchievementsComponent),
     ...canActivate(redirectUnauthorizedToLogin)
+  },
+  {
+    path: 'onboarding',
+    loadComponent: () => import('./components/onboarding/onboarding.component').then( m => m.OnboardingComponent)
   },
   {
     path: 'forgot-password',
