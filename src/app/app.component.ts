@@ -1,6 +1,6 @@
-import {Component} from '@angular/core';
-import {IonApp, IonRouterOutlet} from "@ionic/angular/standalone";
-import {addIcons} from "ionicons";
+import { Component } from '@angular/core';
+import { IonApp, IonRouterOutlet } from "@ionic/angular/standalone";
+import { addIcons } from "ionicons";
 import {
     personOutline,
     chevronForward,
@@ -14,10 +14,10 @@ import {
     arrowBackOutline,
     logoGoogle
 } from "ionicons/icons";
-import {Router} from "@angular/router";
-import {HttpClientModule} from '@angular/common/http';
-import {CardService} from './services/card.service';
-import {Question} from './models/question.model';
+import { Router } from "@angular/router";
+import { HttpClientModule } from "@angular/common/http";
+import { CardService } from './services/card.service';
+import { Question } from './models/question.model';
 
 @Component({
     selector: 'app-root',
@@ -27,12 +27,10 @@ import {Question} from './models/question.model';
         IonRouterOutlet,
         IonApp
     ],
-    standalone: true,
-    providers: [HttpClientModule],
-
+    standalone: true
 })
 export class AppComponent {
-    questions: Question[] = []; // Initialisiere die Variable mit einem leeren Array
+    questions: Question[] = [];
 
     constructor(private router: Router, private cardService: CardService) {
         addIcons({
@@ -48,6 +46,8 @@ export class AppComponent {
             arrowBackOutline,
             logoGoogle
         });
+
+        // Lade die Fragen beim Initialisieren der Komponente
         this.cardService.getQuestions().subscribe(data => {
             this.questions = data;
         });
