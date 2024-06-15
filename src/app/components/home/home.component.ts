@@ -14,7 +14,7 @@ import { AuthService } from 'src/app/services/auth.service';
 export class HomeComponent {
   constructor(private authService: AuthService, private router: Router, private loadingController: LoadingController) {
   }
-  async logout() {
+  /*async logout() {
     const loading = await this.loadingController.create({
       message: 'Logging out...',
     });
@@ -22,5 +22,5 @@ export class HomeComponent {
     await this.authService.logout();
     loading.dismiss();
     this.router.navigateByUrl('/login', { replaceUrl: true });
-  }
+  }*/
 }
