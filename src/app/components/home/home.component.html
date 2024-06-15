@@ -1,5 +1,5 @@
 <ion-header>
-    <h1>Hallo, <br> User!</h1>
+    <h1>Hallo, <br> {{ userName }} !</h1>
     <ion-img class="user-image" [src]="" alt="pp"></ion-img>
 </ion-header>
 
@@ -13,9 +13,11 @@
         <ion-button routerLink="/stats"  class="stats-button" style ="--background: #FF6905;">Statistics</ion-button>
     </div>
     <div class="entdecken">
+        <h2>Entdecken</h2>
 
     </div>
     <div class="Module">
+        <h2>Meine Module</h2>
 
     </div>
     <ion-button type="button" color="danger" (click)="logout()">Logout</ion-button>
