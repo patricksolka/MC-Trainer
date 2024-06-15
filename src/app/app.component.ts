@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {IonApp, IonRouterOutlet, NavController} from "@ionic/angular/standalone";
+import {IonApp, IonRouterOutlet} from "@ionic/angular/standalone";
 import {addIcons} from "ionicons";
 import {personOutline, chevronForward,lockClosedOutline,mailOutline, home, book, addCircle, statsChart, person, arrowBackOutline, logoGoogle} from "ionicons/icons";
 import {Router} from "@angular/router";
@@ -24,8 +24,8 @@ export class AppComponent {
 
     constructor(private router: Router) {
   addIcons({personOutline, chevronForward, lockClosedOutline, mailOutline, home, book, addCircle, statsChart, person, arrowBackOutline, logoGoogle});
-        this.cardService.getQuestions().subscribe(data => {
-            this.questions = data;
-        });
+        //this.cardService.getQuestions().subscribe(data => {
+            //this.questions = data;
+       // });
         }
 }
