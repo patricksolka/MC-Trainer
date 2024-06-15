@@ -26,20 +26,23 @@
                 formControlName="email"
                 [clearInput]="true" class="ion-margin-bottom">
         </ion-input>
+        <!--
         <ion-note slot="error"
                   *ngIf="(email?.dirty || email?.touched) && email.errors">
             Email falsch
         </ion-note>
+        -->
 
         <ion-input fill="outline"
                    type="password"
                    placeholder="Passwort"
                    formControlName="password" class="ion-margin-bottom">
         </ion-input>
+        <!--
         <ion-note slot="error"
                   *ngIf="(password?.dirty || password?.touched) && password.errors">Passwort
             falsch
-        </ion-note>
+        </ion-note> -->
         <ion-button type="button"
                     expand="block"
                     size="large"

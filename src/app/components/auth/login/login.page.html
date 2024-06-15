@@ -23,10 +23,11 @@
                        placeholder="Passwort"
                        formControlName="password" class="ion-margin-bottom">
             </ion-input>
+        <!--
             <ion-note slot="error"
                       *ngIf="(password?.dirty || password?.touched) && password.errors">Passwort
                 falsch
-            </ion-note>
+            </ion-note> -->
         <div class="forgotPassword ion-margin-bottom">
             <a [routerLink]="['/forgot-password']">Passwort vergessen?</a>
         </div>
