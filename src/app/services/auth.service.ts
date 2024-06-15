@@ -1,12 +1,60 @@
-// src/app/services/auth.service.ts
-import { Injectable } from '@angular/core';
-import { User } from '../models/user.model';
-import { HttpClient } from '@angular/common/http';
+import {Injectable} from '@angular/core';
+//import { User } from '../models/user.model';
+//import { HttpClient } from '@angular/common/http';
+import {
+    Auth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut
+} from '@angular/fire/auth';
+import {doc, Firestore, getDoc, setDoc} from "@angular/fire/firestore";
+
 
 @Injectable({
     providedIn: 'root'
 })
+
 export class AuthService {
+    constructor(private auth: Auth, private firestore: Firestore) {}
+
+    async register({ firstName, lastName, email, password }) {
+        try {
+            const userCredential= await createUserWithEmailAndPassword(this.auth, email, password);
+            const user = userCredential.user;
+
+            const userRef = doc(this.firestore, `users/${user.uid}`);
+            await setDoc(userRef, {
+                uid: user.uid,
+                email: user.email,
+                firstName,
+                lastName,
+            });
+            return user;
+            } catch (e) {
+            return null;
+        }
+    }
+
+
+    async login({email, password}) {
+        try {
+            const user= await signInWithEmailAndPassword(
+                this.auth,
+                email,
+                password
+            );
+            return user;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    logout(){
+        signOut(this.auth)
+    }
+
+
+    /*
     private users: User[] = [];
     private currentUser: User | null = null;
 
@@ -53,4 +101,7 @@ export class AuthService {
     isAuthenticated(): boolean {
         return this.currentUser !== null;
     }
+}
+*/
+
 }
