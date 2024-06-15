@@ -1,79 +1,46 @@
-<ion-content>
-
+<ion-content class="ion-padding">
     <ion-title class="main-title">MultipleChoice</ion-title>
-
     <swiper-container pagination="true" pagination-clickable="true"
                       centered-slides="true">
         <swiper-slide class="ion-padding">
-            <ion-grid>
-                <ion-row>
-                    <ion-col size="12">
+            <div class="imageContainer">
                         <ion-img src="assets/question.png"></ion-img>
-                    </ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="12">
-                        <ion-text class="subheading">Interaktives Lernen</ion-text>
-                    </ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="12">
-                        <ion-text class="description">Erweitere dein Wissen mit Fragen <br>aus
+                    </div>
+                        <ion-title class="subheading">Interaktives
+                            Lernen</ion-title>
+                        <p class="description">Erweitere dein Wissen mit Fragen <br> aus
                             unterschiedlichen
                             Kategorien
-                        </ion-text>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
+                        </p>
         </swiper-slide>
         <swiper-slide class="ion-padding">
-            <ion-grid>
-                <ion-row>
-                    <ion-col size="12">
-                        <ion-img src="assets/knowledge.png"></ion-img>
-                    </ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="12">
-                        <ion-text class="subheading">Bilde dich weiter</ion-text>
-                    </ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="12">
-                        <ion-text class="description">Festige dein Wissen mit dem Lernmodus
-                        </ion-text>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
+            <div class="imageContainer">
+                <ion-img src="assets/knowledge.png"></ion-img>
+            </div>
+            <ion-title class="subheading">Bilde dich weiter</ion-title>
+            <p class="description">Mit dem Lernmodus kannst du <br> dein Wissen festigen
+            </p>
         </swiper-slide>
         <swiper-slide class="ion-padding">
-            <ion-grid>
-                <ion-row>
-                    <ion-col size="12">
-                        <ion-img src="assets/achievement.png"></ion-img>
-                    </ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="12">
-                        <ion-text class="subheading">Sammle Achievements</ion-text>
-                    </ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="12">
-                        <ion-text class="description">Feiere deine Erfolge und bleib motiviert
-                            auf deinem Lernweg
-                        </ion-text>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
+            <div class="imageContainer">
+                <ion-img src="assets/achievement.png"></ion-img>
+            </div>
+            <ion-title class="subheading">Sammle Achievements</ion-title>
+            <p class="description ion-text-wrap">Feiere deine Erfolge und bleib motiviert
+                auf deinem Lernweg
+            </p>
         </swiper-slide>
     </swiper-container>
+    <ion-button size="large" expand="block" class="anmelden">
+        Anmelden
+    </ion-button>
+    <ion-button size="large" class="ion-color-dark" expand="block">
+        Registrieren
+    </ion-button>
 </ion-content>
-<ion-button size="default" expand="block">
-    Anmelden
-</ion-button>
-<ion-button class="ion-color-dark">
-    Registrieren
-</ion-button>
+
+
+
+
 
 
