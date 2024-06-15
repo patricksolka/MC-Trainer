@@ -27,7 +27,7 @@ ion-content {
     font-size: 16px;
     font-weight: 400;
     font-family: Poppins, sans-serif;
-    padding-bottom: 5rem;
+    padding-bottom: 40px;
 }
 
 swiper-container{
@@ -66,12 +66,16 @@ swiper-container {
     font-size: 16px;
     font-weight: 500;
     --border-radius: 10px;
-    height: 59px;
+    height: 70px;
     --background: #3D5CFF;
   }
 
 .anmelden {
   --background: #2F2F42;
+}
+
+.buttons{
+  padding-top: 35px;
 }
 
 
