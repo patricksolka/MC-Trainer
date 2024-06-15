@@ -39,7 +39,8 @@ export const routes: Routes = [
     ...canActivate(redirectUnauthorizedToLogin)
   },
   { path: 'total-stats',
-    loadComponent: () => import('./components/total-stats/total-stats.component').then( m => m.TotalStatsComponent)
+    loadComponent: () => import('./components/total-stats/total-stats.component').then( m => m.TotalStatsComponent),
+    ...canActivate(redirectUnauthorizedToLogin)
   },
   {
     path: 'achievements',
@@ -48,11 +49,13 @@ export const routes: Routes = [
   },
   {
     path: 'onboarding',
-    loadComponent: () => import('./components/onboarding/onboarding.component').then( m => m.OnboardingComponent)
+    loadComponent: () => import('./components/onboarding/onboarding.component').then( m => m.OnboardingComponent),
+    ...canActivate(redirectLoggedInToHome)
   },
   {
     path: 'forgot-password',
-    loadComponent: () => import('./components/auth/forgot-password/forgot-password.page').then(m => m.ForgotPasswordPage)
+    loadComponent: () => import('./components/auth/forgot-password/forgot-password.page').then(m => m.ForgotPasswordPage),
+    ...canActivate(redirectUnauthorizedToLogin)
   },
 
 ];

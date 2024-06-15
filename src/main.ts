@@ -12,6 +12,7 @@ import {initializeApp, provideFirebaseApp} from '@angular/fire/app';
 import {getFirestore, provideFirestore} from '@angular/fire/firestore';
 import {getAuth, provideAuth} from '@angular/fire/auth';
 import {IonicModule} from "@ionic/angular";
+import {provideHttpClient} from "@angular/common/http";
 
 // Swiper Init
 registerSwiperElements();
@@ -29,6 +30,7 @@ bootstrapApplication(AppComponent, {
         provideRouter(routes),
         provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
         provideFirestore(() => getFirestore()),
-        provideAuth(() => getAuth())
+        provideAuth(() => getAuth()),
+        provideHttpClient()
     ],
 });
