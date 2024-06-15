@@ -55,7 +55,7 @@ export const routes: Routes = [
   {
     path: 'forgot-password',
     loadComponent: () => import('./components/auth/forgot-password/forgot-password.page').then(m => m.ForgotPasswordPage),
-    ...canActivate(redirectUnauthorizedToLogin)
+    //...canActivate(redirectUnauthorizedToLogin)
   },
 
 ];
