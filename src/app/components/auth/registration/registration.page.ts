@@ -64,7 +64,7 @@ export class RegistrationPage  {
         this.showAlertRegister('Registrierung fehlgeschlagen', 'Versuche es erneut!');
       }
     } else {
-      this.showAlertRegister('Registrierung fehlgeschlagen', 'Bitte füllen Sie alle erforderlichen Felder aus!');
+      this.showAlertRegister('Registrierung fehlgeschlagen', 'Bitte fülle alle erforderlichen Felder aus!');
     }
   }
   /*async register() {
