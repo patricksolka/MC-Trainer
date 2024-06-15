@@ -26,16 +26,16 @@
                 <ion-img src="assets/achievement.png"></ion-img>
             </div>
             <ion-title class="subheading">Sammle Achievements</ion-title>
-            <p class="description ion-text-wrap">Feiere deine Erfolge und bleib motiviert
+            <p class="description">Feiere deine Erfolge  und <br> bleib motiviert
                 auf deinem Lernweg
             </p>
         </swiper-slide>
     </swiper-container>
     <div class="buttons">
-    <ion-button  expand="block" class="anmelden  ion-margin-bottom">
+    <ion-button  expand="block" class="anmelden  ion-margin-bottom" [routerLink]="['/login']">
         Anmelden
     </ion-button>
-    <ion-button  expand="block" class="ion-margin-top">
+    <ion-button  expand="block" class="ion-margin-top" [routerLink]="['/register']">
         Registrieren
     </ion-button>
     </div>

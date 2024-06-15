@@ -1,45 +1,3 @@
-/*.input{
-  font-size: 1rem;
-}
-ion-item{
-  --background: #1f1f1f;
-  border-radius: 10px;
-  margin-bottom: 16px
-}
-
-.headerContent{
-  margin-top: 80px;
-  margin-bottom: 80px;
-  text-align: center;
-  .subTitle{
-    color: grey;
-    font-size: 0.9rem;
-  }
-  title{
-    font-size: 2rem;
-  }
-}
-
-.signinLink{
-  display: flex;
-  margin: auto;
-  flex-direction: row;
-  align-items: center;
-  position: absolute;
-  justify-content: center;
-  left: 0;
-  bottom: 0;
-  width: 80%;
-  right: 0;
-
-  p{
-    font-size: 0.9rem;
-  }
-  a{
-    text-decoration: none;
-  }
-}
-*/
 
 ion-note{
   color: #B8B8D2;
@@ -49,12 +7,17 @@ ion-note{
 ion-input {
   --background: #3E3E55;
   color: #858597;
-  font-weight: 800;
+  font-weight: 500;
   font-size: 16px;
-  .input-fill-outline.sc-ion-input-md-h{
-    border-radius: 15px;
+  height: 70px;
+  z-index: 9999;
+  --ion-border-color: none !important
+}
 
-  }
+.input-fill-outline.sc-ion-input-md-h{
+  --border-radius: 10px !important;
+  --border-color: none;
+
 }
 ion-item{
   --background: #3E3E55;
@@ -63,48 +26,39 @@ ion-item{
 ion-content {
   --ion-background-color: #1F1F39 !important;
 }
-.arrowBack{
-  width: 30px;
-  height: 30px;
-}
 
-.login{
-  font-weight: 1000;
-  font-size: 2rem;
+.register{
+  font-size: 30pt;
+  font-weight: bold;
 }
 .passwort-vergessen {
   text-align: right;
 }
 
 ion-button {
+  margin-top: 1.5rem;
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 500;
   text-transform: none;
   --background: #3D5CFF;
-  border-radius: 10px;
+  --border-radius: 10px;
+  height: 70px;
+  min-width: 380px;
 }
 
-.registerPrompt {
+.loginPrompt {
+  padding-top: 1rem;
   text-align: center;
   color: #B8B8D2;
-  font-size: 12px;
+  font-size: 14px;
+  font-weight: 500;
   a{
     color: #3D5CFF;
     text-decoration: none;
-
   }
 }
 
-.forgotPassword{
-  display: flex;
-  justify-content: flex-end;
-  a{
-    font-weight: 400;
-    font-size: 14px;
-    text-decoration: none;
-    color: #B8B8D2;
-  }
-}
+
 .divider {
   display: flex;
   align-items: center;
