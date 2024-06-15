@@ -1,4 +1,4 @@
-.input{
+/*.input{
   font-size: 1rem;
 }
 ion-item{
@@ -39,3 +39,96 @@ ion-item{
     text-decoration: none;
   }
 }
+*/
+
+ion-note{
+  color: #B8B8D2;
+  font-weight: 800;
+  font-size: 16px;
+}
+ion-input {
+  --background: #3E3E55;
+  color: #858597;
+  font-weight: 800;
+  font-size: 16px;
+  .input-fill-outline.sc-ion-input-md-h{
+    border-radius: 15px;
+
+  }
+}
+ion-item{
+  --background: #3E3E55;
+}
+
+ion-content {
+  --ion-background-color: #1F1F39 !important;
+}
+.arrowBack{
+  width: 30px;
+  height: 30px;
+}
+
+.login{
+  font-weight: 1000;
+  font-size: 2rem;
+}
+.passwort-vergessen {
+  text-align: right;
+}
+
+ion-button {
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: none;
+  --background: #3D5CFF;
+  border-radius: 10px;
+}
+
+.registerPrompt {
+  text-align: center;
+  color: #B8B8D2;
+  font-size: 12px;
+  a{
+    color: #3D5CFF;
+    text-decoration: none;
+
+  }
+}
+
+.forgotPassword{
+  display: flex;
+  justify-content: flex-end;
+  a{
+    font-weight: 400;
+    font-size: 14px;
+    text-decoration: none;
+    color: #B8B8D2;
+  }
+}
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.line {
+  flex-grow: 1;
+  border: none;
+  border-top: 1px solid #B8B8D2;
+}
+
+.or-text {
+  padding: 0 10px;
+}
+
+.google-button {
+  --background: #EEEEEE;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: none;
+  border-radius: 10px;
+}
+
