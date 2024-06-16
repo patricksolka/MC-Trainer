@@ -24,8 +24,22 @@ export const routes: Routes = [
     ...canActivate(redirectLoggedInToHome)
   },
   {
+    path: 'forgot-password',
+    loadComponent: () => import('./components/auth/forgot-password/forgot-password.page').then(m => m.ForgotPasswordPage)
+  },
+  {
     path: 'home',
     loadComponent: () => import('./components/home/home.component').then(m => m.HomeComponent),
+    ...canActivate(redirectUnauthorizedToLogin)
+  },
+  {
+    path: 'categories',
+    loadComponent: () => import('./components/categories/categories.component').then(m => m.CategoriesComponent),
+    ...canActivate(redirectUnauthorizedToLogin)
+  },
+  {
+    path: 'cards/:categoryId',
+    loadComponent: () => import('./components/card/card.component').then(m => m.CardComponent),
     ...canActivate(redirectUnauthorizedToLogin)
   },
   {
@@ -42,13 +56,5 @@ export const routes: Routes = [
     path: 'achievements',
     loadComponent: () => import('./components/achievements/achievements.component').then(m => m.AchievementsComponent),
     ...canActivate(redirectUnauthorizedToLogin)
-  },
-  {
-    path: 'forgot-password',
-    loadComponent: () => import('./components/auth/forgot-password/forgot-password.page').then(m => m.ForgotPasswordPage)
-  },
-  {
-    path: 'categories',
-    loadComponent: () => import('./components/categories/categories.component').then(m => m.CategoriesComponent)
   },
 ];
