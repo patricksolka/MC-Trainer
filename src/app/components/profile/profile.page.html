@@ -1,0 +1,44 @@
+
+<ion-content class="ion-padding">
+    <ion-icon name="arrow-back-outline" class="arrowBack"></ion-icon>
+    <ion-text><h1 class="register">Profil</h1></ion-text>
+    <form class="ion-padding-top" [formGroup]="credentials"
+          (ngSubmit)="updateProfile()">
+        <ion-input
+                fill="outline"
+                placeholder="Vorname"
+                formControlName="firstName"
+                [clearInput]="true"
+                class="ion-margin-bottom">
+        </ion-input>
+        <ion-input
+                fill="outline"
+                placeholder="Nachname"
+                formControlName="lastName"
+                [clearInput]="true"
+                class="ion-margin-bottom">
+        </ion-input>
+        <ion-input
+                fill="outline"
+                type="email"
+                placeholder="Email"
+                formControlName="email"
+                [clearInput]="true" class="ion-margin-bottom">
+        </ion-input>
+
+        <!--<ion-note slot="error"
+                  *ngIf="(email?.dirty || email?.touched) && email.errors">
+            Email falsch
+        </ion-note>-->
+
+
+        <ion-input fill="outline"
+                   type="password"
+                   placeholder="Passwort"
+                   formControlName="password" class="ion-margin-bottom">
+        </ion-input>
+        <ion-button type="submit" color="danger" (click)="updateProfile()">Update</ion-button>
+    </form>
+    <ion-button type="button" color="danger" (click)="logout()">Logout</ion-button>
+    <ion-button type="button" color="danger" (click)="deleteProfile()">Profil löschen</ion-button>
+</ion-content>
