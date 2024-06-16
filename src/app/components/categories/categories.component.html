@@ -1,92 +1,73 @@
-<ion-header [translucent]="true">
+<!-- categories.component.html -->
+<ion-header>
     <ion-toolbar>
-        <ion-title>Entdecken</ion-title>
-        <ion-buttons [collapse]="true" slot="end">
-            <ion-button>
-                <ion-icon name="search-outline"></ion-icon>
+        <ion-title>Leistungen</ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="toggleSearch()">
+                <ion-icon slot="icon-only" name="search-outline"></ion-icon>
+            </ion-button>
+            <ion-button (click)="shareRecords()">
+                <ion-icon slot="icon-only" name="share-social-outline"></ion-icon>
             </ion-button>
         </ion-buttons>
+    </ion-toolbar>
+
+    <ion-toolbar *ngIf="searchBarVisible">
+        <ion-searchbar [(ngModel)]="searchText"></ion-searchbar>
     </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
     <ion-header collapse="condense">
         <ion-toolbar>
-            <ion-buttons [collapse]="true" slot="start">
+            <ion-buttons slot="start">
                 <ion-button (click)="navigateHome()">
                     <ion-icon name="arrow-back-outline"></ion-icon>
                 </ion-button>
             </ion-buttons>
             <ion-title>Entdecken</ion-title>
-            <ion-buttons [collapse]="true" slot="end">
+            <ion-buttons slot="end">
                 <ion-icon name="search-outline"></ion-icon>
             </ion-buttons>
         </ion-toolbar>
     </ion-header>
+
     <ion-list>
-        <ion-grid>
-            <ion-row>
-                <ion-col size="6" *ngFor="let category of categories$ | async">
-                    <ion-card color="dark">
-                        <ion-card-header>
-                            <ion-card-content>{{ category.name }}</ion-card-content>
-                        </ion-card-header>
-                    </ion-card>
-                </ion-col>
-            </ion-row>
-        </ion-grid>
+        <ion-item *ngFor="let category of categories$ | async" (click)="selectCategory(category.id)">
+            {{ category.name }}
+        </ion-item>
     </ion-list>
     <ion-item>
         <ion-label position="floating">Neue Kategorie</ion-label>
-        <ion-input #categoryInput type="text"></ion-input>
+        <ion-input [(ngModel)]="newCategoryName" type="text"></ion-input>
     </ion-item>
-    <!-- <ion-button expand="full" (click)="addCategory(categoryInput.value)">Kategorie hinzufügen</ion-button> -->
-
-    <ion-item>
-        <ion-label position="floating">Frage</ion-label>
-        <ion-input #questionInput type="text"></ion-input>
-    </ion-item>
-    <ion-item>
-        <ion-label position="floating">Antworten (durch Komma getrennt)</ion-label>
-        <ion-input #answersInput type="text"></ion-input>
-    </ion-item>
-    <ion-item>
-        <ion-label position="floating">Richtige Antwort</ion-label>
-        <ion-input #correctAnswerInput type="text"></ion-input>
-    </ion-item>
-    <!-- <ion-button expand="full" (click)="addCardToCategory(categoryInput.value, questionInput.value, answersInput.value?.split(','), correctAnswerInput.value)">Karte hinzufügen</ion-button> -->
+    <ion-button expand="full" (click)="addCategory(newCategoryName)">Kategorie hinzufügen</ion-button>
 </ion-content>
 
 <ion-footer>
     <ion-toolbar>
         <ion-tabs>
             <ion-tab-bar slot="bottom">
-
                 <ion-tab-button tab="home" (click)="navigateHome()">
                     <ion-icon name="home"></ion-icon>
                     Home
                 </ion-tab-button>
-
                 <ion-tab-button tab="book">
                     <ion-icon name="book"></ion-icon>
                     Module
                 </ion-tab-button>
-
                 <ion-tab-button tab="add-outline">
                     <ion-icon name="add-outline"></ion-icon>
                     Hinzufügen
                 </ion-tab-button>
-
                 <ion-tab-button tab="stats-chart-outline">
                     <ion-icon name="stats-chart-outline"></ion-icon>
                     Fortschritt
                 </ion-tab-button>
-
                 <ion-tab-button tab="person">
                     <ion-icon name="person"></ion-icon>
                     Profil
                 </ion-tab-button>
-
             </ion-tab-bar>
         </ion-tabs>
     </ion-toolbar>
