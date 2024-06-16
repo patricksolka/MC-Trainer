@@ -78,7 +78,7 @@ export class AuthService {
         signOut(this.auth)
     }
 
-    async deleteAccount(uid: string) {
+    /*async deleteAccount(uid: string) {
         try {
             const userRef = doc(this.firestore, `users/${uid}`);
             await deleteDoc(userRef);
@@ -88,7 +88,7 @@ export class AuthService {
             console.error("Fehler beim Löschen des Benutzers: ", e);
             return null;
         }
-    }
+    }*/
    /* async deleteAccount(uid: string) {
         try{
             const userRef = doc(this.firestore, `users/${uid}`);

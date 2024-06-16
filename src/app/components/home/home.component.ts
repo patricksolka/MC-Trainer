@@ -3,13 +3,14 @@ import {IonicModule, LoadingController} from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import {Router, RouterModule} from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
   standalone: true,
-  imports: [IonicModule, CommonModule, RouterModule]
+    imports: [IonicModule, CommonModule, RouterModule, FormsModule]
 })
 export class HomeComponent {
   constructor(private authService: AuthService, private router: Router, private loadingController: LoadingController) {
