@@ -24,9 +24,12 @@ import {User} from "../../models/user.model";
     imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonInput, IonNote, IonText, ReactiveFormsModule, IonButton, IonIcon]
 })
 export class ProfilePage {
+    credentials: FormGroup;
+
 
     private user: User = new User();
-    credentials: FormGroup;
+
+
 
     constructor(private loadingController: LoadingController,
                 private authService: AuthService,
@@ -40,20 +43,29 @@ export class ProfilePage {
             email: ['', [Validators.required, Validators.email]],
             password: ['', Validators.required]
         });
-        this.loadUser();
+        this.fetchUser();
     }
 
-    loadUser() {
+    /*inputDidChange(){
+            return this.credentials.pristine ||
+                (this.credentials.value.firstName === this.user.firstName &&
+                    this.credentials.value.lastName === this.user.lastName &&
+                    this.credentials.value.email === this.user.email );
+                    //this.credentials.value.password === this.user.password
+    }*/
+
+
+    fetchUser() {
         const uid = this.authService.auth.currentUser.uid;
         this.userService.getUser(uid).then(user => {
             if (user) {
                 console.log('Found user:', user);
                 Object.assign(this.user, user);
-                /*this.credentials.patchValue({
+                this.credentials.patchValue({
                     firstName: this.user.firstName,
                     lastName: this.user.lastName,
                     email: this.user.email
-                });*/
+                });
             } else {
                 console.log('No user found with id:', uid);
             }
@@ -88,13 +100,17 @@ export class ProfilePage {
                 message: 'Änderungen werden gespeichert',
             });
             await loading.present();
-           // Object.assign(this.user, this.credentials.value);
-           // await this.userService.updateUser(this.user);
+           Object.assign(this.user, this.credentials.value);
+           await this.userService.updateUser(this.user);
             await loading.dismiss();
             console.log('Profile updated', this.user);
         } else {
             console.log('Form is not valid');
         }
+    }
+
+    ionViewWillEnter() {
+        this.fetchUser();
     }
 }
 

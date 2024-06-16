@@ -1,11 +1,12 @@
 import {AuthService} from "./auth.service";
-import {deleteDoc, doc, Firestore, getDoc, setDoc, updateDoc} from "@angular/fire/firestore";
+import {deleteDoc, doc, Firestore, getDoc, updateDoc, QueryDocumentSnapshot,
+    SnapshotOptions, DocumentData} from "@angular/fire/firestore";
 import {deleteUser} from "@angular/fire/auth";
 import {Injectable} from "@angular/core";
 import {User} from "../models/user.model";
-import firebase from "firebase/compat";
-import QueryDocumentSnapshot = firebase.firestore.QueryDocumentSnapshot;
-import {DocumentData, SnapshotOptions} from "@angular/fire/compat/firestore";
+
+//import QueryDocumentSnapshot = firebase.firestore.QueryDocumentSnapshot;
+//import {DocumentData, SnapshotOptions} from "@angular/fire/compat/firestore";
 
 @Injectable({
     providedIn: 'root'
@@ -28,7 +29,7 @@ export class UserService {
             return null;
         }
     }
-
+    // ohne converter
     /* async updateUser(user: User) {
          try {
              const userRef = doc(this.firestore, `users/${user.uid}`);
@@ -40,16 +41,17 @@ export class UserService {
      }
  */
 
-    /*async updateUser(user: User) {
+    //mit converter
+    async updateUser(user: User) {
         try {
             const userData = this.userConverter.toFirestore(user);
             const userRef = doc(this.firestore, 'users', user.uid);
             await updateDoc(userRef, userData);
         } catch (e) {
-            console.error("Fehler beim Aktualisieren des Benutzers: ", e);
+            console.log("Fehler beim Aktualisieren des Benutzers: ", e);
             return null;
         }
-    }*/
+    }
 
     private userConverter = {
         fromFirestore: (snapshot: QueryDocumentSnapshot, options: SnapshotOptions): User => {
