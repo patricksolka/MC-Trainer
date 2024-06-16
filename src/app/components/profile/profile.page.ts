@@ -13,7 +13,7 @@ import {
 import {LoadingController} from "@ionic/angular";
 import {AuthService} from "../../services/auth.service";
 import {UserService} from "../../services/user.service";
-import {Router} from "@angular/router";
+import {Router, RouterLink, RouterModule} from "@angular/router";
 import {User} from "../../models/user.model";
 
 @Component({
@@ -21,7 +21,7 @@ import {User} from "../../models/user.model";
     templateUrl: './profile.page.html',
     styleUrls: ['./profile.page.scss'],
     standalone: true,
-    imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonInput, IonNote, IonText, ReactiveFormsModule, IonButton, IonIcon]
+    imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonInput, IonNote, IonText, ReactiveFormsModule, IonButton, IonIcon, RouterLink]
 })
 export class ProfilePage {
     credentials: FormGroup;

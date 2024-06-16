@@ -1,0 +1,42 @@
+
+ion-icon {
+  width: 32px;
+  height: 32px;
+}
+
+ion-input {
+  --background: #3E3E55;
+  color: #858597;
+  font-weight: 500;
+  font-size: 16px;
+  height: 70px;
+}
+
+.input-fill-outline.sc-ion-input-md-h{
+  --border-radius: 10px !important;
+  --border-color: none;
+
+}
+
+ion-content {
+  --ion-background-color: #1F1F39 !important;
+}
+
+.profile{
+  font-size: 30pt;
+  font-weight: bold;
+}
+
+.ulp {
+  font-size: 16px;
+  font-weight: 500;
+  text-transform: none;
+  --background: #3D5CFF;
+  --border-radius: 10px;
+  height: 70px;
+  min-width: 380px;
+}
+
+.backButton{
+  --background: transparentize(#3D5CFF, 0);
+}

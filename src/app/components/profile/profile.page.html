@@ -1,7 +1,9 @@
 
 <ion-content class="ion-padding">
-    <ion-icon name="arrow-back-outline" class="arrowBack"></ion-icon>
-    <ion-text><h1 class="register">Profil</h1></ion-text>
+    <ion-button class="backButton" [routerLink]="['/home']">
+    <ion-icon name="arrow-back-outline" class="arrowBack" ></ion-icon>
+    </ion-button>
+    <ion-text><h1 class="profile">Profil</h1></ion-text>
     <form class="ion-padding-top" [formGroup]="credentials"
           (ngSubmit)="updateProfile()">
         <ion-input
@@ -40,9 +42,14 @@
                    class="ion-margin-bottom">
 
         </ion-input>
-        <ion-button type="button" color="danger" (click)="updateProfile()"
-                    >Update</ion-button>
+        <!-- Change className later -->
+        <ion-button class="ulp"  type="button"  (click)="updateProfile()" expand="block"
+                    size="large">Update</ion-button>
     </form>
-    <ion-button type="button" color="danger" (click)="logout()">Logout</ion-button>
-    <ion-button type="button" color="danger" (click)="deleteProfile()">Profil löschen</ion-button>
+    <!-- Change className later -->
+    <ion-button class="ulp"  type="button" color="danger" (click)="logout()" expand="block"
+                size="large">Logout</ion-button>
+    <!-- Change className later -->
+    <ion-button class="ulp"  type="button" color="danger" (click)="deleteProfile()" expand="block"
+                size="large">Profil löschen</ion-button>
 </ion-content>
