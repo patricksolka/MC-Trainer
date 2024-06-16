@@ -21,6 +21,8 @@ export class HomeComponent {
       private loadingController: LoadingController,
       private auth: Auth
   ) {
+    this.getUser();
+    console.log(this.userName);
   }
   async logout() {
     const loading = await this.loadingController.create({
@@ -31,14 +33,14 @@ export class HomeComponent {
     loading.dismiss();
     this.router.navigateByUrl('/login', { replaceUrl: true });
   }
-  ngOnInit() {
-    const currentUser = this.auth.currentUser;
-    if (currentUser) {
-      this.authService.getUserDetails(currentUser.uid).then((userDetails) => {
-        if (userDetails) {
-          this.userName = `${userDetails.firstName}`;
-        }
-      });
+    async getUser() {
+      const currentUser = this.auth.currentUser;
+      if (currentUser) {
+        await this.authService.getUserDetails(currentUser.uid).then((userDetails) => {
+          if (userDetails) {
+            this.userName = `${userDetails.firstName}`;
+          }
+        });
+      }
     }
-  }
 }
