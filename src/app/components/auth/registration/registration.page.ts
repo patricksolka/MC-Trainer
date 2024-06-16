@@ -59,28 +59,16 @@ export class RegistrationPage  {
       await loading.dismiss();
 
       if (user) {
-        this.router.navigateByUrl('/home', { replaceUrl: true });
+        localStorage.setItem('userName', user.firstName);
+        await this.router.navigateByUrl('/home', { replaceUrl: true });
       } else {
-        this.showAlertRegister('Registrierung fehlgeschlagen', 'Versuche es erneut!');
+        await this.showAlertRegister('Registrierung fehlgeschlagen', 'Versuche es erneut!');
       }
     } else {
-      this.showAlertRegister('Registrierung fehlgeschlagen', 'Bitte fülle alle erforderlichen Felder aus!');
+      await this.showAlertRegister('Registrierung fehlgeschlagen', 'Bitte fülle alle' +
+          ' erforderlichen Felder aus!');
     }
   }
-  /*async register() {
-    const loading = await this.loadingController.create();
-    await loading.present();
-    const {firstName, lastName, email, password } = this.credentials.value;
-    const user = await this.authService.register(this.credentials.value);
-    await loading.dismiss();
-
-    if (user) {
-      this.router.navigateByUrl('/home', { replaceUrl: true });
-    } else {
-      this.showAlertRegister('Registrierung fehlgeschlagen', 'Versuche es erneut!');
-    }
-  }*/
-
 
   async showAlertRegister(header: string, message: string) {
     const alert = await this.alertController.create({

@@ -21,6 +21,7 @@ import {
 import {Router, RouterLink} from "@angular/router";
 import {AuthService} from "../../../services/auth.service";
 import {AlertController, LoadingController} from "@ionic/angular";
+import {UserService} from "../../../services/user.service";
 
 
 @Component({
@@ -53,7 +54,8 @@ export class LoginPage {
         private loadingController: LoadingController,
         private alertController: AlertController,
         private router: Router,
-        private authService: AuthService
+        private authService: AuthService,
+        private userService: UserService,
     ) {
         this.credentials = this.fb.group({
             email: ['', [Validators.required, Validators.email]],
@@ -76,11 +78,15 @@ export class LoginPage {
             await loading.present();
             const {email, password} = this.credentials.value;
 
-            const user = await this.authService.login(this.credentials.value);
+            const userCredential = await this.authService.login(this.credentials.value);
             await loading.dismiss();
 
-            if (user) {
-                await this.router.navigateByUrl('/home', {replaceUrl: true});
+            if (userCredential) {
+                const user = await this.userService.getUser(userCredential.user.uid);
+                if (user) {
+                    localStorage.setItem('userName', user.firstName);
+                    await this.router.navigateByUrl('/home', {replaceUrl: true});
+                }
             } else {
                 await this.showAlertLogin('Login fehlgeschlagen', 'Versuche es erneut!');
               }
