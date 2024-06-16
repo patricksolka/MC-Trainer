@@ -10,7 +10,7 @@ const redirectLoggedInToHome = () => redirectLoggedInTo(['home']);
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'onboarding',
     pathMatch: 'full',
   },
   {
@@ -22,10 +22,6 @@ export const routes: Routes = [
     path: 'register',
     loadComponent: () => import('./components/auth/registration/registration.page').then(m => m.RegistrationPage),
     ...canActivate(redirectLoggedInToHome)
-  },
-  {
-    path: 'forgot-password',
-    loadComponent: () => import('./components/auth/forgot-password/forgot-password.page').then(m => m.ForgotPasswordPage)
   },
   {
     path: 'home',
@@ -52,9 +48,24 @@ export const routes: Routes = [
     loadComponent: () => import('./components/stats/stats.component').then(m => m.StatsComponent),
     ...canActivate(redirectUnauthorizedToLogin)
   },
+  { path: 'total-stats',
+    loadComponent: () => import('./components/total-stats/total-stats.component').then( m => m.TotalStatsComponent),
+    ...canActivate(redirectUnauthorizedToLogin)
+  },
   {
     path: 'achievements',
     loadComponent: () => import('./components/achievements/achievements.component').then(m => m.AchievementsComponent),
     ...canActivate(redirectUnauthorizedToLogin)
   },
+  {
+    path: 'onboarding',
+    loadComponent: () => import('./components/onboarding/onboarding.component').then( m => m.OnboardingComponent),
+    ...canActivate(redirectLoggedInToHome)
+  },
+  {
+    path: 'forgot-password',
+    loadComponent: () => import('./components/auth/forgot-password/forgot-password.page').then(m => m.ForgotPasswordPage),
+    //...canActivate(redirectUnauthorizedToLogin)
+  },
+
 ];
