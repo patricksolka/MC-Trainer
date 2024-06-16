@@ -10,7 +10,7 @@ const redirectLoggedInToHome = () => redirectLoggedInTo(['home']);
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'onboarding',
+    redirectTo: '',
     pathMatch: 'full',
   },
   {
