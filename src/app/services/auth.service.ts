@@ -1,13 +1,14 @@
 import {Injectable} from '@angular/core';
-//import { User } from '../models/user.model';
+import { User } from '../models/user.model';
 //import { HttpClient } from '@angular/common/http';
 import {
     Auth,
-    createUserWithEmailAndPassword,
+    createUserWithEmailAndPassword, deleteUser,
     signInWithEmailAndPassword,
     signOut
 } from '@angular/fire/auth';
-import {doc, Firestore, getDoc, setDoc} from "@angular/fire/firestore";
+import {deleteDoc, doc, Firestore, setDoc} from "@angular/fire/firestore";
+import {UserService} from "./user.service";
 
 
 @Injectable({
@@ -15,22 +16,31 @@ import {doc, Firestore, getDoc, setDoc} from "@angular/fire/firestore";
 })
 
 export class AuthService {
-    constructor(private auth: Auth, private firestore: Firestore) {}
+    constructor(public auth: Auth, private firestore: Firestore, private userService: UserService) {
+    }
 
-    async register({ firstName, lastName, email, password }) {
+    async register({firstName, lastName, email, password}) {
         try {
-            const userCredential= await createUserWithEmailAndPassword(this.auth, email, password);
-            const user = userCredential.user;
+            const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
+            const firebaseUser = userCredential.user;
 
-            const userRef = doc(this.firestore, `users/${user.uid}`);
-            await setDoc(userRef, {
-                uid: user.uid,
-                email: user.email,
+            const user: User = {
+                uid: firebaseUser.uid,
+                email: firebaseUser.email,
                 firstName,
                 lastName,
-            });
+                stats: {
+                    completedQuizzes: 0,
+                    correctAnswers: 0,
+                    totalQuestions: 0,
+                }
+            };
+
+            const userRef = doc(this.firestore, `users/${user.uid}`);
+            await setDoc(userRef, user);
+
             return user;
-            } catch (e) {
+        } catch (e) {
             return null;
         }
     }
@@ -38,7 +48,7 @@ export class AuthService {
 
     async login({email, password}) {
         try {
-            const user= await signInWithEmailAndPassword(
+            const user = await signInWithEmailAndPassword(
                 this.auth,
                 email,
                 password
@@ -49,59 +59,24 @@ export class AuthService {
         }
     }
 
-    logout(){
-        signOut(this.auth)
-    }
-
-
-    /*
-    private users: User[] = [];
-    private currentUser: User | null = null;
-
-    constructor(private http: HttpClient) {
-        this.loadUsers();
-    }
-
-    private loadUsers() {
-        this.http.get<User[]>('assets/users.json').subscribe((data: User[]) => {
-            this.users = data;
-        });
-    }
-
-    register(user: User): boolean {
-        if (this.users.find(u => u.username === user.username)) {
-            return false; // User already exists
-        }
-        this.users.push(user);
-        return true;
-    }
-
-    login(username: string, password: string): boolean {
-        const user = this.users.find(u => u.username === username && u.password === password);
-        if (user) {
-            this.currentUser = user;
-            return true;
-        }
-        return false;
-    }
-
-    logout(): void {
-        this.currentUser = null;
-    }
-
-    resetPassword(username: string, newPassword: string): boolean {
-        const user = this.users.find(u => u.username === username);
-        if (user) {
-            user.password = newPassword;
-            return true;
-        }
-        return false;
-    }
-
-    isAuthenticated(): boolean {
-        return this.currentUser !== null;
+    logout() {
+        signOut(this.auth);
+        localStorage.removeItem('userName');
     }
 }
-*/
 
-}
+
+//evtl um Änderungen in der db zu beobachten
+   /* const unsubscribe = onSnapshot(userRef, (docSnapshot) => {
+        if (!docSnapshot.exists()) {
+            // Das Dokument wurde gelöscht, löschen Sie den Benutzer aus der Authentifizierung
+            deleteUser(this.auth.currentUser).catch((error) => {
+                console.error("Fehler beim Löschen des Benutzers aus der Authentifizierung: ", error);
+            });
+            // Beenden Sie das Abhören von Änderungen, nachdem der Benutzer gelöscht wurde
+            unsubscribe();
+        }
+    });*/
+
+
+
