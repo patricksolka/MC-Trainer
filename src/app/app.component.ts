@@ -1,21 +1,63 @@
 import { Component } from '@angular/core';
-import {IonApp, IonRouterOutlet, NavController} from "@ionic/angular/standalone";
-import {addIcons} from "ionicons";
-import {personOutline, chevronForward,lockClosedOutline,mailOutline, home, book, addCircle, statsChart, person, arrowBackOutline, statsChartOutline, addOutline, searchOutline, logoGoogle} from "ionicons/icons";
-import {Router} from "@angular/router";
+import { IonApp, IonRouterOutlet, NavController} from "@ionic/angular/standalone";
+import { addIcons } from "ionicons";
+import {
+    personOutline,
+    chevronForward,
+    lockClosedOutline,
+    mailOutline,
+    home,
+    book,
+    addCircle,
+    statsChart,
+    person,
+    arrowBackOutline,
+    logoGoogle,
+    statsChartOutline,
+    addOutline,
+    searchOutline,
+} from "ionicons/icons";
+import { Router } from "@angular/router";
+import { HttpClientModule } from "@angular/common/http";
+import { CardService } from './services/card.service';
+import { Question } from './models/question.model';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: 'app.component.html',
-  imports: [
-    IonRouterOutlet,
-    IonApp
-  ],
-  standalone: true
+    selector: 'app-root',
+    templateUrl: 'app.component.html',
+    imports: [
+        HttpClientModule,
+        IonRouterOutlet,
+        IonApp
+    ],
+    standalone: true
 })
 export class AppComponent {
-  constructor(private router: Router) {
-  addIcons({personOutline, chevronForward, lockClosedOutline, mailOutline, home, book, addCircle, statsChart, person, arrowBackOutline, statsChartOutline, addOutline, searchOutline, logoGoogle});
-  }
-}
+    questions: Question[] = [];
 
+    constructor(private router: Router, private cardService: CardService) {
+        addIcons({
+            personOutline,
+            chevronForward,
+            lockClosedOutline,
+            mailOutline,
+            home,
+            book,
+            addCircle,
+            statsChart,
+            person,
+            arrowBackOutline,
+            logoGoogle,
+            statsChartOutline,
+            addOutline,
+            searchOutline,
+        });
+
+        // Lade die Fragen beim Initialisieren der Komponente
+        /*
+        this.cardService.getQuestions().subscribe(data => {
+            this.questions = data;
+        });
+         */
+    }
+}

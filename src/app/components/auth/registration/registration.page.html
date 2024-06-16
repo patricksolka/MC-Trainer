@@ -1,7 +1,7 @@
 <ion-content class="ion-padding">
     <!--<ion-icon name="arrow-back-outline" class="arrowBack"></ion-icon>-->
-    <ion-text><h1 class="login">Registrieren</h1></ion-text>
-    <ion-note class="subTitle ion-padding-bottom"><h5>Erstelle ein neues Konto</h5></ion-note>
+    <ion-text><h1 class="register">Registrieren</h1></ion-text>
+    <ion-note class="subTitle ion-padding-bottom"><h5>Erstelle ein neues Konto.</h5></ion-note>
     <form (ngSubmit)="register()"
           [formGroup]="credentials"
           class="ion-padding-top">
@@ -26,32 +26,32 @@
                 formControlName="email"
                 [clearInput]="true" class="ion-margin-bottom">
         </ion-input>
+        <!--
         <ion-note slot="error"
                   *ngIf="(email?.dirty || email?.touched) && email.errors">
             Email falsch
         </ion-note>
+        -->
 
         <ion-input fill="outline"
                    type="password"
                    placeholder="Passwort"
                    formControlName="password" class="ion-margin-bottom">
         </ion-input>
+        <!--
         <ion-note slot="error"
                   *ngIf="(password?.dirty || password?.touched) && password.errors">Passwort
             falsch
-        </ion-note>
-        <div class="forgotPassword ion-margin-bottom">
-            <a [routerLink]="['/forgot-password']">Passwort vergessen?</a>
-        </div>
+        </ion-note> -->
         <ion-button type="button"
                     expand="block"
                     size="large"
-                    (click)="register()">
+                    (click)="register()" class="ion-margin-top">
             Registrieren
         </ion-button>
     </form>
 
-    <div class="registerPrompt ion-margin-top">
+    <div class="loginPrompt ion-margin-top">
         Du hast bereits einen Account? <a [routerLink]="['/login']">Anmelden</a>
     </div>
     <div class="divider">
