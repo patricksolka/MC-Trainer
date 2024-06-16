@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 export class CategoriesService {
     private categoriesCollection;
 
+
     constructor(private firestore: Firestore) {
         this.categoriesCollection = collection(this.firestore, 'categories');
     }
@@ -37,4 +38,5 @@ export class CategoriesService {
         const categoryDoc = doc(this.firestore, `categories/${id}`);
         return deleteDoc(categoryDoc);
     }
+
 }

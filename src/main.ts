@@ -7,6 +7,7 @@ import {routes} from './app/app.routes';
 import {AppComponent} from './app/app.component';
 import {environment} from './environments/environment';
 import { register as registerSwiperElements} from  'swiper/element/bundle';
+import {FooterPage} from "./app/components/footer/footer.page";
 //Firebase
 import {initializeApp, provideFirebaseApp} from '@angular/fire/app';
 import {getFirestore, provideFirestore} from '@angular/fire/firestore';

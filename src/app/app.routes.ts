@@ -39,11 +39,6 @@ export const routes: Routes = [
     ...canActivate(redirectUnauthorizedToLogin)
   },
   {
-    path: 'cards',
-    loadComponent: () => import('./components/card/card.component').then(m => m.CardComponent),
-    ...canActivate(redirectUnauthorizedToLogin)
-  },
-  {
     path: 'stats',
     loadComponent: () => import('./components/stats/stats.component').then(m => m.StatsComponent),
     ...canActivate(redirectUnauthorizedToLogin)
@@ -71,6 +66,14 @@ export const routes: Routes = [
     path: 'profile',
     loadComponent: () => import('./components/profile/profile.page').then(m => m.ProfilePage),
     ...canActivate(redirectUnauthorizedToLogin)
+  },  {
+    path: 'profile',
+    loadComponent: () => import('./components/profile/profile.page').then( m => m.ProfilePage)
   },
+  {
+    path: 'footer',
+    loadComponent: () => import('./components/footer/footer.page').then( m => m.FooterPage)
+  },
+
 
 ];

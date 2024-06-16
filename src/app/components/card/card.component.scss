@@ -1,12 +1,23 @@
 /* Füge deine CSS-Stile für die Card-Komponente hier hinzu */
 .selected {
   border: 3px solid blue;
+  background-color: #d9d9d9;
 }
 
 .correct {
   border: 3px solid green;
+  background-color: #a5d6a7;
 }
 
 .incorrect {
   border: 3px solid red;
+  background-color: #ef9a9a;
+}
+
+ion-card {
+  margin: 20px;
+}
+
+ion-item {
+  cursor: pointer;
 }

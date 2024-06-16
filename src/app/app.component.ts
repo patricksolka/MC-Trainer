@@ -21,6 +21,7 @@ import { Router } from "@angular/router";
 import { HttpClientModule } from "@angular/common/http";
 import { CardService } from './services/card.service';
 import { Question } from './models/question.model';
+import {FooterPage} from "./components/footer/footer.page";
 
 @Component({
     selector: 'app-root',
@@ -28,7 +29,8 @@ import { Question } from './models/question.model';
     imports: [
         HttpClientModule,
         IonRouterOutlet,
-        IonApp
+        IonApp,
+        FooterPage
     ],
     standalone: true
 })

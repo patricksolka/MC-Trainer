@@ -1,7 +1,7 @@
 // card.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Card } from '../../models/card.model';
 import { Category } from '../../models/categories.model';
 import { CardService } from '../../services/card.service';
@@ -17,6 +17,8 @@ import {
     IonTitle,
     IonToolbar
 } from "@ionic/angular/standalone";
+import {IonicModule} from "@ionic/angular";
+import {FooterPage} from "../footer/footer.page";
 
 
 @Component({
@@ -24,7 +26,7 @@ import {
     templateUrl: './card.component.html',
     styleUrls: ['./card.component.css'],
     standalone: true,
-    imports: [CommonModule, RouterModule, IonHeader, IonContent, IonToolbar, IonTitle, IonList, IonItem, IonCard, IonCardHeader, IonCardContent, IonButton]
+    imports: [CommonModule, IonHeader, IonContent, IonToolbar, IonTitle, IonList, IonItem, IonCard, IonCardHeader, IonCardContent, IonButton, IonicModule, FooterPage]
 })
 export class CardComponent implements OnInit, OnDestroy {
     categories$: Observable<Category[]>;
@@ -34,12 +36,15 @@ export class CardComponent implements OnInit, OnDestroy {
     currentQuestion: Card;
     showResult = false;
     selectedAnswers: string[] = [];
-    currentQuestionIndex: number = 0; // Neue Variable für den Index der aktuellen Frage
+    correctAnswersCount = 0;
+    incorrectAnswersCount = 0;
+    totalQuestions = 0;
     questions: Card[] = []; // Array für alle Fragen
 
+//    currentQuestionIndex: number = 0; // Neue Variable für den Index der aktuellen Frage
     private cardsSubscription: Subscription;
 
-    constructor(private cardService: CardService, private route: ActivatedRoute) { }
+    constructor(private cardService: CardService, private route: ActivatedRoute, private router: Router) { }
 
     ngOnInit(): void {
         this.categoryId = this.route.snapshot.paramMap.get('categoryId');
@@ -47,22 +52,36 @@ export class CardComponent implements OnInit, OnDestroy {
         this.loadCards(this.categoryId);
     }
 
+    loadCategories(): void {
+        this.categories$ = this.cardService.getCategoriesWithQuestionCounts();
+    }
+
     loadCards(categoryId: string): void {
         this.cards$ = this.cardService.getAllCardsForCategory(categoryId);
-        this.cardsSubscription = this.cards$.subscribe({
-            next: (cards) => {
+        this.cardsSubscription = this.cards$.subscribe(
+            (cards) => {
                 console.log('Geladene Karten:', cards);
                 if (cards.length > 0) {
-                    this.questions = cards; // Aktualisieren Sie die Fragen
+                    this.questions = this.shuffleArray(cards); // Mische die Fragen
+                    this.totalQuestions = this.questions.length;
                     this.currentQuestion = this.questions[0];
                 } else {
                     console.warn('Keine Karten gefunden für die Kategorie mit ID:', categoryId);
                 }
             },
-            error: (error) => {
+            (error) => {
                 console.error('Fehler beim Laden der Karten:', error);
             }
-        });
+        );
+    }
+
+    shuffleArray(array: any[]): any[] {
+        // Fisher-Yates Shuffle Algorithmus
+        for (let i = array.length - 1; i >= 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
     }
 
     selectCategory(categoryId: string): void {
@@ -81,23 +100,31 @@ export class CardComponent implements OnInit, OnDestroy {
     getNextQuestion(): void {
         this.showResult = false;
         this.selectedAnswers = [];
-        // Implementiere hier die Logik, um die nächste Frage zu laden
-        this.currentQuestionIndex++; // Inkrementiere den Index für die nächste Frage
-
-        if (this.currentQuestionIndex < this.questions.length) {
-            this.currentQuestion = this.questions[this.currentQuestionIndex];
+        const index = this.questions.indexOf(this.currentQuestion);
+        if (index < this.questions.length - 1) {
+            this.currentQuestion = this.questions[index + 1];
         } else {
-            // Hier könnten Sie Logik hinzufügen, wenn alle Fragen beantwortet wurden
-            console.log('Alle Fragen wurden beantwortet!');
+            // Navigiere zur Statistikseite und übergebe die Ergebnisse
+            this.router.navigate(['/stats'], {
+                state: {
+                    correctAnswers: this.correctAnswersCount,
+                    incorrectAnswers: this.incorrectAnswersCount,
+                }
+            });
         }
     }
 
     checkAnswers(): void {
-        this.isAnswerCorrect = () => {
-            return this.selectedAnswers.every(answer => this.currentQuestion.correctAnswer.includes(answer)) &&
-                this.currentQuestion.correctAnswer.every(answer => this.selectedAnswers.includes(answer));
-        };
+       const isCorrect = this.selectedAnswers.every(answer => this.currentQuestion.correctAnswer.includes(answer)) && this.currentQuestion.correctAnswer.every(answer => this.selectedAnswers.includes(answer));
+        if(isCorrect) {
+            this.correctAnswersCount++
+        } else {
+            this.incorrectAnswersCount++;
+        }
         this.showResult = true;
+        setTimeout(() => {
+            this.getNextQuestion();
+        }, 1000); // Warte eine Sekunde bevor die nächste Frage geladen wird
     }
 
     isCorrectAnswer(answer: string): boolean {

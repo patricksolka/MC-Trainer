@@ -33,10 +33,15 @@
     </ion-header>
 
     <ion-list>
-        <ion-item *ngFor="let category of categories$ | async" (click)="selectCategory(category.id)">
-            {{ category.name }}
-        </ion-item>
+        <ng-container *ngFor="let category of categories$ | async">
+            <ng-container *ngIf="categoryHasQuestions(category)">
+                <ion-item (click)="selectCategory(category.id)">
+                    {{ category.name }} ({{ category.questionCount }})
+                </ion-item>
+            </ng-container>
+        </ng-container>
     </ion-list>
+
     <ion-item>
         <ion-label position="floating">Neue Kategorie</ion-label>
         <ion-input [(ngModel)]="newCategoryName" type="text"></ion-input>
@@ -44,31 +49,4 @@
     <ion-button expand="full" (click)="addCategory(newCategoryName)">Kategorie hinzufügen</ion-button>
 </ion-content>
 
-<ion-footer>
-    <ion-toolbar>
-        <ion-tabs>
-            <ion-tab-bar slot="bottom">
-                <ion-tab-button tab="home" (click)="navigateHome()">
-                    <ion-icon name="home"></ion-icon>
-                    Home
-                </ion-tab-button>
-                <ion-tab-button tab="book">
-                    <ion-icon name="book"></ion-icon>
-                    Module
-                </ion-tab-button>
-                <ion-tab-button tab="add-outline">
-                    <ion-icon name="add-outline"></ion-icon>
-                    Hinzufügen
-                </ion-tab-button>
-                <ion-tab-button tab="stats-chart-outline">
-                    <ion-icon name="stats-chart-outline"></ion-icon>
-                    Fortschritt
-                </ion-tab-button>
-                <ion-tab-button tab="person">
-                    <ion-icon name="person"></ion-icon>
-                    Profil
-                </ion-tab-button>
-            </ion-tab-bar>
-        </ion-tabs>
-    </ion-toolbar>
-</ion-footer>
+<app-footer></app-footer>
