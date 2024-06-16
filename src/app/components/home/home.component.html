@@ -1,7 +1,16 @@
+<!--<ion-header *ngIf="loaded">-->
 <ion-header>
-    <h1>Hallo, <br [ngModel]=""> User!</h1>
+    <h1>Hallo, <br> {{ user?.firstName }}</h1>
     <ion-img class="user-image" [src]="" alt="pp"></ion-img>
 </ion-header>
+
+<!--<ion-header *ngIf="!loaded">
+    <h1>Hallo, <br>
+        <ion-skeleton-text animated="true"
+                           style="width: 80px">{{ user?.firstName }}</ion-skeleton-text></h1>
+    <ion-img class="user-image" [src]="" alt="pp"></ion-img>
+</ion-header>-->
+
 
 <ion-content style ="--background: #1F1F39;">
     <div class="progress">
