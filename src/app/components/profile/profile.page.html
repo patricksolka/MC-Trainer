@@ -23,7 +23,8 @@
                 type="email"
                 placeholder="Email"
                 formControlName="email"
-                [clearInput]="true" class="ion-margin-bottom">
+                [readonly] = "true"
+                class="ion-margin-bottom">
         </ion-input>
 
         <!--<ion-note slot="error"
@@ -35,9 +36,12 @@
         <ion-input fill="outline"
                    type="password"
                    placeholder="Passwort"
-                   formControlName="password" class="ion-margin-bottom">
+                   formControlName="password"
+                   class="ion-margin-bottom">
+
         </ion-input>
-        <ion-button type="submit" color="danger" (click)="updateProfile()">Update</ion-button>
+        <ion-button type="button" color="danger" (click)="updateProfile()"
+                    >Update</ion-button>
     </form>
     <ion-button type="button" color="danger" (click)="logout()">Logout</ion-button>
     <ion-button type="button" color="danger" (click)="deleteProfile()">Profil löschen</ion-button>
