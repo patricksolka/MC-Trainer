@@ -1,7 +1,18 @@
+<!--<ion-header *ngIf="loaded">-->
 <ion-header>
-    <h1>Hallo, <br> User!</h1>
+   <!-- <h1>Hallo, <br> {{ user?.firstName }}</h1>-->
+    <h1>Hallo, <br> <span>{{ userName }}</span> </h1>
+
     <ion-img class="user-image" [src]="" alt="pp"></ion-img>
 </ion-header>
+
+<!--<ion-header *ngIf="!loaded">
+    <h1>Hallo, <br>
+        <ion-skeleton-text animated="true"
+                           style="width: 80px">{{ user?.firstName }}</ion-skeleton-text></h1>
+    <ion-img class="user-image" [src]="" alt="pp"></ion-img>
+</ion-header>-->
+
 
 <ion-content style ="--background: #1F1F39;">
     <div class="progress">
@@ -21,27 +32,27 @@
     <div class="Module">
 
     </div>
-    <ion-button type="button" color="danger" (click)="logout()">Logout</ion-button>
+   <!-- <ion-button type="button" color="danger" (click)="logout()">Logout</ion-button>-->
 </ion-content>
 <ion-footer>
     <ion-tab-bar style ="--background: #1F1F39;">
-        <ion-tab-button tab="home" routerLink="/home">
+        <ion-tab-button tab="home" [routerLink]="['home']">
             <ion-icon name="home"></ion-icon>
             <ion-label>Home</ion-label>
         </ion-tab-button>
-        <ion-tab-button tab="modules" routerLink="/categories">
+        <ion-tab-button tab="modules" [routerLink]="['categories']">
             <ion-icon name="book"></ion-icon>
             <ion-label>Module</ion-label>
         </ion-tab-button>
-        <ion-tab-button tab="add" routerLink="/add">
+        <ion-tab-button tab="add" [routerLink]="['/add']">
             <ion-icon name="add-circle"></ion-icon>
             <ion-label>Hinzufügen</ion-label>
         </ion-tab-button>
-        <ion-tab-button tab="progress" routerLink="/stats">
+        <ion-tab-button tab="progress" [routerLink]="['/stats']">
             <ion-icon name="stats-chart"></ion-icon>
             <ion-label>Fortschritt</ion-label>
         </ion-tab-button>
-        <ion-tab-button tab="profile" routerLink="/profil">
+        <ion-tab-button tab="profile" [routerLink]="['/profile']">
             <ion-icon name="person"></ion-icon>
             <ion-label>Profil</ion-label>
         </ion-tab-button>

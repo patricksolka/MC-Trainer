@@ -50,21 +50,25 @@ export class RegistrationPage  {
   get password(){
     return this.credentials.get('password');
   }
-
   async register() {
-    const loading = await this.loadingController.create();
-    await loading.present();
-    const {firstName, lastName, email, password } = this.credentials.value;
-    const user = await this.authService.register(this.credentials.value);
-    await loading.dismiss();
+    if (this.credentials.valid) {
+      const loading = await this.loadingController.create();
+      await loading.present();
+      const {firstName, lastName, email, password } = this.credentials.value;
+      const user = await this.authService.register(this.credentials.value);
+      await loading.dismiss();
 
-    if (user) {
-      this.router.navigateByUrl('/home', { replaceUrl: true });
+      if (user) {
+        localStorage.setItem('userName', user.firstName);
+        await this.router.navigateByUrl('/home', { replaceUrl: true });
+      } else {
+        await this.showAlertRegister('Registrierung fehlgeschlagen', 'Versuche es erneut!');
+      }
     } else {
-      this.showAlertRegister('Registrierung fehlgeschlagen', 'Versuche es erneut!');
+      await this.showAlertRegister('Registrierung fehlgeschlagen', 'Bitte fülle alle' +
+          ' erforderlichen Felder aus!');
     }
   }
-
 
   async showAlertRegister(header: string, message: string) {
     const alert = await this.alertController.create({
@@ -74,7 +78,7 @@ export class RegistrationPage  {
         {
           text: 'OK',
           handler: () => {
-            this.credentials.reset();
+            //this.credentials.reset();
           },
         },
       ],
