@@ -3,7 +3,7 @@ import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {Category} from '../../models/categories.model';
 import {CategoriesService} from '../../services/categories.service';
-import {Router} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {Observable} from 'rxjs';
 import {FormBuilder, FormGroup, FormsModule} from '@angular/forms';
 import {
@@ -16,13 +16,15 @@ import {
     IonTitle,
     IonToolbar
 } from "@ionic/angular/standalone";
+import {IonicModule} from "@ionic/angular";
+import {FooterPage} from "../footer/footer.page";
 
 @Component({
     selector: 'app-categories',
     templateUrl: './categories.component.html',
     styleUrls: ['./categories.component.css'],
     standalone: true,
-    imports: [CommonModule, FormsModule, IonApp, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonIcon, IonSearchbar, IonContent, IonList, IonItem, IonLabel, IonInput, IonFooter, IonTabs, IonTabBar, IonTabButton]
+    imports: [CommonModule, FormsModule, IonApp, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonIcon, IonSearchbar, IonContent, IonList, IonItem, IonLabel, IonInput, IonFooter, IonTabs, IonTabBar, IonTabButton, IonicModule, RouterLink, FooterPage]
 })
 export class CategoriesComponent implements OnInit {
 
@@ -44,6 +46,9 @@ export class CategoriesComponent implements OnInit {
 
     loadCategories(): void {
         this.categories$ = this.categoryService.getAllCategories();
+        this.categories$.subscribe(categories => {
+            console.log('Geladene Kategorien:', categories); // Protokollierung hinzufügen
+        });
     }
 
     toggleSearch() {
@@ -75,6 +80,10 @@ export class CategoriesComponent implements OnInit {
         } else {
             console.warn('Category name cannot be empty');
         }
+    }
+
+    categoryHasQuestions(category: Category): boolean {
+        return category.questionCount && category.questionCount > 0;
     }
 
 }

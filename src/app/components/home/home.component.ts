@@ -5,13 +5,14 @@ import {Router, RouterModule} from '@angular/router';
 import {UserService} from 'src/app/services/user.service';
 import {AuthService} from 'src/app/services/auth.service';
 import {FormsModule} from "@angular/forms";
+import {FooterPage} from "../footer/footer.page";
 
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css'],
     standalone: true,
-    imports: [IonicModule, CommonModule, RouterModule, FormsModule]
+    imports: [IonicModule, CommonModule, RouterModule, FormsModule, FooterPage]
 })
 export class HomeComponent {
     public userName: string = localStorage.getItem('userName') || 'User';

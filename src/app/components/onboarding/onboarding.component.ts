@@ -9,6 +9,7 @@ import {
 } from "@ionic/angular/standalone";
 import {CommonModule} from "@angular/common";
 import {RouterModule} from "@angular/router";
+import {FooterPage} from "../footer/footer.page";
 
 
 @Component({
@@ -17,7 +18,7 @@ import {RouterModule} from "@angular/router";
   styleUrls: ['./onboarding.component.scss'],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   standalone: true,
-    imports: [CommonModule, RouterModule, IonImg, IonContent, IonText, IonButton, IonHeader, IonTitle, IonGrid, IonRow, IonCol, IonThumbnail, IonButtons]
+    imports: [CommonModule, RouterModule, IonImg, IonContent, IonText, IonButton, IonHeader, IonTitle, IonGrid, IonRow, IonCol, IonThumbnail, IonButtons, FooterPage]
 
 })
 export class OnboardingComponent  implements OnInit {
