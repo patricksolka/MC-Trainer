@@ -1,14 +1,14 @@
 import {Injectable} from '@angular/core';
 import {User} from '../models/user.model';
-//import { HttpClient } from '@angular/common/http';
 import {
     Auth,
     createUserWithEmailAndPassword, deleteUser,
     signInWithEmailAndPassword,
     signOut
 } from '@angular/fire/auth';
-import {deleteDoc, doc, Firestore, setDoc} from "@angular/fire/firestore";
+import {doc, Firestore, onSnapshot, setDoc} from "@angular/fire/firestore";
 import {UserService} from "./user.service";
+import {Router} from "@angular/router";
 
 
 @Injectable({
@@ -16,7 +16,7 @@ import {UserService} from "./user.service";
 })
 
 export class AuthService {
-    constructor(public auth: Auth, private firestore: Firestore, private userService: UserService) {
+    constructor(public auth: Auth, private firestore: Firestore, private userService: UserService, private router: Router) {
     }
 
     async register({firstName, lastName, email, password}) {
@@ -29,15 +29,28 @@ export class AuthService {
                 email: firebaseUser.email,
                 firstName,
                 lastName,
-                stats: {
-                    completedQuizzes: 0,
+            };
+            // move up if needed ^
+           /* stats: {
+                completedQuizzes: 0,
                     correctAnswers: 0,
                     totalQuestions: 0,
-                }
-            };
-
+            }*/
             const userRef = doc(this.firestore, `users/${user.uid}`);
             await setDoc(userRef, user);
+
+            // Start listening for changes to the user document
+            const unsubscribe = onSnapshot(userRef, async (docSnapshot) => {
+                if (!docSnapshot.exists()) {
+                    // doc was deleted from FB, delete user from auth
+                    if (this.auth.currentUser) {
+                        await deleteUser(this.auth.currentUser);
+                    }
+
+                    unsubscribe();
+                    await this.router.navigateByUrl('/login', {replaceUrl: true});
+                }
+            });
 
             return user;
         } catch (e) {
@@ -65,18 +78,6 @@ export class AuthService {
     }
 }
 
-
-//evtl um Änderungen in der db zu beobachten
-/* const unsubscribe = onSnapshot(userRef, (docSnapshot) => {
-     if (!docSnapshot.exists()) {
-         // Das Dokument wurde gelöscht, löschen Sie den Benutzer aus der Authentifizierung
-         deleteUser(this.auth.currentUser).catch((error) => {
-             console.error("Fehler beim Löschen des Benutzers aus der Authentifizierung: ", error);
-         });
-         // Beenden Sie das Abhören von Änderungen, nachdem der Benutzer gelöscht wurde
-         unsubscribe();
-     }
- });*/
 
 
 
