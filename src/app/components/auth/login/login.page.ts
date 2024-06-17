@@ -90,30 +90,15 @@ export class LoginPage {
                     await this.router.navigateByUrl('/home', {replaceUrl: true});
                 }
             } else {
-                await this.showAlertLogin('Login fehlgeschlagen', 'Versuche es erneut!');
-              }
-           } else {
-            this.showAlertLogin('Login fehlgeschlagen', 'Bitte fülle alle erforderlichen' +
+                await this.userService.showAlert('Login fehlgeschlagen', 'Versuche es' +
+                    ' erneut!');
+            }
+        } else {
+            await this.userService.showAlert('Login fehlgeschlagen', 'Bitte fülle alle' +
+                ' erforderlichen' +
                 ' Felder' +
                 ' aus!');
         }
-    }
-
-    async showAlertLogin(header: string, message: string) {
-        const alert = await this.alertController.create({
-            header,
-            message,
-            buttons: [
-                {
-                    text: 'OK',
-                    handler: () => {
-                        //this.credentials.reset();
-                    },
-                },
-            ],
-        });
-
-        await alert.present();
     }
 
     async onSignInWithGoogle() {

@@ -5,6 +5,7 @@ import {
 } from "@angular/fire/firestore";
 import {Injectable} from "@angular/core";
 import {User} from "../models/user.model";
+import {AlertController} from "@ionic/angular";
 
 
 @Injectable({
@@ -76,6 +77,23 @@ export class UserService {
         }
     }
 
-    constructor(private authService: AuthService, private firestore: Firestore) {
+    async showAlert(header: string, message: string) {
+        const alert = await this.alertController.create({
+            header,
+            message,
+            buttons: [
+                {
+                    text: 'OK',
+                    handler: () => {
+                        //this.credentials.reset();
+                    },
+                },
+            ],
+        });
+
+        await alert.present();
+    }
+
+    constructor(private authService: AuthService, private firestore: Firestore,  private alertController: AlertController) {
     }
 }
