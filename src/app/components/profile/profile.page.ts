@@ -54,7 +54,6 @@ export class ProfilePage {
                     //this.credentials.value.password === this.user.password
     }*/
 
-
     fetchUser() {
         const uid = this.authService.auth.currentUser.uid;
         this.userService.getUser(uid).then(user => {
@@ -82,6 +81,7 @@ export class ProfilePage {
         await this.router.navigateByUrl('/login', {replaceUrl: true});
     }
 
+    //TODO: Add ConfirmAlert before deleting profile
     async deleteProfile() {
         const loading = await this.loadingController.create({
             message: 'Profil wird gelöscht...',
