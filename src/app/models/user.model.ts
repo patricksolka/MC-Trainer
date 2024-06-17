@@ -8,7 +8,7 @@ export class User {
     email: string;
     //password: string;
     stats: Stats;
-    //    favoriteCategories: string[]; // Neue Eigenschaft
+    favoriteCategories: string[] = [];
 }
 
 

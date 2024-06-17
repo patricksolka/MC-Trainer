@@ -24,7 +24,10 @@ export class UserService {
         if (userSnap.exists()) {
             const user = userSnap.data() as User;
             localStorage.setItem('userName', user.firstName);
-            return user;
+            return {
+                user,
+                favoriteCategories: user.favoriteCategories || [] // Ensure favoriteCategories is defined
+            };
         } else {
             return null;
         }
@@ -82,20 +85,22 @@ export class UserService {
     constructor(private authService: AuthService, private firestore: Firestore ) { }
 
 
-    // Module/Kategorien User -> Demnächst Hinzufügen
-    /*
-    addFavoriteCategory(uid: string, categoryId: string): Promise<void> {
+    async getFavoriteModules(uid: string): Promise<string[]> {
+        const user = await this.getUser(uid);
+        return user ? user.favoriteCategories || [] : [];
+    }
+
+    async addFavoriteModule(uid: string, categoryId: string): Promise<void> {
         const userDoc = doc(this.firestore, `users/${uid}`);
-        return updateDoc(userDoc, {
+        await updateDoc(userDoc, {
             favoriteCategories: arrayUnion(categoryId)
         });
     }
 
-    removeFavoriteCategory(uid: string, categoryId: string): Promise<void> {
+    async removeFavoriteModule(uid: string, categoryId: string): Promise<void> {
         const userDoc = doc(this.firestore, `users/${uid}`);
-        return updateDoc(userDoc, {
+        await updateDoc(userDoc, {
             favoriteCategories: arrayRemove(categoryId)
         });
     }
-    */
 }

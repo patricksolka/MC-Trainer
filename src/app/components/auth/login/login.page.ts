@@ -76,24 +76,22 @@ export class LoginPage {
         if (this.credentials.valid) {
             const loading = await this.loadingController.create();
             await loading.present();
-            const {email, password} = this.credentials.value;
+            const { email, password } = this.credentials.value;
 
             const userCredential = await this.authService.login(this.credentials.value);
             await loading.dismiss();
 
             if (userCredential) {
-                const user = await this.userService.getUser(userCredential.user.uid);
-                if (user) {
-                    localStorage.setItem('userName', user.firstName);
-                    await this.router.navigateByUrl('/home', {replaceUrl: true});
+                const userResponse = await this.userService.getUser(userCredential.user.uid);
+                if (userResponse && userResponse.user) {
+                    localStorage.setItem('userName', userResponse.user.firstName);
+                    await this.router.navigateByUrl('/home', { replaceUrl: true });
                 }
             } else {
                 await this.showAlertLogin('Login fehlgeschlagen', 'Versuche es erneut!');
-              }
-           } else {
-            this.showAlertLogin('Login fehlgeschlagen', 'Bitte fülle alle erforderlichen' +
-                ' Felder' +
-                ' aus!');
+            }
+        } else {
+            this.showAlertLogin('Login fehlgeschlagen', 'Bitte fülle alle erforderlichen Felder aus!');
         }
     }
 

@@ -33,7 +33,8 @@ export class AuthService {
                     completedQuizzes: 0,
                     correctAnswers: 0,
                     totalQuestions: 0,
-                }
+                },
+                favoriteCategories: []
             };
 
             const userRef = doc(this.firestore, `users/${user.uid}`);
