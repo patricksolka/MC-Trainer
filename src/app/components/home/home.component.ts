@@ -35,7 +35,7 @@ export class HomeComponent {
         console.log('IonViewWillEnter');
     }
 
-  userName: string = 'User';
+  // userName: string = 'User';
 
   constructor(
       private authService: AuthService,
