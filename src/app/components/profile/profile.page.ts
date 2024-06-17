@@ -72,10 +72,9 @@ export class ProfilePage {
         });
     }
 
-
     async logout() {
         const loading = await this.loadingController.create({
-            message: 'Logging out...',
+            message: 'Ausloggen...',
         });
         await loading.present();
         this.authService.logout();
@@ -85,7 +84,7 @@ export class ProfilePage {
 
     async deleteProfile() {
         const loading = await this.loadingController.create({
-            message: 'Deleting profile...',
+            message: 'Profil wird gelöscht...',
         });
         await loading.present();
         const uid = this.authService.auth.currentUser.uid;
@@ -139,6 +138,8 @@ export class ProfilePage {
             }
         });
     }
+
+
 }
 
 

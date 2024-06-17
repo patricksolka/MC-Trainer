@@ -74,7 +74,9 @@ export class LoginPage {
 
     async login() {
         if (this.credentials.valid) {
-            const loading = await this.loadingController.create();
+            const loading = await this.loadingController.create({
+                message: 'Einloggen...',
+            });
             await loading.present();
             const {email, password} = this.credentials.value;
 
@@ -112,5 +114,14 @@ export class LoginPage {
         });
 
         await alert.present();
+    }
+
+    async onSignInWithGoogle() {
+        try {
+            const result = await this.authService.loginWithGoogle();
+            // Handle the result
+        } catch (error) {
+            // Handle the error
+        }
     }
 }
