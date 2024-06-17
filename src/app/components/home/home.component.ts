@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {IonicModule, LoadingController} from '@ionic/angular';
 import {CommonModule} from '@angular/common';
 import {Router, RouterModule} from '@angular/router';
@@ -20,8 +20,7 @@ export class HomeComponent {
     constructor(private router: Router,
                 private loadingController: LoadingController,
                 private userService: UserService,
-                private authService: AuthService)
-    {
+                private authService: AuthService) {
         //this.getUserName();
     }
 
@@ -41,4 +40,5 @@ export class HomeComponent {
         this.userName = localStorage.getItem('userName') || 'User';
         console.log('IonViewWillEnter');
     }
+
 }

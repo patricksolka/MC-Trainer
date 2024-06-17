@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import { User } from '../models/user.model';
+import {User} from '../models/user.model';
 //import { HttpClient } from '@angular/common/http';
 import {
     Auth,
@@ -67,16 +67,16 @@ export class AuthService {
 
 
 //evtl um Änderungen in der db zu beobachten
-   /* const unsubscribe = onSnapshot(userRef, (docSnapshot) => {
-        if (!docSnapshot.exists()) {
-            // Das Dokument wurde gelöscht, löschen Sie den Benutzer aus der Authentifizierung
-            deleteUser(this.auth.currentUser).catch((error) => {
-                console.error("Fehler beim Löschen des Benutzers aus der Authentifizierung: ", error);
-            });
-            // Beenden Sie das Abhören von Änderungen, nachdem der Benutzer gelöscht wurde
-            unsubscribe();
-        }
-    });*/
+/* const unsubscribe = onSnapshot(userRef, (docSnapshot) => {
+     if (!docSnapshot.exists()) {
+         // Das Dokument wurde gelöscht, löschen Sie den Benutzer aus der Authentifizierung
+         deleteUser(this.auth.currentUser).catch((error) => {
+             console.error("Fehler beim Löschen des Benutzers aus der Authentifizierung: ", error);
+         });
+         // Beenden Sie das Abhören von Änderungen, nachdem der Benutzer gelöscht wurde
+         unsubscribe();
+     }
+ });*/
 
 
 

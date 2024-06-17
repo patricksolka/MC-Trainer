@@ -10,7 +10,7 @@ const redirectLoggedInToHome = () => redirectLoggedInTo(['home']);
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'onboarding',
+    redirectTo: '',
     pathMatch: 'full',
   },
   {
@@ -66,9 +66,6 @@ export const routes: Routes = [
     path: 'profile',
     loadComponent: () => import('./components/profile/profile.page').then(m => m.ProfilePage),
     ...canActivate(redirectUnauthorizedToLogin)
-  },  {
-    path: 'profile',
-    loadComponent: () => import('./components/profile/profile.page').then( m => m.ProfilePage)
   },
   {
     path: 'footer',
