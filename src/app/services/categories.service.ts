@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Firestore, collection, collectionData, doc, addDoc, updateDoc, deleteDoc, docData } from '@angular/fire/firestore';
 import { Category } from '../models/categories.model';
 import { Observable } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
@@ -25,18 +26,18 @@ export class CategoriesService {
         return docData(categoryDoc, { idField: 'id' }) as Observable<Category>;
     }
 
-    addCategory(category: Category): Promise<void> {
-        return addDoc(this.categoriesCollection, { name: category.name }).then(() => {});
+    async addCategory(category: Category): Promise<void> {
+        await addDoc(this.categoriesCollection, { name: category.name, questionCount: 0 });
     }
 
-    updateCategory(id: string, category: Partial<Category>): Promise<void> {
+    async updateCategory(id: string, category: Partial<Category>): Promise<void> {
         const categoryDoc = doc(this.firestore, `categories/${id}`);
-        return updateDoc(categoryDoc, category);
+        await updateDoc(categoryDoc, category);
     }
 
-    deleteCategory(id: string): Promise<void> {
+    async deleteCategory(id: string): Promise<void> {
         const categoryDoc = doc(this.firestore, `categories/${id}`);
-        return deleteDoc(categoryDoc);
+        await deleteDoc(categoryDoc);
     }
 
 }

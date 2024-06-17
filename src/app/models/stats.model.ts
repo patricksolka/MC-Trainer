@@ -1,5 +1,4 @@
-
-
+// stats.model.ts
 export interface Stats {
     completedQuizzes: number;
     correctAnswers: number;

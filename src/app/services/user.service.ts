@@ -1,5 +1,5 @@
 import {AuthService} from "./auth.service";
-import {deleteDoc, doc, Firestore, getDoc} from "@angular/fire/firestore";
+import {deleteDoc, doc, Firestore, getDoc, updateDoc, arrayUnion, arrayRemove} from "@angular/fire/firestore";
 import {deleteUser} from "@angular/fire/auth";
 import {Injectable} from "@angular/core";
 import {User} from "../models/user.model";
@@ -70,4 +70,22 @@ export class UserService{
         }
     }
     constructor(private authService: AuthService, private firestore: Firestore ) { }
+
+
+    // Module/Kategorien User -> Demnächst Hinzufügen
+    /*
+    addFavoriteCategory(uid: string, categoryId: string): Promise<void> {
+        const userDoc = doc(this.firestore, `users/${uid}`);
+        return updateDoc(userDoc, {
+            favoriteCategories: arrayUnion(categoryId)
+        });
+    }
+
+    removeFavoriteCategory(uid: string, categoryId: string): Promise<void> {
+        const userDoc = doc(this.firestore, `users/${uid}`);
+        return updateDoc(userDoc, {
+            favoriteCategories: arrayRemove(categoryId)
+        });
+    }
+    */
 }
