@@ -39,4 +39,5 @@ export class HomeComponent {
         this.userName = localStorage.getItem('userName') || 'User';
         console.log('IonViewWillEnter');
     }
+
 }

@@ -40,3 +40,13 @@ ion-content {
 .backButton{
   --background: transparentize(#3D5CFF, 0);
 }
+
+
+.header {
+  display: flex;
+  align-items: center;
+}
+
+.backButton {
+  margin-right: auto;
+}

@@ -30,7 +30,6 @@ export class ProfilePage {
     private user: User = new User();
 
 
-
     constructor(private loadingController: LoadingController,
                 private authService: AuthService,
                 private router: Router,
@@ -100,8 +99,9 @@ export class ProfilePage {
                 message: 'Änderungen werden gespeichert',
             });
             await loading.present();
-           Object.assign(this.user, this.credentials.value);
-           await this.userService.updateUser(this.user);
+            Object.assign(this.user, this.credentials.value);
+            await this.userService.updateUser(this.user);
+            localStorage.setItem('userName', this.user.firstName);
             await loading.dismiss();
             console.log('Profile updated', this.user);
         } else {
@@ -111,6 +111,7 @@ export class ProfilePage {
 
     ionViewWillEnter() {
         this.fetchUser();
+
     }
 }
 
