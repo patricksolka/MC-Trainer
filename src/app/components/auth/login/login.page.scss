@@ -1,51 +1,97 @@
-.input{
-  font-size: 1rem;
+
+ion-note{
+  color: #B8B8D2;
+  font-weight: 800;
+  font-size: 16px;
+}
+ion-input {
+  --background: #3E3E55;
+  color: #858597;
+  font-weight: 500;
+  font-size: 16px;
+  height: 70px;
+}
+
+.input-fill-outline.sc-ion-input-md-h{
+  --border-radius: 10px !important;
+  --border-color: none;
+
 }
 ion-item{
-  --background: #1f1f1f;
-  border-radius: 10px;
-  margin-bottom: 16px
+  --background: #3E3E55;
 }
 
-.headerContent{
-  margin-top: 80px;
-  margin-bottom: 80px;
+ion-content {
+  --ion-background-color: #1F1F39 !important;
+}
+
+.login{
+  font-size: 30pt;
+  font-weight: bold;
+}
+
+ion-button {
+  font-size: 16px;
+  font-weight: 500;
+  text-transform: none;
+  --background: #3D5CFF;
+  --border-radius: 10px;
+  height: 70px;
+  min-width: 380px;
+}
+
+.registerPrompt {
+  padding-top: 1rem;
   text-align: center;
-  .subTitle{
-    color: grey;
-    font-size: 0.9rem;
-  }
-  title{
-    font-size: 2rem;
-  }
-}
-
-.registerLink{
-  display: flex;
-  margin: auto;
-  flex-direction: row;
-  align-items: center;
-  position: absolute;
-  justify-content: center;
-  left: 0;
-  bottom: 0;
-  width: 80%;
-  right: 0;
-
-  p{
-    font-size: 0.9rem;
-  }
+  color: #B8B8D2;
+  font-size: 14px;
+  font-weight: 500;
   a{
+    color: #3D5CFF;
     text-decoration: none;
+
   }
 }
 
-.forgotpassword{
+.forgotPassword{
   display: flex;
   justify-content: flex-end;
   a{
-    font-weight: 400;
-    font-size: 0.9rem;
+    font-weight: 500;
+    font-size: 14px;
     text-decoration: none;
+    color: #B8B8D2;
   }
 }
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.line {
+  flex-grow: 1;
+  border: none;
+  border-top: 1px solid #B8B8D2;
+}
+
+.or-text {
+  padding: 0 10px;
+}
+
+.google-button {
+  --background: #EEEEEE;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: none;
+  border-radius: 10px;
+}
+
+ion-icon {
+ width: 32px;
+  height: 32px;
+}
+
