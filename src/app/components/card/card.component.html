@@ -1,55 +1,40 @@
-<!--ion-content>
-  <ion-card>
-    <ion-card-header>
-      {{ currentQuestion.question }}
-    </ion-card-header>
-    <ion-card-content>
-      <ion-list>
-        <ion-item *ngFor="let answer of currentQuestion.answers">
-          <ion-button (click)="checkAnswers(answer)" [color]="selectedAnswers.includes(answer) ? 'primary' : 'light'">
-            {{ answer }}
-          </ion-button>
-        </ion-item>
-      </ion-list>
-      <ion-button (click)="showCorrectAnswers()">Auflösen</ion-button>
-      <span *ngIf="showResult && !checkAnswers(selectedAnswers)">
-        Falsch! Die richtige Antwort(en) ist/sind: {{ showCorrectAnswers() }}
-      </span>
-    </ion-card-content>
-  </ion-card>
-</ion-content-->
+<!-- card.component.html -->
+<ion-content>
+    <ion-header>
+        <ion-toolbar>
+            <ion-title>Quiz Kategorien</ion-title>
+        </ion-toolbar>
+    </ion-header>
 
-<ion-content
-  *ngIf="currentQuestion.question">
-  <ion-grid>
-    <ion-row>
-      <ion-col size="12" class="ion-text-end">
-        <ion-button color="danger" (click)="resetQuiz()">Zurücksetzen</ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-  <ion-card>
-    <ion-card-header>
-      {{ currentQuestion.question }}
-    </ion-card-header>
-    <ion-card-content>
-      <ion-list>
-        <ion-item
-          *ngFor="let answer of currentQuestion.answers"
-          [ngClass]="{
-            'selected': selectedAnswers.includes(answer),
-            'correct': showResult && currentQuestion.correctAnswer.includes(answer),
-            'incorrect': showResult && !currentQuestion.correctAnswer.includes(answer) && selectedAnswers.includes(answer)
-          }"
-          (click)="toggleAnswer(answer)"
-        >
-          {{ answer }}
-        </ion-item>
-      </ion-list>
-      <ion-button *ngIf="!showResult" (click)="checkAnswers()">Check Answer</ion-button>
-      <ion-button *ngIf="showResult" (click)="getNextQuestion()">Next Question</ion-button>
-      <p *ngIf="showResult && !isAnswerCorrect">Falsch! Die richtige(n) Antwort(en) ist/sind: {{ currentQuestion.correctAnswer.join(', ') }}</p>
-    </ion-card-content>
-  </ion-card>
+    <ion-list>
+        <ng-container *ngFor="let category of categories$ | async">
+            <ion-item *ngIf="category.questionCount && category.questionCount > 0" (click)="selectCategory(category.id)">
+                {{ category.name }}
+            </ion-item>
+        </ng-container>
+    </ion-list>
+
+    <ion-card *ngIf="currentQuestion">
+        <ion-card-header>
+            {{ currentQuestion.question }}
+        </ion-card-header>
+        <ion-card-content>
+            <ion-list>
+                <ion-item
+                        *ngFor="let answer of currentQuestion.answers"
+                        [ngClass]="{
+                            'selected': selectedAnswers.includes(answer),
+                            'correct': showResult && isCorrectAnswer(answer),
+                            'incorrect': showResult && !isCorrectAnswer(answer) && selectedAnswers.includes(answer)
+                        }" (click)="toggleAnswer(answer)">
+                    {{ answer }}
+                </ion-item>
+            </ion-list>
+            <ion-button *ngIf="!showResult" (click)="checkAnswers()">Antworten überprüfen</ion-button>
+            <ion-button *ngIf="showResult" (click)="getNextQuestion()">Nächste Frage</ion-button>
+            <p *ngIf="showResult && !isAnswerCorrect()">Falsch! Die richtigen Antworten
+                sind: {{ currentQuestion.correctAnswer.join(', ') }}</p>
+        </ion-card-content>
+    </ion-card>
 </ion-content>
-
+<app-footer></app-footer>

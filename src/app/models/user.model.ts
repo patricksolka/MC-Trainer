@@ -1,10 +1,14 @@
-// src/app/models/user.model.ts
+// user.model.ts
+import {Stats} from "./stats.model";
+
 export class User {
-    constructor(
-        public username: string,
-        public password: string,
-        public email: string,
-        public firstname: string,
-        public lastname: string
-    ) {}
+    uid: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    //password: string;
+    stats: Stats;
+    //    favoriteCategories: string[]; // Neue Eigenschaft
 }
+
+

@@ -1,34 +1,63 @@
-<ion-header [translucent]="true">
-    <ion-toolbar>
-        <ion-title>Login</ion-title>
-    </ion-toolbar>
-</ion-header>
-<ion-content [fullscreen]="true">
-    <div class="headerContent">
-        <ion-title class="title">Willkommen zurück</ion-title>
-        <p class="subTitle">Log dich ein und lege direkt los</p>
-    </div>
-    <form>
-        <div class="ion-padding">
-            <ion-item>
-                <ion-input placeholder="Username oder E-Mail" class="input"></ion-input>
-                <ion-icon name="person-outline"></ion-icon>
-            </ion-item>
-            <ion-item>
-                <ion-input placeholder="Password" class="input"></ion-input>
-                <ion-icon name="lock-closed-outline"></ion-icon>
-            </ion-item>
-        <div class="forgotpassword">
-            <a [routerLink]="['/forgot-password']" style="color:#FFC33F">Passwort vergessen?</a>
+<ion-content class="ion-padding">
+    <!--<ion-icon name="arrow-back-outline" class="arrowBack"></ion-icon>-->
+    <ion-text class="login">Anmelden</ion-text>
+
+    <ion-note class="subTitle ion-padding-bottom"><h5>Gib deine Anmeldedaten ein.</h5></ion-note>
+    <form [formGroup]="credentials" (ngSubmit)="login()" class="ion-padding-top">
+
+            <ion-input
+                    fill="outline"
+                    type="email"
+                    placeholder="Email"
+                    formControlName="email"
+                    [clearInput]="true" class="ion-margin-bottom">
+            </ion-input>
+<!--
+            <ion-note slot="error"
+                      *ngIf="(email?.dirty || email?.touched) && email.errors">
+                Email falsch</ion-note>
+-->
+
+            <ion-input fill="outline"
+                       type="password"
+                       placeholder="Passwort"
+                       formControlName="password" class="ion-margin-bottom">
+            </ion-input>
+        <!--
+            <ion-note slot="error"
+                      *ngIf="(password?.dirty || password?.touched) && password.errors">Passwort
+                falsch
+            </ion-note> -->
+        <div class="forgotPassword ion-margin-bottom">
+            <a [routerLink]="['/forgot-password']">Passwort vergessen?</a>
         </div>
-        <div class="registerLink">
-            <p class=""> New member? <a style="color: #FFC33F" [routerLink]="['/registration']">Signup now</a></p>
-        </div>
-        <ion-fab vertical="bottom" horizontal="end" style="margin-bottom: 1px">
-            <ion-fab-button [routerLink]="['/home']">
-                <ion-icon name="chevron-forward"></ion-icon>
-            </ion-fab-button>
-        </ion-fab>
-        </div>
+        <!-- evtl drinnen lassen, mal gucken
+        <ion-button type="submit"
+                    expand="block"
+                    [disabled]="!credentials.valid"
+                    size="large">
+            Anmelden
+        </ion-button>
+        -->
+        <ion-button type="submit"
+                    expand="block"
+                    size="large">
+            Anmelden
+        </ion-button>
     </form>
+
+    <div class="registerPrompt ion-margin-top">
+        Du hast noch keinen Account? <a [routerLink]="['/register']">Registrieren</a>
+    </div>
+    <div class="divider">
+        <hr class="line">
+        <span class="or-text">ODER</span>
+        <hr class="line">
+    </div>
+
+    <ion-button class="google-button" size="large">
+        <ion-icon name="logo-google"></ion-icon>
+    </ion-button>
+
 </ion-content>
+

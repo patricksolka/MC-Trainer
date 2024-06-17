@@ -1,9 +1,9 @@
 import { Stats } from '../../models/stats.model';
 
 export const ACHIEVEMENTS = [
-    { id: 1, name: 'First Step', description: 'Complete your first quiz', condition:
-            (stats: Stats) => stats.completedQuizzes >= 1 },
-    { id: 2, name: 'Quiz Master', description: 'Get 100% correct answers in a quiz', condition:
-            (stats: Stats) => stats.correctAnswers === stats.totalQuestions },
+    { id: 1, name: 'First Step', description: 'First correct answer!', condition:
+            (stats: Stats) => stats.correctAnswers >= 1 },
+    { id: 2, name: 'So far so good', description: 'Five correct answers!', condition:
+            (stats: Stats) => stats.correctAnswers >= 5 },
     // weitere Achievements hinzufügen
 ];

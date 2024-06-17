@@ -1,0 +1,47 @@
+<ion-content class="ion-padding">
+    <ion-title class="main-title">MultipleChoice</ion-title>
+    <swiper-container pagination="true" pagination-clickable="true"
+                      centered-slides="true">
+        <swiper-slide class="ion-padding">
+            <div class="imageContainer">
+                        <ion-img src="assets/question.png"></ion-img>
+                    </div>
+                        <ion-title class="subheading">Interaktives
+                            Lernen</ion-title>
+                        <p class="description">Erweitere dein Wissen mit Fragen <br> aus
+                            unterschiedlichen
+                            Kategorien
+                        </p>
+        </swiper-slide>
+        <swiper-slide class="ion-padding">
+            <div class="imageContainer">
+                <ion-img src="assets/knowledge.png"></ion-img>
+            </div>
+            <ion-title class="subheading">Bilde dich weiter</ion-title>
+            <p class="description">Mit dem Lernmodus kannst du <br> dein Wissen festigen
+            </p>
+        </swiper-slide>
+        <swiper-slide class="ion-padding">
+            <div class="imageContainer">
+                <ion-img src="assets/achievement.png"></ion-img>
+            </div>
+            <ion-title class="subheading">Sammle Achievements</ion-title>
+            <p class="description">Feiere deine Erfolge  und <br> bleib motiviert
+                auf deinem Lernweg
+            </p>
+        </swiper-slide>
+    </swiper-container>
+    <div class="buttons">
+    <ion-button  expand="block" class="anmelden  ion-margin-bottom" [routerLink]="['/login']">
+        Anmelden
+    </ion-button>
+    <ion-button  expand="block" class="ion-margin-top" [routerLink]="['/register']">
+        Registrieren
+    </ion-button>
+    </div>
+</ion-content>
+
+
+
+
+

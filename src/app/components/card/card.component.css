@@ -1,11 +1,12 @@
+/* Füge deine CSS-Stile für die Card-Komponente hier hinzu */
 .selected {
-  border: 3px solid blue;
+    border: 3px solid blue;
 }
 
 .correct {
-  border: 3px solid green;
+    border: 3px solid green;
 }
 
 .incorrect {
-  border: 3px solid red;
+    border: 3px solid red;
 }

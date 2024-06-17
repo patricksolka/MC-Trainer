@@ -1,0 +1,72 @@
+[
+  {
+    "question": "Was ist die Hauptstadt von Österreich?",
+    "answers": ["Wien", "Salzburg", "Innsbruck", "Graz"],
+    "correctAnswer": ["Wien"]
+  },
+  {
+    "question": "Welche der folgenden sind Planeten unseres Sonnensystems?",
+    "answers": ["Mars", "Venus", "Pluto", "Jupiter", "Merkur", "Sirius"],
+    "correctAnswer": ["Mars", "Venus", "Jupiter", "Merkur"]
+  },
+  {
+    "question": "Wer hat die Relativitätstheorie entwickelt?",
+    "answers": ["Albert Einstein", "Isaac Newton", "Nikola Tesla", "Marie Curie"],
+    "correctAnswer": ["Albert Einstein"]
+  },
+  {
+    "question": "Welche Sprache wird in Brasilien gesprochen?",
+    "answers": ["Portugiesisch", "Spanisch", "Französisch", "Englisch"],
+    "correctAnswer": ["Portugiesisch"]
+  },
+  {
+    "question": "Welches dieser Tiere ist ein Säugetier?",
+    "answers": ["Krokodil", "Hai", "Delfin", "Pinguin"],
+    "correctAnswer": ["Delfin"]
+  },
+  {
+    "question": "Welche dieser Farben ist keine Primärfarbe?",
+    "answers": ["Rot", "Blau", "Gelb", "Grün"],
+    "correctAnswer": ["Grün"]
+  },
+  {
+    "question": "In welchem Jahr fiel die Berliner Mauer?",
+    "answers": ["1987", "1989", "1991", "1993"],
+    "correctAnswer": ["1989"]
+  },
+  {
+    "question": "Was ist die größte Insel der Welt?",
+    "answers": ["Grönland", "Australien", "Borneo", "Madagaskar"],
+    "correctAnswer": ["Grönland"]
+  },
+  {
+    "question": "Welches dieser Elemente ist ein Edelgas?",
+    "answers": ["Sauerstoff", "Stickstoff", "Argon", "Wasserstoff"],
+    "correctAnswer": ["Argon"]
+  },
+  {
+    "question": "Wer malte die Mona Lisa?",
+    "answers": ["Leonardo da Vinci", "Vincent van Gogh", "Pablo Picasso", "Claude Monet"],
+    "correctAnswer": ["Leonardo da Vinci"]
+  },
+  {
+    "question": "Welches Land ist bekannt für das Taj Mahal?",
+    "answers": ["Indien", "Ägypten", "China", "Iran"],
+    "correctAnswer": ["Indien"]
+  },
+  {
+    "question": "Was ist das chemische Symbol für Gold?",
+    "answers": ["Ag", "Au", "Pb", "Fe"],
+    "correctAnswer": ["Au"]
+  },
+  {
+    "question": "Welche Stadt wird als 'Die ewige Stadt' bezeichnet?",
+    "answers": ["Rom", "Athen", "Kairo", "Istanbul"],
+    "correctAnswer": ["Rom"]
+  },
+  {
+    "question": "Welche dieser Sportarten ist kein Mannschaftssport?",
+    "answers": ["Fußball", "Basketball", "Tennis", "Volleyball"],
+    "correctAnswer": ["Tennis"]
+  }
+  ]

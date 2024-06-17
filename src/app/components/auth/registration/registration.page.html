@@ -1,44 +1,67 @@
-<ion-header [translucent]="true">
-    <ion-toolbar>
-        <ion-title>Registrieren</ion-title>
-    </ion-toolbar>
-</ion-header>
+<ion-content class="ion-padding">
+    <!--<ion-icon name="arrow-back-outline" class="arrowBack"></ion-icon>-->
+    <ion-text><h1 class="register">Registrieren</h1></ion-text>
+    <ion-note class="subTitle ion-padding-bottom"><h5>Erstelle ein neues Konto.</h5></ion-note>
+    <form (ngSubmit)="register()"
+          [formGroup]="credentials"
+          class="ion-padding-top">
+        <ion-input
+                fill="outline"
+                placeholder="Vorname"
+                formControlName="firstName"
+                [clearInput]="true"
+                class="ion-margin-bottom">
+        </ion-input>
+        <ion-input
+                fill="outline"
+                placeholder="Nachname"
+                formControlName="lastName"
+                [clearInput]="true"
+                class="ion-margin-bottom">
+        </ion-input>
+        <ion-input
+                fill="outline"
+                type="email"
+                placeholder="Email"
+                formControlName="email"
+                [clearInput]="true" class="ion-margin-bottom">
+        </ion-input>
+        <!--
+        <ion-note slot="error"
+                  *ngIf="(email?.dirty || email?.touched) && email.errors">
+            Email falsch
+        </ion-note>
+        -->
 
-<ion-content [fullscreen]="true">
-    <div class="headerContent">
-    <ion-title class="title">Willkommen</ion-title>
-        <p class="subTitle">Registriere dich jetzt</p>
-    </div>
-    <form>
-        <div class="ion-padding">
-            <ion-item>
-                <ion-input placeholder="Vorname" class="input"></ion-input>
-                <!-- <ion-icon name="person-outline"></ion-icon> -->
-            </ion-item>
-            <ion-item>
-                <ion-input placeholder="Nachname" class="input"></ion-input>
-               <!-- <ion-icon name="person-outline"></ion-icon> -->
-            </ion-item>
-            <ion-item>
-                <ion-input placeholder="Username" class="input"></ion-input>
-                <ion-icon name="person-outline"></ion-icon>
-            </ion-item>
-            <ion-item>
-                <ion-input placeholder="E-Mail" class="input"></ion-input>
-                <ion-icon name="mail-outline"></ion-icon>
-            </ion-item>
-            <ion-item>
-                <ion-input placeholder="Password" class="input"></ion-input>
-                <ion-icon name="lock-closed-outline"></ion-icon>
-            </ion-item>
-            <div class="signinLink">
-                <p class=""> Already a member? <a [routerLink]="['/login']" style="color: #FFC33F">Signin up</a></p>
-            </div>
-            <ion-fab vertical="bottom" horizontal="end" style="margin-bottom: 1px">
-                <ion-fab-button [routerLink]="['/home']">
-                    <ion-icon name="chevron-forward"></ion-icon>
-                </ion-fab-button>
-            </ion-fab>
-        </div>
+        <ion-input fill="outline"
+                   type="password"
+                   placeholder="Passwort"
+                   formControlName="password" class="ion-margin-bottom">
+        </ion-input>
+        <!--
+        <ion-note slot="error"
+                  *ngIf="(password?.dirty || password?.touched) && password.errors">Passwort
+            falsch
+        </ion-note> -->
+        <ion-button type="button"
+                    expand="block"
+                    size="large"
+                    (click)="register()" class="ion-margin-top">
+            Registrieren
+        </ion-button>
     </form>
+
+    <div class="loginPrompt ion-margin-top">
+        Du hast bereits einen Account? <a [routerLink]="['/login']">Anmelden</a>
+    </div>
+    <div class="divider">
+        <hr class="line">
+        <span class="or-text">ODER</span>
+        <hr class="line">
+    </div>
+
+    <ion-button class="google-button" size="large">
+        <ion-icon name="logo-google"></ion-icon>
+    </ion-button>
+
 </ion-content>

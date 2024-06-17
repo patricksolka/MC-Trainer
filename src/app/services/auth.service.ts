@@ -1,56 +1,89 @@
-// src/app/services/auth.service.ts
-import { Injectable } from '@angular/core';
-import { User } from '../models/user.model';
-import { HttpClient } from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {User} from '../models/user.model';
+//import { HttpClient } from '@angular/common/http';
+import {
+    Auth,
+    createUserWithEmailAndPassword, deleteUser,
+    signInWithEmailAndPassword,
+    signOut
+} from '@angular/fire/auth';
+import {deleteDoc, doc, Firestore, setDoc, getDoc} from "@angular/fire/firestore";
+import {UserService} from "./user.service";
+
 
 @Injectable({
     providedIn: 'root'
 })
+
 export class AuthService {
-    private users: User[] = [];
-    private currentUser: User | null = null;
-
-    constructor(private http: HttpClient) {
-        this.loadUsers();
+    constructor(public auth: Auth, private firestore: Firestore, private userService: UserService) {
     }
 
-    private loadUsers() {
-        this.http.get<User[]>('assets/users.json').subscribe((data: User[]) => {
-            this.users = data;
-        });
-    }
+    async register({firstName, lastName, email, password}) {
+        try {
+            const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
+            const firebaseUser = userCredential.user;
 
-    register(user: User): boolean {
-        if (this.users.find(u => u.username === user.username)) {
-            return false; // User already exists
+            const user: User = {
+                uid: firebaseUser.uid,
+                email: firebaseUser.email,
+                firstName,
+                lastName,
+                stats: {
+                    completedQuizzes: 0,
+                    correctAnswers: 0,
+                    totalQuestions: 0,
+                }
+            };
+
+            const userRef = doc(this.firestore, `users/${user.uid}`);
+            await setDoc(userRef, user);
+
+            return user;
+        } catch (e) {
+            return null;
         }
-        this.users.push(user);
-        return true;
     }
 
-    login(username: string, password: string): boolean {
-        const user = this.users.find(u => u.username === username && u.password === password);
-        if (user) {
-            this.currentUser = user;
-            return true;
+
+    async login({email, password}) {
+        try {
+            const user = await signInWithEmailAndPassword(
+                this.auth,
+                email,
+                password
+            );
+            return user;
+        } catch (e) {
+            return null;
         }
-        return false;
     }
 
-    logout(): void {
-        this.currentUser = null;
+    logout() {
+        signOut(this.auth);
+        localStorage.removeItem('userName');
     }
 
-    resetPassword(username: string, newPassword: string): boolean {
-        const user = this.users.find(u => u.username === username);
-        if (user) {
-            user.password = newPassword;
-            return true;
+    async getUserDetails(uid: string): Promise<any> {
+        const userRef = doc(this.firestore, `users/${uid}`);
+        const userDoc = await getDoc(userRef);
+        if (userDoc.exists()) {
+            return userDoc.data();
+        } else {
+            return null;
         }
-        return false;
     }
 
-    isAuthenticated(): boolean {
-        return this.currentUser !== null;
-    }
+
+//evtl um Änderungen in der db zu beobachten
+    /* const unsubscribe = onSnapshot(userRef, (docSnapshot) => {
+         if (!docSnapshot.exists()) {
+             // Das Dokument wurde gelöscht, löschen Sie den Benutzer aus der Authentifizierung
+             deleteUser(this.auth.currentUser).catch((error) => {
+                 console.error("Fehler beim Löschen des Benutzers aus der Authentifizierung: ", error);
+             });
+             // Beenden Sie das Abhören von Änderungen, nachdem der Benutzer gelöscht wurde
+             unsubscribe();
+         }
+     });*/
 }
