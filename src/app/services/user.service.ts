@@ -1,12 +1,11 @@
 import {AuthService} from "./auth.service";
-import {deleteDoc, doc, Firestore, getDoc, updateDoc, QueryDocumentSnapshot,
-    SnapshotOptions, DocumentData} from "@angular/fire/firestore";
-import {deleteUser} from "@angular/fire/auth";
+import {
+    deleteDoc, doc, Firestore, getDoc, updateDoc, QueryDocumentSnapshot,
+    SnapshotOptions, DocumentData
+} from "@angular/fire/firestore";
 import {Injectable} from "@angular/core";
 import {User} from "../models/user.model";
 
-//import QueryDocumentSnapshot = firebase.firestore.QueryDocumentSnapshot;
-//import {DocumentData, SnapshotOptions} from "@angular/fire/compat/firestore";
 
 @Injectable({
     providedIn: 'root'
@@ -29,6 +28,7 @@ export class UserService {
             return null;
         }
     }
+
     // ohne converter
     /* async updateUser(user: User) {
          try {
@@ -66,18 +66,16 @@ export class UserService {
         }
     };
 
-
-    async deleteUser(uid: string) {
-        try {
+    async deleteUser(uid: string){
+        try{
             const userRef = doc(this.firestore, `users/${uid}`);
             await deleteDoc(userRef);
-            await deleteUser(this.authService.auth.currentUser);
-            localStorage.removeItem('userName');
-        }
-        catch(e){
+        } catch (e){
             console.error("Fehler beim Löschen des Benutzers: ", e);
             return null;
         }
     }
-    constructor(private authService: AuthService, private firestore: Firestore ) { }
+
+    constructor(private authService: AuthService, private firestore: Firestore) {
+    }
 }

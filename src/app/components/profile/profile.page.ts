@@ -15,6 +15,7 @@ import {AuthService} from "../../services/auth.service";
 import {UserService} from "../../services/user.service";
 import {Router, RouterLink, RouterModule} from "@angular/router";
 import {User} from "../../models/user.model";
+import {onAuthStateChanged} from "@angular/fire/auth";
 
 @Component({
     selector: 'app-profile',
@@ -90,8 +91,12 @@ export class ProfilePage {
         const uid = this.authService.auth.currentUser.uid;
         await this.userService.deleteUser(uid);
         await loading.dismiss();
-        await this.router.navigateByUrl('/login', {replaceUrl: true});
+
     }
+
+    //TODO: Fix updateProfile
+    //TODO: when updating profile, password is stored in db without hashing
+    //TODO: Synchronize Auth with Firestore
 
     async updateProfile() {
         if (this.credentials.valid) {
@@ -111,7 +116,28 @@ export class ProfilePage {
 
     ionViewWillEnter() {
         this.fetchUser();
+        console.log('AuthService.auth:', this.authService.auth);
+        console.log('AuthService.auth.currentUser:', this.authService.auth.currentUser);
 
+
+        onAuthStateChanged(this.authService.auth, (user) => {
+            if (user) {
+                console.log('User is logged in:', user);
+            } else {
+                console.log('User is logged out');
+            }
+        });
+
+    }
+
+    ionViewDidLeave(){
+        onAuthStateChanged(this.authService.auth, (user) => {
+            if (user) {
+                console.log('User is logged in:', user);
+            } else {
+                console.log('User is logged out');
+            }
+        });
     }
 }
 
