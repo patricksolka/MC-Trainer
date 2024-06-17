@@ -1,9 +1,13 @@
 
 <ion-content class="ion-padding">
-    <ion-button class="backButton" [routerLink]="['/home']">
-    <ion-icon name="arrow-back-outline" class="arrowBack" ></ion-icon>
-    </ion-button>
-    <ion-text><h1 class="profile">Profil</h1></ion-text>
+    <div class="header">
+        <ion-button class="backButton" [routerLink]="['/home']">
+            <ion-icon name="arrow-back-outline" class="arrowBack"></ion-icon>
+        </ion-button>
+        <ion-text><h1 class="profile">Profil</h1></ion-text>
+    </div>
+    <!-- Rest of your code -->
+
     <form class="ion-padding-top" [formGroup]="credentials"
           (ngSubmit)="updateProfile()">
         <ion-input
