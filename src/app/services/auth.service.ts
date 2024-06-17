@@ -4,7 +4,7 @@ import {
     Auth,
     createUserWithEmailAndPassword, deleteUser,
     signInWithEmailAndPassword,
-    signOut
+    signOut, GoogleAuthProvider, signInWithPopup
 } from '@angular/fire/auth';
 import {doc, Firestore, onSnapshot, setDoc} from "@angular/fire/firestore";
 import {UserService} from "./user.service";
@@ -31,11 +31,11 @@ export class AuthService {
                 lastName,
             };
             // move up if needed ^
-           /* stats: {
-                completedQuizzes: 0,
-                    correctAnswers: 0,
-                    totalQuestions: 0,
-            }*/
+            /* stats: {
+                 completedQuizzes: 0,
+                     correctAnswers: 0,
+                     totalQuestions: 0,
+             }*/
             const userRef = doc(this.firestore, `users/${user.uid}`);
             await setDoc(userRef, user);
 
@@ -58,7 +58,6 @@ export class AuthService {
         }
     }
 
-
     async login({email, password}) {
         try {
             const user = await signInWithEmailAndPassword(
@@ -69,6 +68,18 @@ export class AuthService {
             return user;
         } catch (e) {
             return null;
+        }
+    }
+
+    //TODO: implement Google login // not working properly
+    async loginWithGoogle() {
+        const provider = new GoogleAuthProvider();
+        try {
+            const result = await signInWithPopup(this.auth, provider);
+            return result;
+        } catch (error) {
+            console.error(error);
+            throw error;
         }
     }
 

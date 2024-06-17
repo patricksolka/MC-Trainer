@@ -22,6 +22,8 @@ if (environment.production) {
   enableProdMode();
 }
 
+
+
 bootstrapApplication(AppComponent, {
     providers: [
         {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
@@ -30,7 +32,7 @@ bootstrapApplication(AppComponent, {
         provideRouter(routes),
         provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
         provideFirestore(() => getFirestore()),
-        provideAuth(() => getAuth()),
+        provideAuth(() => getAuth(), ),
         provideHttpClient()
     ],
 });

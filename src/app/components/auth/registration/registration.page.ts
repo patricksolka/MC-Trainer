@@ -52,7 +52,9 @@ export class RegistrationPage  {
   }
   async register() {
     if (this.credentials.valid) {
-      const loading = await this.loadingController.create();
+      const loading = await this.loadingController.create({
+        message: 'Registrieren...',
+      });
       await loading.present();
       const {firstName, lastName, email, password } = this.credentials.value;
       const user = await this.authService.register(this.credentials.value);
