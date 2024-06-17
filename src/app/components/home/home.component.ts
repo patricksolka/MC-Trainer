@@ -6,6 +6,7 @@ import {UserService} from 'src/app/services/user.service';
 import {AuthService} from 'src/app/services/auth.service';
 import {FormsModule} from "@angular/forms";
 import {FooterPage} from "../footer/footer.page";
+import {Auth} from "@angular/fire/auth";
 
 @Component({
     selector: 'app-home',
@@ -16,13 +17,6 @@ import {FooterPage} from "../footer/footer.page";
 })
 export class HomeComponent {
     public userName: string = localStorage.getItem('userName') || 'User';
-
-    constructor(private router: Router,
-                private loadingController: LoadingController,
-                private userService: UserService,
-                private authService: AuthService) {
-        //this.getUserName();
-    }
 
     /*async getUserName() {
         const currentUser = this.authService.auth.currentUser;
@@ -41,4 +35,34 @@ export class HomeComponent {
         console.log('IonViewWillEnter');
     }
 
+  userName: string = 'User';
+
+  constructor(
+      private authService: AuthService,
+      private router: Router,
+      private loadingController: LoadingController,
+      private auth: Auth
+  ) {
+    this.getUser();
+    console.log(this.userName);
+  }
+  async logout() {
+    const loading = await this.loadingController.create({
+      message: 'Logging out...',
+    });
+    await loading.present();
+    await this.authService.logout();
+    loading.dismiss();
+    this.router.navigateByUrl('/login', { replaceUrl: true });
+  }
+    async getUser() {
+      const currentUser = this.auth.currentUser;
+      if (currentUser) {
+        await this.authService.getUserDetails(currentUser.uid).then((userDetails) => {
+          if (userDetails) {
+            this.userName = `${userDetails.firstName}`;
+          }
+        });
+      }
+    }
 }

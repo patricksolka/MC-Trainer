@@ -7,7 +7,7 @@ import {
     signInWithEmailAndPassword,
     signOut
 } from '@angular/fire/auth';
-import {deleteDoc, doc, Firestore, setDoc} from "@angular/fire/firestore";
+import {deleteDoc, doc, Firestore, setDoc, getDoc} from "@angular/fire/firestore";
 import {UserService} from "./user.service";
 
 
@@ -63,7 +63,17 @@ export class AuthService {
         signOut(this.auth);
         localStorage.removeItem('userName');
     }
-}
+
+    async getUserDetails(uid: string): Promise<any> {
+        const userRef = doc(this.firestore, `users/${uid}`);
+        const userDoc = await getDoc(userRef);
+        if (userDoc.exists()) {
+            return userDoc.data();
+        } else {
+            return null;
+        }
+    }
+
 
 
 //evtl um Änderungen in der db zu beobachten
