@@ -1,3 +1,4 @@
+// user.model.ts
 import {Stats} from "./stats.model";
 
 export class User {
@@ -7,6 +8,7 @@ export class User {
     email: string;
     //password: string;
     stats: Stats;
+    //    favoriteCategories: string[]; // Neue Eigenschaft
 }
 
 

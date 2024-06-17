@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { Firestore, collection, collectionData, doc, addDoc, updateDoc, deleteDoc, docData, query, where, CollectionReference } from '@angular/fire/firestore';
 import { Card } from '../models/card.model';
-import { Observable, combineLatest } from 'rxjs';
+import {Observable, combineLatest, take} from 'rxjs';
 import { Category } from '../models/categories.model';
 import { map, switchMap } from 'rxjs/operators';
 import {CategoriesService} from "./categories.service";
@@ -50,8 +50,11 @@ export class CardService {
     return docData(cardDoc, { idField: 'id' }) as Observable<Card>;
   }
 
-  addCard(card: Card) {
-    return addDoc(this.cardsCollection, card);
+  async addCard(card: Card): Promise<void> {
+    await addDoc(this.cardsCollection, card);
+    const categoryDoc = doc(this.firestore, `categories/${card['categoryId']}`);
+    const categoryData = await docData(categoryDoc).toPromise();
+    await updateDoc(categoryDoc, { questionCount: (categoryData['questionCount'] || 0) + 1 });
   }
 
   updateCard(id: string, card: Partial<Card>): Promise<void> {
@@ -59,8 +62,12 @@ export class CardService {
     return updateDoc(cardDoc, card);
   }
 
-  deleteCard(id: string): Promise<void> {
+  async deleteCard(id: string): Promise<void> {
     const cardDoc = doc(this.firestore, `cards/${id}`);
-    return deleteDoc(cardDoc);
+    const cardData = await docData(cardDoc).toPromise();
+    await deleteDoc(cardDoc);
+    const categoryDoc = doc(this.firestore, `categories/${cardData['categoryId']}`);
+    const categoryData = await docData(categoryDoc).toPromise();
+    await updateDoc(categoryDoc, { questionCount: (categoryData['questionCount'] || 1) - 1 });
   }
 }
