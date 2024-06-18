@@ -23,10 +23,11 @@ export class UserService {
         if (userSnap.exists()) {
             const user = userSnap.data() as User;
             localStorage.setItem('userName', user.firstName);
-            return {
+            return user;
+            /*return {
                 user,
                 favoriteCategories: user.favoriteCategories || [] // Ensure favoriteCategories is defined
-            };
+            };*/
         } else {
             return null;
         }
@@ -115,6 +116,6 @@ export class UserService {
         await alert.present();
     }
 
-    constructor(private authService: AuthService, private firestore: Firestore,  private alertController: AlertController) {
+    constructor(private firestore: Firestore,  private alertController: AlertController) {
     }
 }

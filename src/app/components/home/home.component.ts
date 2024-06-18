@@ -68,9 +68,9 @@ export class HomeComponent {
             message: 'Logging out...',
         });
         await loading.present();
-        await this.authService.logout();
-        loading.dismiss();
-        this.router.navigateByUrl('/login', {replaceUrl: true});
+        this.authService.logout();
+        await loading.dismiss();
+        await this.router.navigateByUrl('/login', {replaceUrl: true});
     }
 
     async getUser() {
