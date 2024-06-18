@@ -1,5 +1,6 @@
 import {Stats} from "./stats.model";
 
+//TODO: Interface or class?
 export class User {
     uid: string;
     firstName: string;

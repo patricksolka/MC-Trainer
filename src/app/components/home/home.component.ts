@@ -49,8 +49,6 @@ export class HomeComponent {
         private categoriesService: CategoriesService,
         private userService: UserService
     ) {
-        this.getUser();
-        console.log(this.userName);
         this.fetchCategories();
         this.userId = this.auth.currentUser?.uid || '';
         this.fetchFavoriteModules();
@@ -73,16 +71,7 @@ export class HomeComponent {
         await this.router.navigateByUrl('/login', {replaceUrl: true});
     }
 
-    async getUser() {
-        const currentUser = this.auth.currentUser;
-        if (currentUser) {
-            await this.authService.getUserDetails(currentUser.uid).then((userDetails) => {
-                if (userDetails) {
-                    this.userName = `${userDetails.firstName}`;
-                }
-            });
-        }
-    }
+
 
     fetchCategories() {
         this.categoriesService.getAllCategories().subscribe((categories) => {
@@ -136,7 +125,7 @@ export class HomeComponent {
     removeFavoriteModule(module: Category) {
         const currentUser = this.auth.currentUser;
         if (currentUser) {
-            this.userService.removeFavoriteCategory(currentUser.uid, module.id).then(() => {
+            this.userService.removeFavoriteModule(currentUser.uid, module.id).then(() => {
                 this.favoriteModules = this.favoriteModules.filter(m => m.id !== module.id);
             });
         }

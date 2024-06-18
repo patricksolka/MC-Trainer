@@ -57,6 +57,8 @@ export class MeineModuleComponents {
     }
   }
 
+
+
   updateFilteredCategories() {
     this.filteredCategories = this.categories.filter(category => !this.favoriteModules.find(fav => fav.id === category.id));
   }
