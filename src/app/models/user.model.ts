@@ -9,6 +9,7 @@ export class User {
     //password: string;
     stats: Stats;
     favoriteCategories: string[] = [];
+    favoriteCategoriesWithTimestamps:{[categoryId: string]: number};
 }
 
 
