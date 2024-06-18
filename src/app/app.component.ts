@@ -16,7 +16,7 @@ import {
     statsChartOutline,
     addOutline,
     searchOutline,
-    trash,
+    trash, search
 } from "ionicons/icons";
 import { Router } from "@angular/router";
 import { HttpClientModule } from "@angular/common/http";
@@ -55,6 +55,7 @@ export class AppComponent {
             addOutline,
             searchOutline,
             trash,
+            search
         });
 
         // Lade die Fragen beim Initialisieren der Komponente
