@@ -225,6 +225,18 @@ ion-col {
     align-items: center; /* Zentriert die Kinder-Elemente vertikal */
 }
 
+.card {
+    transition: transform 0.5s ease;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card:active {
+    transform: scale(0.95);
+}
+
 
 
 
