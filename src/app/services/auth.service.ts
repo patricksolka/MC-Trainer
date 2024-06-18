@@ -6,7 +6,7 @@ import {
     signInWithEmailAndPassword,
     signOut, GoogleAuthProvider, signInWithPopup
 } from '@angular/fire/auth';
-import {deleteDoc, doc, Firestore, setDoc, getDoc,onSnapshot, setDoc} from "@angular/fire/firestore";
+import {doc, Firestore,  getDoc,onSnapshot, setDoc} from "@angular/fire/firestore";
 import {UserService} from "./user.service";
 import {Router} from "@angular/router";
 
@@ -74,6 +74,7 @@ export class AuthService {
                 email,
                 password
             );
+
             return user;
         } catch (e) {
             return null;
@@ -96,6 +97,7 @@ export class AuthService {
         signOut(this.auth);
         localStorage.removeItem('userName');
     }
+
     //TODO: herausfinden ob diese funktion nötig ist
     async getUserDetails(uid: string): Promise<any> {
         const userRef = doc(this.firestore, `users/${uid}`);
@@ -106,3 +108,4 @@ export class AuthService {
             return null;
         }
     }
+}
