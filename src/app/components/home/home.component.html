@@ -14,10 +14,8 @@
         </div>
         <ion-button routerLink="/achievements"  class="achievements-button" style ="--background: #FF6905;">Achievements</ion-button>
         <ion-button routerLink="/total-stats"  class="stats-button" style ="--background: #FF6905;">Total-Stats</ion-button>
-        <ion-button routerLink="/cards"  class="stats-button" style ="--background: #FF6905;">Start Quiz</ion-button>
-        <ion-button routerLink="/onboarding"  class="stats-button" style ="--background: #FF6905;">Onboarding</ion-button>
-
     </div>
+
     <div class="entdecken">
         <h2>Entdecken</h2>
         <ion-grid>
@@ -31,21 +29,28 @@
             </ion-row>
         </ion-grid>
     </div>
+
     <div class="Module">
         <h2>Meine Module</h2>
-        <div *ngIf="favoriteModules.length === 0" class="no-modules">
-            <p>Sie haben noch keine Module ausgewählt.</p>
-            <ion-button routerLink="/categories" style ="--background: #FF6905;">Module hinzufügen</ion-button>
+        <div *ngIf="favoriteModules.length === 0">Sie haben noch keine Module ausgewählt.
+            <ion-button routerLink="/meine-module" class="meine-module" style ="--background: #FF6905;"> Module hinzufügen</ion-button>
         </div>
-        <div *ngIf="favoriteModules.length > 0" class="favorite-modules">
-            <ion-list>
-                <ion-item *ngFor="let module of favoriteModules">
-                    <ion-label>{{ module.name }}</ion-label>
+        <ion-list>
+            <ion-item-sliding *ngFor="let module of favoriteModules">
+                <ion-item>
+                    {{ module.name }}
                 </ion-item>
-            </ion-list>
-        </div>
+                <ion-item-options side="end">
+                    <ion-item-option color="danger" (click)="removeFavoriteModule(module)">
+                        <ion-icon slot="icon-only" name="trash"></ion-icon>
+                    </ion-item-option>
+                </ion-item-options>
+            </ion-item-sliding>
+        </ion-list>
+
     </div>
-   <ion-button type="button" color="danger" (click)="logout()">Logout</ion-button>
+
+    <ion-button type="button" color="danger" (click)="logout()">Logout</ion-button>
 </ion-content>
 
 <app-footer></app-footer>

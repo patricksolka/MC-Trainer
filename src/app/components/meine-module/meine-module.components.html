@@ -1,0 +1,36 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/home"></ion-back-button>
+        </ion-buttons>
+        <ion-title>Module Management</ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="toggleSearch()">
+                <ion-icon name="search"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-searchbar *ngIf="searchVisible" [(ngModel)]="searchTerm" (ionInput)="filterCategories()"></ion-searchbar>
+
+    <div class="section">
+        <h2>Meine Module</h2>
+        <div *ngIf="favoriteModules.length === 0">Sie haben noch keine Module ausgewählt.</div>
+        <ion-list>
+            <ion-item *ngFor="let module of favoriteModules">
+                {{ module.name }}
+            </ion-item>
+        </ion-list>
+    </div>
+
+    <div class="section">
+        <h2>Entdecken</h2>
+        <ion-list>
+            <ion-item *ngFor="let category of filteredCategories" (click)="addToFavorites(category.id)">
+                {{ category.name }}
+            </ion-item>
+        </ion-list>
+    </div>
+</ion-content>
