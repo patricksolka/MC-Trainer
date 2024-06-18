@@ -28,7 +28,7 @@ if (environment.production) {
 bootstrapApplication(AppComponent, {
     providers: [
         {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
-        importProvidersFrom(IonicModule.forRoot({innerHTMLTemplatesEnabled: true})),
+        importProvidersFrom(IonicModule.forRoot({mode: 'md' ,innerHTMLTemplatesEnabled: true})),
         provideIonicAngular({innerHTMLTemplatesEnabled: true}),
         provideRouter(routes),
         provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),

@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {IonicModule, LoadingController} from '@ionic/angular';
+import {LoadingController} from '@ionic/angular';
 import {CommonModule} from '@angular/common';
 import {Router, RouterModule} from '@angular/router';
 import {UserService} from 'src/app/services/user.service';
@@ -10,13 +10,22 @@ import {Auth} from "@angular/fire/auth";
 import { CategoriesService } from 'src/app/services/categories.service';
 import { Category } from '../../models/categories.model';
 import { Subscription, interval } from 'rxjs';
+import {
+    IonButton, IonButtons,
+    IonCard,
+    IonCardContent, IonCol,
+    IonContent, IonGrid,
+    IonIcon,
+    IonImg, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonList, IonRow,
+    IonText, IonToolbar
+} from "@ionic/angular/standalone";
 
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css'],
     standalone: true,
-    imports: [IonicModule, CommonModule, RouterModule, FormsModule, FooterPage]
+    imports: [CommonModule, RouterModule, FormsModule, FooterPage, IonButton, IonContent, IonIcon, IonText, IonImg, IonCard, IonCardContent, IonGrid, IonRow, IonCol, IonList, IonItemSliding, IonItem, IonItemOptions, IonItemOption, IonToolbar, IonButtons]
 })
 export class HomeComponent {
     public userName: string = localStorage.getItem('userName') || 'User';
@@ -25,7 +34,7 @@ export class HomeComponent {
     public favoriteModules: Category[] = [];
     private timerSubscription: Subscription;
     private categoryIndex: number = 0;
-    private userId: string;
+    //private userId: string;
 
     /*async getUserName() {
         const currentUser = this.authService.auth.currentUser;
@@ -50,7 +59,7 @@ export class HomeComponent {
         private userService: UserService
     ) {
         this.fetchCategories();
-        this.userId = this.auth.currentUser?.uid || '';
+        //this.userId = this.auth.currentUser?.uid || '';
         this.fetchFavoriteModules();
 
     }
@@ -61,7 +70,7 @@ export class HomeComponent {
         }
     }
 
-    async logout() {
+   /* async logout() {
         const loading = await this.loadingController.create({
             message: 'Logging out...',
         });
@@ -69,13 +78,36 @@ export class HomeComponent {
         this.authService.logout();
         await loading.dismiss();
         await this.router.navigateByUrl('/login', {replaceUrl: true});
-    }
+    }*/
 
 
-
-    fetchCategories() {
+    //TODO: Images vorerst aus assets laden; später aus DB
+    /*fetchCategories() {
         this.categoriesService.getAllCategories().subscribe((categories) => {
             this.categories = categories;
+            this.initializeDisplayedCategories();
+            this.fetchFavoriteModules(); // Ensure this is called after categories are loaded
+        });
+    }*/
+    fetchCategories() {
+        this.categoriesService.getAllCategories().subscribe((categories) => {
+            this.categories = categories.map(category => {
+                let imagePath = '';
+                if (category.name === 'Mathe') {
+                    imagePath = 'assets/mathe.jpg';
+                } else if (category.name === 'Geschichte') {
+                    imagePath = 'assets/geschichte.jpg';
+                } else if (category.name === 'Informatik') {
+                    imagePath = 'assets/informatik.jpg';
+                } else if (category.name === 'Pflanzen') {
+                    imagePath = 'assets/pflanzen.jpg';
+                }
+                // Fügen Sie hier weitere Bedingungen für andere Kategorien hinzu
+                return {
+                    ...category,
+                    imagePath: imagePath
+                };
+            });
             this.initializeDisplayedCategories();
             this.fetchFavoriteModules(); // Ensure this is called after categories are loaded
         });
@@ -114,6 +146,7 @@ export class HomeComponent {
             this.displayedCategories[indexToReplace] = nextCategory;
         }
     }
+
     async loadFavoriteModules() {
         const currentUser = this.auth.currentUser;
         if (currentUser) {
@@ -122,6 +155,7 @@ export class HomeComponent {
             });
         }
     }
+
     removeFavoriteModule(module: Category) {
         const currentUser = this.auth.currentUser;
         if (currentUser) {
@@ -130,5 +164,11 @@ export class HomeComponent {
             });
         }
     }
+
+    ionViewWillEnter() {
+        this.userName = localStorage.getItem('userName') || 'User';
+        console.log('IonViewWillEnter');
+    }
+
 
 }
