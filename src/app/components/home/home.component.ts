@@ -36,9 +36,9 @@ export class HomeComponent {
     public loadCards: CardComponent;
     private timerSubscription: Subscription;
     private categoryIndex: number = 0;
-    private userId: string;
-    userImg: string;
-    achiImg:String
+    //private userId: string;
+    //userImg: string;
+    //achiImg:String
     //private userId: string;
 
     /*async getUserName() {
@@ -165,14 +165,14 @@ export class HomeComponent {
     }
 
 
-    async loadFavoriteModules() {
+  /*  async loadFavoriteModules() {
         const currentUser = this.auth.currentUser;
         if (currentUser) {
             this.userService.getFavoriteModules(currentUser.uid).then(favoriteModuleIds => {
                 this.favoriteModules = this.categories.filter(category => favoriteModuleIds.includes(category.id));
             });
         }
-    }
+    }*/
 
     removeFavoriteModule(module: Category) {
         const currentUser = this.auth.currentUser;
@@ -190,6 +190,7 @@ export class HomeComponent {
 
     ionViewWillEnter() {
         this.userName = localStorage.getItem('userName') || 'User';
+        //this.loadFavoriteModules();
         console.log('IonViewWillEnter');
     }
 
