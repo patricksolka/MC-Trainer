@@ -103,4 +103,10 @@ export class UserService {
             favoriteCategories: arrayRemove(categoryId)
         });
     }
+    removeFavoriteCategory(uid: string, categoryId: string): Promise<void> {
+        const userDoc = doc(this.firestore, `users/${uid}`);
+        return updateDoc(userDoc, {
+            favoriteCategories: arrayRemove(categoryId)
+        });
+    }
 }

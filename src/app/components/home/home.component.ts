@@ -88,8 +88,10 @@ export class HomeComponent {
         this.categoriesService.getAllCategories().subscribe((categories) => {
             this.categories = categories;
             this.initializeDisplayedCategories();
+            this.fetchFavoriteModules(); // Ensure this is called after categories are loaded
         });
     }
+
     fetchFavoriteModules() {
         const currentUser = this.auth.currentUser;
         if (currentUser) {
@@ -123,4 +125,21 @@ export class HomeComponent {
             this.displayedCategories[indexToReplace] = nextCategory;
         }
     }
+    async loadFavoriteModules() {
+        const currentUser = this.auth.currentUser;
+        if (currentUser) {
+            this.userService.getFavoriteModules(currentUser.uid).then(favoriteModuleIds => {
+                this.favoriteModules = this.categories.filter(category => favoriteModuleIds.includes(category.id));
+            });
+        }
+    }
+    removeFavoriteModule(module: Category) {
+        const currentUser = this.auth.currentUser;
+        if (currentUser) {
+            this.userService.removeFavoriteCategory(currentUser.uid, module.id).then(() => {
+                this.favoriteModules = this.favoriteModules.filter(m => m.id !== module.id);
+            });
+        }
+    }
+
 }
