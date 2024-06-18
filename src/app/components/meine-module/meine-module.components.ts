@@ -21,7 +21,7 @@ export class MeineModuleComponents {
   filteredCategories: Category[] = [];
   searchVisible: boolean = false;
   searchTerm: string = '';
-
+  favoriteModuleIds: { id: string, timestamp: number }[] = []; // Define favoriteModuleIds
 
   constructor(
       private userService: UserService,
@@ -43,7 +43,10 @@ export class MeineModuleComponents {
     const currentUser = this.auth.currentUser;
     if (currentUser) {
       this.userService.getFavoriteModules(currentUser.uid).then(favoriteModuleIds => {
-        this.favoriteModules = this.categories.filter(category => favoriteModuleIds.includes(category.id));
+        this.favoriteModuleIds = favoriteModuleIds; // Assign the favoriteModuleIds
+        this.favoriteModules = this.categories.filter(category =>
+            this.favoriteModuleIds.some(fav => fav.id === category.id)
+        );
         this.updateFilteredCategories();
       });
     }
@@ -57,10 +60,10 @@ export class MeineModuleComponents {
     }
   }
 
-
-
   updateFilteredCategories() {
-    this.filteredCategories = this.categories.filter(category => !this.favoriteModules.find(fav => fav.id === category.id));
+    this.filteredCategories = this.categories.filter(category =>
+        !this.favoriteModules.find(fav => fav.id === category.id)
+    );
   }
 
   toggleSearch() {

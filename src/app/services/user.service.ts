@@ -1,7 +1,7 @@
 //import {AuthService} from "./auth.service";
 import {
     deleteDoc, doc, Firestore, getDoc, updateDoc, QueryDocumentSnapshot,
-    SnapshotOptions, DocumentData, arrayUnion, arrayRemove } from "@angular/fire/firestore";
+    SnapshotOptions, DocumentData, arrayUnion, arrayRemove, deleteField } from "@angular/fire/firestore";
 import {Injectable} from "@angular/core";
 import {User} from "../models/user.model";
 import {AlertController} from "@ionic/angular";
@@ -80,24 +80,32 @@ export class UserService {
         }
     }
 
-    async getFavoriteModules(uid: string): Promise<string[]> {
+    async getFavoriteModules(uid: string): Promise<{ id: string, timestamp: number }[]> {
         const user = await this.getUser(uid);
-        return user ? user.favoriteCategories || [] : [];
+        if (user) {
+            const favoriteCategoriesWithTimestamps = user.favoriteCategoriesWithTimestamps || [];
+            // Convert the object to an array of { id, timestamp }
+            return Object.entries(favoriteCategoriesWithTimestamps).map(([id, timestamp]) => ({ id, timestamp }));
+        } else {
+            return [];
+        }
     }
 
     async addFavoriteModule(uid: string, categoryId: string): Promise<void> {
         const userDoc = doc(this.firestore, `users/${uid}`);
+        const timestamp = Date.now();
         await updateDoc(userDoc, {
-            favoriteCategories: arrayUnion(categoryId)
+            [`favoriteCategoriesWithTimestamps.${categoryId}`]: timestamp
         });
     }
 
     async removeFavoriteModule(uid: string, categoryId: string): Promise<void> {
         const userDoc = doc(this.firestore, `users/${uid}`);
         await updateDoc(userDoc, {
-            favoriteCategories: arrayRemove(categoryId)
+            [`favoriteCategoriesWithTimestamps.${categoryId}`]: deleteField()
         });
     }
+
 
     async showAlert(header: string, message: string) {
         const alert = await this.alertController.create({
