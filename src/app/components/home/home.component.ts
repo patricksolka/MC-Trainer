@@ -19,6 +19,7 @@ import {
     IonImg, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonList, IonRow,
     IonText, IonToolbar
 } from "@ionic/angular/standalone";
+import {CardComponent} from "../card/card.component";
 
 @Component({
     selector: 'app-home',
@@ -32,8 +33,12 @@ export class HomeComponent {
     public categories: Category[] = [];
     public displayedCategories: Category[] = [];
     public favoriteModules: Category[] = [];
+    public loadCards: CardComponent;
     private timerSubscription: Subscription;
     private categoryIndex: number = 0;
+    private userId: string;
+    userImg: string;
+    achiImg:String
     //private userId: string;
 
     /*async getUserName() {
@@ -50,6 +55,7 @@ export class HomeComponent {
 
     // userName: string = 'User';
 
+
     constructor(
         private authService: AuthService,
         private router: Router,
@@ -61,7 +67,10 @@ export class HomeComponent {
         this.fetchCategories();
         //this.userId = this.auth.currentUser?.uid || '';
         this.fetchFavoriteModules();
-
+/*
+        this.userImg='assets/person-circle-outline.png';
+        this.achiImg='assets/achievements.png';
+*/
     }
 
     ngOnDestroy() {
@@ -116,12 +125,20 @@ export class HomeComponent {
     fetchFavoriteModules() {
         const currentUser = this.auth.currentUser;
         if (currentUser) {
-            this.userService.getFavoriteModules(currentUser.uid).then((favoriteModuleIds) => {
-                this.favoriteModules = this.categories.filter(category => favoriteModuleIds.includes(category.id));
+            this.userService.getFavoriteModules(currentUser.uid).then((favoriteModuleData) => {
+                this.favoriteModules = this.categories.filter(category =>
+                    favoriteModuleData.some(fav => fav.id === category.id)
+                );
+
+                // Sort the favoriteModules by the recently viewed timestamp
+                this.favoriteModules.sort((a, b) => {
+                    const aTimestamp = favoriteModuleData.find(fav => fav.id === a.id)?.timestamp || 0;
+                    const bTimestamp = favoriteModuleData.find(fav => fav.id === b.id)?.timestamp || 0;
+                    return bTimestamp - aTimestamp;
+                });
             });
         }
     }
-
 
     initializeDisplayedCategories() {
         this.displayedCategories = this.categories.slice(0, 4);
@@ -147,6 +164,7 @@ export class HomeComponent {
         }
     }
 
+
     async loadFavoriteModules() {
         const currentUser = this.auth.currentUser;
         if (currentUser) {
@@ -163,6 +181,11 @@ export class HomeComponent {
                 this.favoriteModules = this.favoriteModules.filter(m => m.id !== module.id);
             });
         }
+    }
+
+    startQuiz(category: Category) {
+        // Navigate to the quiz page for the selected category
+        this.router.navigate(['/cards', category.id]);
     }
 
     ionViewWillEnter() {

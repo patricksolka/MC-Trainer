@@ -6,16 +6,6 @@ import {CategoriesService} from '../../services/categories.service';
 import {Router, RouterLink} from '@angular/router';
 import {Observable} from 'rxjs';
 import {FormBuilder, FormGroup, FormsModule} from '@angular/forms';
-import {
-    IonApp,
-    IonButton,
-    IonButtons, IonContent, IonFooter,
-    IonHeader,
-    IonIcon, IonInput, IonItem, IonLabel, IonList,
-    IonSearchbar, IonTabBar, IonTabButton, IonTabs,
-    IonTitle,
-    IonToolbar
-} from "@ionic/angular/standalone";
 import {IonicModule} from "@ionic/angular";
 import {FooterPage} from "../footer/footer.page";
 
@@ -24,7 +14,7 @@ import {FooterPage} from "../footer/footer.page";
     templateUrl: './categories.component.html',
     styleUrls: ['./categories.component.css'],
     standalone: true,
-    imports: [CommonModule, FormsModule, IonApp, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonIcon, IonSearchbar, IonContent, IonList, IonItem, IonLabel, IonInput, IonFooter, IonTabs, IonTabBar, IonTabButton, IonicModule, RouterLink, FooterPage]
+    imports: [CommonModule, FormsModule, IonicModule, RouterLink, FooterPage]
 })
 export class CategoriesComponent implements OnInit {
 
@@ -70,7 +60,11 @@ export class CategoriesComponent implements OnInit {
 
     addCategory(newCategoryName: string): void {
         if (newCategoryName.trim() !== '') {
-            const newCategory: Category = { id: '', name: newCategoryName };
+            const newCategory: Category = {
+                id: '',
+                name: newCategoryName,
+                lastViewed: Date.now() // Add the lastViewed property
+            };
             this.categoryService.addCategory(newCategory).then(() => {
                 this.newCategoryName = '';
                 this.loadCategories();
@@ -81,6 +75,7 @@ export class CategoriesComponent implements OnInit {
             console.warn('Category name cannot be empty');
         }
     }
+
 
     categoryHasQuestions(category: Category): boolean {
         return category.questionCount && category.questionCount > 0;
