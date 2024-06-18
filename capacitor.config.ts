@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'io.ionic.starter',
-  appName: 'ema-jhpt04-u1',
+  appName: 'ema-ss24-mc-haupt',
   webDir: 'www'
 };
 

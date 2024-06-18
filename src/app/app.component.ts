@@ -3,6 +3,7 @@ import { IonApp, IonRouterOutlet, NavController} from "@ionic/angular/standalone
 import { addIcons } from "ionicons";
 import {
     personOutline,
+    personCircle,
     chevronForward,
     lockClosedOutline,
     mailOutline,
@@ -41,6 +42,7 @@ export class AppComponent {
     constructor(private router: Router, private cardService: CardService) {
         addIcons({
             personOutline,
+            personCircle,
             chevronForward,
             lockClosedOutline,
             mailOutline,

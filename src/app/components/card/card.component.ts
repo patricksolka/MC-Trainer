@@ -1,4 +1,3 @@
-// card.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,7 +16,7 @@ import {
     IonTitle,
     IonToolbar
 } from "@ionic/angular/standalone";
-import {IonicModule} from "@ionic/angular";
+//import {IonicModule} from "@ionic/angular";
 import {FooterPage} from "../footer/footer.page";
 
 
@@ -26,7 +25,7 @@ import {FooterPage} from "../footer/footer.page";
     templateUrl: './card.component.html',
     styleUrls: ['./card.component.css'],
     standalone: true,
-    imports: [CommonModule, IonHeader, IonContent, IonToolbar, IonTitle, IonList, IonItem, IonCard, IonCardHeader, IonCardContent, IonButton, IonicModule, FooterPage]
+    imports: [CommonModule, IonHeader, IonContent, IonToolbar, IonTitle, IonList, IonItem, IonCard, IonCardHeader, IonCardContent, IonButton, FooterPage]
 })
 export class CardComponent implements OnInit, OnDestroy {
     categories$: Observable<Category[]>;
