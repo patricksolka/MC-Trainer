@@ -74,41 +74,39 @@ export class LoginPage {
 
     async login() {
         if (this.credentials.valid) {
-            const loading = await this.loadingController.create();
+            const loading = await this.loadingController.create({
+                message: 'Einloggen...',
+            });
             await loading.present();
-            const { email, password } = this.credentials.value;
+            const {email, password} = this.credentials.value;
 
             const userCredential = await this.authService.login(this.credentials.value);
             await loading.dismiss();
 
             if (userCredential) {
-                const userResponse = await this.userService.getUser(userCredential.user.uid);
-                if (userResponse && userResponse.user) {
-                    localStorage.setItem('userName', userResponse.user.firstName);
-                    await this.router.navigateByUrl('/home', { replaceUrl: true });
+                const user = await this.userService.getUser(userCredential.user.uid);
+                if (user) {
+                    localStorage.setItem('userName', user.firstName);
+                    await this.router.navigateByUrl('/home', {replaceUrl: true});
                 }
             } else {
-                await this.showAlertLogin('Login fehlgeschlagen', 'Versuche es erneut!');
+                await this.userService.showAlert('Login fehlgeschlagen', 'Versuche es' +
+                    ' erneut!');
             }
         } else {
-            this.showAlertLogin('Login fehlgeschlagen', 'Bitte fülle alle erforderlichen Felder aus!');
+            await this.userService.showAlert('Login fehlgeschlagen', 'Bitte fülle alle' +
+                ' erforderlichen' +
+                ' Felder' +
+                ' aus!');
         }
     }
 
-    async showAlertLogin(header: string, message: string) {
-        const alert = await this.alertController.create({
-            header,
-            message,
-            buttons: [
-                {
-                    text: 'OK',
-                    handler: () => {
-                        //this.credentials.reset();
-                    },
-                },
-            ],
-        });
-
-        await alert.present();
+    async onSignInWithGoogle() {
+        try {
+            const result = await this.authService.loginWithGoogle();
+            // Handle the result
+        } catch (error) {
+            // Handle the error
+        }
     }
 }

@@ -16,6 +16,7 @@ import {UserService} from "../../services/user.service";
 import {Router, RouterLink, RouterModule} from "@angular/router";
 import {User} from "../../models/user.model";
 import {FooterPage} from "../footer/footer.page";
+import {onAuthStateChanged} from "@angular/fire/auth";
 
 @Component({
     selector: 'app-profile',
@@ -54,7 +55,6 @@ export class ProfilePage {
                     //this.credentials.value.password === this.user.password
     }*/
 
-
     fetchUser() {
         const uid = this.authService.auth.currentUser.uid;
         this.userService.getUser(uid).then(user => {
@@ -72,10 +72,9 @@ export class ProfilePage {
         });
     }
 
-
     async logout() {
         const loading = await this.loadingController.create({
-            message: 'Logging out...',
+            message: 'Ausloggen...',
         });
         await loading.present();
         this.authService.logout();
@@ -83,16 +82,21 @@ export class ProfilePage {
         await this.router.navigateByUrl('/login', {replaceUrl: true});
     }
 
+    //TODO: Add ConfirmAlert before deleting profile
     async deleteProfile() {
         const loading = await this.loadingController.create({
-            message: 'Deleting profile...',
+            message: 'Profil wird gelöscht...',
         });
         await loading.present();
         const uid = this.authService.auth.currentUser.uid;
         await this.userService.deleteUser(uid);
         await loading.dismiss();
-        await this.router.navigateByUrl('/login', {replaceUrl: true});
+
     }
+
+    //TODO: Fix updateProfile
+    //TODO: when updating profile, password is stored in db without hashing
+    //TODO: Synchronize Auth with Firestore
 
     async updateProfile() {
         if (this.credentials.valid) {
@@ -112,8 +116,31 @@ export class ProfilePage {
 
     ionViewWillEnter() {
         this.fetchUser();
+        console.log('AuthService.auth:', this.authService.auth);
+        console.log('AuthService.auth.currentUser:', this.authService.auth.currentUser);
+
+
+        onAuthStateChanged(this.authService.auth, (user) => {
+            if (user) {
+                console.log('User is logged in:', user);
+            } else {
+                console.log('User is logged out');
+            }
+        });
 
     }
+
+    ionViewDidLeave(){
+        onAuthStateChanged(this.authService.auth, (user) => {
+            if (user) {
+                console.log('User is logged in:', user);
+            } else {
+                console.log('User is logged out');
+            }
+        });
+    }
+
+
 }
 
 

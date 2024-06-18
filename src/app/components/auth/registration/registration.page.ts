@@ -15,6 +15,7 @@ import {
 import {Router, RouterLink} from "@angular/router";
 import {AlertController, LoadingController} from "@ionic/angular";
 import {AuthService} from "../../../services/auth.service";
+import {UserService} from "../../../services/user.service";
 
 @Component({
   selector: 'app-registration',
@@ -33,7 +34,8 @@ export class RegistrationPage  {
       private loadingController: LoadingController,
       private alertController: AlertController,
       private router: Router,
-      private authService: AuthService
+      private authService: AuthService,
+      private userService: UserService
   ) {
     this.credentials = this.fb.group({
       firstName: ['', [Validators.required]],
@@ -52,7 +54,9 @@ export class RegistrationPage  {
   }
   async register() {
     if (this.credentials.valid) {
-      const loading = await this.loadingController.create();
+      const loading = await this.loadingController.create({
+        message: 'Registrieren...',
+      });
       await loading.present();
       const {firstName, lastName, email, password } = this.credentials.value;
       const user = await this.authService.register(this.credentials.value);
@@ -62,28 +66,11 @@ export class RegistrationPage  {
         localStorage.setItem('userName', user.firstName);
         await this.router.navigateByUrl('/home', { replaceUrl: true });
       } else {
-        await this.showAlertRegister('Registrierung fehlgeschlagen', 'Versuche es erneut!');
+        await this.userService.showAlert('Registrierung fehlgeschlagen', 'Versuche es erneut!');
       }
     } else {
-      await this.showAlertRegister('Registrierung fehlgeschlagen', 'Bitte fülle alle' +
+      await this.userService.showAlert('Registrierung fehlgeschlagen', 'Bitte fülle alle' +
           ' erforderlichen Felder aus!');
     }
   }
-
-  async showAlertRegister(header: string, message: string) {
-    const alert = await this.alertController.create({
-      header,
-      message,
-      buttons: [
-        {
-          text: 'OK',
-          handler: () => {
-            //this.credentials.reset();
-          },
-        },
-      ],
-    });
-    await alert.present();
-  }
-
 }

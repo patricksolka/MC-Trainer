@@ -1,4 +1,3 @@
-// user.model.ts
 import {Stats} from "./stats.model";
 
 export class User {
