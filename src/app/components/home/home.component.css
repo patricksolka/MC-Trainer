@@ -140,7 +140,7 @@ ion-card-content {
 ion-card-content p {
     font-weight: 300;
     font-size: 14px;
-    color: #B8B8D2;
+    color: var(--ion-color-light);
 }
 
 
@@ -150,8 +150,6 @@ ion-card-content p {
     box-shadow: #0d0d0d 0px 10px 20px 0px;
     display: flex;
     flex-direction: column;
-
-
 }
 
 .achievementsButton{
