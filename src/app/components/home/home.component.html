@@ -12,8 +12,8 @@
         <ion-text slot="start">
             <h1>Hallo, <br> <span class="userName">{{ userName }}</span></h1></ion-text>
         <ion-buttons slot="end">
-            <ion-button>
-                <ion-icon name="person-circle"></ion-icon>
+            <ion-button [routerLink]="['/profile']">
+                <ion-icon  name="person-circle"></ion-icon>
             </ion-button>
         </ion-buttons>
     </ion-toolbar>

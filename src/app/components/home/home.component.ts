@@ -64,7 +64,8 @@ export class HomeComponent {
         private categoriesService: CategoriesService,
         private userService: UserService
     ) {
-        this.fetchCategories();
+        this.fetchPreview();
+        //this.fetchCategories();
         //this.userId = this.auth.currentUser?.uid || '';
         this.fetchFavoriteModules();
 /*
@@ -98,7 +99,7 @@ export class HomeComponent {
             this.fetchFavoriteModules(); // Ensure this is called after categories are loaded
         });
     }*/
-    fetchCategories() {
+    /*fetchCategories() {
         this.categoriesService.getAllCategories().subscribe((categories) => {
             this.categories = categories.map(category => {
                 let imagePath = '';
@@ -120,7 +121,30 @@ export class HomeComponent {
             this.initializeDisplayedCategories();
             this.fetchFavoriteModules(); // Ensure this is called after categories are loaded
         });
+    }*/
+
+    fetchPreview() {
+        this.categoriesService.getAllCategories().subscribe((categories) => {
+            this.categories = categories;
+            this.initializeDisplayedCategories();
+            this.fetchFavoriteModules(); // Ensure this is called after categories are loaded
+        });
     }
+
+
+    /*fetchCategories() {
+    this.categoriesService.getAllCategories().subscribe((categories) => {
+      this.categories = categories.map(category => {
+        // Der imagePath wird direkt aus der Firebase-Datenbank abgerufen
+        return {
+          ...category,
+          imagePath: category.imagePath
+        };
+      });
+      this.initializeDisplayedCategories();
+      this.fetchFavoriteModules(); // Ensure this is called after categories are loaded
+    });
+  }*/
 
     fetchFavoriteModules() {
         const currentUser = this.auth.currentUser;
