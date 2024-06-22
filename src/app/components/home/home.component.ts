@@ -124,7 +124,7 @@ export class HomeComponent {
     }*/
 
     fetchPreview() {
-        this.categoriesService.getAllCategories().subscribe((categories) => {
+        this.categoriesService.getPreviewCategories().subscribe((categories) => {
             this.categories = categories;
             this.initializeDisplayedCategories();
             this.fetchFavoriteModules(); // Ensure this is called after categories are loaded
@@ -166,14 +166,14 @@ export class HomeComponent {
 
     initializeDisplayedCategories() {
         this.displayedCategories = this.categories.slice(0, 4);
-        this.startCategoryRotation();
+        //this.startCategoryRotation();
     }
 
-    startCategoryRotation() {
+    /*startCategoryRotation() {
         this.timerSubscription = interval(10000).subscribe(() => {
             this.updateDisplayedCategory();
         });
-    }
+    }*/
 
     updateDisplayedCategory() {
         if (this.categories.length > 4) {
