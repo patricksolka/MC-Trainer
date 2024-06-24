@@ -7,6 +7,7 @@ import { Category } from 'src/app/models/categories.model';
 import { Auth } from '@angular/fire/auth';
 import {IonicModule} from "@ionic/angular";
 import {RouterLink} from "@angular/router";
+import {CategoryService} from "../../../../../../src/app/services/category.service";
 
 @Component({
   selector: 'app-meine-module',
@@ -25,15 +26,15 @@ export class MeineModuleComponents {
 
   constructor(
       private userService: UserService,
-      private categoriesService: CategoriesService,
+      private categoryService: CategoryService,
       private auth: Auth
   ) {
-    this.loadCategories();
-    this.loadFavoriteModules();
+    //this.loadCategories();
+    //this.loadFavoriteModules();
   }
 
-  async loadCategories() {
-    this.categoriesService.getAllCategories().subscribe(categories => {
+  /*async loadCategories() {
+    this.categoryService.getAllCategories().subscribe(categories => {
       this.categories = categories;
       this.updateFilteredCategories();
     });
@@ -51,12 +52,12 @@ export class MeineModuleComponents {
       });
     }
   }
-
+*/
   async addToFavorites(categoryId: string) {
     const currentUser = this.auth.currentUser;
     if (currentUser) {
       await this.userService.addFavoriteModule(currentUser.uid, categoryId);
-      this.loadFavoriteModules();
+      //this.loadFavoriteModules();
     }
   }
 
