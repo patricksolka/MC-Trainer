@@ -42,6 +42,7 @@ export class CardComponent implements OnInit, OnDestroy {
     incorrectAnswersCount = 0;
     totalQuestions = 0;
     questions: Card[] = []; // Array für alle Fragen
+    correctAnswer: boolean = false;
 
 //    currentQuestionIndex: number = 0; // Neue Variable für den Index der aktuellen Frage
     private cardsSubscription: Subscription;
@@ -178,7 +179,7 @@ export class CardComponent implements OnInit, OnDestroy {
         });
     }
 
-
+/*
     checkAnswers(): void {
        const isCorrect = this.selectedAnswers.every(answer => this.currentQuestion.correctAnswer.includes(answer)) && this.currentQuestion.correctAnswer.every(answer => this.selectedAnswers.includes(answer));
         if(isCorrect) {
@@ -188,15 +189,34 @@ export class CardComponent implements OnInit, OnDestroy {
             this.incorrectAnswersCount++;
         }
         this.showResult = true;
-        /*setTimeout(() => {
-            this.getNextQuestion();
-        }, 1000); // Warte eine Sekunde bevor die nächste Frage geladen wird
-
-         */
     }
+ */
+
+
+    checkAnswers(): void {
+        // Überprüfen, ob alle ausgewählten Antworten korrekt sind
+        const allSelectedCorrect = this.selectedAnswers.every(answer => this.currentQuestion.correctAnswer.includes(answer));
+        // Überprüfen, ob die Anzahl der ausgewählten Antworten der Anzahl der korrekten Antworten entspricht
+        const isCorrect = allSelectedCorrect && this.selectedAnswers.length === this.currentQuestion.correctAnswer.length;
+
+        if (isCorrect) {
+            console.log("correct");
+            this.correctAnswersCount++;
+            this.correctAnswer = true;
+            this.cardService.updateCardAnsweredCounter(this.currentQuestion.id, "counter");
+        } else {
+            console.log("not correct");
+            this.correctAnswer = false;
+            this.incorrectAnswersCount++;
+           // this.cardService.updateCardAnsweredCounter(this.currentQuestion.id, "counterIncorrect");
+        }
+        this.showResult = true;
+    }
+
 
     isCorrectAnswer(answer: string): boolean {
         return this.currentQuestion.correctAnswer.includes(answer);
+        //return this.correctAnswer;
     }
 
     isAnswerCorrect(): boolean {
