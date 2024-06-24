@@ -1,4 +1,4 @@
-// categories.service.ts
+// category.service.ts
 import { Injectable } from '@angular/core';
 import {
     Firestore,
@@ -34,7 +34,7 @@ export class CategoriesService {
         //this.categoriesCollection = collection(this.firestore, 'categories');
     }
 
-
+    //TODO: Eigentlich nicht nötig da wir mit fetchCategories() arbeiten
     getAllCategories(): Observable<Category[]> {
         try {
             return collectionData(this.categoriesCollectionRef) as Observable<Category[]>;
@@ -66,18 +66,11 @@ export class CategoriesService {
         }
     }
 
-    private categoryConverter = {
-        fromFirestore: (snapshot: QueryDocumentSnapshot, options: SnapshotOptions): Category => {
-            const result = Object.assign(new Category(), snapshot.data(options));
-            result.id = snapshot.id;
-            return result;
-        },
-        toFirestore: (category: Category): DocumentData => {
-            const copy = {...category};
-            delete copy.id;
-            return copy;
-        }
-    };
+    getPreviewCategories(): Observable<Category[]> {
+        const filterQuery = query(this.categoriesCollectionRef, limit(4));
+        return collectionData(filterQuery) as Observable<Category[]>;
+    }
+
 
     async fetchCategories(): Promise<Category[] | null> {
         try {
@@ -105,11 +98,22 @@ export class CategoriesService {
         }
     }
 
+    private categoryConverter = {
+        fromFirestore: (snapshot: QueryDocumentSnapshot, options: SnapshotOptions): Category => {
+            const result = Object.assign(new Category(), snapshot.data(options));
+            result.id = snapshot.id;
+            return result;
+        },
+        toFirestore: (category: Category): DocumentData => {
+            const copy = {...category};
+            delete copy.id;
+            return copy;
+        }
+    };
+
+
     //Retrieve the first four categories for Preview
-    getPreviewCategories(): Observable<Category[]> {
-        const filterQuery = query(this.categoriesCollectionRef, limit(4));
-        return collectionData(filterQuery) as Observable<Category[]>;
-    }
+
 
     async addCategory(category: Category): Promise<void> {
         await addDoc(this.categoriesCollectionRef, { name: category.name, questionCount: 0 });
