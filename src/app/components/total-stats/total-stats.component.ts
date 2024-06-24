@@ -26,14 +26,14 @@ export class TotalStatsComponent implements OnInit {
         this.totalCorrectAnswers = this.totalStatsService.getTotalCorrectAnswers();
         this.totalIncorrectAnswers = this.totalStatsService.getTotalIncorrectAnswers();
     }
-/*
-    resetTotalStats() {
-        this.totalStatsService.resetStats();
-        this.totalCorrectAnswers = 0;
-        this.totalIncorrectAnswers = 0;
-    }
+    /*
+        resetTotalStats() {
+            this.totalStatsService.resetStats();
+            this.totalCorrectAnswers = 0;
+            this.totalIncorrectAnswers = 0;
+        }
 
- */
+     */
 
     backToHome(){
         this.router.navigate(['/home']);
