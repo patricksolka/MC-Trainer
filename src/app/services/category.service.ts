@@ -33,7 +33,7 @@ export class CategoryService {
         //this.categoriesCollection = collection(this.firestore, 'categories');
     }
 
-
+    //TODO: Eigentlich nicht nötig da wir mit fetchCategories() arbeiten
     getAllCategories(): Observable<Category[]> {
         try {
             return collectionData(this.categoriesCollectionRef) as Observable<Category[]>;
@@ -111,6 +111,7 @@ export class CategoryService {
         const refWithConverter = filterQuery.withConverter(this.categoryConverter);
         return collectionData(refWithConverter) as Observable<Category[]>;
     }
+
 
     async addCategory(category: Category): Promise<void> {
         await addDoc(this.categoriesCollectionRef, { name: category.name, questionCount: 0 });
