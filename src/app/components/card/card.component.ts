@@ -62,15 +62,32 @@ export class CardComponent implements OnInit, OnDestroy {
         this.categories$ = this.cardService.getCategoriesWithQuestionCounts();
     }
 
-    loadCards(categoryId: string): void {
+    async checkAllAnswered(): Promise<Card | null> {
+        for (const card of this.questions) {
+            const counter = await this.cardService.getCardAnsweredCounter(card.id);
+            if (counter < 6) {
+                return card;
+            }
+        }
+        return null;
+    }
+
+
+    async loadCards(categoryId: string): Promise<void> {
         this.cards$ = this.cardService.getAllCardsForCategory(categoryId);
         this.cardsSubscription = this.cards$.subscribe(
-            (cards) => {
+            async (cards) => {
                 console.log('Geladene Karten:', cards);
                 if (cards.length > 0) {
                     this.questions = this.shuffleArray(cards); // Mische die Fragen
                     this.totalQuestions = this.questions.length;
-                    this.currentQuestion = this.questions[0];
+                    const question = await this.checkAllAnswered();
+                    if(question){
+                        this.currentQuestion = question;
+                    } else {
+                        console.log("Fehler! Alle Karten wurden beantwortet!")
+                    }
+                    //this.currentQuestion = this.questions[0];
                 } else {
                     console.warn('Keine Karten gefunden für die Kategorie mit ID:', categoryId);
                 }
@@ -103,17 +120,22 @@ export class CardComponent implements OnInit, OnDestroy {
         }
     }
 
-    getNextQuestion(): void {
+    /*async getNextQuestion(): Promise<void> {
         this.showResult = false;
         this.selectedAnswers = [];
         const index = this.questions.indexOf(this.currentQuestion);
         if (index < this.questions.length - 1) {
-            this.currentQuestion = this.questions[index + 1];
+            const counter = await this.cardService.getCardAnsweredCounter(this.questions[index + 1].id);
+            if (counter > 3) {
+                this.getNextQuestion();
+            } else {
+                this.currentQuestion = this.questions[index + 1];
+            }
         } else {
             // Navigiere zur Statistikseite und übergebe die Ergebnisse
             this.totalStatsService.updateStats(this.correctAnswersCount, this.incorrectAnswersCount);
-          //  console.log(this.totalStatsService.getTotalCorrectAnswers());
-          //  console.log(this.totalStatsService.getTotalIncorrectAnswers());
+            //  console.log(this.totalStatsService.getTotalCorrectAnswers());
+            //  console.log(this.totalStatsService.getTotalIncorrectAnswers());
 
             this.router.navigate(['/stats'], {
                 state: {
@@ -124,10 +146,41 @@ export class CardComponent implements OnInit, OnDestroy {
         }
     }
 
+     */
+
+    async getNextQuestion(): Promise<void> {
+        this.showResult = false;
+        this.selectedAnswers = [];
+
+        let index = this.questions.indexOf(this.currentQuestion);
+
+        while (index < this.questions.length - 1) {
+            index++;
+            const counter = await this.cardService.getCardAnsweredCounter(this.questions[index].id);
+
+            if (counter <= 6) {
+                this.currentQuestion = this.questions[index];
+                return;
+            }
+        }
+
+        // Wenn alle verbleibenden Fragen mehr als 3 Mal beantwortet wurden
+        this.totalStatsService.updateStats(this.correctAnswersCount, this.incorrectAnswersCount);
+
+        this.router.navigate(['/stats'], {
+            state: {
+                correctAnswers: this.correctAnswersCount,
+                incorrectAnswers: this.incorrectAnswersCount,
+            }
+        });
+    }
+
+
     checkAnswers(): void {
        const isCorrect = this.selectedAnswers.every(answer => this.currentQuestion.correctAnswer.includes(answer)) && this.currentQuestion.correctAnswer.every(answer => this.selectedAnswers.includes(answer));
         if(isCorrect) {
             this.correctAnswersCount++
+            this.cardService.updateCardAnsweredCounter(this.currentQuestion.id, "counter");
         } else {
             this.incorrectAnswersCount++;
         }
