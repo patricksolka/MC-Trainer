@@ -1,7 +1,9 @@
 /* Füge deine CSS-Stile für die Card-Komponente hier hinzu */
 .selected {
+  color: #e0ac08;
   border: 3px solid blue;
-  background-color: #d9d9d9;
+  background-color: #d9d9d9; /* Füge die Hintergrundfarbe für die ausgewählte Antwort hinzu */
+  font-weight: bold; /* Fett formatierte Antwort */
 }
 
 .correct {
@@ -20,4 +22,10 @@ ion-card {
 
 ion-item {
   cursor: pointer;
+}
+
+.selected-answer {
+  color: #e0ac08;
+  font-weight: bold; /* Fett formatierte Antwort */
+  background-color: #e0e0e0; /* Hintergrundfarbe für ausgewählte Antwort */
 }

@@ -26,7 +26,7 @@ import { TotalStatsService } from '../../services/total-stats.service'; // Impor
 @Component({
     selector: 'app-card',
     templateUrl: './card.component.html',
-    styleUrls: ['./card.component.css'],
+    styleUrls: ['./card.component.scss'],
     standalone: true,
     imports: [CommonModule, IonHeader, IonContent, IonToolbar, IonTitle, IonList, IonItem, IonCard, IonCardHeader, IonCardContent, IonButton, FooterPage]
 })
@@ -164,7 +164,7 @@ export class CardComponent implements OnInit, OnDestroy {
             }
         }
 
-        // Wenn alle verbleibenden Fragen mehr als 3 Mal beantwortet wurden
+        // Wenn alle verbleibenden Fragen mehr als 6 Mal beantwortet wurden
         this.totalStatsService.updateStats(this.correctAnswersCount, this.incorrectAnswersCount);
 
         this.router.navigate(['/stats'], {
