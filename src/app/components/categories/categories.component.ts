@@ -2,11 +2,12 @@
 import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {Category} from '../../models/categories.model';
-import {CategoriesService} from '../../services/categories.service';
+import {CategoryService} from '../../services/category.service';
 import {Router, RouterLink} from '@angular/router';
 import {FormBuilder, FormGroup, FormsModule} from '@angular/forms';
 import {IonicModule} from "@ionic/angular";
 import {FooterPage} from "../footer/footer.page";
+import {from, Observable} from "rxjs";
 
 @Component({
     selector: 'app-categories',
@@ -18,13 +19,13 @@ import {FooterPage} from "../footer/footer.page";
 export class CategoriesComponent implements OnInit {
     //TODO: Fix Observable vs Promise handling
     //categories$: Observable<Category[] | null>;
-    categories: Promise<Category[] | null>;
+    categories: Observable<Category[] | null>;
     searchBarVisible = false;
     searchText = '';
     newCategoryName: string = '';
     categoryForm: FormGroup;
 
-    constructor(private categoryService: CategoriesService, private router: Router, private fb: FormBuilder) {
+    constructor(private categoryService: CategoryService, private router: Router, private fb: FormBuilder) {
         this.loadCategories();
         this.categoryForm = this.fb.group({
             name: ['']
@@ -36,7 +37,7 @@ export class CategoriesComponent implements OnInit {
     }
 
     loadCategories(): void {
-        this.categories = this.categoryService.fetchCategories();
+        this.categories = from(this.categoryService.fetchCategories());
     }
 
     /*loadCategories(): void {

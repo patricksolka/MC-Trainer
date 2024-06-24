@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
-import { CategoriesService } from 'src/app/services/categories.service';
+import { CategoryService } from 'src/app/services/category.service';
 import { Category } from 'src/app/models/categories.model';
 import { Auth } from '@angular/fire/auth';
 import {IonicModule} from "@ionic/angular";
@@ -25,7 +25,7 @@ export class MeineModuleComponents {
 
   constructor(
       private userService: UserService,
-      private categoriesService: CategoriesService,
+      private categoriesService: CategoryService,
       private auth: Auth
   ) {
     this.loadCategories();
@@ -35,7 +35,7 @@ export class MeineModuleComponents {
   async loadCategories() {
     this.categoriesService.getAllCategories().subscribe(categories => {
       this.categories = categories;
-      this.updateFilteredCategories();
+      //this.updateFilteredCategories();
     });
   }
 
@@ -47,7 +47,7 @@ export class MeineModuleComponents {
         this.favoriteModules = this.categories.filter(category =>
             this.favoriteModuleIds.some(fav => fav.id === category.id)
         );
-        this.updateFilteredCategories();
+        //this.updateFilteredCategories();
       });
     }
   }
@@ -60,11 +60,11 @@ export class MeineModuleComponents {
     }
   }
 
-  updateFilteredCategories() {
+ /* updateFilteredCategories() {
     this.filteredCategories = this.categories.filter(category =>
         !this.favoriteModules.find(fav => fav.id === category.id)
     );
-  }
+  }*/
 
   toggleSearch() {
     this.searchVisible = !this.searchVisible;
@@ -76,7 +76,7 @@ export class MeineModuleComponents {
 
   filterCategories() {
     if (this.searchTerm.trim() === '') {
-      this.updateFilteredCategories();
+      //this.updateFilteredCategories();
     } else {
       this.filteredCategories = this.categories.filter(category =>
           !this.favoriteModules.find(fav => fav.id === category.id) &&

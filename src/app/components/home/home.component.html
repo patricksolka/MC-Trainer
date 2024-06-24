@@ -39,8 +39,8 @@
         <ion-text class="entdecken">Entdecken</ion-text>
         <ion-grid>
             <ion-row>
-                <ion-col size="6" *ngFor="let category of displayedCategories">
-                    <div class="card" (click)="startQuiz(category)">
+                <ion-col size="6" *ngFor="let category of categories">
+                    <div class="card" (click)="startQuiz(category.id)">
                         <div class="image-container">
                             <img class="categoryImage" [src]="category.imagePath" alt="{{ category.name }}">
                             <div class="text-overlay">{{ category.name }}</div>
@@ -59,7 +59,7 @@
         </div>
         <ion-list >
             <ion-item-sliding *ngFor="let module of favoriteModules">
-                <ion-item (click)="startQuiz(module)">
+                <ion-item> <!--(click)="startQuiz(module.id)"-->>
                     {{ module.name }}
                 </ion-item>
                 <ion-item-options side="end">

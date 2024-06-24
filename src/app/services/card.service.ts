@@ -5,7 +5,7 @@ import { Card } from '../models/card.model';
 import {Observable, combineLatest, take} from 'rxjs';
 import { Category } from '../models/categories.model';
 import { map, switchMap } from 'rxjs/operators';
-import {CategoriesService} from "./categories.service";
+import {CategoryService} from "./category.service";
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ import {CategoriesService} from "./categories.service";
 export class CardService {
   private cardsCollection: CollectionReference<Card>;
 
-  constructor(private firestore: Firestore, private categoryService: CategoriesService) {
+  constructor(private firestore: Firestore, private categoryService: CategoryService) {
     this.cardsCollection = collection(firestore, 'cards') as CollectionReference<Card>;
   }
 
