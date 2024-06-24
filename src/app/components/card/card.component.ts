@@ -113,6 +113,9 @@ export class CardComponent implements OnInit, OnDestroy {
     }
 
     toggleAnswer(answer: string): void {
+        if (this.showResult) {
+            return; // Wenn die Antworten überprüft wurden, keine weiteren Antworten auswählen
+        }
         if (this.selectedAnswers.includes(answer)) {
             this.selectedAnswers = this.selectedAnswers.filter(a => a !== answer);
         } else {
