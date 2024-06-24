@@ -6,6 +6,7 @@ import { Category } from '../../models/categories.model';
 import { CardService } from '../../services/card.service';
 import { Observable, Subscription } from 'rxjs';
 import {
+    AlertController,
     IonButton,
     IonCard, IonCardContent,
     IonCardHeader,
@@ -18,6 +19,8 @@ import {
 } from "@ionic/angular/standalone";
 //import {IonicModule} from "@ionic/angular";
 import {FooterPage} from "../footer/footer.page";
+import { TotalStatsService } from '../../services/total-stats.service'; // Importiere den TotalStatsService
+
 
 
 @Component({
@@ -43,7 +46,11 @@ export class CardComponent implements OnInit, OnDestroy {
 //    currentQuestionIndex: number = 0; // Neue Variable für den Index der aktuellen Frage
     private cardsSubscription: Subscription;
 
-    constructor(private cardService: CardService, private route: ActivatedRoute, private router: Router) { }
+    constructor(private cardService: CardService, private route: ActivatedRoute, private router: Router,
+                private alertController: AlertController,
+                private totalStatsService: TotalStatsService
+
+    ) { }
 
     ngOnInit(): void {
         this.categoryId = this.route.snapshot.paramMap.get('categoryId');
@@ -104,6 +111,10 @@ export class CardComponent implements OnInit, OnDestroy {
             this.currentQuestion = this.questions[index + 1];
         } else {
             // Navigiere zur Statistikseite und übergebe die Ergebnisse
+            this.totalStatsService.updateStats(this.correctAnswersCount, this.incorrectAnswersCount);
+          //  console.log(this.totalStatsService.getTotalCorrectAnswers());
+          //  console.log(this.totalStatsService.getTotalIncorrectAnswers());
+
             this.router.navigate(['/stats'], {
                 state: {
                     correctAnswers: this.correctAnswersCount,
@@ -121,9 +132,11 @@ export class CardComponent implements OnInit, OnDestroy {
             this.incorrectAnswersCount++;
         }
         this.showResult = true;
-        setTimeout(() => {
+        /*setTimeout(() => {
             this.getNextQuestion();
         }, 1000); // Warte eine Sekunde bevor die nächste Frage geladen wird
+
+         */
     }
 
     isCorrectAnswer(answer: string): boolean {
