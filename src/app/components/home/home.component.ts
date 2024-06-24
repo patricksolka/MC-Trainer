@@ -7,9 +7,9 @@ import {AuthService} from 'src/app/services/auth.service';
 import {FormsModule} from "@angular/forms";
 import {FooterPage} from "../footer/footer.page";
 import {Auth} from "@angular/fire/auth";
-import { CategoriesService } from 'src/app/services/categories.service';
-import { Category } from '../../models/categories.model';
-import { Subscription, interval } from 'rxjs';
+import {CategoryService} from 'src/app/services/category.service';
+import {Category} from '../../models/categories.model';
+import {Subscription, interval, from} from 'rxjs';
 import {
     IonButton, IonButtons,
     IonCard,
@@ -61,17 +61,17 @@ export class HomeComponent {
         private router: Router,
         private loadingController: LoadingController,
         private auth: Auth,
-        private categoriesService: CategoriesService,
+        private categoriesService: CategoryService,
         private userService: UserService
     ) {
         this.fetchPreview();
         //this.fetchCategories();
         //this.userId = this.auth.currentUser?.uid || '';
         this.fetchFavoriteModules();
-/*
-        this.userImg='assets/person-circle-outline.png';
-        this.achiImg='assets/achievements.png';
-*/
+        /*
+                this.userImg='assets/person-circle-outline.png';
+                this.achiImg='assets/achievements.png';
+        */
     }
 
     ngOnDestroy() {
@@ -80,15 +80,15 @@ export class HomeComponent {
         }
     }
 
-   /* async logout() {
-        const loading = await this.loadingController.create({
-            message: 'Logging out...',
-        });
-        await loading.present();
-        this.authService.logout();
-        await loading.dismiss();
-        await this.router.navigateByUrl('/login', {replaceUrl: true});
-    }*/
+    /* async logout() {
+         const loading = await this.loadingController.create({
+             message: 'Logging out...',
+         });
+         await loading.present();
+         this.authService.logout();
+         await loading.dismiss();
+         await this.router.navigateByUrl('/login', {replaceUrl: true});
+     }*/
 
 
     //TODO: Images vorerst aus assets laden; später aus DB
@@ -99,6 +99,7 @@ export class HomeComponent {
             this.fetchFavoriteModules(); // Ensure this is called after categories are loaded
         });
     }*/
+
     /*fetchCategories() {
         this.categoriesService.getAllCategories().subscribe((categories) => {
             this.categories = categories.map(category => {
@@ -125,9 +126,16 @@ export class HomeComponent {
 
     fetchPreview() {
         this.categoriesService.getPreviewCategories().subscribe((categories) => {
-            this.categories = categories;
+            console.log(categories);
+            this.categories = categories.map(category => {
+                return {
+                    ...category,
+                    id: category.id
+                };
+            });
             this.initializeDisplayedCategories();
             this.fetchFavoriteModules(); // Ensure this is called after categories are loaded
+            console.log(this.categories); // Move this line here
         });
     }
 
@@ -189,14 +197,14 @@ export class HomeComponent {
     }
 
 
-  /*  async loadFavoriteModules() {
-        const currentUser = this.auth.currentUser;
-        if (currentUser) {
-            this.userService.getFavoriteModules(currentUser.uid).then(favoriteModuleIds => {
-                this.favoriteModules = this.categories.filter(category => favoriteModuleIds.includes(category.id));
-            });
-        }
-    }*/
+    /*  async loadFavoriteModules() {
+          const currentUser = this.auth.currentUser;
+          if (currentUser) {
+              this.userService.getFavoriteModules(currentUser.uid).then(favoriteModuleIds => {
+                  this.favoriteModules = this.categories.filter(category => favoriteModuleIds.includes(category.id));
+              });
+          }
+      }*/
 
     removeFavoriteModule(module: Category) {
         const currentUser = this.auth.currentUser;
@@ -207,9 +215,27 @@ export class HomeComponent {
         }
     }
 
-    startQuiz(category: Category) {
+    /*startQuiz(category: Category) {
         // Navigate to the quiz page for the selected category
         this.router.navigate(['/cards', category.id]);
+    }*/
+
+    /*startQuiz(category: Category) {
+        if (category && category.id) {
+            // Navigate to the quiz page for the selected category
+            this.router.navigate(['/cards', category.id]);
+        } else {
+            console.error('Category or category id is undefined:', category);
+        }
+    }*/
+
+    startQuiz(categoryId: string) {
+        if (categoryId) {
+            this.router.navigate(['/cards', categoryId]);
+        } else {
+            console.error('Invalid categoryId:', categoryId);
+            // Handle invalid categoryId case, e.g., show error message or navigate to a default route
+        }
     }
 
     ionViewWillEnter() {

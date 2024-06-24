@@ -1,4 +1,3 @@
-// categories.service.ts
 import { Injectable } from '@angular/core';
 import {
     Firestore,
@@ -23,7 +22,7 @@ import { Observable } from 'rxjs';
 @Injectable({
     providedIn: 'root'
 })
-export class CategoriesService {
+export class CategoryService {
     //private categoriesCollection;
     public categories: Category[];
     categoriesCollectionRef: CollectionReference<DocumentData>;
@@ -105,10 +104,12 @@ export class CategoriesService {
         }
     }
 
+
     //Retrieve the first four categories for Preview
     getPreviewCategories(): Observable<Category[]> {
         const filterQuery = query(this.categoriesCollectionRef, limit(4));
-        return collectionData(filterQuery) as Observable<Category[]>;
+        const refWithConverter = filterQuery.withConverter(this.categoryConverter);
+        return collectionData(refWithConverter) as Observable<Category[]>;
     }
 
     async addCategory(category: Category): Promise<void> {
