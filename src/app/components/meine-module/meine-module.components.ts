@@ -8,6 +8,7 @@ import { Auth } from '@angular/fire/auth';
 import {IonicModule} from "@ionic/angular";
 import {RouterLink} from "@angular/router";
 
+
 @Component({
   selector: 'app-meine-module',
   templateUrl: './meine-module.components.html',
@@ -25,15 +26,15 @@ export class MeineModuleComponents {
 
   constructor(
       private userService: UserService,
-      private categoriesService: CategoryService,
+      private categoryService: CategoryService,
       private auth: Auth
   ) {
-    this.loadCategories();
-    this.loadFavoriteModules();
+    //this.loadCategories();
+    //this.loadFavoriteModules();
   }
 
   async loadCategories() {
-    this.categoriesService.getAllCategories().subscribe(categories => {
+    this.categoryService.getAllCategories().subscribe(categories => {
       this.categories = categories;
       //this.updateFilteredCategories();
     });
@@ -56,7 +57,7 @@ export class MeineModuleComponents {
     const currentUser = this.auth.currentUser;
     if (currentUser) {
       await this.userService.addFavoriteModule(currentUser.uid, categoryId);
-      this.loadFavoriteModules();
+      //this.loadFavoriteModules();
     }
   }
 
