@@ -51,7 +51,7 @@
     <ion-grid>
         <ion-row class="preview">
             <ion-col size="6" *ngFor="let category of categories | async">
-                <div class="card"> <!--(click)="startQuiz(category.id)"-->
+                <div class="card" (click)="categoryService.startQuiz(category.id)">
                     <div class="image-container">
                         <img class="categoryImage" [src]="category.imagePath"
                              alt="{{ category.name }}">

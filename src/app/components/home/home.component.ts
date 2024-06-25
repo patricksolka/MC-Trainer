@@ -59,7 +59,7 @@ export class HomeComponent {
         private router: Router,
         private loadingController: LoadingController,
         private auth: Auth,
-        private categoryService: CategoryService,
+        public categoryService: CategoryService,
         private userService: UserService
     ) {
             this.fetchPreview();
@@ -169,29 +169,6 @@ export class HomeComponent {
             this.userService.removeFavoriteModule(currentUser.uid, module.id).then(() => {
                 this.favoriteModules = this.favoriteModules.filter(m => m.id !== module.id);
             });
-        }
-    }
-
-    /*startQuiz(category: Category) {
-        // Navigate to the quiz page for the selected category
-        this.router.navigate(['/cards', category.id]);
-    }*/
-
-    /*startQuiz(category: Category) {
-        if (category && category.id) {
-            // Navigate to the quiz page for the selected category
-            this.router.navigate(['/cards', category.id]);
-        } else {
-            console.error('Category or category id is undefined:', category);
-        }
-    }*/
-
-    startQuiz(categoryId: string) {
-        if (categoryId) {
-            this.router.navigate(['/cards', categoryId]);
-        } else {
-            console.error('Invalid categoryId:', categoryId);
-            // Handle invalid categoryId case, e.g., show error message or navigate to a default route
         }
     }
 

@@ -35,7 +35,7 @@ export class CategoriesComponent implements OnInit {
     newCategoryName: string = '';
     categoryForm: FormGroup;
 
-    constructor(private categoryService: CategoryService, private router: Router, private fb: FormBuilder) {
+    constructor(public categoryService: CategoryService, private router: Router, private fb: FormBuilder) {
         this.loadCategories();
         this.categoryForm = this.fb.group({
             name: ['']
