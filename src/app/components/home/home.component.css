@@ -213,15 +213,7 @@ ion-col {
     height: auto;
 }
 
-.entdecken{
-    font-size: 12pt;
-    font-weight: bold;
-}
 
-.entdecken-container {
-    display: flex;
-    align-items: center; /* Zentriert die Kinder-Elemente vertikal */
-}
 
 .card {
     transition: transform 0.5s ease;
@@ -256,6 +248,10 @@ ion-col {
     align-items: center;
     text-transform: none;
     color: #3D5CFF; /* Optional: Adjust the color */
+}
+
+.favorites{
+    margin-top:  0.3rem;
 }
 
 
