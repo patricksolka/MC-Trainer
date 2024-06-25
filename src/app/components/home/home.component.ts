@@ -50,25 +50,9 @@ export class HomeComponent {
     private timerSubscription: Subscription;
     private categoryIndex: number = 0;
     public isLoading: boolean = false;
-    //private userId: string;
-    //userImg: string;
-    //achiImg:String
-    //private userId: string;
 
-    /*async getUserName() {
-        const currentUser = this.authService.auth.currentUser;
-        if (currentUser) {
-            await this.userService.getUser(currentUser.uid).then((userDetails) => {
-                this.userName = localStorage.getItem('userName') || 'User';
-                if (userDetails) {
-                    this.userName = `${userDetails.firstName}`;
-                }
-            });
-        }
-    }*/
 
-    // userName: string = 'User';
-
+//TODO: LooadingController fixen sodass er nur beim starten der App angezeigt wird
 
     constructor(
         private authService: AuthService,
@@ -78,15 +62,8 @@ export class HomeComponent {
         private categoryService: CategoryService,
         private userService: UserService
     ) {
-        //this.categoryService.fetchCategories();
-        this.fetchPreview();
-        //this.fetchCategories();
-        //this.userId = this.auth.currentUser?.uid || '';
-        this.fetchFavoriteModules();
-        /*
-                this.userImg='assets/person-circle-outline.png';
-                this.achiImg='assets/achievements.png';
-        */
+            this.fetchPreview();
+            this.fetchFavoriteModules();
     }
 
     ngOnDestroy() {
@@ -94,50 +71,6 @@ export class HomeComponent {
             this.timerSubscription.unsubscribe();
         }
     }
-
-    /* async logout() {
-         const loading = await this.loadingController.create({
-             message: 'Logging out...',
-         });
-         await loading.present();
-         this.authService.logout();
-         await loading.dismiss();
-         await this.router.navigateByUrl('/login', {replaceUrl: true});
-     }*/
-
-
-    //TODO: Images vorerst aus assets laden; später aus DB
-    /*fetchCategories() {
-        this.categoriesService.getAllCategories().subscribe((categories) => {
-            this.categories = categories;
-            this.initializeDisplayedCategories();
-            this.fetchFavoriteModules(); // Ensure this is called after categories are loaded
-        });
-    }*/
-
-    /*fetchCategories() {
-        this.categoriesService.getAllCategories().subscribe((categories) => {
-            this.categories = categories.map(category => {
-                let imagePath = '';
-                if (category.name === 'Mathe') {
-                    imagePath = 'assets/mathe.jpg';
-                } else if (category.name === 'Geschichte') {
-                    imagePath = 'assets/geschichte.jpg';
-                } else if (category.name === 'Informatik') {
-                    imagePath = 'assets/informatik.jpg';
-                } else if (category.name === 'Pflanzen') {
-                    imagePath = 'assets/pflanzen.jpg';
-                }
-                // Fügen Sie hier weitere Bedingungen für andere Kategorien hinzu
-                return {
-                    ...category,
-                    imagePath: imagePath
-                };
-            });
-            this.initializeDisplayedCategories();
-            this.fetchFavoriteModules(); // Ensure this is called after categories are loaded
-        });
-    }*/
 
     async fetchPreview() {
         this.isLoading = true;
@@ -156,6 +89,7 @@ export class HomeComponent {
             //this.fetchFavoriteModules(); // Ensure this is called after categories are loaded
             await loading.dismiss();
             this.isLoading = false;
+
         });
     }
 
@@ -189,6 +123,7 @@ export class HomeComponent {
                     );
                     await loading.dismiss();
                     this.isLoading = false;
+
                 });
             });
         }
@@ -261,7 +196,7 @@ export class HomeComponent {
     }
 
     ionViewWillEnter() {
-        this.fetchFavoriteModules();
+        //this.fetchFavoriteModules();
         this.userName = localStorage.getItem('userName') || 'User';
         //this.loadFavoriteModules();
         console.log('IonViewWillEnter');
