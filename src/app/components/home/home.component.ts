@@ -49,6 +49,7 @@ export class HomeComponent {
     public loadCards: CardComponent;
     private timerSubscription: Subscription;
     private categoryIndex: number = 0;
+    public isLoading: boolean = false;
     //private userId: string;
     //userImg: string;
     //achiImg:String
@@ -138,9 +139,13 @@ export class HomeComponent {
         });
     }*/
 
-    fetchPreview() {
-        this.categoryService.getPreviewCategories().subscribe((categories) => {
-            console.log(categories);
+    async fetchPreview() {
+        this.isLoading = true;
+        const loading = await this.loadingController.create({
+        });
+        await loading.present();
+
+        this.categoryService.getPreviewCategories().subscribe(async (categories) => {
             this.categories = categories.map(category => {
                 return {
                     ...category,
@@ -148,8 +153,9 @@ export class HomeComponent {
                 };
             });
             this.initializeDisplayedCategories();
-            this.fetchFavoriteModules(); // Ensure this is called after categories are loaded
-            console.log(this.categories); // Move this line here
+            //this.fetchFavoriteModules(); // Ensure this is called after categories are loaded
+            await loading.dismiss();
+            this.isLoading = false;
         });
     }
 
@@ -169,14 +175,20 @@ export class HomeComponent {
   }*/
 
     async fetchFavoriteModules() {
+        this.isLoading = true;
+        const loading = await this.loadingController.create({
+        });
+        await loading.present();
+
         const currentUser = this.auth.currentUser;
         if (currentUser) {
-            await this.userService.getFavoriteModules(currentUser.uid).then((favoriteModuleData) => {
-                this.categoryService.fetchCategories().then((allCategories) => {
+            await this.userService.getFavoriteModules(currentUser.uid).then(async (favoriteModuleData) => {
+                this.categoryService.fetchCategories().then(async (allCategories) => {
                     this.favoriteModules = allCategories.filter(category =>
                         favoriteModuleData.some(fav => fav.id === category.id)
                     );
-                    // ...
+                    await loading.dismiss();
+                    this.isLoading = false;
                 });
             });
         }
