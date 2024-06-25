@@ -12,25 +12,33 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content>
-    <ion-searchbar *ngIf="searchVisible" [(ngModel)]="searchTerm" (ionInput)="filterCategories()"></ion-searchbar>
+<ion-content class="ion-padding">
+  <!--  <ion-searchbar *ngIf="searchVisible" [(ngModel)]="searchTerm" (ionInput)="filterCategories()"></ion-searchbar>-->
 
-    <div class="section">
+    <ng-container class="section">
         <h2>Meine Module</h2>
-        <div *ngIf="favoriteModules.length === 0">Sie haben noch keine Module ausgewählt.</div>
-        <ion-list>
+        <ng-container *ngIf="favoriteModules.length === 0">Sie haben noch keine Module ausgewählt.</ng-container>
+        <ion-list class="ion-padding">
             <ion-item *ngFor="let module of favoriteModules">
                 {{ module.name }}
             </ion-item>
         </ion-list>
-    </div>
+    </ng-container>
 
-    <div class="section">
+    <!--<div class="section">
         <h2>Entdecken</h2>
         <ion-list>
             <ion-item *ngFor="let category of filteredCategories" (click)="addToFavorites(category.id)">
                 {{ category.name }}
             </ion-item>
         </ion-list>
-    </div>
+    </div>-->
+
+    <ion-list class="ion-padding">
+        <ng-container *ngFor="let category of categories | async">
+                <ion-item (click)="addToFavorites(category.id)">
+                    {{ category.name }} ({{ category.questionCount }})
+                </ion-item>
+            </ng-container>
+    </ion-list>
 </ion-content>

@@ -59,7 +59,7 @@
         </div>
         <ion-list >
             <ion-item-sliding *ngFor="let module of favoriteModules">
-                <ion-item> <!--(click)="startQuiz(module.id)"-->>
+                <ion-item (click)="startQuiz(module.id)">
                     {{ module.name }}
                 </ion-item>
                 <ion-item-options side="end">
