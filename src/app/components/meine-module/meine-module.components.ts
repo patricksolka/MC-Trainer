@@ -7,6 +7,7 @@ import { Category } from 'src/app/models/categories.model';
 import { Auth } from '@angular/fire/auth';
 import {IonicModule} from "@ionic/angular";
 import {RouterLink} from "@angular/router";
+import {from, Observable} from "rxjs";
 
 
 @Component({
@@ -17,7 +18,8 @@ import {RouterLink} from "@angular/router";
   imports: [ CommonModule, FormsModule, IonicModule, RouterLink]
 })
 export class MeineModuleComponents {
-  categories: Category[] = [];
+  //categories: Category[] = [];
+  categories: Observable<Category[] | null>;
   favoriteModules: Category[] = [];
   filteredCategories: Category[] = [];
   searchVisible: boolean = false;
@@ -29,35 +31,43 @@ export class MeineModuleComponents {
       private categoryService: CategoryService,
       private auth: Auth
   ) {
-    //this.loadCategories();
+    this.loadCategories();
     //this.loadFavoriteModules();
   }
 
-  async loadCategories() {
+ /* async loadCategories() {
     this.categoryService.getAllCategories().subscribe(categories => {
       this.categories = categories;
       //this.updateFilteredCategories();
     });
-  }
+  }*/
 
-  async loadFavoriteModules() {
+  async loadFavoriteModules(categories: Category[]) {
     const currentUser = this.auth.currentUser;
     if (currentUser) {
       this.userService.getFavoriteModules(currentUser.uid).then(favoriteModuleIds => {
         this.favoriteModuleIds = favoriteModuleIds; // Assign the favoriteModuleIds
-        this.favoriteModules = this.categories.filter(category =>
+        this.favoriteModules = categories.filter(category =>
             this.favoriteModuleIds.some(fav => fav.id === category.id)
         );
-        //this.updateFilteredCategories();
       });
     }
+  }
+
+  async loadCategories() {
+    this.categories = from(this.categoryService.fetchCategories());
+    this.categories.subscribe(categories => {
+      this.loadFavoriteModules(categories);
+    });
   }
 
   async addToFavorites(categoryId: string) {
     const currentUser = this.auth.currentUser;
     if (currentUser) {
       await this.userService.addFavoriteModule(currentUser.uid, categoryId);
-      //this.loadFavoriteModules();
+      this.categories.subscribe(categories => {
+        this.loadFavoriteModules(categories);
+      });
     }
   }
 
@@ -71,11 +81,11 @@ export class MeineModuleComponents {
     this.searchVisible = !this.searchVisible;
     if (!this.searchVisible) {
       this.searchTerm = '';
-      this.filterCategories();
+      //this.filterCategories();
     }
   }
 
-  filterCategories() {
+  /*filterCategories() {
     if (this.searchTerm.trim() === '') {
       //this.updateFilteredCategories();
     } else {
@@ -84,5 +94,5 @@ export class MeineModuleComponents {
           category.name.toLowerCase().includes(this.searchTerm.toLowerCase())
       );
     }
-  }
+  }*/
 }

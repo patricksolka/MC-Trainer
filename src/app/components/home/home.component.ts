@@ -9,7 +9,7 @@ import {FooterPage} from "../footer/footer.page";
 import {Auth} from "@angular/fire/auth";
 import {CategoryService} from 'src/app/services/category.service';
 import {Category} from '../../models/categories.model';
-import {Subscription, interval, from} from 'rxjs';
+import {Subscription} from 'rxjs';
 import {
     IonButton, IonButtons,
     IonCard,
@@ -158,15 +158,11 @@ export class HomeComponent {
         const currentUser = this.auth.currentUser;
         if (currentUser) {
             this.userService.getFavoriteModules(currentUser.uid).then((favoriteModuleData) => {
-                this.favoriteModules = this.categories.filter(category =>
-                    favoriteModuleData.some(fav => fav.id === category.id)
-                );
-
-                // Sort the favoriteModules by the recently viewed timestamp
-                this.favoriteModules.sort((a, b) => {
-                    const aTimestamp = favoriteModuleData.find(fav => fav.id === a.id)?.timestamp || 0;
-                    const bTimestamp = favoriteModuleData.find(fav => fav.id === b.id)?.timestamp || 0;
-                    return bTimestamp - aTimestamp;
+                this.categoriesService.fetchCategories().then((allCategories) => {
+                    this.favoriteModules = allCategories.filter(category =>
+                        favoriteModuleData.some(fav => fav.id === category.id)
+                    );
+                    // ...
                 });
             });
         }
