@@ -5,16 +5,26 @@ import {Category} from '../../models/categories.model';
 import {CategoryService} from '../../services/category.service';
 import {Router, RouterLink} from '@angular/router';
 import {FormBuilder, FormGroup, FormsModule} from '@angular/forms';
-import {IonicModule} from "@ionic/angular";
 import {FooterPage} from "../footer/footer.page";
 import {from, Observable} from "rxjs";
+import {
+    IonButton,
+    IonButtons,
+    IonCol,
+    IonContent, IonGrid,
+    IonHeader, IonIcon,
+    IonList,
+    IonRow, IonSearchbar, IonText, IonTitle,
+    IonToolbar
+} from "@ionic/angular/standalone";
+
 
 @Component({
     selector: 'app-categories',
     templateUrl: './categories.component.html',
-    styleUrls: ['./categories.component.css'],
+    styleUrls: ['./categories.component.scss'],
     standalone: true,
-    imports: [CommonModule, FormsModule, IonicModule, RouterLink, FooterPage]
+    imports: [CommonModule, FormsModule, RouterLink, FooterPage, IonCol, IonRow, IonContent, IonHeader, IonToolbar, IonList, IonButtons, IonButton, IonTitle, IonIcon, IonGrid, IonSearchbar, IonText]
 })
 export class CategoriesComponent implements OnInit {
     //TODO: Fix Observable vs Promise handling
