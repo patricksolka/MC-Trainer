@@ -18,6 +18,7 @@ import {
 } from '@angular/fire/firestore';
 import { Category } from '../models/categories.model';
 import { Observable } from 'rxjs';
+import {Router} from "@angular/router";
 
 @Injectable({
     providedIn: 'root'
@@ -28,7 +29,7 @@ export class CategoryService {
     categoriesCollectionRef: CollectionReference<DocumentData>;
 
 
-    constructor(private firestore: Firestore) {
+    constructor(private firestore: Firestore, private router: Router) {
         this.categoriesCollectionRef = collection(firestore, 'categories');
         //this.categoriesCollection = collection(this.firestore, 'categories');
     }
@@ -125,6 +126,15 @@ export class CategoryService {
     async deleteCategory(id: string): Promise<void> {
         const categoryDoc = doc(this.firestore, `categories/${id}`);
         await deleteDoc(categoryDoc);
+    }
+
+    startQuiz(categoryId: string) {
+        if (categoryId) {
+            this.router.navigate(['/cards', categoryId]);
+        } else {
+            console.error('Invalid categoryId:', categoryId);
+            // Handle invalid categoryId case, e.g., show error message or navigate to a default route
+        }
     }
 
 }
