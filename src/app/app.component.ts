@@ -36,6 +36,7 @@ import {FooterPage} from "./components/footer/footer.page";
     ],
     standalone: true
 })
+
 export class AppComponent {
     questions: Question[] = [];
 
