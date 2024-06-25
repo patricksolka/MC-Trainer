@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import {
     Firestore,
     collection,
-    collectionData,
     doc,
     addDoc,
     updateDoc,
@@ -14,10 +13,10 @@ import {
     limit,
     QueryDocumentSnapshot,
     SnapshotOptions,
-    orderBy, onSnapshot, getDocs
+    orderBy, onSnapshot, getDocs, Unsubscribe
 } from '@angular/fire/firestore';
 import { Category } from '../models/categories.model';
-import { Observable } from 'rxjs';
+//import { Observable } from 'rxjs';
 import {Router} from "@angular/router";
 
 @Injectable({
@@ -35,7 +34,7 @@ export class CategoryService {
     }
 
     //TODO: Eigentlich nicht nötig da wir mit fetchCategories() arbeiten
-    getAllCategories(): Observable<Category[]> {
+    /*getAllCategories(): Observable<Category[]> {
         try {
             return collectionData(this.categoriesCollectionRef) as Observable<Category[]>;
 
@@ -43,7 +42,7 @@ export class CategoryService {
             console.error('Error fetching categories:', e);
         }
         return null;
-    }
+    }*/
 
     /*getAllCategories(): Observable<Category[]> {
         return collectionData(this.categoriesCollection) as Observable<Category[]>;
@@ -79,7 +78,7 @@ export class CategoryService {
         }
     };
 
-    async fetchCategories(): Promise<Category[] | null> {
+    async getCategories(): Promise<Category[] | null> {
         try {
             const filterQuery = query(this.categoriesCollectionRef, orderBy('name'));
             const refWithConverter = filterQuery.withConverter(this.categoryConverter);
@@ -106,15 +105,32 @@ export class CategoryService {
     }
 
 
-    //Retrieve the first four categories for Preview
-    getPreviewCategories(): Observable<Category[]> {
-        const filterQuery = query(this.categoriesCollectionRef, limit(4));
+
+   /* getPreviewCategories(): Observable<Category[]> {
+        const filterQuery = query(this.categoriesCollectionRef, limit(10));
         const refWithConverter = filterQuery.withConverter(this.categoryConverter);
         return collectionData(refWithConverter) as Observable<Category[]>;
+    }*/
+    //Retrieve the first four categories for Preview
+    async getPreviewCategories(): Promise<Category[]> {
+        try {
+            const filterQuery = query(this.categoriesCollectionRef, limit(4));
+            const refWithConverter = filterQuery.withConverter(this.categoryConverter);
+
+            const categoryDocs = await getDocs(refWithConverter);
+            const categories: Category[] = [];
+            categoryDocs.forEach(categoryDoc => {
+                categories.push(categoryDoc.data());
+            });
+            return categories;
+        } catch (error) {
+            console.error('Error fetching preview categories:', error);
+            return [];
+        }
     }
 
 
-    async addCategory(category: Category): Promise<void> {
+    /*async addCategory(category: Category): Promise<void> {
         await addDoc(this.categoriesCollectionRef, { name: category.name, questionCount: 0 });
     }
 
@@ -126,7 +142,7 @@ export class CategoryService {
     async deleteCategory(id: string): Promise<void> {
         const categoryDoc = doc(this.firestore, `categories/${id}`);
         await deleteDoc(categoryDoc);
-    }
+    }*/
 
     startQuiz(categoryId: string) {
         if (categoryId) {

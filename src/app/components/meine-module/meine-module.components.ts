@@ -55,7 +55,7 @@ export class MeineModuleComponents {
   }
 
   async loadCategories() {
-    this.categories = from(this.categoryService.fetchCategories());
+    this.categories = from(this.categoryService.getCategories());
     this.categories.subscribe(categories => {
       this.loadFavoriteModules(categories);
     });
