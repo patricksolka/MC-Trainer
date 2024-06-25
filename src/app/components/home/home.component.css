@@ -1,6 +1,5 @@
-
 ion-toolbar {
-    --background: none;
+    /** --background: none; */
     --padding-start: 10px;
 
 }
@@ -21,11 +20,11 @@ h1{
     }
 }
 
-
+/*
 ion-content {
     --background: #1F1F39;
 }
-
+*/
 
 ion-card-content {
     display: flex;
@@ -78,11 +77,11 @@ ion-card-content p {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: white; /* Passe die Farbe an, damit sie gut lesbar ist */
+    color: white;
     font-size: 20px;
-    font-weight: 500; /* Optional: für besseren Kontrast */
+    font-weight: 500;
     text-align: center;
-    pointer-events: none; /* Verhindert, dass der Text klickbar ist */
+    pointer-events: none;
 }
 
 
@@ -96,7 +95,7 @@ ion-card-content p {
 
 @media (min-width: 768px) {
     .categoryImage {
-        height: 150px; /* Erhöhte Höhe für größere Bildschirme */
+        height: 150px;
     }
 }
 
@@ -142,14 +141,9 @@ ion-col {
     display: flex;
     align-items: center;
     text-transform: none;
-    color: #3D5CFF; /* Optional: Adjust the color */
+    color: #3D5CFF;
 }
 
 .favorites{
     margin-top:  0.3rem;
 }
-
-
-
-
-
