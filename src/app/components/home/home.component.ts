@@ -11,13 +11,26 @@ import {CategoryService} from 'src/app/services/category.service';
 import {Category} from '../../models/categories.model';
 import {Subscription} from 'rxjs';
 import {
-    IonButton, IonButtons,
+    IonButton,
+    IonButtons,
     IonCard,
-    IonCardContent, IonCol,
-    IonContent, IonGrid,
+    IonCardContent, IonCardTitle,
+    IonCol,
+    IonContent,
+    IonGrid,
+    IonHeader,
     IonIcon,
-    IonImg, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonList, IonRow,
-    IonText, IonToolbar
+    IonImg,
+    IonItem,
+    IonItemOption,
+    IonItemOptions,
+    IonItemSliding,
+    IonLabel,
+    IonList,
+    IonRadio,
+    IonRow,
+    IonText,
+    IonToolbar
 } from "@ionic/angular/standalone";
 import {CardComponent} from "../card/card.component";
 
@@ -26,7 +39,7 @@ import {CardComponent} from "../card/card.component";
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css'],
     standalone: true,
-    imports: [CommonModule, RouterModule, FormsModule, FooterPage, IonButton, IonContent, IonIcon, IonText, IonImg, IonCard, IonCardContent, IonGrid, IonRow, IonCol, IonList, IonItemSliding, IonItem, IonItemOptions, IonItemOption, IonToolbar, IonButtons]
+    imports: [CommonModule, RouterModule, FormsModule, FooterPage, IonButton, IonContent, IonIcon, IonText, IonImg, IonCard, IonCardContent, IonGrid, IonRow, IonCol, IonList, IonItemSliding, IonItem, IonItemOptions, IonItemOption, IonToolbar, IonButtons, IonHeader, IonLabel, IonRadio, IonCardTitle]
 })
 export class HomeComponent {
     public userName: string = localStorage.getItem('userName') || 'User';
@@ -61,9 +74,10 @@ export class HomeComponent {
         private router: Router,
         private loadingController: LoadingController,
         private auth: Auth,
-        private categoriesService: CategoryService,
+        private categoryService: CategoryService,
         private userService: UserService
     ) {
+        //this.categoryService.fetchCategories();
         this.fetchPreview();
         //this.fetchCategories();
         //this.userId = this.auth.currentUser?.uid || '';
@@ -125,7 +139,7 @@ export class HomeComponent {
     }*/
 
     fetchPreview() {
-        this.categoriesService.getPreviewCategories().subscribe((categories) => {
+        this.categoryService.getPreviewCategories().subscribe((categories) => {
             console.log(categories);
             this.categories = categories.map(category => {
                 return {
@@ -154,11 +168,11 @@ export class HomeComponent {
     });
   }*/
 
-    fetchFavoriteModules() {
+    async fetchFavoriteModules() {
         const currentUser = this.auth.currentUser;
         if (currentUser) {
-            this.userService.getFavoriteModules(currentUser.uid).then((favoriteModuleData) => {
-                this.categoriesService.fetchCategories().then((allCategories) => {
+            await this.userService.getFavoriteModules(currentUser.uid).then((favoriteModuleData) => {
+                this.categoryService.fetchCategories().then((allCategories) => {
                     this.favoriteModules = allCategories.filter(category =>
                         favoriteModuleData.some(fav => fav.id === category.id)
                     );
@@ -235,6 +249,7 @@ export class HomeComponent {
     }
 
     ionViewWillEnter() {
+        this.fetchFavoriteModules();
         this.userName = localStorage.getItem('userName') || 'User';
         //this.loadFavoriteModules();
         console.log('IonViewWillEnter');
