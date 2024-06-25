@@ -14,7 +14,8 @@ import {
     IonButton,
     IonButtons,
     IonCard,
-    IonCardContent, IonCardTitle,
+    IonCardContent,
+    IonCardTitle,
     IonCol,
     IonContent,
     IonGrid,
@@ -62,6 +63,7 @@ export class HomeComponent {
         public categoryService: CategoryService,
         private userService: UserService
     ) {
+
             this.fetchPreview();
             this.fetchFavoriteModules();
     }
@@ -78,19 +80,24 @@ export class HomeComponent {
         });
         await loading.present();
 
-        this.categoryService.getPreviewCategories().subscribe(async (categories) => {
-            this.categories = categories.map(category => {
+        try {
+            this.categories = await this.categoryService.getPreviewCategories();
+            await loading.dismiss();
+            this.isLoading = false;
+        } catch (e) {
+            console.error('Error fetching preview categories:', e);
+            await loading.dismiss();
+            this.isLoading = false;
+           /* this.categories = categories.map(category => {
                 return {
                     ...category,
                     id: category.id
                 };
-            });
-            this.initializeDisplayedCategories();
-            //this.fetchFavoriteModules(); // Ensure this is called after categories are loaded
-            await loading.dismiss();
-            this.isLoading = false;
+            });*/
+            // this.initializeDisplayedCategories();
+            // this.fetchFavoriteModules(); // Ensure this is called after categories are loaded
 
-        });
+        }
     }
 
 
@@ -117,7 +124,7 @@ export class HomeComponent {
         const currentUser = this.auth.currentUser;
         if (currentUser) {
             await this.userService.getFavoriteModules(currentUser.uid).then(async (favoriteModuleData) => {
-                this.categoryService.fetchCategories().then(async (allCategories) => {
+                this.categoryService.getCategories().then(async (allCategories) => {
                     this.favoriteModules = allCategories.filter(category =>
                         favoriteModuleData.some(fav => fav.id === category.id)
                     );
@@ -129,10 +136,10 @@ export class HomeComponent {
         }
     }
 
-    initializeDisplayedCategories() {
+   /* initializeDisplayedCategories() {
         this.displayedCategories = this.categories.slice(0, 4);
         //this.startCategoryRotation();
-    }
+    }*/
 
     /*startCategoryRotation() {
         this.timerSubscription = interval(10000).subscribe(() => {
