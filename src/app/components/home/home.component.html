@@ -68,7 +68,7 @@
                     <ion-text class="entdecken">Meine Module</ion-text>
                 </ion-col>
                 <ion-col size="auto" class="align-end">
-                    <ion-button fill="clear" [routerLink]="['/categories']"
+                    <ion-button fill="clear" [routerLink]="['/meine-module']"
                                 class="entdecken-button">
                         Alle anzeigen
                         <ion-icon slot="end" name="chevron-forward"></ion-icon>
@@ -81,7 +81,7 @@
                     <ion-text class="ion-text-start">Du hast noch keine favorisierten Module
                         😢</ion-text>
 
-                        <ion-button slot="end"  routerLink="/meine-module" class="meine-module"
+                        <ion-button slot="end"  [routerLink]="['/categories']" class="meine-module"
                                      style="--background: #FF6905;"> Module hinzufügen</ion-button>
 
                 </ion-item>
