@@ -71,10 +71,10 @@ export class MeineModuleComponents {
         }
     }
 
-    async addFavorite(categoryId: string, categoryName: string) {
+    async addFavorite(categoryId: string, categoryName: string, questionCount: number) {
         const currentUser = this.auth.currentUser;
         if (currentUser) {
-            await this.userService.addFavCategory(currentUser.uid, categoryId, categoryName);
+            await this.userService.addFavCategory(currentUser.uid, categoryId, categoryName, questionCount);
             this.loadFavCategories();
         }
     }
