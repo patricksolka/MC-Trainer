@@ -64,6 +64,9 @@ export class MeineModuleComponents {
         if (currentUser) {
             await this.userService.addFavCategory(currentUser.uid, categoryId, categoryName, questionCount);
             this.loadFavCategories();
+
+            // Entfernen Sie die Kategorie aus der Liste der Kategorien
+            this.categories = this.categories.filter(category => category.id !== categoryId);
         }
     }
 
