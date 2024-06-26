@@ -1,4 +1,4 @@
-<ion-header>
+<!--<ion-header>
     <ion-toolbar>
         <ion-buttons slot="start">
             <ion-back-button defaultHref="/home"></ion-back-button>
@@ -10,17 +10,17 @@
             </ion-button>
         </ion-buttons>
     </ion-toolbar>
-</ion-header>
+</ion-header>-->
 
 <ion-content class="ion-padding">
   <!--  <ion-searchbar *ngIf="searchVisible" [(ngModel)]="searchTerm" (ionInput)="filterCategories()"></ion-searchbar>-->
 
     <ng-container class="section">
         <h2>Meine Module</h2>
-        <ng-container *ngIf="favoriteModules.length === 0">Sie haben noch keine Module ausgewählt.</ng-container>
+        <ng-container *ngIf="favCategories.length === 0">Sie haben noch keine Module ausgewählt .</ng-container>
         <ion-list class="ion-padding">
-            <ion-item *ngFor="let module of favoriteModules">
-                {{ module.name }}
+            <ion-item *ngFor="let category of favCategories">
+                {{ category.id }}
             </ion-item>
         </ion-list>
     </ng-container>
@@ -35,8 +35,8 @@
     </div>-->
     <h2>Entdecken</h2>
     <ion-list class="ion-padding">
-        <ng-container *ngFor="let category of categories | async">
-                <ion-item (click)="addToFavorites(category.id)">
+        <ng-container *ngFor="let category of categories">
+                <ion-item (click)="addFavorite(category.id)">
                     {{ category.name }} ({{ category.questionCount }})
                 </ion-item>
             </ng-container>

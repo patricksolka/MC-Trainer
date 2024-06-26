@@ -18,6 +18,8 @@ import {
 import { Category } from '../models/categories.model';
 //import { Observable } from 'rxjs';
 import {Router} from "@angular/router";
+import {Observable} from "rxjs";
+import {UserService} from "./user.service";
 
 @Injectable({
     providedIn: 'root'
@@ -27,7 +29,7 @@ export class CategoryService {
 
     categoriesCollectionRef: CollectionReference<DocumentData>;
 
-    constructor(private firestore: Firestore, private router: Router) {
+    constructor(private firestore: Firestore, private router: Router, private userService: UserService) {
         this.categoriesCollectionRef = collection(firestore, 'categories');
     }
 
@@ -60,7 +62,6 @@ export class CategoryService {
             onSnapshot(refWithConverter, (snapshot) => {
                 snapshot.docs.forEach(docData => {
                     console.log(docData.data());
-                    // Here you can update your component state or do other operations
                 });
             });
 
@@ -68,14 +69,35 @@ export class CategoryService {
             const categoryDocs = await getDocs(refWithConverter);
             const categories: Category[] = [];
             categoryDocs.forEach(categoryDoc => {
-                categories.push(categoryDoc.data());
+                categories.push(this.categoryConverter.fromFirestore(categoryDoc, {}));
             });
+            console.log('test:', categories);
             return categories;
         } catch (error) {
             console.error('Error fetching categories:', error);
             return [];
         }
     }
+
+    /*getCategories(): Observable<Category[]> {
+        return new Observable<Category[]>(observer => {
+            const filterQuery = query(this.categoriesCollectionRef, orderBy('name'));
+            const refWithConverter = filterQuery.withConverter(this.categoryConverter);
+
+            const unsubscribe = onSnapshot(refWithConverter, (snapshot) => {
+                const categories: Category[] = [];
+                snapshot.docs.forEach(doc => {
+                    categories.push(doc.data());
+                });
+                observer.next(categories);
+            }, error => {
+                observer.error(error);
+            });
+
+            // Provide a way of canceling and disposing the source
+            return unsubscribe;
+        });
+    }*/
 
     // get first 4 categories for Preview
     async getPreviewCategories(): Promise<Category[]> {
@@ -116,6 +138,18 @@ export class CategoryService {
             console.error('Invalid categoryId:', categoryId);
         }
     }
+
+
+    /*async addFavCategory(uid: string, categoryId: string): Promise<void> {
+        try {
+            // Hier könnte zusätzliche Logik hinzugefügt werden, bevor die Kategorie hinzugefügt wird
+            await this.userService.addFavUser(uid, categoryId);
+            console.log(`Category ${categoryId} added to favorites for user ${uid}`);
+        } catch (error) {
+            console.error('Error adding category to favorites:', error);
+            throw error; // Fehler weitergeben, falls nötig
+        }
+    }*/
 
 
     /*async addCategory(category: Category): Promise<void> {
