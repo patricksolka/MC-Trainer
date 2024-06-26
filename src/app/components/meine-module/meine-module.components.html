@@ -17,10 +17,11 @@
 
     <ng-container class="section">
         <h2>Meine Module</h2>
-        <ng-container *ngIf="favCategories.length === 0">Sie haben noch keine Module ausgewählt .</ng-container>
+        <ng-container *ngIf="favCategories.length === 0">Sie haben noch keine Module ausgewählt
+            .</ng-container>
         <ion-list class="ion-padding">
             <ion-item *ngFor="let category of favCategories">
-                {{ category.id }}
+                {{ category.name }}
             </ion-item>
         </ion-list>
     </ng-container>
@@ -36,9 +37,11 @@
     <h2>Entdecken</h2>
     <ion-list class="ion-padding">
         <ng-container *ngFor="let category of categories">
-                <ion-item (click)="addFavorite(category.id)">
+                <ion-item (click)="addFavorite(category.id, category.name)">
                     {{ category.name }} ({{ category.questionCount }})
                 </ion-item>
             </ng-container>
     </ion-list>
 </ion-content>
+
+<app-footer></app-footer>
