@@ -26,6 +26,7 @@ export class UserService {
     public user: User;
     public userCollectionRef: CollectionReference<DocumentData>;
 
+
     constructor(private firestore: Firestore, private alertController: AlertController) {
         this.userCollectionRef = collection(firestore, 'users');
     }
@@ -117,6 +118,10 @@ export class UserService {
         }
     }
 
+
+
+
+
     //mit subcollection
     async addFavCategory(uid: string, categoryId: string, categoryName: string, questionCount: number): Promise<void> {
         try {
@@ -128,7 +133,8 @@ export class UserService {
                 await setDoc(docRef, {
                     name: categoryName,
                     timestamp: new Date().getTime(),
-                    questionCount: questionCount
+                    questionCount: questionCount,
+                    isFavorite: true
                 });
 
                 console.log(`Category ${categoryId} added to favorites for user ${uid}`);

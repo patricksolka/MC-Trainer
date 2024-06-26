@@ -17,6 +17,7 @@ import {
     IonItemOptions, IonItemSliding, IonList, IonText, IonTitle,
     IonToolbar
 } from "@ionic/angular/standalone";
+import {collection, Firestore, onSnapshot} from "@angular/fire/firestore";
 
 @Component({
     selector: 'app-meine-module',
@@ -32,32 +33,55 @@ export class MeineModuleComponents {
     searchVisible: boolean = false;
     searchTerm: string = '';
 
+
     constructor(
-        private userService: UserService,
+        public userService: UserService,
         private categoriesService: CategoryService,
         private authService: AuthService,
-        private auth: Auth
+        private auth: Auth,
+        private firestore: Firestore
     ) {
         onAuthStateChanged(this.authService.auth, (user) => {
             if (user) {
                 console.log('User is logged in:', user);
-                this.loadFavCategories();
+                //this.loadFavCategories();
+                this.observeFavCategories(user.uid);
             } else {
                 console.log('User is logged out');
             }
         });
-        this.loadCategories();
+
     }
 
-
-    async loadCategories() {
-        this.categoriesService.getCategories().then(categories => {
-            this.categories = categories;
-            //this.updateFilteredCategories();
+    observeFavCategories(uid: string) {
+        const favCategoriesRef = collection(this.firestore, `users/${uid}/favoriteCategories`);
+        onSnapshot(favCategoriesRef, (snapshot) => {
+            this.favCategories = snapshot.docs.map(doc => ({ id: doc.id, name: doc.data()['name'], questionCount: doc.data()['questionCount'] }));
+            this.loadCategories();
         });
     }
 
-    async loadFavCategories() {
+        loadCategories() {
+            this.categoriesService.getCategories().then(categories => {
+                this.categories = categories.filter(category =>
+                    !this.favCategories.find(fav => fav.id === category.id)
+                );
+            });
+        }
+
+
+
+    /*async loadCategories() {
+        await this.categoriesService.getCategories()/!*.then(categories => {
+            //this.categories = categories;
+            //this.updateFilteredCategories();
+            this.categories = categories.filter(category =>
+                !this.favCategories.find(fav => fav.id === category.id)
+            );
+        });*!/
+    }*/
+
+   /* async loadFavCategories() {
         const currentUser = this.auth.currentUser;
         if (currentUser) {
             await this.userService.getFavCategories(currentUser.uid).then(favCategories => {
@@ -65,16 +89,16 @@ export class MeineModuleComponents {
                 //this.updateFilteredCategories();
             });
         }
-    }
+    }*/
 
     async addFav(categoryId: string, categoryName: string, questionCount: number) {
         const currentUser = this.auth.currentUser;
         if (currentUser) {
             await this.userService.addFavCategory(currentUser.uid, categoryId, categoryName, questionCount);
-            this.loadFavCategories();
+            //this.loadFavCategories();
 
             // Entfernen Sie die Kategorie aus der Liste der Kategorien
-            this.categories = this.categories.filter(category => category.id !== categoryId);
+            //this.categories = this.categories.filter(category => category.id !== categoryId);
         }
     }
 
@@ -82,7 +106,8 @@ export class MeineModuleComponents {
         const currentUser = this.auth.currentUser;
         if (currentUser) {
             await this.userService.removeFavCategory(currentUser.uid, category.id).then(() => {
-                this.favCategories = this.favCategories.filter(c => c.id !== category.id);
+               // this.favCategories = this.favCategories.filter(c => c.id !== category.id);
+                //this.categories.push(category);
             });
         }
     }
@@ -112,6 +137,6 @@ export class MeineModuleComponents {
         }
     }
     ionViewWillEnter() {
-        this.loadFavCategories();
+        //this.loadFavCategories();
     }
 }
