@@ -13,7 +13,7 @@ import {
     query,
     orderBy,
     onSnapshot,
-    getDocs, CollectionReference, collection
+    getDocs, CollectionReference, collection, setDoc
 } from "@angular/fire/firestore";
 import {Injectable} from "@angular/core";
 import {User} from "../models/user.model";
@@ -47,7 +47,7 @@ export class UserService {
         }
     }
 
-    async getFavCategories(uid: string): Promise<{ id: string; name: string; timestamp: number }[] | null> {
+    /*async getFavCategories(uid: string): Promise<{ id: string; name: string; timestamp: number }[] | null> {
         try {
             const userRef = doc(this.userCollectionRef, uid).withConverter(this.userConverter);
             const userSnap = await getDoc(userRef);
@@ -78,7 +78,7 @@ export class UserService {
             console.error('Error fetching favorite categories:', error);
             return [];
         }
-    }
+    }*/
 
     // ohne converter
     /* async updateUser(user: User) {
@@ -108,16 +108,16 @@ export class UserService {
         fromFirestore: (snapshot: QueryDocumentSnapshot, options: SnapshotOptions): User => {
             const user = Object.assign(new User(), snapshot.data(options));
             user.uid = snapshot.id;
-            const favoriteCategories = snapshot.get('favoriteCategories') || {};
-            user.favoriteCategories = Object.entries(favoriteCategories).map(([id, data]) => {
-                const favData = data as { name: string; timestamp: number, questionCount: number};
-                return {
-                    id,
-                    name: favData.name || 'Unknown',
-                    timestamp: favData.timestamp || 0,
-                    questionCount: favData.questionCount || 0
-                };
-            });
+            // const favoriteCategories = snapshot.get('favoriteCategories') || {};
+            // user.favoriteCategories = Object.entries(favoriteCategories).map(([id, data]) => {
+            //     const favData = data as { name: string; timestamp: number, questionCount: number};
+            //     return {
+            //         id,
+            //         name: favData.name || 'Unknown',
+            //         timestamp: favData.timestamp || 0,
+            //         questionCount: favData.questionCount || 0
+            //     };
+            // });
             return user;
         },
         toFirestore: (user: User): DocumentData => {
@@ -137,7 +137,7 @@ export class UserService {
         }
     }
 
-    async addFavCategory(uid: string, categoryId: string, categoryName: string, questionCount: number): Promise<void> {
+   /* async addFavCategory(uid: string, categoryId: string, categoryName: string, questionCount: number): Promise<void> {
         try {
             const userRef = doc(this.firestore, `users/${uid}`);
             const userDoc = await getDoc(userRef);
@@ -168,9 +168,51 @@ export class UserService {
             console.error('Error adding category to favorites:', error);
             throw error;
         }
+    }*/
+
+    getSubcollectionRef(userId: string): CollectionReference<DocumentData> {
+        const userRef = doc(this.firestore, 'users', userId);
+        return collection(userRef, 'favoriteCategories');
+    }
+    //subcollection
+    async getFavCategories(uid: string): Promise<{ id: string; name: string; timestamp: number; questionCount: number }[]> {
+        try {
+            const favCategoriesRef = this.getSubcollectionRef(uid);
+            const querySnapshot = await getDocs(favCategoriesRef);
+
+            const favoriteCategories: { id: string; name: string; timestamp: number; questionCount: number }[] = [];
+            querySnapshot.forEach(doc => {
+                const data = doc.data() as { name: string; timestamp: number; questionCount: number };
+                favoriteCategories.push({ id: doc.id, ...data });
+            });
+
+            console.log('Favoriten', favoriteCategories);
+            return favoriteCategories;
+        } catch (error) {
+            console.error('Error fetching favorite categories:', error);
+            return [];
+        }
     }
 
-    async removeFav(uid: string, categoryId: string): Promise<void> {
+    //subcollection
+    async addFavCategory(uid: string, categoryId: string, categoryName: string, questionCount: number): Promise<void> {
+        try {
+            const favCategoriesRef = this.getSubcollectionRef(uid);
+            const newCategoryRef = doc(favCategoriesRef, categoryId);
+            await setDoc(newCategoryRef, {
+                name: categoryName,
+                timestamp: new Date().getTime(),
+                questionCount: questionCount
+            });
+
+            console.log(`Category ${categoryId} added to favorites for user ${uid}`);
+        } catch (error) {
+            console.error('Error adding category to favorites:', error);
+            throw error;
+        }
+    }
+
+    /*async removeFav(uid: string, categoryId: string): Promise<void> {
         try {
             const userRef = doc(this.firestore, 'users', uid);
             await updateDoc(userRef, {
@@ -178,6 +220,18 @@ export class UserService {
             });
             console.log('Favorite category deleted', categoryId);
         } catch {
+            throw new Error('Error deleting favorite category');
+        }
+    }*/
+    //Subcollection
+    async removeFav(uid: string, categoryId: string): Promise<void> {
+        try {
+            const favCategoriesRef = this.getSubcollectionRef(uid);
+            const categoryRef = doc(favCategoriesRef, categoryId);
+            await deleteDoc(categoryRef);
+            console.log('Favorite category deleted', categoryId);
+        } catch (error) {
+            console.error('Error deleting favorite category:', error);
             throw new Error('Error deleting favorite category');
         }
     }

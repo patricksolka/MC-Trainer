@@ -8,7 +8,7 @@ export class User {
     email: string;
     //password: string;
     stats: Stats;
-    favoriteCategories: { id: string, name: string, timestamp: number}[];
+    //favoriteCategories: { id: string, name: string, timestamp: number}[];
     //favoriteCategories: string[] = [];
     //favoriteCategoriesWithTimestamps:{[categoryId: string]: number};
     //favoriteCategories:[]= [];

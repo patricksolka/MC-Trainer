@@ -24,8 +24,6 @@ export class MeineModuleComponents {
     searchVisible: boolean = false;
     searchTerm: string = '';
 
-
-
     constructor(
         private userService: UserService,
         private categoriesService: CategoryService,
@@ -33,7 +31,6 @@ export class MeineModuleComponents {
         private auth: Auth
     ) {
         onAuthStateChanged(this.authService.auth, (user) => {
-
             if (user) {
                 console.log('User is logged in:', user);
                 this.loadFavCategories();
@@ -41,16 +38,7 @@ export class MeineModuleComponents {
                 console.log('User is logged out');
             }
         });
-
-
-
-
-           /* const favaaCategories = this.userService.getFavCategories(this.authService.auth);
-            console.log('FavCategories', favaaCategories);*/
-
-
         this.loadCategories();
-
     }
 
 
@@ -102,5 +90,8 @@ export class MeineModuleComponents {
                 category.name.toLowerCase().includes(this.searchTerm.toLowerCase())
             );
         }
+    }
+    ionViewWillEnter() {
+        this.loadFavCategories();
     }
 }
