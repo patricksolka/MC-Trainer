@@ -35,7 +35,7 @@ export class AuthService {
                     totalQuestions: 0,
                 },
                 favoriteCategories: [],
-                favoriteCategoriesWithTimestamps:  {}
+                //favoriteCategoriesWithTimestamps:  {}
             };
 
             // move up if needed ^

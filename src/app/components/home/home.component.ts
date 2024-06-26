@@ -35,6 +35,7 @@ import {
 } from "@ionic/angular/standalone";
 import {CardComponent} from "../card/card.component";
 
+
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
@@ -63,9 +64,8 @@ export class HomeComponent {
         public categoryService: CategoryService,
         private userService: UserService
     ) {
-
             this.fetchPreview();
-            this.fetchFavoriteModules();
+            this.fetchFavoriteModules(this.categories);
     }
 
     ngOnDestroy() {
@@ -115,7 +115,7 @@ export class HomeComponent {
     });
   }*/
 
-    async fetchFavoriteModules() {
+    /*async fetchFavoriteModules() {
         this.isLoading = true;
         const loading = await this.loadingController.create({
         });
@@ -124,7 +124,7 @@ export class HomeComponent {
         const currentUser = this.auth.currentUser;
         if (currentUser) {
             await this.userService.getFavoriteModules(currentUser.uid).then(async (favoriteModuleData) => {
-                this.categoryService.getCategories().then(async (allCategories) => {
+                this.categoryService.getCategories().subscribe(async (allCategories) => {
                     this.favoriteModules = allCategories.filter(category =>
                         favoriteModuleData.some(fav => fav.id === category.id)
                     );
@@ -132,6 +132,17 @@ export class HomeComponent {
                     this.isLoading = false;
 
                 });
+            });
+        }
+    }*/
+
+    async fetchFavoriteModules(categories: Category[]): Promise<void> {
+        const currentUser = this.auth.currentUser;
+        if (currentUser) {
+            this.userService.getFavoriteModules(currentUser.uid).then(favoriteModuleIds => {
+                this.favoriteModules = categories.filter(category =>
+                    favoriteModuleIds.some(fav => fav.id === category.id)
+                );
             });
         }
     }
@@ -173,7 +184,7 @@ export class HomeComponent {
     removeFavoriteModule(module: Category) {
         const currentUser = this.auth.currentUser;
         if (currentUser) {
-            this.userService.removeFavoriteModule(currentUser.uid, module.id).then(() => {
+            this.userService.removeFav(currentUser.uid, module.id).then(() => {
                 this.favoriteModules = this.favoriteModules.filter(m => m.id !== module.id);
             });
         }
