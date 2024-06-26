@@ -5,17 +5,25 @@ import { UserService } from 'src/app/services/user.service';
 import { CategoryService } from 'src/app/services/category.service';
 import { Category } from 'src/app/models/categories.model';
 import {Auth, onAuthStateChanged} from '@angular/fire/auth';
-import {IonicModule} from "@ionic/angular";
+
 import {RouterLink} from "@angular/router";
 import {AuthService} from "../../services/auth.service";
 import {FooterPage} from "../footer/footer.page";
+import {
+    IonBackButton, IonButton,
+    IonButtons, IonContent, IonHeader,
+    IonIcon, IonItem,
+    IonItemOption,
+    IonItemOptions, IonItemSliding, IonList, IonTitle,
+    IonToolbar
+} from "@ionic/angular/standalone";
 
 @Component({
     selector: 'app-meine-module',
     templateUrl: './meine-module.components.html',
     styleUrls: ['./meine-module.components.scss'],
     standalone: true,
-    imports: [CommonModule, FormsModule, IonicModule, RouterLink, FooterPage]
+    imports: [CommonModule, FormsModule, RouterLink, FooterPage, IonIcon, IonItemOption, IonItemOptions, IonToolbar, IonButtons, IonBackButton, IonTitle, IonButton, IonContent, IonList, IonItemSliding, IonHeader, IonItem]
 })
 export class MeineModuleComponents {
     categories: Category[] = [];
@@ -67,6 +75,15 @@ export class MeineModuleComponents {
 
             // Entfernen Sie die Kategorie aus der Liste der Kategorien
             this.categories = this.categories.filter(category => category.id !== categoryId);
+        }
+    }
+
+    async removeFav(category: Category) {
+        const currentUser = this.auth.currentUser;
+        if (currentUser) {
+            await this.userService.removeFavCategory(currentUser.uid, category.id).then(() => {
+                this.favCategories = this.favCategories.filter(c => c.id !== category.id);
+            });
         }
     }
 

@@ -13,34 +13,28 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <!--  <ion-searchbar *ngIf="searchVisible" [(ngModel)]="searchTerm" (ionInput)="filterCategories()"></ion-searchbar>-->
-
-    <ng-container class="section">
-        <h2>Meine Module</h2>
-        <ng-container *ngIf="favCategories.length === 0">Sie haben noch keine Module ausgewählt
-            .</ng-container>
-        <ion-list class="ion-padding">
-            <ion-item *ngFor="let category of favCategories">
-                {{ category.name }} ({{ category.questionCount }})
-            </ion-item>
-        </ion-list>
+    <!--  <ion-searchbar *ngIf="searchVisible" [(ngModel)]="searchTerm" (ionInput)="filterCategories()"></ion-searchbar>-->
+    <h2>Meine Module</h2>
+    <ng-container *ngIf="favCategories.length === 0">Sie haben noch keine Module ausgewählt .
     </ng-container>
+    <ion-list class="ion-padding" *ngFor="let category of favCategories">
+        <ion-item-sliding>
+        <ion-item>
+            {{ category.name }} ({{ category.questionCount }})
+        </ion-item>
+            <ion-item-options side="end">
+                <ion-item-option color="danger" (click)="removeFav(category)">
+                    <ion-icon slot="icon-only" name="trash"></ion-icon>
+                </ion-item-option>
+            </ion-item-options>
+        </ion-item-sliding>
+    </ion-list>
 
-    <!--<div class="section">
-        <h2>Entdecken</h2>
-        <ion-list>
-            <ion-item *ngFor="let category of filteredCategories" (click)="addToFavorites(category.id)">
-                {{ category.name }}
-            </ion-item>
-        </ion-list>
-    </div>-->
     <h2>Entdecken</h2>
-    <ion-list class="ion-padding">
-        <ng-container *ngFor="let category of categories">
-                <ion-item (click)="addFav(category.id, category.name, category.questionCount)">
-                    {{ category.name }} ({{ category.questionCount }})
-                </ion-item>
-            </ng-container>
+    <ion-list class="ion-padding" *ngFor="let category of categories">
+        <ion-item (click)="addFav(category.id, category.name, category.questionCount)">
+            {{ category.name }} ({{ category.questionCount }})
+        </ion-item>
     </ion-list>
 </ion-content>
 
