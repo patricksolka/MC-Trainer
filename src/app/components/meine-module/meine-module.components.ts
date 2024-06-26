@@ -17,7 +17,8 @@ import {
     IonItemOptions, IonItemSliding, IonList, IonText, IonTitle,
     IonToolbar
 } from "@ionic/angular/standalone";
-import {collection, Firestore, onSnapshot} from "@angular/fire/firestore";
+import {collection, Firestore, onSnapshot, Unsubscribe} from "@angular/fire/firestore";
+import {Subscription} from "rxjs";
 
 @Component({
     selector: 'app-meine-module',
@@ -27,11 +28,12 @@ import {collection, Firestore, onSnapshot} from "@angular/fire/firestore";
     imports: [CommonModule, FormsModule, RouterLink, FooterPage, IonIcon, IonItemOption, IonItemOptions, IonToolbar, IonButtons, IonBackButton, IonTitle, IonButton, IonContent, IonList, IonItemSliding, IonHeader, IonItem, IonCard, IonText]
 })
 export class MeineModuleComponents {
-    categories: Category[] = [];
-    favCategories: { id: string; name: string, questionCount: number }[] = [];
-    filteredCategories: Category[] = [];
-    searchVisible: boolean = false;
-    searchTerm: string = '';
+    public categories: Category[] = [];
+    public favCategories: { id: string; name: string, questionCount: number }[] = [];
+    private filteredCategories: Category[] = [];
+    private searchVisible: boolean = false;
+    private searchTerm: string = '';
+    private subscription: Unsubscribe | null = null;
 
 
     constructor(
@@ -55,10 +57,17 @@ export class MeineModuleComponents {
 
     observeFavCategories(uid: string) {
         const favCategoriesRef = collection(this.firestore, `users/${uid}/favoriteCategories`);
-        onSnapshot(favCategoriesRef, (snapshot) => {
+        this.subscription = onSnapshot(favCategoriesRef, (snapshot) => {
             this.favCategories = snapshot.docs.map(doc => ({ id: doc.id, name: doc.data()['name'], questionCount: doc.data()['questionCount'] }));
             this.loadCategories();
         });
+    }
+
+    ngOnDestroy() {
+        if (this.subscription) {
+            this.subscription();
+            this.subscription = null;
+        }
     }
 
         loadCategories() {
@@ -136,6 +145,7 @@ export class MeineModuleComponents {
             );
         }
     }
+
     ionViewWillEnter() {
         //this.loadFavCategories();
     }
