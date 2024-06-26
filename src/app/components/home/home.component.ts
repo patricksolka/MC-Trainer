@@ -49,20 +49,15 @@ export class HomeComponent {
     public categories: Category[] = [];
     public isLoading: boolean = false;
     public favCategories: { id: string; name: string }[] = [];
-    //public displayedCategories: Category[] = [];
-    //public favoriteModules: Category[] = [];
-    //public loadCards: CardComponent;
-   // private timerSubscription: Subscription;
-    //private categoryIndex: number = 0;
 
 
 
 //TODO: LooadingController fixen sodass er nur beim starten der App angezeigt wird
 
     constructor(
-        private authService: AuthService,
+        //private authService: AuthService,
         private router: Router,
-        private loadingController: LoadingController,
+        //private loadingController: LoadingController,
         private auth: Auth,
         public  categoryService: CategoryService,
         private userService: UserService,
@@ -115,9 +110,7 @@ export class HomeComponent {
 
     ionViewWillEnter() {
         this.loadFav();
-
         this.userName = localStorage.getItem('userName') || 'User';
-        //this.loadFavoriteModules();
         console.log('IonViewWillEnter');
     }
 
