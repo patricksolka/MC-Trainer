@@ -102,7 +102,7 @@ export class HomeComponent {
     async removeFav(category: Category) {
         const currentUser = this.auth.currentUser;
         if (currentUser) {
-            await this.userService.removeFav(currentUser.uid, category.id).then(() => {
+            await this.userService.removeFavCategory(currentUser.uid, category.id).then(() => {
                 this.favCategories = this.favCategories.filter(c => c.id !== category.id);
             });
         }
