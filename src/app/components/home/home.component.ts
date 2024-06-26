@@ -78,20 +78,20 @@ export class HomeComponent {
             this.timerSubscription.unsubscribe();
         }
     }*/
-
+    //TODO: LoadingController vorerst nicht nötig
     async fetchPreview() {
-        this.isLoading = true;
+        /*this.isLoading = true;
         const loading = await this.loadingController.create({
         });
-        await loading.present();
+        await loading.present();*/
 
         try {
             this.categories = await this.categoryService.getPreviewCategories();
-            await loading.dismiss();
+            //await loading.dismiss();
             this.isLoading = false;
         } catch (e) {
             console.error('Error fetching preview categories:', e);
-            await loading.dismiss();
+           // await loading.dismiss();
             this.isLoading = false;
         }
     }
