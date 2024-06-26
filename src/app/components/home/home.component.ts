@@ -47,13 +47,14 @@ import {CardComponent} from "../card/card.component";
 export class HomeComponent {
     public userName: string = localStorage.getItem('userName') || 'User';
     public categories: Category[] = [];
-    public displayedCategories: Category[] = [];
-    //public favoriteModules: Category[] = [];
-    public loadCards: CardComponent;
-    private timerSubscription: Subscription;
-    private categoryIndex: number = 0;
     public isLoading: boolean = false;
-    favCategories: { id: string; name: string }[] = [];
+    public favCategories: { id: string; name: string }[] = [];
+    //public displayedCategories: Category[] = [];
+    //public favoriteModules: Category[] = [];
+    //public loadCards: CardComponent;
+   // private timerSubscription: Subscription;
+    //private categoryIndex: number = 0;
+
 
 
 //TODO: LooadingController fixen sodass er nur beim starten der App angezeigt wird
@@ -63,21 +64,20 @@ export class HomeComponent {
         private router: Router,
         private loadingController: LoadingController,
         private auth: Auth,
-        public categoryService: CategoryService,
+        public  categoryService: CategoryService,
         private userService: UserService,
 
     ) {
-            this.fetchPreview();
-            this.loadFavCategory();
-
-            //this.fetchFavoriteModules();
+        this.fetchPreview();
+        //this.loadFav();
+        //this.fetchFavoriteModules();
     }
 
-    ngOnDestroy() {
+    /*ngOnDestroy() {
         if (this.timerSubscription) {
             this.timerSubscription.unsubscribe();
         }
-    }
+    }*/
 
     async fetchPreview() {
         this.isLoading = true;
@@ -93,112 +93,29 @@ export class HomeComponent {
             console.error('Error fetching preview categories:', e);
             await loading.dismiss();
             this.isLoading = false;
-           /* this.categories = categories.map(category => {
-                return {
-                    ...category,
-                    id: category.id
-                };
-            });*/
-            // this.initializeDisplayedCategories();
-            // this.fetchFavoriteModules(); // Ensure this is called after categories are loaded
-
         }
     }
 
-
-    /*fetchCategories() {
-    this.categoriesService.getAllCategories().subscribe((categories) => {
-      this.categories = categories.map(category => {
-        // Der imagePath wird direkt aus der Firebase-Datenbank abgerufen
-        return {
-          ...category,
-          imagePath: category.imagePath
-        };
-      });
-      this.initializeDisplayedCategories();
-      this.fetchFavoriteModules(); // Ensure this is called after categories are loaded
-    });
-  }*/
-
-    /*async fetchFavoriteModules() {
-        this.isLoading = true;
-        const loading = await this.loadingController.create({
-        });
-        await loading.present();
-
-        const currentUser = this.auth.currentUser;
-        if (currentUser) {
-            await this.userService.getFavoriteModules(currentUser.uid).then(async (favoriteModuleData) => {
-                this.categoryService.getCategories().subscribe(async (allCategories) => {
-                    this.favoriteModules = allCategories.filter(category =>
-                        favoriteModuleData.some(fav => fav.id === category.id)
-                    );
-                    await loading.dismiss();
-                    this.isLoading = false;
-
-                });
-            });
-        }
-    }*/
-
-  /*  fetchFavoriteModules() {
-        const currentUser = this.auth.currentUser;
-        if (currentUser) {
-            this.userService.getFavCategories(currentUser.uid).then((favCategoriesData) => {
-                this.favoriteModules = this.categories.filter(category =>
-                    favCategoriesData.some(fav => fav.id === category.id)
-                );
-
-                // Sort the favoriteModules by the recently viewed timestamp
-
-            });
-        }
-    }
-*/
-
-    /* initializeDisplayedCategories() {
-         this.displayedCategories = this.categories.slice(0, 4);
-         //this.startCategoryRotation();
-     }*/
-
-    /*startCategoryRotation() {
-        this.timerSubscription = interval(10000).subscribe(() => {
-            this.updateDisplayedCategory();
-        });
-    }*/
-
-    /*updateDisplayedCategory() {
-        if (this.categories.length > 4) {
-            let nextCategory;
-            do {
-                nextCategory = this.categories[this.categoryIndex];
-                this.categoryIndex = (this.categoryIndex + 1) % this.categories.length;
-            } while (this.displayedCategories.includes(nextCategory));
-
-            const indexToReplace = Math.floor(Math.random() * this.displayedCategories.length);
-            this.displayedCategories[indexToReplace] = nextCategory;
-        }
-    }*/
-
-
-      async loadFavCategory() {
+    async loadFav() {
           const currentUser = this.auth.currentUser;
           if (currentUser) {
+
               this.favCategories = await this.userService.getFavCategories(currentUser.uid);
+              console.log(this.favCategories);
           }
       }
-
-    removeFavoriteModule(module: Category) {
+    async removeFav(category: Category) {
         const currentUser = this.auth.currentUser;
         if (currentUser) {
-            this.userService.removeFav(currentUser.uid, module.id).then(() => {
-                this.favCategories = this.favCategories.filter(m => m.id !== module.id);
+            await this.userService.removeFav(currentUser.uid, category.id).then(() => {
+                this.favCategories = this.favCategories.filter(c => c.id !== category.id);
             });
         }
     }
 
     ionViewWillEnter() {
-        this.loadFavCategory();
+        this.loadFav();
+
         this.userName = localStorage.getItem('userName') || 'User';
         //this.loadFavoriteModules();
         console.log('IonViewWillEnter');

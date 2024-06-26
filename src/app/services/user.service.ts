@@ -204,7 +204,15 @@ export class UserService {
         fromFirestore: (snapshot: QueryDocumentSnapshot, options: SnapshotOptions): User => {
             const user = Object.assign(new User(), snapshot.data(options));
             user.uid = snapshot.id;
-            user.favoriteCategories = snapshot.get('favoriteCategories') || [];
+            const favoriteCategories = snapshot.get('favoriteCategories') || {};
+            user.favoriteCategories = Object.entries(favoriteCategories).map(([id, data]) => {
+                const favData = data as { name: string; timestamp: number };
+                return {
+                    id,
+                    name: favData.name || 'Unknown',
+                    timestamp: favData.timestamp || 0,
+                };
+            });
             return user;
         },
         toFirestore: (user: User): DocumentData => {
@@ -370,18 +378,13 @@ export class UserService {
 
     async removeFav(uid: string, categoryId: string): Promise<void> {
         try {
-            /*const user = await this.getUser(uid);
-            if (!user) {
-                throw new Error('User not found.');
-            }*/
-            const userRef = doc(this.firestore, `users/${uid}`);
+            const userRef = doc(this.firestore, 'users', uid);
             await updateDoc(userRef, {
                 [`favoriteCategories.${categoryId}`]: deleteField()
             });
-            console.log(`Category ${categoryId} removed from favorites for user ${uid}`);
-        } catch (error) {
-            console.error('Error removing category from favorites:', error);
-            throw error; // Fehler weitergeben, falls nötig
+            console.log('Favorite category deleted', categoryId);
+        } catch {
+            throw new Error('Error deleting favorite category');
         }
     }
 
