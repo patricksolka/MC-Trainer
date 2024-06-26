@@ -11,10 +11,10 @@ import {AuthService} from "../../services/auth.service";
 import {FooterPage} from "../footer/footer.page";
 import {
     IonBackButton, IonButton,
-    IonButtons, IonContent, IonHeader,
+    IonButtons, IonCard, IonContent, IonHeader,
     IonIcon, IonItem,
     IonItemOption,
-    IonItemOptions, IonItemSliding, IonList, IonTitle,
+    IonItemOptions, IonItemSliding, IonList, IonText, IonTitle,
     IonToolbar
 } from "@ionic/angular/standalone";
 
@@ -23,7 +23,7 @@ import {
     templateUrl: './meine-module.components.html',
     styleUrls: ['./meine-module.components.scss'],
     standalone: true,
-    imports: [CommonModule, FormsModule, RouterLink, FooterPage, IonIcon, IonItemOption, IonItemOptions, IonToolbar, IonButtons, IonBackButton, IonTitle, IonButton, IonContent, IonList, IonItemSliding, IonHeader, IonItem]
+    imports: [CommonModule, FormsModule, RouterLink, FooterPage, IonIcon, IonItemOption, IonItemOptions, IonToolbar, IonButtons, IonBackButton, IonTitle, IonButton, IonContent, IonList, IonItemSliding, IonHeader, IonItem, IonCard, IonText]
 })
 export class MeineModuleComponents {
     categories: Category[] = [];
