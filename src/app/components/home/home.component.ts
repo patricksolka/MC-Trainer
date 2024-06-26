@@ -9,7 +9,7 @@ import {FooterPage} from "../footer/footer.page";
 import {Auth} from "@angular/fire/auth";
 import {CategoryService} from 'src/app/services/category.service';
 import {Category} from '../../models/categories.model';
-import {Subscription} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import {
     IonButton,
     IonButtons,
@@ -36,6 +36,7 @@ import {
 import {CardComponent} from "../card/card.component";
 
 
+
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
@@ -47,11 +48,12 @@ export class HomeComponent {
     public userName: string = localStorage.getItem('userName') || 'User';
     public categories: Category[] = [];
     public displayedCategories: Category[] = [];
-    public favoriteModules: Category[] = [];
+    //public favoriteModules: Category[] = [];
     public loadCards: CardComponent;
     private timerSubscription: Subscription;
     private categoryIndex: number = 0;
     public isLoading: boolean = false;
+    favCategories: { id: string; name: string }[] = [];
 
 
 //TODO: LooadingController fixen sodass er nur beim starten der App angezeigt wird
@@ -62,10 +64,13 @@ export class HomeComponent {
         private loadingController: LoadingController,
         private auth: Auth,
         public categoryService: CategoryService,
-        private userService: UserService
+        private userService: UserService,
+
     ) {
             this.fetchPreview();
-            this.fetchFavoriteModules(this.categories);
+            this.loadFavCategory();
+
+            //this.fetchFavoriteModules();
     }
 
     ngOnDestroy() {
@@ -136,21 +141,25 @@ export class HomeComponent {
         }
     }*/
 
-    async fetchFavoriteModules(categories: Category[]): Promise<void> {
+  /*  fetchFavoriteModules() {
         const currentUser = this.auth.currentUser;
         if (currentUser) {
-            this.userService.getFavoriteModules(currentUser.uid).then(favoriteModuleIds => {
-                this.favoriteModules = categories.filter(category =>
-                    favoriteModuleIds.some(fav => fav.id === category.id)
+            this.userService.getFavCategories(currentUser.uid).then((favCategoriesData) => {
+                this.favoriteModules = this.categories.filter(category =>
+                    favCategoriesData.some(fav => fav.id === category.id)
                 );
+
+                // Sort the favoriteModules by the recently viewed timestamp
+
             });
         }
     }
+*/
 
-   /* initializeDisplayedCategories() {
-        this.displayedCategories = this.categories.slice(0, 4);
-        //this.startCategoryRotation();
-    }*/
+    /* initializeDisplayedCategories() {
+         this.displayedCategories = this.categories.slice(0, 4);
+         //this.startCategoryRotation();
+     }*/
 
     /*startCategoryRotation() {
         this.timerSubscription = interval(10000).subscribe(() => {
@@ -158,7 +167,7 @@ export class HomeComponent {
         });
     }*/
 
-    updateDisplayedCategory() {
+    /*updateDisplayedCategory() {
         if (this.categories.length > 4) {
             let nextCategory;
             do {
@@ -169,29 +178,27 @@ export class HomeComponent {
             const indexToReplace = Math.floor(Math.random() * this.displayedCategories.length);
             this.displayedCategories[indexToReplace] = nextCategory;
         }
-    }
+    }*/
 
 
-    /*  async loadFavoriteModules() {
+      async loadFavCategory() {
           const currentUser = this.auth.currentUser;
           if (currentUser) {
-              this.userService.getFavoriteModules(currentUser.uid).then(favoriteModuleIds => {
-                  this.favoriteModules = this.categories.filter(category => favoriteModuleIds.includes(category.id));
-              });
+              this.favCategories = await this.userService.getFavCategories(currentUser.uid);
           }
-      }*/
+      }
 
     removeFavoriteModule(module: Category) {
         const currentUser = this.auth.currentUser;
         if (currentUser) {
             this.userService.removeFav(currentUser.uid, module.id).then(() => {
-                this.favoriteModules = this.favoriteModules.filter(m => m.id !== module.id);
+                this.favCategories = this.favCategories.filter(m => m.id !== module.id);
             });
         }
     }
 
     ionViewWillEnter() {
-        //this.fetchFavoriteModules();
+        this.loadFavCategory();
         this.userName = localStorage.getItem('userName') || 'User';
         //this.loadFavoriteModules();
         console.log('IonViewWillEnter');

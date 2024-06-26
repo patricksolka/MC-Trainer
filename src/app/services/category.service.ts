@@ -61,7 +61,7 @@ export class CategoryService {
             // Subscribe to real-time updates (optional)
             onSnapshot(refWithConverter, (snapshot) => {
                 snapshot.docs.forEach(docData => {
-                    console.log(docData.data());
+                   // console.log(docData.data());
                 });
             });
 
@@ -71,11 +71,11 @@ export class CategoryService {
             categoryDocs.forEach(categoryDoc => {
                 categories.push(this.categoryConverter.fromFirestore(categoryDoc, {}));
             });
-            console.log('test:', categories);
+
             return categories;
         } catch (error) {
             console.error('Error fetching categories:', error);
-            return [];
+            return null;
         }
     }
 
