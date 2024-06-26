@@ -19,7 +19,7 @@ import {FooterPage} from "../footer/footer.page";
 })
 export class MeineModuleComponents {
     categories: Category[] = [];
-    favCategories: { id: string; name: string }[] = [];
+    favCategories: { id: string; name: string, questionCount: number }[] = [];
     filteredCategories: Category[] = [];
     searchVisible: boolean = false;
     searchTerm: string = '';
