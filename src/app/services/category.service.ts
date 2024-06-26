@@ -33,6 +33,9 @@ export class CategoryService {
         this.categoriesCollectionRef = collection(firestore, 'categories');
     }
 
+    // In CategoryService
+
+
     // get category by id
     async getCategoryById(id: string): Promise<Category | null> {
         try {
