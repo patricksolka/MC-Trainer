@@ -206,11 +206,12 @@ export class UserService {
             user.uid = snapshot.id;
             const favoriteCategories = snapshot.get('favoriteCategories') || {};
             user.favoriteCategories = Object.entries(favoriteCategories).map(([id, data]) => {
-                const favData = data as { name: string; timestamp: number };
+                const favData = data as { name: string; timestamp: number, questionCount: number};
                 return {
                     id,
                     name: favData.name || 'Unknown',
                     timestamp: favData.timestamp || 0,
+                    questionCount: favData.questionCount || 0
                 };
             });
             return user;
@@ -336,7 +337,7 @@ export class UserService {
     }*/
 
     //mit name
-    async addFavCategory(uid: string, categoryId: string, categoryName: string): Promise<void> {
+    async addFavCategory(uid: string, categoryId: string, categoryName: string, questionCount: number): Promise<void> {
         try {
             const userRef = doc(this.firestore, `users/${uid}`);
             const userDoc = await getDoc(userRef);
@@ -348,7 +349,8 @@ export class UserService {
                     ...userData.favoriteCategories,
                     [categoryId]: {
                         name: categoryName,
-                        timestamp: new Date().getTime()  // Add current timestamp
+                        timestamp: new Date().getTime(),
+                        questionCount: questionCount
                     }
                 };
 
