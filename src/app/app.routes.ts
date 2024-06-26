@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
 import { redirectUnauthorizedTo, redirectLoggedInTo, canActivate } from "@angular/fire/auth-guard";
 
-const redirectUnauthorizedToLogin = () => {
-  return redirectUnauthorizedTo(['login']);
+const redirectUnauthorizedToOnboarding = () => {
+  return redirectUnauthorizedTo(['onboarding']);
 };
 
 const redirectLoggedInToHome = () => redirectLoggedInTo(['home']);
@@ -26,31 +26,31 @@ export const routes: Routes = [
   {
     path: 'home',
     loadComponent: () => import('./components/home/home.component').then(m => m.HomeComponent),
-    ...canActivate(redirectUnauthorizedToLogin)
+    ...canActivate(redirectUnauthorizedToOnboarding)
   },
   {
     path: 'categories',
     loadComponent: () => import('./components/categories/categories.component').then(m => m.CategoriesComponent),
-    ...canActivate(redirectUnauthorizedToLogin)
+    ...canActivate(redirectUnauthorizedToOnboarding)
   },
   {
     path: 'cards/:categoryId',
     loadComponent: () => import('./components/card/card.component').then(m => m.CardComponent),
-    ...canActivate(redirectUnauthorizedToLogin)
+    ...canActivate(redirectUnauthorizedToOnboarding)
   },
   {
     path: 'stats',
     loadComponent: () => import('./components/stats/stats.component').then(m => m.StatsComponent),
-    ...canActivate(redirectUnauthorizedToLogin)
+    ...canActivate(redirectUnauthorizedToOnboarding)
   },
   { path: 'total-stats',
     loadComponent: () => import('./components/total-stats/total-stats.component').then( m => m.TotalStatsComponent),
-    ...canActivate(redirectUnauthorizedToLogin)
+    ...canActivate(redirectUnauthorizedToOnboarding)
   },
   {
     path: 'achievements',
     loadComponent: () => import('./components/achievements/achievements.component').then(m => m.AchievementsComponent),
-    ...canActivate(redirectUnauthorizedToLogin)
+    ...canActivate(redirectUnauthorizedToOnboarding)
   },
   {
     path: 'onboarding',
@@ -60,12 +60,12 @@ export const routes: Routes = [
   {
     path: 'forgot-password',
     loadComponent: () => import('./components/auth/forgot-password/forgot-password.page').then(m => m.ForgotPasswordPage),
-    //...canActivate(redirectUnauthorizedToLogin)
+    //...canActivate(redirectUnauthorizedToOnboarding)
   },
   {
     path: 'profile',
     loadComponent: () => import('./components/profile/profile.page').then(m => m.ProfilePage),
-    ...canActivate(redirectUnauthorizedToLogin)
+    ...canActivate(redirectUnauthorizedToOnboarding)
   },
   {
     path: 'footer',
@@ -73,7 +73,8 @@ export const routes: Routes = [
   },
   {
     path: 'meine-module',
-    loadComponent: () => import('./components/meine-module/meine-module.components').then(m => m.MeineModuleComponents)
+    loadComponent: () => import('./components/meine-module/meine-module.components').then(m => m.MeineModuleComponents),
+    ...canActivate(redirectUnauthorizedToOnboarding)
   },
 
 
