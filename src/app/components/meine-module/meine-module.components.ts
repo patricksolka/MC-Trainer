@@ -63,12 +63,7 @@ export class MeineModuleComponents {
         });
     }
 
-    ngOnDestroy() {
-        if (this.subscription) {
-            this.subscription();
-            this.subscription = null;
-        }
-    }
+
 
         loadCategories() {
             this.categoriesService.getCategories().then(categories => {
@@ -106,7 +101,7 @@ export class MeineModuleComponents {
             await this.userService.addFavCategory(currentUser.uid, categoryId, categoryName, questionCount);
             //this.loadFavCategories();
 
-            // Entfernen Sie die Kategorie aus der Liste der Kategorien
+
             //this.categories = this.categories.filter(category => category.id !== categoryId);
         }
     }
@@ -115,17 +110,11 @@ export class MeineModuleComponents {
         const currentUser = this.auth.currentUser;
         if (currentUser) {
             await this.userService.removeFavCategory(currentUser.uid, category.id).then(() => {
-               // this.favCategories = this.favCategories.filter(c => c.id !== category.id);
-                //this.categories.push(category);
             });
         }
     }
 
-   /* updateFilteredCategories() {
-        this.filteredCategories = this.categories.filter(category =>
-            !this.favCategories.find(fav => fav.id === category.id)
-        );
-    }*/
+
 
     toggleSearch() {
         this.searchVisible = !this.searchVisible;
@@ -146,7 +135,14 @@ export class MeineModuleComponents {
         }
     }
 
-    ionViewWillEnter() {
+    /*ionViewWillEnter() {
         //this.loadFavCategories();
+    }*/
+
+    ngOnDestroy() {
+        if (this.subscription) {
+            this.subscription();
+            this.subscription = null;
+        }
     }
 }
