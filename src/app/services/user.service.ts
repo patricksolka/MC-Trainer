@@ -1,7 +1,17 @@
-//import {AuthService} from "./auth.service";
 import {
-    deleteDoc, doc, Firestore, getDoc, updateDoc, QueryDocumentSnapshot,
-    SnapshotOptions, DocumentData, arrayUnion, arrayRemove, deleteField } from "@angular/fire/firestore";
+    deleteDoc,
+    doc,
+    Firestore,
+    getDoc,
+    updateDoc,
+    QueryDocumentSnapshot,
+    SnapshotOptions,
+    DocumentData,
+    query,
+    orderBy,
+    onSnapshot,
+    getDocs, CollectionReference, collection, setDoc
+} from "@angular/fire/firestore";
 import {Injectable} from "@angular/core";
 import {User} from "../models/user.model";
 import {AlertController} from "@ionic/angular";
@@ -13,7 +23,13 @@ import {AlertController} from "@ionic/angular";
 
 export class UserService {
 
-    user: User;
+    public user: User;
+    public userCollectionRef: CollectionReference<DocumentData>;
+
+
+    constructor(private firestore: Firestore, private alertController: AlertController) {
+        this.userCollectionRef = collection(firestore, 'users');
+    }
 
     //get user by ID
     async getUser(uid: string) {
@@ -24,28 +40,11 @@ export class UserService {
             const user = userSnap.data() as User;
             localStorage.setItem('userName', user.firstName);
             return user;
-            /*return {
-                user,
-                favoriteCategories: user.favoriteCategories || [] // Ensure favoriteCategories is defined
-            };*/
         } else {
             return null;
         }
     }
 
-    // ohne converter
-    /* async updateUser(user: User) {
-         try {
-             const userRef = doc(this.firestore, `users/${user.uid}`);
-             await updateDoc(userRef, user);
-         } catch (e) {
-             console.error("Fehler beim Aktualisieren des Benutzers: ", e);
-             return null;
-         }
-     }
- */
-
-    //mit converter
     async updateUser(user: User) {
         try {
             const userData = this.userConverter.toFirestore(user);
@@ -57,10 +56,124 @@ export class UserService {
         }
     }
 
+    async deleteUser(uid: string) {
+        try {
+            const userRef = doc(this.firestore, `users/${uid}`);
+            await deleteDoc(userRef);
+        } catch (e) {
+            console.error("Fehler beim Löschen des Benutzers: ", e);
+            return null;
+        }
+    }
+
+    //mit subcollection
+    /*async getFavCategories(uid: string): Promise<{ id: string; name: string; timestamp: number; questionCount: number }[]> {
+        try {
+            const favCategoriesRef = this.getFavcollectionRef(uid);
+            const querySnapshot = await getDocs(favCategoriesRef);
+
+            const favoriteCategories: { id: string; name: string; timestamp: number; questionCount: number }[] = [];
+            querySnapshot.forEach(doc => {
+                const data = doc.data() as { name: string; timestamp: number; questionCount: number };
+                favoriteCategories.push({ id: doc.id, ...data });
+            });
+
+            console.log('Favoriten', favoriteCategories);
+            return favoriteCategories;
+        } catch (error) {
+            console.error('Error fetching favorite categories:', error);
+            return [];
+        }
+    }*/
+    async getFavCategories(uid: string): Promise<{
+        id: string;
+        name: string;
+        timestamp: number;
+        questionCount: number
+    }[]> {
+        try {
+            const favCategoriesRef = collection(this.firestore, `users/${uid}/favoriteCategories`);
+            const filterQuery = query(favCategoriesRef, orderBy('timestamp'));
+
+            const favDocs = await getDocs(filterQuery);
+            const categories: {
+                id: string;
+                name: string;
+                timestamp: number;
+                questionCount: number
+            }[] = [];
+            favDocs.forEach(favoriteDoc => {
+                const data = favoriteDoc.data() as {
+                    name: string;
+                    timestamp: number;
+                    questionCount: number
+                };
+                categories.push({id: favoriteDoc.id, ...data});
+            });
+
+            return categories;
+        } catch (error) {
+            console.error('Error fetching favorite categories:', error);
+            return [];
+        }
+    }
+
+
+
+
+
+    //mit subcollection
+    async addFavCategory(uid: string, categoryId: string, categoryName: string, questionCount: number): Promise<void> {
+        try {
+            const favCategoriesRef = this.getFavcollectionRef(uid);
+            const docRef = doc(favCategoriesRef, categoryId);
+            const docSnap = await getDoc(docRef);
+
+            if (!docSnap.exists()) {
+                await setDoc(docRef, {
+                    name: categoryName,
+                    timestamp: new Date().getTime(),
+                    questionCount: questionCount,
+                    isFavorite: true
+                });
+
+                console.log(`Category ${categoryId} added to favorites for user ${uid}`);
+            } else {
+                console.log(`Category ${categoryId} is already a favorite for user ${uid}`);
+            }
+        } catch (error) {
+            console.error('Error adding category to favorites:', error);
+            throw error;
+        }
+    }
+
+    //Subcollection
+    async removeFavCategory(uid: string, categoryId: string): Promise<void> {
+        try {
+            const favCategoriesRef = this.getFavcollectionRef(uid);
+            const categoryRef = doc(favCategoriesRef, categoryId);
+            await deleteDoc(categoryRef);
+            console.log('Favorite category deleted', categoryId);
+        } catch (error) {
+            console.error('Error deleting favorite category:', error);
+            throw new Error('Error deleting favorite category');
+        }
+    }
+
     private userConverter = {
         fromFirestore: (snapshot: QueryDocumentSnapshot, options: SnapshotOptions): User => {
             const user = Object.assign(new User(), snapshot.data(options));
             user.uid = snapshot.id;
+            // const favoriteCategories = snapshot.get('favoriteCategories') || {};
+            // user.favoriteCategories = Object.entries(favoriteCategories).map(([id, data]) => {
+            //     const favData = data as { name: string; timestamp: number, questionCount: number};
+            //     return {
+            //         id,
+            //         name: favData.name || 'Unknown',
+            //         timestamp: favData.timestamp || 0,
+            //         questionCount: favData.questionCount || 0
+            //     };
+            // });
             return user;
         },
         toFirestore: (user: User): DocumentData => {
@@ -70,42 +183,10 @@ export class UserService {
         }
     };
 
-    async deleteUser(uid: string){
-        try{
-            const userRef = doc(this.firestore, `users/${uid}`);
-            await deleteDoc(userRef);
-        } catch (e){
-            console.error("Fehler beim Löschen des Benutzers: ", e);
-            return null;
-        }
+    getFavcollectionRef(userId: string): CollectionReference<DocumentData> {
+        const userRef = doc(this.firestore, 'users', userId);
+        return collection(userRef, 'favoriteCategories');
     }
-
-    async getFavoriteModules(uid: string): Promise<{ id: string, timestamp: number }[]> {
-        const user = await this.getUser(uid);
-        if (user) {
-            const favoriteCategoriesWithTimestamps = user.favoriteCategoriesWithTimestamps || [];
-            // Convert the object to an array of { id, timestamp }
-            return Object.entries(favoriteCategoriesWithTimestamps).map(([id, timestamp]) => ({ id, timestamp }));
-        } else {
-            return [];
-        }
-    }
-
-    async addFavoriteModule(uid: string, categoryId: string): Promise<void> {
-        const userDoc = doc(this.firestore, `users/${uid}`);
-        const timestamp = Date.now();
-        await updateDoc(userDoc, {
-            [`favoriteCategoriesWithTimestamps.${categoryId}`]: timestamp
-        });
-    }
-
-    async removeFavoriteModule(uid: string, categoryId: string): Promise<void> {
-        const userDoc = doc(this.firestore, `users/${uid}`);
-        await updateDoc(userDoc, {
-            [`favoriteCategoriesWithTimestamps.${categoryId}`]: deleteField()
-        });
-    }
-
 
     async showAlert(header: string, message: string) {
         const alert = await this.alertController.create({
@@ -124,6 +205,97 @@ export class UserService {
         await alert.present();
     }
 
-    constructor(private firestore: Firestore,  private alertController: AlertController) {
-    }
+    //als Datenfeld
+    /*async getFavCategories(uid: string): Promise<{ id: string; name: string; timestamp: number }[] | null> {
+        try {
+            const userRef = doc(this.userCollectionRef, uid).withConverter(this.userConverter);
+            const userSnap = await getDoc(userRef);
+
+            if (!userSnap.exists) {
+                return []; // User not found
+            }
+
+            const user = userSnap.data();
+            if (user) {
+                const favoriteCategoriesArray: { id: string; name: string; timestamp: number }[] = [];
+
+                // Check if favoriteCategories exists and is not null
+                if (user.favoriteCategories) {
+                    // Push each category object into the array
+                    for (const categoryId in user.favoriteCategories) {
+                        const category = user.favoriteCategories[categoryId];
+                        favoriteCategoriesArray.push(category);
+                    }
+                }
+
+                console.log('Favoriten', favoriteCategoriesArray);
+                return favoriteCategoriesArray; // Return the array of favorite categories
+            } else {
+                return []; // Handle case where user data might be empty after conversion
+            }
+        } catch (error) {
+            console.error('Error fetching favorite categories:', error);
+            return [];
+        }
+    }*/
+
+    // ohne converter
+    /* async updateUser(user: User) {
+         try {
+             const userRef = doc(this.firestore, `users/${user.uid}`);
+             await updateDoc(userRef, user);
+         } catch (e) {
+             console.error("Fehler beim Aktualisieren des Benutzers: ", e);
+             return null;
+         }
+     }
+ */
+
+    //mit converter
+    /* async addFavCategory(uid: string, categoryId: string, categoryName: string, questionCount: number): Promise<void> {
+         try {
+             const userRef = doc(this.firestore, `users/${uid}`);
+             const userDoc = await getDoc(userRef);
+
+             if (userDoc.exists()) {
+                 const userData = userDoc.data() as User;
+                 // Update the userData with new favorite category, name, and timestamp
+                 userData.favoriteCategories = {
+                     ...userData.favoriteCategories,
+                     [categoryId]: {
+                         name: categoryName,
+                         timestamp: new Date().getTime(),
+                         questionCount: questionCount
+                     }
+                 };
+
+
+                 const userDataFirestore = this.userConverter.toFirestore(userData);
+
+                 // Update the Firestore document
+                 await updateDoc(userRef, userDataFirestore);
+
+                 console.log(`Category ${categoryId} added to favorites for user ${uid}`);
+             } else {
+                 throw new Error('User not found.');
+             }
+         } catch (error) {
+             console.error('Error adding category to favorites:', error);
+             throw error;
+         }
+     }*/
+
+    /*async removeFav(uid: string, categoryId: string): Promise<void> {
+        try {
+            const userRef = doc(this.firestore, 'users', uid);
+            await updateDoc(userRef, {
+                [`favoriteCategories.${categoryId}`]: deleteField()
+            });
+            console.log('Favorite category deleted', categoryId);
+        } catch {
+            throw new Error('Error deleting favorite category');
+        }
+    }*/
+
+
 }

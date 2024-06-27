@@ -67,7 +67,7 @@
                 </ion-col>
             </ion-row>
 
-            <ng-container *ngIf="favoriteModules.length === 0" class="favorites">
+            <ng-container *ngIf="favCategories.length === 0" class="favorites">
                 <ion-item>
                     <ion-text class="ion-text-start">Du hast noch keine favorisierten Module
                         😢</ion-text>
@@ -84,13 +84,13 @@
                                 style="&#45;&#45;background: #FF6905;"> Module hinzufügen
                     </ion-button>
                 </ion-card>-->
-            <ion-list *ngIf="favoriteModules.length > 0" class="favorites">
-                <ion-item-sliding *ngFor="let module of favoriteModules">
-                    <ion-item (click)="categoryService.startQuiz(module.id)">
-                        {{ module.name }}
+            <ion-list> <!--*ngIf="favCategories.length < 0" class="favorites"-->
+                <ion-item-sliding *ngFor="let category of favCategories">
+                    <ion-item (click)="categoryService.startQuiz(category.id)">
+                        {{ category.name }}
                     </ion-item>
                     <ion-item-options side="end">
-                        <ion-item-option color="danger" (click)="removeFavoriteModule(module)">
+                        <ion-item-option color="danger" (click)="removeFav(category)">
                             <ion-icon slot="icon-only" name="trash"></ion-icon>
                         </ion-item-option>
                     </ion-item-options>

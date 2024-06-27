@@ -13,32 +13,30 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <!--  <ion-searchbar *ngIf="searchVisible" [(ngModel)]="searchTerm" (ionInput)="filterCategories()"></ion-searchbar>-->
+    <!--  <ion-searchbar *ngIf="searchVisible" [(ngModel)]="searchTerm" (ionInput)="filterCategories()"></ion-searchbar>-->
+    <h2>Meine Module</h2>
+    <ion-card
+            *ngIf="favCategories.length === 0"><ion-text>Sie haben noch keine Module favorisiert
+        😢</ion-text> </ion-card>
+    <ion-list class="ion-padding" *ngFor="let category of favCategories">
+        <ion-item-sliding>
+        <ion-item>
+            {{ category.name }} ({{ category.questionCount }})
+        </ion-item>
+            <ion-item-options side="end">
+                <ion-item-option color="danger" (click)="removeFav(category)">
+                    <ion-icon slot="icon-only" name="trash"></ion-icon>
+                </ion-item-option>
+            </ion-item-options>
+        </ion-item-sliding>
+    </ion-list>
 
-    <ng-container class="section">
-        <h2>Meine Module</h2>
-        <ng-container *ngIf="favoriteModules.length === 0">Sie haben noch keine Module ausgewählt.</ng-container>
-        <ion-list class="ion-padding">
-            <ion-item *ngFor="let module of favoriteModules">
-                {{ module.name }}
-            </ion-item>
-        </ion-list>
-    </ng-container>
-
-    <!--<div class="section">
-        <h2>Entdecken</h2>
-        <ion-list>
-            <ion-item *ngFor="let category of filteredCategories" (click)="addToFavorites(category.id)">
-                {{ category.name }}
-            </ion-item>
-        </ion-list>
-    </div>-->
     <h2>Entdecken</h2>
-    <ion-list class="ion-padding">
-        <ng-container *ngFor="let category of categories | async">
-                <ion-item (click)="addToFavorites(category.id)">
-                    {{ category.name }} ({{ category.questionCount }})
-                </ion-item>
-            </ng-container>
+    <ion-list class="ion-padding" *ngFor="let category of categories">
+        <ion-item (click)="addFav(category.id, category.name, category.questionCount)">
+            {{ category.name }} ({{ category.questionCount }})
+        </ion-item>
     </ion-list>
 </ion-content>
+
+<app-footer></app-footer>

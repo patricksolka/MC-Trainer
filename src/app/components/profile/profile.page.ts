@@ -79,7 +79,7 @@ export class ProfilePage {
         await loading.present();
         this.authService.logout();
         await loading.dismiss();
-        await this.router.navigateByUrl('/login', {replaceUrl: true});
+        await this.router.navigateByUrl('/onboarding', {replaceUrl: true});
     }
 
     //TODO: Add ConfirmAlert before deleting profile
