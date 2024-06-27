@@ -47,7 +47,7 @@ export class CategoriesComponent implements OnInit {
     }
 
     loadCategories(): void {
-        this.categories = from(this.categoryService.fetchCategories());
+        this.categories = from(this.categoryService.getCategories());
     }
 
     /*loadCategories(): void {
@@ -81,7 +81,7 @@ export class CategoriesComponent implements OnInit {
 
 
 
-    addCategory(newCategoryName: string): void {
+    /*addCategory(newCategoryName: string): void {
         if (newCategoryName.trim() !== '') {
             const newCategory: Category = {
                 id: '',
@@ -97,7 +97,7 @@ export class CategoriesComponent implements OnInit {
         } else {
             console.warn('Category name cannot be empty');
         }
-    }
+    }*/
 
 
     categoryHasQuestions(category: Category): boolean {

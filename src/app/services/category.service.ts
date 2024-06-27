@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import {
     Firestore,
     collection,
-    collectionData,
     doc,
     addDoc,
     updateDoc,
@@ -14,40 +13,30 @@ import {
     limit,
     QueryDocumentSnapshot,
     SnapshotOptions,
-    orderBy, onSnapshot, getDocs
+    orderBy, onSnapshot, getDocs, Unsubscribe
 } from '@angular/fire/firestore';
 import { Category } from '../models/categories.model';
-import { Observable } from 'rxjs';
+//import { Observable } from 'rxjs';
 import {Router} from "@angular/router";
+import {Observable} from "rxjs";
+import {UserService} from "./user.service";
 
 @Injectable({
     providedIn: 'root'
 })
 export class CategoryService {
-    //private categoriesCollection;
     public categories: Category[];
+
     categoriesCollectionRef: CollectionReference<DocumentData>;
 
-
-    constructor(private firestore: Firestore, private router: Router) {
+    constructor(private firestore: Firestore, private router: Router, private userService: UserService) {
         this.categoriesCollectionRef = collection(firestore, 'categories');
-        //this.categoriesCollection = collection(this.firestore, 'categories');
     }
 
-    //TODO: Eigentlich nicht nötig da wir mit fetchCategories() arbeiten
-    getAllCategories(): Observable<Category[]> {
-        try {
-            return collectionData(this.categoriesCollectionRef) as Observable<Category[]>;
+    // In CategoryService
 
-        } catch (e) {
-            console.error('Error fetching categories:', e);
-        }
-        return null;
-    }
 
-    /*getAllCategories(): Observable<Category[]> {
-        return collectionData(this.categoriesCollection) as Observable<Category[]>;
-    }*/
+    // get category by id
     async getCategoryById(id: string): Promise<Category | null> {
         try {
             const docRef = doc(this.firestore, 'categories', id);
@@ -66,6 +55,72 @@ export class CategoryService {
         }
     }
 
+    //get all categories
+    async getCategories(): Promise<Category[] | null> {
+        try {
+            const filterQuery = query(this.categoriesCollectionRef, orderBy('name'));
+            const refWithConverter = filterQuery.withConverter(this.categoryConverter);
+
+            // Subscribe to real-time updates (optional)
+            onSnapshot(refWithConverter, (snapshot) => {
+                snapshot.docs.forEach(docData => {
+                   // console.log(docData.data());
+                });
+            });
+
+            // Fetch categories once
+            const categoryDocs = await getDocs(refWithConverter);
+            const categories: Category[] = [];
+            categoryDocs.forEach(categoryDoc => {
+                categories.push(this.categoryConverter.fromFirestore(categoryDoc, {}));
+            });
+
+            return categories;
+        } catch (error) {
+            console.error('Error fetching categories:', error);
+            return null;
+        }
+    }
+
+    /*getCategories(): Observable<Category[]> {
+        return new Observable<Category[]>(observer => {
+            const filterQuery = query(this.categoriesCollectionRef, orderBy('name'));
+            const refWithConverter = filterQuery.withConverter(this.categoryConverter);
+
+            const unsubscribe = onSnapshot(refWithConverter, (snapshot) => {
+                const categories: Category[] = [];
+                snapshot.docs.forEach(doc => {
+                    categories.push(doc.data());
+                });
+                observer.next(categories);
+            }, error => {
+                observer.error(error);
+            });
+
+            // Provide a way of canceling and disposing the source
+            return unsubscribe;
+        });
+    }*/
+
+    // get first 4 categories for Preview
+    async getPreviewCategories(): Promise<Category[]> {
+        try {
+            const filterQuery = query(this.categoriesCollectionRef, limit(4));
+            const refWithConverter = filterQuery.withConverter(this.categoryConverter);
+
+            const categoryDocs = await getDocs(refWithConverter);
+            const categories: Category[] = [];
+            categoryDocs.forEach(categoryDoc => {
+                categories.push(categoryDoc.data());
+            });
+            return categories;
+        } catch (error) {
+            console.error('Error fetching preview categories:', error);
+            return [];
+        }
+    }
+
+    // Dokumente in Catgeory-Objekte umwandeln
     private categoryConverter = {
         fromFirestore: (snapshot: QueryDocumentSnapshot, options: SnapshotOptions): Category => {
             const result = Object.assign(new Category(), snapshot.data(options));
@@ -79,42 +134,28 @@ export class CategoryService {
         }
     };
 
-    async fetchCategories(): Promise<Category[] | null> {
-        try {
-            const filterQuery = query(this.categoriesCollectionRef, orderBy('name'));
-            const refWithConverter = filterQuery.withConverter(this.categoryConverter);
-
-            // Subscribe to real-time updates (optional)
-            onSnapshot(refWithConverter, (snapshot) => {
-                snapshot.docs.forEach(docData => {
-                    console.log(docData.data());
-                    // Here you can update your component state or do other operations
-                });
-            });
-
-            // Fetch categories once
-            const categoryDocs = await getDocs(refWithConverter);
-            const categories: Category[] = [];
-            categoryDocs.forEach(categoryDoc => {
-                categories.push(categoryDoc.data());
-            });
-            return categories;
-        } catch (error) {
-            console.error('Error fetching categories:', error);
-            return [];
+    startQuiz(categoryId: string) {
+        if (categoryId) {
+            this.router.navigate(['/cards', categoryId]);
+        } else {
+            console.error('Invalid categoryId:', categoryId);
         }
     }
 
 
-    //Retrieve the first four categories for Preview
-    getPreviewCategories(): Observable<Category[]> {
-        const filterQuery = query(this.categoriesCollectionRef, limit(4));
-        const refWithConverter = filterQuery.withConverter(this.categoryConverter);
-        return collectionData(refWithConverter) as Observable<Category[]>;
-    }
+    /*async addFavCategory(uid: string, categoryId: string): Promise<void> {
+        try {
+            // Hier könnte zusätzliche Logik hinzugefügt werden, bevor die Kategorie hinzugefügt wird
+            await this.userService.addFavUser(uid, categoryId);
+            console.log(`Category ${categoryId} added to favorites for user ${uid}`);
+        } catch (error) {
+            console.error('Error adding category to favorites:', error);
+            throw error; // Fehler weitergeben, falls nötig
+        }
+    }*/
 
 
-    async addCategory(category: Category): Promise<void> {
+    /*async addCategory(category: Category): Promise<void> {
         await addDoc(this.categoriesCollectionRef, { name: category.name, questionCount: 0 });
     }
 
@@ -126,15 +167,8 @@ export class CategoryService {
     async deleteCategory(id: string): Promise<void> {
         const categoryDoc = doc(this.firestore, `categories/${id}`);
         await deleteDoc(categoryDoc);
-    }
+    }*/
 
-    startQuiz(categoryId: string) {
-        if (categoryId) {
-            this.router.navigate(['/cards', categoryId]);
-        } else {
-            console.error('Invalid categoryId:', categoryId);
-            // Handle invalid categoryId case, e.g., show error message or navigate to a default route
-        }
-    }
+
 
 }
