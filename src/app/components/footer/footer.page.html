@@ -1,4 +1,5 @@
-<ion-footer class="footer-box">
+
+    <div class="tabBar">
     <ion-tab-bar class="ion-padding">
         <ion-tab-button tab="home" [routerLink]="['/home']"
                         routerLinkActive="active">
@@ -11,7 +12,7 @@
         </ion-tab-button>
         <ion-tab-button tab="add" [routerLink]="['/meine-module']" routerLinkActive="active">
             <ion-icon name="add-circle"></ion-icon>
-            <ion-label>Hinzufügen</ion-label>
+            <ion-label class="addTab" >Hinzufügen</ion-label>
         </ion-tab-button>
         <ion-tab-button tab="progress" [routerLink]="['/total-stats']" routerLinkActive="active">
             <ion-icon name="stats-chart"></ion-icon>
@@ -22,4 +23,4 @@
             <ion-label>Profil</ion-label>
         </ion-tab-button>
     </ion-tab-bar>
-</ion-footer>
+    </div>

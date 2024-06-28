@@ -28,22 +28,48 @@
 /* Dark Mode Specific Styles */
 @media (prefers-color-scheme: dark) {
   ion-footer {
+
     ion-tab-bar {
-      background-color: transparent; // Hintergrundfarbe für den Tab-Bar im Dark Mode
+      background-color: var(--ion-background-color-test);
+      //background-color: transparent; // Hintergrundfarbe für den Tab-Bar im Dark Mode
+     /* border-top-left-radius: 15px;
+      border-top-right-radius: 15px;*/
+      //overflow: hidden; /* Verhindert Überläufe */
+      border-radius: 15px 15px 0 0; /* Rundet die oberen Ecken ab */
+      box-shadow: var(--box-shadow); // Schatten für den Tab-Bar im Dark Mode
+      border-color: transparent;
+
+
 
       ion-tab-button {
+        overflow: visible;
         background-color: transparent;
         color: var(--ion-text-color); // Textfarbe im Dark Mode
+
+
 
         ion-label {
           font-size: 12px; // Schriftgröße für Labels
           color: white; // Farbe des Text im Dark Mode
+         margin-top: 10px;
         }
+
+
       }
 
-      ion-tab-button.active {
+      ion-tab-button.active ion-icon, ion-tab-button.active ion-label {
         color: var(--ion-color-primary); // Farbe für ausgewählten Tab im Dark Mode
       }
     }
   }
 }
+
+.tabBar {
+  //background-color: var(--ion-background-color-test);
+  //overflow: hidden; /* Verhindert Überläufe */
+  //border-radius: 15px 15px 0 0; /* Rundet die oberen Ecken ab */
+ // Textfarbe im Dark Mode
+}
+
+
+
