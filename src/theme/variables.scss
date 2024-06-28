@@ -88,7 +88,7 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
   --ion-color-primary-shade: #1b1b32;
-  --ion-color-primary-tint: #35354d;
+  --ion-color-primary-tint: #2F2F42;
 
   /* Secondary Color */
   --ion-color-secondary: #50c8ff;
@@ -157,7 +157,7 @@ http://ionicframework.com/docs/theming/ */
   /* Background and Text Colors */
   --ion-background-color: #1F1F39;
   --ion-text-color: #ffffff; /* Standard Textfarbe für Dark Mode */
-  --ion-card-background: #35354d;
+  --ion-card-background: #2F2F42;
 
   /* Button Colors */
   --ion-button-background: var(--ion-color-secondary);
@@ -224,7 +224,7 @@ http://ionicframework.com/docs/theming/ */
     --ion-item-background: #35354d;
     --ion-toolbar-background: transparentize();
     // --ion-toolbar-background: #35354d;
-    --ion-card-background: #35354d;
+    --ion-card-background: #2F2F42;
     --ion-border-color: #222222;
   }
 
@@ -234,7 +234,7 @@ http://ionicframework.com/docs/theming/ */
     --ion-text-color: #ffffff;
     --ion-text-color-rgb: 255, 255, 255;
     --ion-item-background: #35354d;
-    --ion-card-background: #35354d;
+    --ion-card-background: #2F2F42;
   }
 
   .ios ion-modal {
@@ -249,11 +249,12 @@ http://ionicframework.com/docs/theming/ */
     --ion-text-color: #ffffff;
     --ion-text-color-rgb: 255, 255, 255;
     --ion-border-color: #222222;
-    --ion-item-background: #35354d;
+    --ion-item-background: #2F2F42;
     --ion-toolbar-background: #35354d;
     --ion-tab-bar-background: #35354d;
-    --ion-card-background: #35354d;
+    --ion-card-background: #2F2F42;
     --ion-card-border-color: #333;
+    --ion-color-primary: #3D5CFF;
   }
 
   .md ion-modal {

@@ -33,18 +33,16 @@
 
       ion-tab-button {
         background-color: transparent;
-        color: var(--ion-text-color-dark); // Textfarbe im Dark Mode
-        --color-selected: var(--ion-color-primary-dark); // Farbe für ausgewählten Tab im Dark Mode
-        --color-selected-hover: var(--ion-color-primary-dark); // Farbe für Hover im Dark Mode
-
-        ion-icon {
-          color: white; // Farbe der Icons im Dark Mode
-        }
+        color: var(--ion-text-color); // Textfarbe im Dark Mode
 
         ion-label {
           font-size: 12px; // Schriftgröße für Labels
           color: white; // Farbe des Text im Dark Mode
         }
+      }
+
+      ion-tab-button.active {
+        color: var(--ion-color-primary); // Farbe für ausgewählten Tab im Dark Mode
       }
     }
   }

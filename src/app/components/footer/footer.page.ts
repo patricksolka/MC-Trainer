@@ -10,18 +10,19 @@ import {
   IonTitle,
   IonToolbar
 } from '@ionic/angular/standalone';
-import {RouterLink} from "@angular/router";
+import {RouterLink, RouterLinkActive} from "@angular/router";
 
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.page.html',
   styleUrls: ['./footer.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonFooter, IonTabBar, IonTabButton, IonIcon, IonLabel, RouterLink]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonFooter, IonTabBar, IonTabButton, IonIcon, IonLabel, RouterLink, RouterLinkActive]
 })
 export class FooterPage implements OnInit {
+  constructor() {
 
-  constructor() { }
+  }
 
   ngOnInit() {
   }

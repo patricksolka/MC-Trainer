@@ -1,22 +1,23 @@
 <ion-footer class="footer-box">
-    <ion-tab-bar>
-        <ion-tab-button tab="home" [routerLink]="['/home']">
+    <ion-tab-bar class="ion-padding">
+        <ion-tab-button tab="home" [routerLink]="['/home']"
+                        routerLinkActive="active">
             <ion-icon name="home"></ion-icon>
             <ion-label>Home</ion-label>
         </ion-tab-button>
-        <ion-tab-button tab="modules" [routerLink]="['/categories']">
+        <ion-tab-button tab="modules" [routerLink]="['/categories']" routerLinkActive="active">
             <ion-icon name="book"></ion-icon>
             <ion-label>Module</ion-label>
         </ion-tab-button>
-        <ion-tab-button tab="add" [routerLink]="['/meine-module']">
+        <ion-tab-button tab="add" [routerLink]="['/meine-module']" routerLinkActive="active">
             <ion-icon name="add-circle"></ion-icon>
             <ion-label>Hinzufügen</ion-label>
         </ion-tab-button>
-        <ion-tab-button tab="progress" [routerLink]="['/total-stats']">
+        <ion-tab-button tab="progress" [routerLink]="['/total-stats']" routerLinkActive="active">
             <ion-icon name="stats-chart"></ion-icon>
             <ion-label>Fortschritt</ion-label>
         </ion-tab-button>
-        <ion-tab-button tab="profile" [routerLink]="['/profile']">
+        <ion-tab-button tab="profile" [routerLink]="['/profile']" routerLinkActive="active">
             <ion-icon name="person"></ion-icon>
             <ion-label>Profil</ion-label>
         </ion-tab-button>
