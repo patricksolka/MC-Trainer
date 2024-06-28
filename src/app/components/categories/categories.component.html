@@ -49,12 +49,8 @@
         <ion-grid>
             <ion-row>
                 <ion-col size="6" *ngFor="let category of categories">
-                    <div class="card">
-                        <img
-                                class="categoryImage"
-                                [src]="category.imagePath"
-                                alt="{{ category.name }}"
-                                >
+                    <div class="card" (click)="categoryService.startQuiz(category.id)">
+                        <img class="categoryImage" [src]="category.imagePath" alt="{{ category.name }}">
 
                         <div class="text-overlay">{{ category.name }}</div>
                     </div>
