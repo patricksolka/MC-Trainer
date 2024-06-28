@@ -11,8 +11,14 @@
             <ion-label>Module</ion-label>
         </ion-tab-button>
         <ion-tab-button tab="add" [routerLink]="['/meine-module']" routerLinkActive="active">
-            <ion-icon name="add-circle"></ion-icon>
+            <div class="addCircle">
+
+            <ion-icon name="add-outline" class="addCircleIcon"></ion-icon>
+
+            </div>
+
             <ion-label class="addTab" >Hinzufügen</ion-label>
+
         </ion-tab-button>
         <ion-tab-button tab="progress" [routerLink]="['/total-stats']" routerLinkActive="active">
             <ion-icon name="stats-chart"></ion-icon>
