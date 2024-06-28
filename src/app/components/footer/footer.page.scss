@@ -1,23 +1,5 @@
 /* Light Mode Specific Styles */
 @media (prefers-color-scheme: light) {
-  :root {
-    --ion-text-color-dark: #000000; // Textfarbe im Light Mode (du kannst dies anpassen)
-    --ion-tab-bar-background-light: #ffffff; // Hintergrundfarbe des Tab-Bar im Light Mode
-    --ion-color-primary-light: #3880ff; // Primärfarbe für ausgewählte Elemente im Light Mode
-  }
-
-  .ios ion-footer {
-    // spezifische Styles für iOS im Light Mode
-  }
-
-  .md ion-footer {
-    // spezifische Styles für Material Design im Light Mode
-  }
-
-  ion-toolbar ion-icon {
-    color: #38388E; // kräftiges Lila für Icons in der Toolbar im Light Mode
-  }
-
   ion-footer {
     ion-tab-bar {
       background-color: transparent; // Hintergrundfarbe für den Tab-Bar im Light Mode
@@ -29,12 +11,14 @@
         --color-selected-hover: var(--ion-color-primary-light); // Farbe für Hover im Light Mode
 
         ion-icon {
-          color:   var(--ion-color-primary-tint);
+          // color:   var(--ion-color-primary-tint);
+          color:     var(--ion-color-medium);
         }
 
         ion-label {
           font-size: 12px; // Schriftgröße für Labels
-          color:   var(--ion-color-primary-tint);
+          // color:   var(--ion-color-primary-tint);  // Farbe des Text im Dark Mode
+          color:   var(--ion-color-medium);  // Farbe des Text im Dark Mode
         }
       }
     }
@@ -43,24 +27,6 @@
 
 /* Dark Mode Specific Styles */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --ion-text-color-dark: #ffffff; // Textfarbe im Dark Mode
-    --ion-tab-bar-background-dark: #333333; // Hintergrundfarbe des Tab-Bar im Dark Mode
-    --ion-color-primary-dark: #3880ff; // Primärfarbe für ausgewählte Elemente im Dark Mode
-  }
-
-  .ios ion-footer {
-    // spezifische Styles für iOS im Dark Mode
-  }
-
-  .md ion-footer {
-    // spezifische Styles für Material Design im Dark Mode
-  }
-
-  ion-toolbar ion-icon {
-    color: #ffffff; // Farbe der Icons im Dark Mode
-  }
-
   ion-footer {
     ion-tab-bar {
       background-color: transparent; // Hintergrundfarbe für den Tab-Bar im Dark Mode
@@ -77,7 +43,7 @@
 
         ion-label {
           font-size: 12px; // Schriftgröße für Labels
-          color: white;
+          color: white; // Farbe des Text im Dark Mode
         }
       }
     }
