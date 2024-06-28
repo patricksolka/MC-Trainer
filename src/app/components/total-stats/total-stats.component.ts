@@ -16,7 +16,11 @@ export class TotalStatsComponent implements OnInit {
     totalIncorrectAnswers: number = 0;
 
     constructor(private totalStatsService: TotalStatsService, private router: Router,
-                private alertController: AlertController) {}
+                private alertController: AlertController) {
+        this.totalStatsService.initializeStats().then(() => {
+            this.updateTotalStats();
+        });
+    }
 
     ngOnInit() {
         this.updateTotalStats();
@@ -26,14 +30,14 @@ export class TotalStatsComponent implements OnInit {
         this.totalCorrectAnswers = this.totalStatsService.getTotalCorrectAnswers();
         this.totalIncorrectAnswers = this.totalStatsService.getTotalIncorrectAnswers();
     }
-/*
-    resetTotalStats() {
-        this.totalStatsService.resetStats();
-        this.totalCorrectAnswers = 0;
-        this.totalIncorrectAnswers = 0;
-    }
+    /*
+        resetTotalStats() {
+            this.totalStatsService.resetStats();
+            this.totalCorrectAnswers = 0;
+            this.totalIncorrectAnswers = 0;
+        }
 
- */
+     */
 
     backToHome(){
         this.router.navigate(['/home']);
