@@ -1,0 +1,159 @@
+.progressCard:active {
+    transform: scale(0.95);
+    transition: transform 0.5s;
+}
+
+ion-toolbar {
+    --background: none;
+    --padding-start: 10px;
+
+}
+ion-toolbar ion-button{
+    justify-content: end;
+}
+ion-toolbar ion-icon{
+    width: 60px;
+    height: 60px;
+}
+
+h1{
+    font-size: 20px;
+    font-weight: 500;
+    .userName{
+        font-size: 24px;
+        font-weight: 800;
+    }
+}
+
+
+ion-content {
+    --background: #1F1F39;
+}
+
+
+ion-card-content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.medal {
+    width: 96px;
+    height: 96px;
+    float: right;
+   /* //position: static;*/
+}
+
+ion-card-content p {
+    font-weight: 300;
+    font-size: 14px;
+    color: var(--ion-color-light);
+}
+
+
+.progressCard {
+    --background: #2F2F42;
+    border-radius: 10px;
+    box-shadow: #0d0d0d 0px 10px 20px 0px;
+    display: flex;
+    flex-direction: column;
+}
+
+.achievementsButton{
+    width: 100px;
+    font-size: 12px;
+    text-transform: none;
+}
+
+.categoryImage {
+    width: 100%;
+    height: 80px;
+    border-radius: 10px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    object-fit: cover;
+    opacity: 0.5;
+}
+
+
+.text-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white; /* Passe die Farbe an, damit sie gut lesbar ist */
+    font-size: 20px;
+    font-weight: 500; /* Optional: für besseren Kontrast */
+    text-align: center;
+    pointer-events: none; /* Verhindert, dass der Text klickbar ist */
+}
+
+
+
+.categoryImage p {
+    position: absolute;
+    color: white;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+@media (min-width: 768px) {
+    .categoryImage {
+        height: 150px; /* Erhöhte Höhe für größere Bildschirme */
+    }
+}
+
+ion-col {
+    --padding: 0 !important;
+}
+
+.image-container {
+    position: relative;
+    width: 100%;
+    height: auto;
+}
+
+.card {
+    transition: transform 0.5s ease;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card:active {
+    transform: scale(0.95);
+}
+
+.header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 40px;
+
+}
+
+.entdecken {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.entdecken-button {
+    font-size: 10px;
+    --padding-start: 0;
+    --padding-end: 0;
+    display: flex;
+    align-items: center;
+    text-transform: none;
+    color: #3D5CFF; /* Optional: Adjust the color */
+}
+
+.favorites{
+    margin-top:  0.3rem;
+}
+
+
+
+
+
