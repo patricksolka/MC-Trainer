@@ -10,6 +10,7 @@ import { register as registerSwiperElements} from  'swiper/element/bundle';
 import {FooterPage} from "./app/components/footer/footer.page";
 //Firebase
 import {initializeApp, provideFirebaseApp} from '@angular/fire/app';
+import {getStorage, provideStorage} from "@angular/fire/storage";
 import {getFirestore, provideFirestore} from '@angular/fire/firestore';
 import {getAuth, provideAuth} from '@angular/fire/auth';
 import {IonicModule} from "@ionic/angular";
@@ -34,6 +35,7 @@ bootstrapApplication(AppComponent, {
         provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
         provideFirestore(() => getFirestore()),
         provideAuth(() => getAuth(), ),
+        provideStorage(() => getStorage()),
         provideHttpClient()
     ],
 });
