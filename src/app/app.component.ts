@@ -1,5 +1,11 @@
 import { Component } from '@angular/core';
-import { IonApp, IonRouterOutlet, NavController} from "@ionic/angular/standalone";
+import {
+    IonApp, IonContent,
+    IonFooter,
+    IonHeader,
+    IonRouterOutlet,
+    NavController
+} from "@ionic/angular/standalone";
 import { addIcons } from "ionicons";
 import {
     personOutline,
@@ -32,12 +38,15 @@ import {FooterPage} from "./components/footer/footer.page";
         HttpClientModule,
         IonRouterOutlet,
         IonApp,
-        FooterPage
+        FooterPage,
+        IonFooter,
+        IonHeader,
+        IonContent
     ],
     standalone: true
 })
 export class AppComponent {
-    questions: Question[] = [];
+    //questions: Question[] = [];
 
     constructor(private router: Router, private cardService: CardService) {
         addIcons({
@@ -66,5 +75,10 @@ export class AppComponent {
             this.questions = data;
         });
          */
+    }
+
+    isRoute():boolean{
+        const url = this.router.url;
+        return url.includes('login') || url.includes('register') || url.includes('onboarding');
     }
 }
