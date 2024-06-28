@@ -8,7 +8,18 @@
   justify-content: center;
   object-fit: cover;
   opacity: 0.5;
+ // transition: opacity 0.5s ease;
 }
+/*.categorySkeleton{
+  width: 100%;
+  height: 80px;
+  border-radius: 10px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  object-fit: cover;
+}*/
 
 .text-overlay {
   position: absolute;
@@ -33,6 +44,10 @@
   .categoryImage {
     height: 150px; /* Erhöhte Höhe für größere Bildschirme */
   }
+  .categorySkeleton{
+    height: 150px; /* Erhöhte Höhe für größere Bildschirme */
+
+  }
 }
 
 ion-col {
@@ -56,3 +71,13 @@ ion-col {
 .card:active {
   transform: scale(0.95);
 }
+
+/*.categoryImage {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.categoryImage.loaded {
+  opacity: 1;
+}*/
+
