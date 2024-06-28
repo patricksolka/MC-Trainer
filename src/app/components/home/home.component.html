@@ -1,5 +1,5 @@
 <ion-content class="ion-padding" *ngIf="!isLoading">
-    <ion-toolbar class="ion-margin-bottom">
+    <ion-toolbar class="ion-margin-bottom home-cover-profie">
         <ion-text slot="start">
             <h1>Hallo, <br> <span class="userName">{{ userName }}</span></h1>
         </ion-text>
@@ -50,7 +50,7 @@
         <ion-grid>
             <ion-row class="header-row">
                 <ion-col size="auto">
-                    <ion-text class="entdecken">Meine Module</ion-text>
+                    <ion-text class="entdecken">Deine Module</ion-text>
                 </ion-col>
                 <ion-col size="auto" class="align-end">
                     <ion-button fill="clear" [routerLink]="['/meine-module']" class="entdecken-button">
@@ -61,9 +61,9 @@
             </ion-row>
 
             <ng-container *ngIf="favCategories.length === 0" class="favorites">
-                <ion-item>
+                <ion-item class="home-box-none-module">
                     <ion-text class="ion-text-start">Du hast noch keine favorisierten Module 😢</ion-text>
-                    <div slot="end" [routerLink]="['/meine-module']" class="progress-button">
+                    <div slot="end" [routerLink]="['/meine-module']" class="progress-button-auto">
                         Module hinzufügen
                     </div>
                 </ion-item>

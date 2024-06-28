@@ -232,7 +232,8 @@ http://ionicframework.com/docs/theming/ */
     --ion-background-color: #1F1F39;
     --ion-text-color: #ffffff;
     --ion-item-background: #35354d;
-    --ion-toolbar-background: #35354d;
+    --ion-toolbar-background: transparentize();
+    // --ion-toolbar-background: #35354d;
     --ion-card-background: #35354d;
     --ion-border-color: #222222;
   }
