@@ -10,6 +10,16 @@
   opacity: 0.5;
  // transition: opacity 0.5s ease;
 }
+.categorySkeleton{
+  width: 100%;
+  height: 80px;
+  border-radius: 10px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  object-fit: cover;
+}
 
 .text-overlay {
   position: absolute;
@@ -33,6 +43,10 @@
 @media (min-width: 768px) {
   .categoryImage {
     height: 150px; /* Erhöhte Höhe für größere Bildschirme */
+  }
+  .categorySkeleton{
+    height: 150px; /* Erhöhte Höhe für größere Bildschirme */
+
   }
 }
 
