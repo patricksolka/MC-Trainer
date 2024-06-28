@@ -61,7 +61,7 @@ ion-card-content p {
 .progressCard {
   --background: var(--ion-card-background);
     border-radius: 10px;
-    box-shadow: #0d0d0d 0px 10px 20px 0px;
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
     display: flex;
     flex-direction: column;
 
@@ -136,7 +136,7 @@ ion-card-content p {
   justify-content: center;
   object-fit: cover;
   opacity: 0.5;
-  box-shadow: #0d0d0d 0px 10px 20px 0px;
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
 }
 
 .text-overlay {
@@ -173,41 +173,56 @@ ion-col {
   transition: transform 0.5s ease;
 }
 
-.card:hover {
+/*.card:hover {
   transform: scale(1.05);
-}
+}*/
 
 .card:active {
   transform: scale(0.95);
 }
 
-.header-row {
+.header-row-e {
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 40px;
+
+}
+
+.header-row-m {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+  margin-bottom: 5px;
 }
 
 .entdecken {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   color: var(--ion-text-color);
 }
 
-.entdecken-button {
-  font-size: 10px;
+.chevron{
+  width: 15px;
+  height: 15px;
+}
+
+.showAll {
+  font-size: 12px;
+  font-weight: 300;
   --padding-start: 0;
   --padding-end: 0;
   display: flex;
   align-items: center;
   text-transform: none;
   background-color: transparent;
-  color: var(--ion-color-primary-tint);
+  color: var(--ion-color-primary);
 }
 
 .favorites {
   margin-top: 0.3rem;
-  box-shadow: #0d0d0d 0px 10px 20px 0px;
+  //box-shadow: #0d0d0d 0px 10px 20px 0px;
 
 
 }
@@ -215,15 +230,22 @@ ion-col {
 .favoriteItem{
   border-radius: 10px;
   --border-color: none;
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
 }
 
-.home-box-none-module{
+/*.home-box-none-module{
   background-color: transparent;
   .ion-text-start{
     background-color: transparent;
     font-size: smaller;
     margin: 10px 0 10px 0;
   }
+}*/
+
+//TODO: Fix button color
+.meine-module {
+  text-transform: none;
+  --ion-color-contrast: var(--ion-color-primary);
 }
 
 /** MOBILE **/
