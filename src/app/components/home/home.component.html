@@ -37,14 +37,14 @@
 
 
     <ion-grid>
-        <ion-row class="header-row">
+        <ion-row class="header-row-e">
             <ion-col size="auto">
                 <ion-text class="entdecken">Entdecken</ion-text>
             </ion-col>
             <ion-col size="auto" class="align-end">
-                <ion-button fill="clear" [routerLink]="['/categories']" class="entdecken-button">
+                <ion-button fill="clear" [routerLink]="['/categories']" class="showAll">
                     Alle anzeigen
-                    <ion-icon slot="end" name="chevron-forward"></ion-icon>
+                    <ion-icon class="chevron" slot="end" name="chevron-forward"></ion-icon>
                 </ion-button>
             </ion-col>
         </ion-row>
@@ -64,37 +64,37 @@
 
     <div class="Module">
         <ion-grid>
-            <ion-row class="header-row">
+            <ion-row class="header-row-m">
                 <ion-col size="auto">
                     <ion-text class="entdecken">Meine Module</ion-text>
                 </ion-col>
                 <ion-col size="auto" class="align-end">
                     <ion-button fill="clear" [routerLink]="['/meine-module']"
-                                class="entdecken-button">
+                                class="showAll">
                         Alle anzeigen
-                        <ion-icon slot="end" name="chevron-forward"></ion-icon>
+                        <ion-icon class="chevron"  slot="end" name="chevron-forward"></ion-icon>
                     </ion-button>
                 </ion-col>
             </ion-row>
 
-            <ng-container *ngIf="favCategories.length === 0" class="favorites">
+           <!-- <ng-container *ngIf="favCategories.length === 0" class="favorites">
                 <ion-item>
                     <ion-text class="ion-text-start">Du hast noch keine favorisierten Module
                         😢</ion-text>
 
                         <ion-button slot="end"  [routerLink]="['/meine-module']"
                                     class="meine-module"
-                                     style="--background: #FF6905;"> Module hinzufügen</ion-button>
+                                     style="&#45;&#45;background: #FF6905;"> Module hinzufügen</ion-button>
 
                 </ion-item>
             </ng-container>
-               <!-- <ion-card *ngIf="favoriteModules.length === 0">Sie haben noch keine Module
+               &lt;!&ndash; <ion-card *ngIf="favoriteModules.length === 0">Sie haben noch keine Module
                     ausgewählt.
                     <ion-button routerLink="/meine-module" class="meine-module"
                                 style="&#45;&#45;background: #FF6905;"> Module hinzufügen
                     </ion-button>
-                </ion-card>-->
-            <ion-list class="favoriteItem"> <!--*ngIf="favCategories.length < 0" class="favorites"-->
+                </ion-card>&ndash;&gt;
+            <ion-list class="favoriteItem"> &lt;!&ndash;*ngIf="favCategories.length < 0" class="favorites"&ndash;&gt;
                 <ion-item-sliding  *ngFor="let category of favCategories">
                     <ion-item lines="none" (click)="categoryService.startQuiz(category.id)">
                         {{ category.name }}
@@ -105,7 +105,33 @@
                         </ion-item-option>
                     </ion-item-options>
                 </ion-item-sliding>
+            </ion-list>-->
+            <ion-list class="favoriteItem" *ngIf="favCategories.length > 0">
+                <ion-item-sliding *ngFor="let category of favCategories">
+                    <ion-item lines="none" (click)="categoryService.startQuiz(category.id)">
+                        {{ category.name }}
+                    </ion-item>
+                    <ion-item-options side="end">
+                        <ion-item-option color="danger" (click)="removeFav(category)">
+                            <ion-icon slot="icon-only" name="trash"></ion-icon>
+                        </ion-item-option>
+                    </ion-item-options>
+                </ion-item-sliding>
             </ion-list>
+
+
+                <!-- Hier wird die Card angezeigt, wenn favCategories leer ist -->
+                <ion-list class="favoriteItem" *ngIf="favCategories.length === 0">
+                        <ion-item lines="none">
+                        <ion-text >Du hast noch keine favorisierten Module
+                            😢</ion-text>
+
+                        <ion-button color="warning" slot="end"
+                                    [routerLink]="['/meine-module']"
+                                    class="meine-module"> Module hinzufügen</ion-button>
+                        </ion-item>
+                </ion-list>
+
         </ion-grid>
     </div>
 </ion-content>
