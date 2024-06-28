@@ -7,4 +7,5 @@ export class Category {
     questionCount?: number; // Anzahl der Fragen
     //lastViewed: number;
     imagePath?: string;
+   imageLoaded?: boolean = false;
 }

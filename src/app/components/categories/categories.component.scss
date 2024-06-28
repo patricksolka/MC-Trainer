@@ -8,6 +8,7 @@
   justify-content: center;
   object-fit: cover;
   opacity: 0.5;
+ // transition: opacity 0.5s ease;
 }
 
 .text-overlay {
@@ -56,3 +57,13 @@ ion-col {
 .card:active {
   transform: scale(0.95);
 }
+
+/*.categoryImage {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.categoryImage.loaded {
+  opacity: 1;
+}*/
+
