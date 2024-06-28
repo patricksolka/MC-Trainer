@@ -6,8 +6,6 @@
         </ion-button>
         <ion-text><h1 class="profile">Profil</h1></ion-text>
     </div>
-    <!-- Rest of your code -->
-
     <form class="ion-padding-top" [formGroup]="credentials"
           (ngSubmit)="updateProfile()">
         <ion-input
@@ -32,13 +30,6 @@
                 [readonly] = "true"
                 class="ion-margin-bottom">
         </ion-input>
-
-        <!--<ion-note slot="error"
-                  *ngIf="(email?.dirty || email?.touched) && email.errors">
-            Email falsch
-        </ion-note>-->
-
-
         <ion-input fill="outline"
                    type="password"
                    placeholder="Passwort"
@@ -46,14 +37,11 @@
                    class="ion-margin-bottom">
 
         </ion-input>
-        <!-- Change className later -->
         <ion-button class="ulp"  type="button"  (click)="updateProfile()" expand="block"
                     size="large" disabled>Update</ion-button>
     </form>
-    <!-- Change className later -->
     <ion-button class="ulp"  type="button" color="danger" (click)="logout()" expand="block"
                 size="large">Logout</ion-button>
-    <!-- Change className later -->
     <ion-button class="ulp"  type="button" color="danger" (click)="deleteProfile()" expand="block"
                 size="large">Profil löschen</ion-button>
 </ion-content>
