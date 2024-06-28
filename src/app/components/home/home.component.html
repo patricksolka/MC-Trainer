@@ -94,9 +94,9 @@
                                 style="&#45;&#45;background: #FF6905;"> Module hinzufügen
                     </ion-button>
                 </ion-card>-->
-            <ion-list> <!--*ngIf="favCategories.length < 0" class="favorites"-->
-                <ion-item-sliding *ngFor="let category of favCategories">
-                    <ion-item (click)="categoryService.startQuiz(category.id)">
+            <ion-list class="favoriteItem"> <!--*ngIf="favCategories.length < 0" class="favorites"-->
+                <ion-item-sliding  *ngFor="let category of favCategories">
+                    <ion-item lines="none" (click)="categoryService.startQuiz(category.id)">
                         {{ category.name }}
                     </ion-item>
                     <ion-item-options side="end">

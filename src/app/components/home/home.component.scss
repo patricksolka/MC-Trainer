@@ -207,6 +207,14 @@ ion-col {
 
 .favorites {
   margin-top: 0.3rem;
+  box-shadow: #0d0d0d 0px 10px 20px 0px;
+
+
+}
+
+.favoriteItem{
+  border-radius: 10px;
+  --border-color: none;
 }
 
 .home-box-none-module{
