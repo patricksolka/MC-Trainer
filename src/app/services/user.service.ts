@@ -134,7 +134,7 @@ export class UserService {
                     name: categoryName,
                     timestamp: new Date().getTime(),
                     questionCount: questionCount,
-                    isFavorite: true
+                    //isFavorite: true
                 });
 
                 console.log(`Category ${categoryId} added to favorites for user ${uid}`);
