@@ -254,3 +254,108 @@ ion-col {
     height: 150px;
   }
 }
+
+/*
+.progress-card {
+  background-color: #1d1d2b;
+  border-radius: 10px;
+  padding: 16px;
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.learned-today p, .my-courses p {
+  margin: 0;
+  color: #ffffff;
+}
+
+.learned-today h2 {
+  margin: 0;
+  font-size: 1.5em;
+}
+
+.my-courses p {
+  color: #4a90e2;
+  cursor: pointer;
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 10px;
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-top: 16px;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: #ff6f61;
+  transition: width 0.3s ease;
+}
+*/
+
+.progress-card {
+  background-color: #1d1d2b;
+  border-radius: 10px;
+  padding: 16px;
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px; /* Adjust this margin as needed */
+}
+
+.learned-today {
+  display: flex;
+  flex-direction: column;
+}
+
+.learned-today p {
+  margin: 0;
+  color: #ffffff;
+}
+
+.learned-today h2 {
+  margin: 0;
+  font-size: 1.5em;
+}
+
+.my-courses p {
+  justify-content: end;
+  margin: 0;
+  color: #4a90e2;
+  cursor: pointer;
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 10px;
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-top: 16px; /* Adjust this margin as needed */
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: #ff6f61;
+  transition: width 0.3s ease;
+}
+
+
+
