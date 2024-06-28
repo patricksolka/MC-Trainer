@@ -1,0 +1,25 @@
+ :root {
+    --ion-text-color-dark: #ffffff; // Textfarbe im Dark Mode
+    --ion-tab-bar-background-dark: #333333; // Hintergrundfarbe des Tab-Bar im Dark Mode
+    --ion-color-primary: #3880ff; // Primärfarbe für ausgewählte Elemente im Dark Mode
+  }
+
+  ion-footer {
+    ion-tab-bar {
+      --ion-tab-bar-background: var(--ion-tab-bar-background-dark); // Dunkler Hintergrund für den Tab-Bar
+
+      ion-tab-button {
+        color: var(--ion-text-color-dark); // Textfarbe im Dark Mode
+        --color-selected: var(--ion-color-primary); // Farbe für ausgewählten Tab im Dark Mode
+        --color-selected-hover: var(--ion-color-primary); // Farbe für Hover im Dark Mode
+
+        ion-icon {
+          --ion-color: var(--ion-text-color-dark); // Farbe der Icons im Dark Mode
+        }
+
+        ion-label {
+          font-size: 12px; // Schriftgröße für Labels
+        }
+      }
+    }
+  }
