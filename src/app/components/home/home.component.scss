@@ -10,6 +10,8 @@ $secondary-color: var(--ion-color-secondary, $secondary-color-fallback);
 
 ion-toolbar {
   --padding-start: 10px;
+  --background: var(--ion-background-color);
+
 }
 
 ion-toolbar ion-button {
@@ -40,13 +42,14 @@ ion-content {
 ion-card-content {
   display: flex;
   justify-content: space-between;
+  align-content: start;
 }
 
 .medal {
-  width: 96px;
-  height: 96px;
+  width: 75px;
+  height: 75px;
   float: right;
-  position: static;
+
 }
 
 ion-card-content p {
@@ -57,11 +60,15 @@ ion-card-content p {
 
 .progressCard {
   --background: var(--ion-card-background);
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
+    border-radius: 10px;
+    box-shadow: #0d0d0d 0px 10px 20px 0px;
+    display: flex;
+    flex-direction: column;
+
+
 }
 
+/*
 .progress-button {
   display: inline-block;
   width: 100px;
@@ -86,6 +93,7 @@ ion-card-content p {
     cursor: not-allowed;
   }
 }
+*/
 
 .progress{
   width: auto;
@@ -94,7 +102,7 @@ ion-card-content p {
   font-size: x-large;
 }
 
-.progress-button-auto {
+/*.progress-button-auto {
   display: inline-block;
   width: auto;
   font-size: 12px;
@@ -116,7 +124,7 @@ ion-card-content p {
     background-color: lighten($button-background, 30%);
     cursor: not-allowed;
   }
-}
+}*/
 
 .categoryImage {
   width: 100%;
@@ -128,6 +136,7 @@ ion-card-content p {
   justify-content: center;
   object-fit: cover;
   opacity: 0.5;
+  box-shadow: #0d0d0d 0px 10px 20px 0px;
 }
 
 .text-overlay {
@@ -151,6 +160,7 @@ ion-card-content p {
 
 ion-col {
   --padding: 0 !important;
+
 }
 
 .image-container {
