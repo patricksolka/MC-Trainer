@@ -47,7 +47,7 @@ import {CardComponent} from "../card/card.component";
 export class HomeComponent {
     public userName: string = localStorage.getItem('userName') || 'User';
     public categories: Category[] = [];
-    public isLoading: boolean = false;
+    public loaded: boolean = false;
     public favCategories: { id: string; name: string }[] = [];
 
 
@@ -83,11 +83,11 @@ export class HomeComponent {
         try {
             this.categories = await this.categoryService.getPreviewCategories();
             //await loading.dismiss();
-            this.isLoading = false;
+            //this.loaded = false;
         } catch (e) {
             console.error('Error fetching preview categories:', e);
            // await loading.dismiss();
-            this.isLoading = false;
+            //this.loaded = true;
         }
     }
 
