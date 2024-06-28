@@ -77,8 +77,5 @@ export class AppComponent {
          */
     }
 
-    isRoute():boolean{
-        const url = this.router.url;
-        return url.includes('login') || url.includes('register') || url.includes('onboarding');
-    }
+
 }
