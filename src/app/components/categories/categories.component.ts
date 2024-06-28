@@ -1,12 +1,13 @@
 // categories.component.ts
 import {Component, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import {Category} from '../../models/categories.model';
 import {CategoryService} from '../../services/category.service';
 import {Router, RouterLink} from '@angular/router';
 import {FormBuilder, FormGroup, FormsModule} from '@angular/forms';
 import {FooterPage} from "../footer/footer.page";
-import {from, Observable} from "rxjs";
+import {from, Observable, tap} from "rxjs";
+import {ChangeDetectorRef} from "@angular/core";
 import {
     IonButton,
     IonButtons,
@@ -14,7 +15,7 @@ import {
     IonContent, IonGrid,
     IonHeader, IonIcon,
     IonList,
-    IonRow, IonSearchbar, IonText, IonTitle,
+    IonRow, IonSearchbar, IonSkeletonText, IonText, IonTitle,
     IonToolbar
 } from "@ionic/angular/standalone";
 
@@ -24,38 +25,76 @@ import {
     templateUrl: './categories.component.html',
     styleUrls: ['./categories.component.scss'],
     standalone: true,
-    imports: [CommonModule, FormsModule, RouterLink, FooterPage, IonCol, IonRow, IonContent, IonHeader, IonToolbar, IonList, IonButtons, IonButton, IonTitle, IonIcon, IonGrid, IonSearchbar, IonText]
+    imports: [CommonModule, FormsModule, RouterLink, FooterPage, IonCol, IonRow, IonContent, IonHeader, IonToolbar, IonList, IonButtons, IonButton, IonTitle, IonIcon, IonGrid, IonSearchbar, IonText, IonSkeletonText, NgOptimizedImage]
 })
-export class CategoriesComponent implements OnInit {
+export class CategoriesComponent {
     //TODO: Fix Observable vs Promise handling
     //categories$: Observable<Category[] | null>;
-    categories: Observable<Category[] | null>;
+    categories: Category[] | null;
     searchBarVisible = false;
     searchText = '';
-    newCategoryName: string = '';
-    categoryForm: FormGroup;
+    /* newCategoryName: string = '';
+     categoryForm: FormGroup;*/
+    public loaded: boolean = false;
 
-    constructor(public categoryService: CategoryService, private router: Router, private fb: FormBuilder) {
+    //public imageLoaded: boolean;
+
+    constructor(public categoryService: CategoryService, private router: Router, private fb: FormBuilder, private cdr: ChangeDetectorRef) {
         this.loadCategories();
-        this.categoryForm = this.fb.group({
-            name: ['']
-        });
     }
 
-    ngOnInit(): void {
-        //this.loadCategories();
+    /* async loadCategories(): Promise<void> {
+         //this.loaded = false; // Start loading
+         console.log('Ladezustand1', this.loaded);
+         try {
+             this.categories = await this.categoryService.getCategories();
+             console.log('Geladene Kategorien:', this.categories); // Protokollierung hinzufügen
+             // Assuming the service updates imagesLoaded:
+             //this.loaded = this.categories.every(category => category.imageLoaded); // Check if
+             // all images loaded
+             this.loaded = true; // End loading
+             console.log('Ladezustand2', this.loaded);
+         } catch (error) {
+             console.error('Error loading categories:', error);
+             // Handle error
+         }
+     }*/
+
+    async loadCategories(): Promise<void> {
+        console.log('Ladezustand1', this.loaded);
+        try {
+            this.loaded = false;
+            this.categories = await this.categoryService.getCategories();
+            this.categories.forEach(category => category.imageLoaded = false);
+
+            const imageLoaded = this.categories.map(category =>
+                new Promise<void>((resolve, reject) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        category.imageLoaded = true;
+                        resolve();
+                    };
+                    img.onerror = (error) => {
+                        console.error(`Fehler beim Laden des Bildes für Kategorie ${category.id}:`, error);
+                        reject(error);
+                    };
+                    img.src = category.imagePath;
+                })
+            );
+
+            await Promise.all(imageLoaded);
+
+            if (imageLoaded) {
+                this.loaded = true;
+                console.log('Ladezustand2', this.loaded);
+            }
+        } catch (error) {
+            console.error('Error loading categories:', error);
+            this.loaded = true;
+        }
     }
 
-    loadCategories(): void {
-        this.categories = from(this.categoryService.getCategories());
-    }
 
-    /*loadCategories(): void {
-        this.categories$ = this.categoryService.getAllCategories();
-        this.categories$.subscribe(categories => {
-            console.log('Geladene Kategorien:', categories); // Protokollierung hinzufügen
-        });
-    }*/
 
     toggleSearch() {
         this.searchBarVisible = !this.searchBarVisible;
@@ -78,7 +117,6 @@ export class CategoriesComponent implements OnInit {
             // Handle invalid categoryId case, e.g., show error message or navigate to a default route
         }
     }
-
 
 
     /*addCategory(newCategoryName: string): void {
@@ -104,4 +142,15 @@ export class CategoriesComponent implements OnInit {
         return category.questionCount && category.questionCount > 0;
     }
 
+    /*ionImgDidLoad(categoryId: string) {
+        //this.loadCategories();
+    console.log('Image loaded');
+    const category = this.categories.find(c => c.id === categoryId);
+    if (category) {
+        category.imageLoaded = true;
+        this.imageLoaded = true;
+    }
+    }*/
 }
+
+

@@ -32,43 +32,35 @@
         </ion-toolbar>
     </ion-header>
 
-    <!--<ion-list>
-        <ng-container *ngFor="let category of categories | async">
-           &lt;!&ndash; <ng-container *ngIf="categoryHasQuestions(category)">&ndash;&gt;
-               &lt;!&ndash; <ion-item (click)="selectCategory(category.id)">
-                    {{ category.name }} ({{ category.questionCount }})
-                </ion-item>&ndash;&gt;
-                <div class="image-container">
-                    <img class="categoryImage" [src]="category.imagePath"
-                         alt="{{ category.name }}">
-                    <div class="text-overlay">{{ category.name }}</div>
-                </div>
+<ng-container *ngIf="!loaded; else content">
+<ion-grid>
+    <ion-row>
+        <ion-col size="6" *ngFor="let category of categories">
+            <div class="card">
+                <ion-skeleton-text class="categoryImage" [animated]="true" >
+                </ion-skeleton-text>
+            </div>
+        </ion-col>
+    </ion-row>
+</ion-grid>
 
-            &lt;!&ndash;</ng-container>&ndash;&gt;
-        </ng-container>
-    </ion-list>-->
+</ng-container>
+    <ng-template #content>
+        <ion-grid>
+            <ion-row>
+                <ion-col size="6" *ngFor="let category of categories">
+                    <div class="card">
+                        <img
+                                class="categoryImage"
+                                [src]="category.imagePath"
+                                alt="{{ category.name }}"
+                                >
 
-    <ion-grid>
-        <ion-row class="preview">
-            <ion-col size="6" *ngFor="let category of categories | async">
-                <div class="card" (click)="categoryService.startQuiz(category.id)">
-                    <div class="image-container">
-                        <img class="categoryImage" [src]="category.imagePath"
-                             alt="{{ category.name }}">
                         <div class="text-overlay">{{ category.name }}</div>
                     </div>
-                </div>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
-
-  <!--  <ion-item>
-        <ion-label position="floating">Neue Kategorie</ion-label>
-        <ion-input [(ngModel)]="newCategoryName" type="text"></ion-input>
-    </ion-item>
-    <ion-button expand="full" (click)="addCategory(newCategoryName)">Kategorie hinzufügen</ion-button>-->
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ng-template>
 </ion-content>
-
-
-
 <app-footer></app-footer>

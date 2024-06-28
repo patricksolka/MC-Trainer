@@ -16,7 +16,7 @@ import {
     orderBy, onSnapshot, getDocs, Unsubscribe
 } from '@angular/fire/firestore';
 import { Category } from '../models/categories.model';
-//import { Observable } from 'rxjs';
+
 import {Router} from "@angular/router";
 import {Observable} from "rxjs";
 import {UserService} from "./user.service";
