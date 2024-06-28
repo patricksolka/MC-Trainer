@@ -1,24 +1,75 @@
+.addTab {
+  position: relative;
+  top: 5px;
+  //background-color: var(--ion-background-color-test);
+  //overflow: hidden; /* Verhindert Überläufe */
+  //border-radius: 15px 15px 0 0; /* Rundet die oberen Ecken ab */
+  // Textfarbe im Dark Mode
+}
+
+ion-tab-button.active ion-icon, ion-tab-button.active ion-label {
+  color: var(--ion-color-primary); // Farbe für ausgewählten Tab im Dark Mode
+}
+
+ion-label {
+  font-size: 12px;
+  font-weight: 400;
+  margin-top: 10px;
+}
+
+ion-icon {
+  width: 25px;
+  height: 25px;
+}
+
+.addCircle {
+  margin-top: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  background-color: rgba(var(--ion-color-primary-rgb), 0.05);
+
+}
+
+.addCircleIcon {
+  width: 35px;
+  height: 35px;
+  color: var(--ion-color-primary);
+}
+
+ion-tab-button {
+  --ripple-color: transparent;
+  overflow: visible;
+}
+
+ion-tab-bar {
+  border-radius: 15px 15px 0 0;
+  height: 100px;
+  box-shadow: var(--box-shadow);
+}
+
+
 /* Light Mode Specific Styles */
 @media (prefers-color-scheme: light) {
   ion-footer {
     ion-tab-bar {
-      background-color: transparent; // Hintergrundfarbe für den Tab-Bar im Light Mode
+      background-color: transparent;
 
       ion-tab-button {
         background-color: transparent;
-        color: var(--ion-text-color-dark); // Textfarbe im Light Mode
-        --color-selected: var(--ion-color-primary-light); // Farbe für ausgewählten Tab im Light Mode
-        --color-selected-hover: var(--ion-color-primary-light); // Farbe für Hover im Light Mode
+        color: var(--ion-text-color-dark);
+        --color-selected: var(--ion-color-primary-light);
+        --color-selected-hover: var(--ion-color-primary-light);
 
         ion-icon {
-          // color:   var(--ion-color-primary-tint);
-          color:     var(--ion-color-medium);
+          color: var(--ion-color-medium);
         }
 
         ion-label {
-          font-size: 12px; // Schriftgröße für Labels
-          // color:   var(--ion-color-primary-tint);  // Farbe des Text im Dark Mode
-          color:   var(--ion-color-medium);  // Farbe des Text im Dark Mode
+          color: var(--ion-color-medium);
         }
       }
     }
@@ -30,46 +81,29 @@
   ion-footer {
 
     ion-tab-bar {
-      background-color: var(--ion-background-color-test);
-      //background-color: transparent; // Hintergrundfarbe für den Tab-Bar im Dark Mode
-     /* border-top-left-radius: 15px;
-      border-top-right-radius: 15px;*/
-      //overflow: hidden; /* Verhindert Überläufe */
-      border-radius: 15px 15px 0 0; /* Rundet die oberen Ecken ab */
-      box-shadow: var(--box-shadow); // Schatten für den Tab-Bar im Dark Mode
+      background-color: var(--ion-background-color-md);
+
       border-color: transparent;
 
-
-
       ion-tab-button {
-        overflow: visible;
         background-color: transparent;
         color: var(--ion-text-color); // Textfarbe im Dark Mode
 
 
-
         ion-label {
-          font-size: 12px; // Schriftgröße für Labels
           color: white; // Farbe des Text im Dark Mode
-         margin-top: 10px;
         }
 
 
       }
 
-      ion-tab-button.active ion-icon, ion-tab-button.active ion-label {
-        color: var(--ion-color-primary); // Farbe für ausgewählten Tab im Dark Mode
-      }
+      /* ion-tab-button.active ion-icon, ion-tab-button.active ion-label {
+         color: var(--ion-color-primary); // Farbe für ausgewählten Tab im Dark Mode
+       }*/
     }
   }
 }
 
-.tabBar {
-  //background-color: var(--ion-background-color-test);
-  //overflow: hidden; /* Verhindert Überläufe */
-  //border-radius: 15px 15px 0 0; /* Rundet die oberen Ecken ab */
- // Textfarbe im Dark Mode
-}
 
 
 
