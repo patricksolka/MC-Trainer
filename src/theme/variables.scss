@@ -6,12 +6,12 @@ http://ionicframework.com/docs/theming/ */
 /* Light Mode Variables */
 :root {
   /* Primary Color */
-  --ion-color-primary: #6200ea; /* ein kräftigeres Lila für mehr Kontrast im Lichtmodus */
+  --ion-color-primary: rgba(129, 42, 239, 0.56); /* ein kräftigeres Lila für mehr Kontrast im Lichtmodus */
   --ion-color-primary-rgb: 98, 0, 234;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: #5b00d4;
-  --ion-color-primary-tint: #7c1aff;
+  --ion-color-primary-shade: rgba(108, 26, 211, 0.56);
+  --ion-color-primary-tint: rgba(96, 32, 177, 0.56);
 
   /* Secondary Color */
   --ion-color-secondary: #03a9f4; /* ein heller Blauton */
@@ -181,7 +181,7 @@ http://ionicframework.com/docs/theming/ */
     --ion-background-color: #e0e0ff; /* heller lila Hintergrund */
     --ion-text-color: #1F1F39; /* dunkler Text */
     --ion-item-background: #f8f8ff; /* sehr helles Lila für Items */
-    --ion-toolbar-background: #e0e0ff; /* heller lila Hintergrund für Toolbar */
+    --ion-toolbar-background: transparent; /* heller lila Hintergrund für Toolbar */
     --ion-card-background: #ffffff; /* weißer Hintergrund für Karten */
     --ion-border-color: #ddddff; /* helles lila für Border */
   }
@@ -221,10 +221,9 @@ http://ionicframework.com/docs/theming/ */
   }
 
   ion-toolbar ion-icon {
-    color: #38388E; /* kräftiges Lila für Icons in der Toolbar */
+    color: var(--ion-color-primary-tint); /* kräftiges Lila für Icons in der Toolbar */
   }
 }
-
 
 /* Dark Mode Specific Styles */
 @media (prefers-color-scheme: dark) {
@@ -276,10 +275,11 @@ http://ionicframework.com/docs/theming/ */
       color: #ffffff;
     }
 }
-
+/*
 .achievementsButton,
 .stats-button,
 .meine-module {
   --background: var(--ion-button-background);
   --color: var(--ion-button-color);
 }
+*/

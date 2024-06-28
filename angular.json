@@ -31,7 +31,7 @@
                 "output": "assets"
               }
             ],
-            "styles": ["src/global.scss", "src/theme/variables.scss"],
+            "styles": ["src/global.scss", "src/theme/variables.scss", "src/app/components/footer/footer.page.scss"],
             "scripts": []
           },
           "configurations": {
