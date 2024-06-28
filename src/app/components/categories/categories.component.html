@@ -6,9 +6,6 @@
             <ion-button (click)="toggleSearch()">
                 <ion-icon slot="icon-only" name="search-outline"></ion-icon>
             </ion-button>
-            <ion-button (click)="shareRecords()">
-                <ion-icon slot="icon-only" name="share-social-outline"></ion-icon>
-            </ion-button>
         </ion-buttons>
     </ion-toolbar>
 
@@ -17,8 +14,8 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-    <ion-header collapse="condense">
+<ion-content class="ion-padding">
+   <!-- <ion-header collapse="condense">
         <ion-toolbar>
             <ion-buttons slot="start">
                 <ion-button (click)="navigateHome()">
@@ -30,7 +27,7 @@
                 <ion-icon name="search-outline"></ion-icon>
             </ion-buttons>
         </ion-toolbar>
-    </ion-header>
+    </ion-header>-->
 
 <ng-container *ngIf="!loaded; else content">
 <ion-grid>
