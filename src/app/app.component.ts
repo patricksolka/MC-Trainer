@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {
     IonApp, IonContent,
     IonFooter,
@@ -6,7 +6,7 @@ import {
     IonRouterOutlet,
     NavController
 } from "@ionic/angular/standalone";
-import { addIcons } from "ionicons";
+import {addIcons} from "ionicons";
 import {
     personOutline,
     personCircle,
@@ -25,11 +25,12 @@ import {
     searchOutline,
     trash, search
 } from "ionicons/icons";
-import { Router } from "@angular/router";
-import { HttpClientModule } from "@angular/common/http";
-import { CardService } from './services/card.service';
-import { Question } from './models/_question.model';
+import {Router} from "@angular/router";
+import {HttpClientModule} from "@angular/common/http";
+import {CardService} from './services/card.service';
+import {Question} from './models/_question.model';
 import {FooterPage} from "./components/footer/footer.page";
+import {NgIf} from "@angular/common";
 
 @Component({
     selector: 'app-root',
@@ -41,11 +42,16 @@ import {FooterPage} from "./components/footer/footer.page";
         FooterPage,
         IonFooter,
         IonHeader,
-        IonContent
+        IonContent,
+        NgIf
     ],
     standalone: true
 })
+
 export class AppComponent {
+
+    public showFooter: boolean;
+
     //questions: Question[] = [];
 
     constructor(private router: Router, private cardService: CardService) {
@@ -75,7 +81,13 @@ export class AppComponent {
             this.questions = data;
         });
          */
+
+        //TODO: Beim Quiz evtl verhalten vom footer anpassen
+        this.router.events.subscribe(() => {
+            this.showFooter = !this.router.url.includes('/login') &&
+                !this.router.url.includes('/register') &&
+                !this.router.url.includes('/cards/') &&
+                !this.router.url.includes('/onboarding');
+        });
     }
-
-
 }

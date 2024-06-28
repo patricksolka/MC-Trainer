@@ -69,8 +69,7 @@ export const routes: Routes = [
   },
   {
     path: 'footer',
-    loadComponent: () => import('./components/footer/footer.page').then( m => m.FooterPage),
-    ...canActivate(redirectUnauthorizedToOnboarding)
+    loadComponent: () => import('./components/footer/footer.page').then( m => m.FooterPage)
 
   },
   {
