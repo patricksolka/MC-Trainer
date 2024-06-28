@@ -52,7 +52,6 @@ export class AppComponent {
 
     public showFooter: boolean;
 
-    //questions: Question[] = [];
 
     constructor(private router: Router, private cardService: CardService) {
         addIcons({
@@ -75,19 +74,11 @@ export class AppComponent {
             search
         });
 
-        // Lade die Fragen beim Initialisieren der Komponente
-        /*
-        this.cardService.getQuestions().subscribe(data => {
-            this.questions = data;
-        });
-         */
-
         //TODO: Beim Quiz evtl verhalten vom footer anpassen
+        const excludedRoutes = ['/login', '/register', '/cards/', '/onboarding'];
+
         this.router.events.subscribe(() => {
-            this.showFooter = !this.router.url.includes('/login') &&
-                !this.router.url.includes('/register') &&
-                !this.router.url.includes('/cards/') &&
-                !this.router.url.includes('/onboarding');
+            this.showFooter = !excludedRoutes.some(route => this.router.url.includes(route));
         });
     }
 }
