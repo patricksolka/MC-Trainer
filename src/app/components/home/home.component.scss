@@ -1,12 +1,24 @@
 $secondary-color-fallback: #3880ff; // Beispiel für eine sekundäre Farbe
-$button-background: #FF6905; // Orange Farbe für den Button
+$button-background-fallback: #FF6905; // Orange Farbe für den Button
 
 :root {
+  --ion-color-secondary: #03a9f4;
+  --button-background: #ffeb3b;
+}
+
+[data-theme="dark"] {
   --ion-color-secondary: #3880ff;
   --button-background: #FF6905;
 }
 
 $secondary-color: var(--ion-color-secondary, $secondary-color-fallback);
+$button-background: var(--button-background, $button-background-fallback);
+
+@function dynamic-color($variable, $fallback) {
+  @return if(variable-exists($variable), $variable, $fallback);
+}
+
+$actual-button-background: dynamic-color(--button-background, $button-background-fallback);
 
 ion-toolbar {
   --padding-start: 10px;
@@ -20,7 +32,6 @@ ion-toolbar ion-button {
 ion-toolbar ion-icon {
   width: 60px;
   height: 60px;
-  color: var(--ion-color-warning);
 }
 
 h1 {
@@ -66,10 +77,10 @@ ion-card-content p {
 
 .progress-button {
   display: inline-block;
-  width: 100px;
+  width: auto;
   font-size: 12px;
   text-transform: none;
-  background-color: $button-background; // Orange Farbe für den Button
+  background-color: $actual-button-background; // Verwende die tatsächliche Farbe
   color: white;
   border-radius: 10px;
   padding: 10px 20px;
@@ -79,11 +90,11 @@ ion-card-content p {
   text-decoration: none;
 
   &:hover {
-    background-color: darken($button-background, 10%);
+    background-color: darken($actual-button-background, 10%);
   }
 
   &:disabled {
-    background-color: lighten($button-background, 30%);
+    background-color: lighten($actual-button-background, 30%);
     cursor: not-allowed;
   }
 }
@@ -163,8 +174,6 @@ ion-col {
   text-transform: none;
   background-color: transparent;
   color: var(--ion-color-secondary);
-/*  background-color: $secondary-color-fallback; // Fallback-Farbe für SCSS */
-/*  color: lighten($secondary-color-fallback, 10%); // Nutzung der Fallback-Farbe */
 }
 
 .favorites {
