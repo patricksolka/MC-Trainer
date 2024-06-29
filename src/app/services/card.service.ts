@@ -1,29 +1,26 @@
 // card.service.ts
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import {
-  addDoc,
+  Firestore,
   collection,
   collectionData,
-  CollectionReference,
-  deleteDoc,
   doc,
-  docData,
-  DocumentData,
-  Firestore,
-  getDoc,
-  getDocs,
-  query,
-  setDoc,
-  Timestamp,
+  addDoc,
   updateDoc,
-  where
+  deleteDoc,
+  docData,
+  query,
+  where,
+  CollectionReference,
+  getDoc, setDoc, DocumentData, getDocs, Timestamp, onSnapshot, Unsubscribe
 } from '@angular/fire/firestore';
-import {Card} from '../models/card.model';
-import {combineLatest, Observable} from 'rxjs';
-import {Category} from '../models/categories.model';
-import {map, switchMap} from 'rxjs/operators';
+import { Card } from '../models/card.model';
+import {Observable, combineLatest} from 'rxjs';
+import { Category } from '../models/categories.model';
+import { map, switchMap } from 'rxjs/operators';
 import {CategoryService} from "./category.service";
 import {AuthService} from "./auth.service";
+
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +28,7 @@ import {AuthService} from "./auth.service";
 export class CardService {
   private cardsCollection: CollectionReference<Card>;
   private userCollection: CollectionReference<DocumentData>;
+  private subscription: Unsubscribe | null = null;
 
   constructor(private firestore: Firestore, private categoryService: CategoryService,private authService: AuthService) {
     this.cardsCollection = collection(firestore, 'cards') as CollectionReference<Card>;
@@ -91,8 +89,9 @@ export class CardService {
 
     if (userSnap.exists()) {
       const data = userSnap.data();
-      const counter = data?.['counter'] || 0;
-      return counter;
+      /*const counter = data?.['counter'] || 0;
+      return counter;*/
+      return data?.['counter'] || 0;
     } else {
       await setDoc(userDoc, { counter: 0 });
       return 0;
@@ -139,20 +138,59 @@ export class CardService {
     }
   }
 
-  async getLearningSessions(uid: string): Promise<DocumentData[]> {
+  /*async getLearningSessions(uid: string): Promise<DocumentData[]> {
     try {
       //const userRef = doc(this.firestore, `users/${userId}`);
-
       const learningSessionsRef = collection(this.firestore, `users/${uid}/learningSessions`);
       const snapshot = await getDocs(learningSessionsRef);
-      return snapshot.docs.map(doc => {
-        const data = doc.data();
-        return data['duration'];
-      });
+      return snapshot.docs.map(doc => doc.data());
 
     } catch (error) {
       console.error('Error fetching learning sessions:', error);
       return [];
+    }
+  }*/
+  // als Promise
+ /* async getLearningSessions(uid: string): Promise<DocumentData[]> {
+    const learningSessionsRef = collection(this.firestore, `users/${uid}/learningSessions`);
+
+    // Einmaliges Abrufen der Daten
+    const docSnap = await getDocs(learningSessionsRef);
+    const result = docSnap.docs.map(doc => doc.data());
+
+    // Hinzufügen eines Snapshot-Listeners
+    this.subscription = onSnapshot(learningSessionsRef, (snapshot) => {
+      const duration: number[] = snapshot.docs.map(doc => doc.data()['duration']);
+      console.log('balbaa', duration); // Hier können Sie die erhaltenen Daten weiterverarbeiten' oder speichern
+    });
+
+    return result;
+  }*/
+
+  //als Observable
+  getLearningSessions(uid: string): Observable<DocumentData[]> {
+    return new Observable<DocumentData[]>(observer => {
+      const learningSessionsRef = collection(this.firestore, `users/${uid}/learningSessions`);
+
+      // Einmaliges Abrufen der Daten
+      getDocs(learningSessionsRef).then(docSnap => {
+        const result = docSnap.docs.map(doc => doc.data());
+        observer.next(result); // Emit the initial data
+      });
+
+      // Hinzufügen eines Snapshot-Listeners
+      this.subscription = onSnapshot(learningSessionsRef, (snapshot) => {
+        const data: DocumentData[] = snapshot.docs.map(doc => doc.data());
+        observer.next(data); // Emit the updated data
+      });
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription();
+      this.subscription = null;
+      console.log('unsubscribe from learning sessions');
     }
   }
 }

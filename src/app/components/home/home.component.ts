@@ -29,7 +29,7 @@ import {
     IonLabel,
     IonList,
     IonRadio,
-    IonRow,
+    IonRow, IonSkeletonText,
     IonText,
     IonToolbar
 } from "@ionic/angular/standalone";
@@ -46,9 +46,9 @@ import DocumentData = firestore.DocumentData;
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.scss'],
     standalone: true,
-    imports: [CommonModule, RouterModule, FormsModule, FooterPage, IonButton, IonContent, IonIcon, IonText, IonImg, IonCard, IonCardContent, IonGrid, IonRow, IonCol, IonList, IonItemSliding, IonItem, IonItemOptions, IonItemOption, IonToolbar, IonButtons, IonHeader, IonLabel, IonRadio, IonCardTitle]
+    imports: [CommonModule, RouterModule, FormsModule, FooterPage, IonButton, IonContent, IonIcon, IonText, IonImg, IonCard, IonCardContent, IonGrid, IonRow, IonCol, IonList, IonItemSliding, IonItem, IonItemOptions, IonItemOption, IonToolbar, IonButtons, IonHeader, IonLabel, IonRadio, IonCardTitle, IonSkeletonText]
 })
-export class HomeComponent {
+export class HomeComponent  {
     public userName: string = localStorage.getItem('userName') || 'User';
     public categories: Category[] = [];
     public loaded: boolean = false;
@@ -70,8 +70,18 @@ export class HomeComponent {
         private cardService: CardService
 
     ) {
-        this.fetchProgress();
-        this.fetchPreview();
+        this.auth.onAuthStateChanged(user =>{
+            if (user){
+
+                console.log('hfjgfjgfjjf changed', user.uid);
+                this.userService.getUser(user.uid).then(user => {
+                    localStorage.setItem('userName', user.firstName);
+                });
+                this.fetchProgress();
+                this.fetchPreview();
+            }
+        });
+
 
 
         //this.loadFav();
@@ -83,6 +93,8 @@ export class HomeComponent {
             this.timerSubscription.unsubscribe();
         }
     }*/
+
+
     //TODO: LoadingController vorerst nicht nötig
     async fetchPreview() {
         /*this.isLoading = true;
@@ -125,17 +137,37 @@ export class HomeComponent {
         }
     }
 
-    async fetchProgress(){
+    //als promise
+   /* async fetchProgress(){
+        this.loaded = false;
         const currentUser = this.auth.currentUser;
         if (currentUser) {
-            const learningSessions: DocumentData[] = await this.cardService.getLearningSessions(currentUser.uid);
-            this.learnedMinutes = learningSessions.reduce((total, session) => total + session['duration'], 0 );
+            const learningSessions: DocumentData[] = await
+             this.cardService.getLearningSessions(currentUser.uid);
+            //this.learnedMinutes = learningSessions.reduce((total, session) => total +
+            // session['duration'], 0 );
+            this.learnedMinutes = Math.floor(learningSessions.reduce((total, session) => total + Math.max(1, session['duration']), 0 ));
             console.log('learnedMinutes', this.learnedMinutes);
+            this.loaded = true;
         }
 
+    }*/
+
+    //als observable
+    async fetchProgress(){
+        this.loaded = false;
+        const currentUser = this.auth.currentUser;
+        if (currentUser) {
+            this.cardService.getLearningSessions(currentUser.uid).subscribe(learningSessions => {
+                this.learnedMinutes = Math.floor(learningSessions.reduce((total, session) => total + Math.max(1, session['duration']), 0 ));
+                console.log('learnedMinutes', this.learnedMinutes);
+                this.loaded = true;
+            });
+        }
     }
 
     ionViewWillEnter() {
+        this.fetchPreview();
         this.loadFav();
         this.userName = localStorage.getItem('userName') || 'User';
         console.log('IonViewWillEnter');
