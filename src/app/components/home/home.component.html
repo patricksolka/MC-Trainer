@@ -39,7 +39,8 @@
                 <ion-row>
                     <ion-col size="12">
                         <div class="progressBarContainer">
-                            <div class="progressBar" [style.width.%]="(learnedMinutes /
+                            <div class="progressBar" [ngClass]="{'full': progress >= 60}"
+                                 [style.width.%]="(learnedMinutes /
                             totalMinutes) * 100"></div>
                         </div>
                     </ion-col>
@@ -48,6 +49,7 @@
         </ion-card-content>
     </ion-card>
 
+<!--
     <ion-card class="ion-padding ion-margin-bottom progressCard" [routerLink]="['/total-stats']">
         <ion-card-content class="ion-no-padding">
             <p class="progress">Überprüfe deinen Lernfortschritt <br> und schaue dir deine <br>Achievements
@@ -55,15 +57,15 @@
             <ion-img slot="end" class="medal" [src]="'assets/medalbg.png'" alt="medal"></ion-img>
         </ion-card-content>
 
-        <!--<ion-button routerLink="/total-stats" class="achievementsButton"
+        &lt;!&ndash;<ion-button routerLink="/total-stats" class="achievementsButton"
                     style="&#45;&#45;background:
         #FF6905;">Fortschritt
-        </ion-button>-->
-        <!--
+        </ion-button>&ndash;&gt;
+        &lt;!&ndash;
                 <ion-button routerLink="/total-stats" class="stats-button" style ="&#45;&#45;background: #FF6905;">Total-Stats</ion-button>
-        -->
+        &ndash;&gt;
 
-    </ion-card>
+    </ion-card>-->
 
 
     <ion-grid>
