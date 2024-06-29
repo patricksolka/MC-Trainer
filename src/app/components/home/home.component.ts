@@ -56,7 +56,7 @@ export class HomeComponent  {
 
     //progressBar
     public learnedMinutes: number = 0;
-    public totalMinutes: number = 60;
+    public totalMinutes: number = 30;
     public progress: number ;
 
 
