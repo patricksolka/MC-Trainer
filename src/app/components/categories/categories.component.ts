@@ -30,12 +30,10 @@ import {
 export class CategoriesComponent {
     //TODO: Fix Observable vs Promise handling
     //categories$: Observable<Category[] | null>;
+
     categories: Category[] | null;
     searchBarVisible = false;
     #searchBar: IonSearchbar | undefined;
-    searchText = '';
-    /* newCategoryName: string = '';
-     categoryForm: FormGroup;*/
     public loaded: boolean = false;
 
     @ViewChild(IonSearchbar)
@@ -126,7 +124,6 @@ export class CategoriesComponent {
     }
 
     selectCategory(categoryId: string) {
-
         if (categoryId) {
             this.router.navigate(['/cards', categoryId]);
         } else {

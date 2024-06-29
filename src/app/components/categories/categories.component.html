@@ -1,5 +1,5 @@
 
-<ion-header>
+<ion-header class="ion-padding">
     @if (searchBarVisible) {
         <ion-toolbar>
             <ion-searchbar [(ngModel)]="categoryService.searchCategory"
@@ -18,9 +18,9 @@
                     <ion-button (click)="toggleSearch()">
                         <ion-icon slot="icon-only" name="search-outline"></ion-icon>
                     </ion-button>
-                    <ion-button (click)="shareRecords()">
+                  <!--  <ion-button (click)="shareRecords()">
                         <ion-icon slot="icon-only" name="share-social-outline"></ion-icon>
-                    </ion-button>
+                    </ion-button>-->
                 </ion-buttons>
             }
         </ion-toolbar>
