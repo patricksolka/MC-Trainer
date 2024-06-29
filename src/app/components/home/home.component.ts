@@ -53,8 +53,11 @@ export class HomeComponent  {
     public categories: Category[] = [];
     public loaded: boolean = false;
     public favCategories: { id: string; name: string }[] = [];
+
+    //progressBar
     public learnedMinutes: number = 0;
     public totalMinutes: number = 60;
+    public progress: number ;
 
 
 
@@ -81,6 +84,7 @@ export class HomeComponent  {
                 this.fetchPreview();
                 this.loadFav();
                 this.cardService.resetLearningSession(user.uid);
+                console.log('tetst' ,this.progress);
             }
         });
 
@@ -164,7 +168,9 @@ export class HomeComponent  {
                 //calculate learning Duration
                 //round to nearest minute
                 this.learnedMinutes = Math.round(learningSessions.reduce((total, session) => total + session['duration'], 0 ));
+                this.progress = this.learnedMinutes;
                 console.log('learnedMinutes', this.learnedMinutes);
+                console.log('progress', this.progress);
                 this.loaded = true;
             });
         }
