@@ -26,6 +26,7 @@ import {UserService} from "./user.service";
 })
 export class CategoryService {
     public categories: Category[];
+    public startTime: Date |null = null;
 
     categoriesCollectionRef: CollectionReference<DocumentData>;
 
@@ -136,12 +137,21 @@ export class CategoryService {
 
     startQuiz(categoryId: string) {
         if (categoryId) {
+            this.startTime = new Date();
+            console.log('Service Quiz started at:', this.startTime);
             this.router.navigate(['/cards', categoryId]);
         } else {
             console.error('Invalid categoryId:', categoryId);
         }
+
     }
 
+  /* async endQuiz(userId: string, categoryId: string, cardId: string) {
+       const endTime = new Date();
+       await this.userService.addLearningSession(userId, categoryId, cardId, this.startTime, endTime);
+       this.startTime = null; // Reset der Startzeit
+     } */
+     
 
     /*async addFavCategory(uid: string, categoryId: string): Promise<void> {
         try {

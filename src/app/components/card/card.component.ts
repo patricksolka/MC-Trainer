@@ -19,7 +19,11 @@ import {
 } from "@ionic/angular/standalone";
 //import {IonicModule} from "@ionic/angular";
 import {FooterPage} from "../footer/footer.page";
-import { TotalStatsService } from '../../services/total-stats.service'; // Importiere den TotalStatsService
+import { TotalStatsService } from '../../services/total-stats.service';
+import {CategoryService} from "../../services/category.service";
+import {AuthService} from "../../services/auth.service";
+import {Auth} from "@angular/fire/auth";
+import {UserService} from "../../services/user.service"; // Importiere den TotalStatsService
 
 
 
@@ -43,13 +47,17 @@ export class CardComponent implements OnInit, OnDestroy {
     totalQuestions = 0;
     questions: Card[] = []; // Array für alle Fragen
     correctAnswer: boolean = false;
+    public startTime: Date | null = null;
 
 //    currentQuestionIndex: number = 0; // Neue Variable für den Index der aktuellen Frage
     private cardsSubscription: Subscription;
 
     constructor(private cardService: CardService, private route: ActivatedRoute, private router: Router,
                 private alertController: AlertController,
-                private totalStatsService: TotalStatsService
+                private totalStatsService: TotalStatsService,
+                private categoryService: CategoryService,
+                private auth: Auth,
+                private userService: UserService
 
     ) { }
 
@@ -223,6 +231,56 @@ export class CardComponent implements OnInit, OnDestroy {
         return this.currentQuestion.correctAnswer.every((ans) =>
             this.selectedAnswers.includes(ans));
     }
+
+    startQuiz(categoryId: string) {
+        this.startTime = new Date();
+        this.categoryService.startQuiz(categoryId); // Startet das Quiz
+        console.log('CardComponent', this.startTime);
+    }
+
+   /* async endQuiz() {
+        if (this.categoryService.startTime) {
+            //const endTime = new Date();
+            console.log('endQuiz', this.categoryService.startTime);
+            try {
+                await this.cardService.addLearningSession(this.auth.currentUser.uid, this.categoryId, this.currentQuestion.id, this.startTime, endTime);
+
+            } catch (error) {
+                console.error('Error adding learning session:', error);
+            }
+            //this.startTime = null; // Reset der Startzeit
+        } else {
+            console.error('Start time is not set.');
+        }
+    }*/
+
+    async endQuiz() {
+        if (this.categoryService.startTime) {
+            const endTime = new Date(); // Aktuelle Zeit als Endzeitpunkt
+
+            console.log('endQuiz', this.categoryService.startTime);
+
+            try {
+                await this.cardService.addLearningSession(
+                    this.auth.currentUser.uid,
+                    this.categoryId,
+                    this.currentQuestion.id,
+                    this.categoryService.startTime, // Verwenden der Startzeit aus dem CategoryService
+                    endTime // Verwenden der aktuellen Zeit als Endzeitpunkt
+                );
+
+                console.log('Learning session added successfully.', this.categoryService.startTime, endTime);
+            } catch (error) {
+                console.error('Error adding learning session:', error);
+            }
+
+            // Optional: Zurücksetzen der Startzeit nach der Erfassung der Lernsitzung
+            this.categoryService.startTime = null;
+        } else {
+            console.error('Start time is not set.');
+        }
+    }
+
 
     ngOnDestroy(): void {
         if (this.cardsSubscription) {
