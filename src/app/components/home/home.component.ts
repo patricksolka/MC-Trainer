@@ -49,7 +49,7 @@ export class HomeComponent {
     public categories: Category[] = [];
     public loaded: boolean = false;
     public favCategories: { id: string; name: string }[] = [];
-    public learnedMinutes: number = 6;
+    public learnedMinutes: number = 25;
     public totalMinutes: number = 60;
 
 

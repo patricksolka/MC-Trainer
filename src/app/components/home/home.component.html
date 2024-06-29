@@ -18,6 +18,29 @@
         </ion-buttons>
     </ion-toolbar>
 
+    <ion-card class="progress-card">
+        <ion-card-content>
+            <ion-grid>
+                <ion-row>
+                    <ion-col size="8" class="learned-today">
+                        <p>Learned today</p>
+                        <h2>{{ learnedMinutes }}min / {{ totalMinutes }}min</h2>
+                    </ion-col>
+                    <ion-col size="4" class="my-courses" >
+                        <p [routerLink]="['/meine-module']" >My courses</p>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="12">
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" [style.width.%]="(learnedMinutes / totalMinutes) * 100"></div>
+                        </div>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-card-content>
+    </ion-card>
+
     <ion-card class="ion-padding ion-margin-bottom progressCard" [routerLink]="['/total-stats']">
         <ion-card-content class="ion-no-padding">
             <p class="progress">Überprüfe deinen Lernfortschritt <br> und schaue dir deine <br>Achievements
@@ -135,28 +158,7 @@
         </ion-grid>
     </div>
 
-    <ion-card class="progress-card">
-        <ion-card-content>
-            <ion-grid>
-                <ion-row>
-                    <ion-col size="8" class="learned-today">
-                        <p>Learned today</p>
-                        <h2>{{ learnedMinutes }}min / {{ totalMinutes }}min</h2>
-                    </ion-col>
-                    <ion-col size="4" class="my-courses" >
-                        <p >My courses</p>
-                    </ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="12">
-                        <div class="progress-bar-container">
-                            <div class="progress-bar" [style.width.%]="(learnedMinutes / totalMinutes) * 100"></div>
-                        </div>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
-        </ion-card-content>
-    </ion-card>
+
 
 
 
