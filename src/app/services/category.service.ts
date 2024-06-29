@@ -26,12 +26,16 @@ import {UserService} from "./user.service";
 })
 export class CategoryService {
     public categories: Category[];
+    public filteredCategories: Category[] = [];
     public startTime: Date |null = null;
+    public searchCategory: string = '';
+
 
     categoriesCollectionRef: CollectionReference<DocumentData>;
 
     constructor(private firestore: Firestore, private router: Router, private userService: UserService) {
         this.categoriesCollectionRef = collection(firestore, 'categories');
+        this.filteredCategories = this.categories;
     }
 
     // In CategoryService
@@ -75,6 +79,8 @@ export class CategoryService {
             categoryDocs.forEach(categoryDoc => {
                 categories.push(this.categoryConverter.fromFirestore(categoryDoc, {}));
             });
+            this.categories = categories;
+            this.filteredCategories = categories;
 
             return categories;
         } catch (error) {
@@ -144,6 +150,17 @@ export class CategoryService {
             console.error('Invalid categoryId:', categoryId);
         }
 
+    }
+
+    filterCategories(): void {
+        if (this.searchCategory) {
+            this.filteredCategories = this.categories.filter(category =>
+                category.name.toLowerCase().includes(this.searchCategory.toLowerCase()) /*||
+                category.moduleNr.toLowerCase().includes(this.searchCategory.toLowerCase())*/
+            );
+        } else {
+            this.filteredCategories = this.categories;
+        }
     }
 
   /* async endQuiz(userId: string, categoryId: string, cardId: string) {

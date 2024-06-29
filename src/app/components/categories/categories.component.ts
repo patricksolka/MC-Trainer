@@ -1,5 +1,5 @@
 // categories.component.ts
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {CommonModule, NgOptimizedImage} from '@angular/common';
 import {Category} from '../../models/categories.model';
 import {CategoryService} from '../../services/category.service';
@@ -32,10 +32,19 @@ export class CategoriesComponent {
     //categories$: Observable<Category[] | null>;
     categories: Category[] | null;
     searchBarVisible = false;
+    #searchBar: IonSearchbar | undefined;
     searchText = '';
     /* newCategoryName: string = '';
      categoryForm: FormGroup;*/
     public loaded: boolean = false;
+
+    @ViewChild(IonSearchbar)
+    set searchbar(sb: IonSearchbar) {
+        if (sb) {
+            setTimeout(() => sb.setFocus(), 0);
+            this.#searchBar = sb;
+        }
+    }
 
     //public imageLoaded: boolean;
 
@@ -98,6 +107,14 @@ export class CategoriesComponent {
 
     toggleSearch() {
         this.searchBarVisible = !this.searchBarVisible;
+        if (this.searchBarVisible) {
+            setTimeout(() => {
+                this.#searchBar?.setFocus();
+            }, 1);
+        } else {
+            this.categoryService.searchCategory = '';
+            this.categoryService.filterCategories();
+        }
     }
 
     shareRecords() {
