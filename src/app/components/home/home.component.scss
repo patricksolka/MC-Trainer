@@ -21,6 +21,9 @@ ion-toolbar ion-button {
 ion-toolbar ion-icon {
   width: 60px;
   height: 60px;
+  display: flex;
+  text-align: right;
+  justify-content: end;
 }
 
 h1 {
@@ -210,7 +213,7 @@ ion-col {
 
 .showAll {
   font-size: 12px;
-  font-weight: 300;
+  font-weight: 400;
   --padding-start: 0;
   --padding-end: 0;
   display: flex;
@@ -303,7 +306,7 @@ ion-col {
 }
 */
 
-.progress-card {
+.progressCard {
   background-color: #1d1d2b;
   border-radius: 10px;
   //padding: 16px;
@@ -313,36 +316,40 @@ ion-col {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.card-content {
+/*.card-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px; /* Adjust this margin as needed */
-}
+  margin-bottom: 30px; !* Adjust this margin as needed *!
+}*/
 
-.learned-today {
+.learnedToday {
   display: flex;
   flex-direction: column;
 }
 
-.learned-today p {
-  margin: 0;
+.learnedToday p {
+  //margin: 0;
   color: #ffffff;
 }
 
-.learned-today h2 {
-  margin: 0;
+.learnedToday h2 {
+  margin-top: 3px;
+  //margin: 0;
   font-size: 1.5em;
 }
 
-.my-courses p {
+.stats p {
+  font-size: 14px;
+  font-weight: 400;
+  text-align: right;
   justify-content: end;
   margin: 0;
-  color: #4a90e2;
+  color: var(--ion-color-primary);
   cursor: pointer;
 }
 
-.progress-bar-container {
+.progressBarContainer {
   width: 100%;
   height: 10px;
   background-color: #e0e0e0;
@@ -351,7 +358,7 @@ ion-col {
   margin-top: 16px; /* Adjust this margin as needed */
 }
 
-.progress-bar {
+.progressBar {
   height: 100%;
   background-color: #ff6f61;
   transition: width 0.3s ease;

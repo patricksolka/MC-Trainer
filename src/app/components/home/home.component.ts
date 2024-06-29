@@ -79,6 +79,7 @@ export class HomeComponent  {
                 });
                 this.fetchProgress();
                 this.fetchPreview();
+                this.loadFav();
                 this.cardService.resetLearningSession(user.uid);
             }
         });
