@@ -79,6 +79,7 @@ export class HomeComponent  {
                 });
                 this.fetchProgress();
                 this.fetchPreview();
+                this.cardService.resetLearningSession(user.uid);
             }
         });
 
@@ -159,7 +160,9 @@ export class HomeComponent  {
         const currentUser = this.auth.currentUser;
         if (currentUser) {
             this.cardService.getLearningSessions(currentUser.uid).subscribe(learningSessions => {
-                this.learnedMinutes = Math.floor(learningSessions.reduce((total, session) => total + Math.max(1, session['duration']), 0 ));
+                //calculate learning Duration
+                //round to nearest minute
+                this.learnedMinutes = Math.round(learningSessions.reduce((total, session) => total + session['duration'], 0 ));
                 console.log('learnedMinutes', this.learnedMinutes);
                 this.loaded = true;
             });
@@ -167,8 +170,8 @@ export class HomeComponent  {
     }
 
     ionViewWillEnter() {
-        this.fetchPreview();
-        this.loadFav();
+        /*this.fetchPreview();
+        this.loadFav();*/
         this.userName = localStorage.getItem('userName') || 'User';
         console.log('IonViewWillEnter');
     }
