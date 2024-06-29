@@ -51,6 +51,22 @@ ion-tab-bar {
   box-shadow: var(--box-shadow);
 }
 
+//tab-indicator
+ion-tab-button.active {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 25%;
+    right: 25%;
+    width: 50%;
+    height: 3px;
+    background-color: var(--ion-color-primary);
+  }
+}
+
 
 /* Light Mode Specific Styles */
 @media (prefers-color-scheme: light) {
@@ -103,6 +119,8 @@ ion-tab-bar {
     }
   }
 }
+
+
 
 
 
