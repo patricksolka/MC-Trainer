@@ -1,33 +1,40 @@
 // card.service.ts
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {
-  Firestore,
+  addDoc,
   collection,
   collectionData,
-  doc,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  docData,
-  query,
-  where,
   CollectionReference,
-  getDoc, setDoc
+  deleteDoc,
+  doc,
+  docData,
+  DocumentData,
+  Firestore,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  Timestamp,
+  updateDoc,
+  where
 } from '@angular/fire/firestore';
-import { Card } from '../models/card.model';
-import {Observable, combineLatest, take} from 'rxjs';
-import { Category } from '../models/categories.model';
-import { map, switchMap } from 'rxjs/operators';
+import {Card} from '../models/card.model';
+import {combineLatest, Observable} from 'rxjs';
+import {Category} from '../models/categories.model';
+import {map, switchMap} from 'rxjs/operators';
 import {CategoryService} from "./category.service";
 import {AuthService} from "./auth.service";
+
 @Injectable({
   providedIn: 'root'
 })
 export class CardService {
   private cardsCollection: CollectionReference<Card>;
+  private userCollection: CollectionReference<DocumentData>;
 
   constructor(private firestore: Firestore, private categoryService: CategoryService,private authService: AuthService) {
     this.cardsCollection = collection(firestore, 'cards') as CollectionReference<Card>;
+    this.userCollection = collection(firestore, 'users') as CollectionReference<DocumentData>;
   }
 
   getCategories(): Observable<Category[]> {
@@ -104,5 +111,48 @@ export class CardService {
     const categoryDoc = doc(this.firestore, `categories/${cardData['categoryId']}`);
     const categoryData = await docData(categoryDoc).toPromise();
     await updateDoc(categoryDoc, { questionCount: (categoryData['questionCount'] || 1) - 1 });
+  }
+
+  async addLearningSession(uid: string, categoryId: string, cardId: string, startTime: Date, endTime: Date): Promise<void> {
+    try {
+      const learningSessionsRef = collection(this.firestore, `users/${uid}/learningSessions`);
+      const docRef = doc(learningSessionsRef, categoryId);
+      const docSnap = await getDoc(docRef);
+
+      const startTimeStamp = Timestamp.fromDate(startTime);
+      const endTimeStamp = Timestamp.fromDate(endTime);
+
+      if (!docSnap.exists()) {
+        await setDoc(docRef, {
+          categoryId,
+          cardId,
+          startTime: startTimeStamp,
+          endTime: endTimeStamp,
+          duration: (endTime.getTime() - startTime.getTime()) / 1000 / 60 // Dauer in Minuten
+          // Dauer in Minuten
+        });
+      }
+      console.log('Learning session added successfully');
+
+    } catch (error) {
+      console.error('Error adding learning session:', error);
+    }
+  }
+
+  async getLearningSessions(uid: string): Promise<DocumentData[]> {
+    try {
+      //const userRef = doc(this.firestore, `users/${userId}`);
+
+      const learningSessionsRef = collection(this.firestore, `users/${uid}/learningSessions`);
+      const snapshot = await getDocs(learningSessionsRef);
+      return snapshot.docs.map(doc => {
+        const data = doc.data();
+        return data['duration'];
+      });
+
+    } catch (error) {
+      console.error('Error fetching learning sessions:', error);
+      return [];
+    }
   }
 }

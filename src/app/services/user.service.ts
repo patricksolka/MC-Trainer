@@ -10,7 +10,7 @@ import {
     query,
     orderBy,
     onSnapshot,
-    getDocs, CollectionReference, collection, setDoc
+    getDocs, CollectionReference, collection, setDoc, addDoc
 } from "@angular/fire/firestore";
 import {Injectable} from "@angular/core";
 import {User} from "../models/user.model";
@@ -85,6 +85,7 @@ export class UserService {
             return [];
         }
     }*/
+
     async getFavCategories(uid: string): Promise<{
         id: string;
         name: string;
@@ -118,14 +119,11 @@ export class UserService {
         }
     }
 
-
-
-
-
     //mit subcollection
     async addFavCategory(uid: string, categoryId: string, categoryName: string, questionCount: number): Promise<void> {
         try {
-            const favCategoriesRef = this.getFavcollectionRef(uid);
+            /*const favCategoriesRef = this.getFavcollectionRef(uid);*/
+            const favCategoriesRef = collection(this.firestore, `users/${uid}/favoriteCategories`);
             const docRef = doc(favCategoriesRef, categoryId);
             const docSnap = await getDoc(docRef);
 
@@ -150,7 +148,8 @@ export class UserService {
     //Subcollection
     async removeFavCategory(uid: string, categoryId: string): Promise<void> {
         try {
-            const favCategoriesRef = this.getFavcollectionRef(uid);
+            //const favCategoriesRef = this.getFavcollectionRef(uid);
+            const favCategoriesRef = collection(this.firestore, `users/${uid}/favoriteCategories`);
             const categoryRef = doc(favCategoriesRef, categoryId);
             await deleteDoc(categoryRef);
             console.log('Favorite category deleted', categoryId);
@@ -159,6 +158,9 @@ export class UserService {
             throw new Error('Error deleting favorite category');
         }
     }
+
+
+
 
     private userConverter = {
         fromFirestore: (snapshot: QueryDocumentSnapshot, options: SnapshotOptions): User => {
@@ -183,10 +185,10 @@ export class UserService {
         }
     };
 
-    getFavcollectionRef(userId: string): CollectionReference<DocumentData> {
+    /*getFavcollectionRef(userId: string): CollectionReference<DocumentData> {
         const userRef = doc(this.firestore, 'users', userId);
         return collection(userRef, 'favoriteCategories');
-    }
+    }*/
 
     async showAlert(header: string, message: string) {
         const alert = await this.alertController.create({

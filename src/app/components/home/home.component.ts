@@ -34,6 +34,10 @@ import {
     IonToolbar
 } from "@ionic/angular/standalone";
 import {CardComponent} from "../card/card.component";
+import {CardService} from "../../services/card.service";
+import {card} from "ionicons/icons";
+import {firestore} from "firebase-admin";
+import DocumentData = firestore.DocumentData;
 
 
 
@@ -49,7 +53,7 @@ export class HomeComponent {
     public categories: Category[] = [];
     public loaded: boolean = false;
     public favCategories: { id: string; name: string }[] = [];
-    public learnedMinutes: number = 25;
+    public learnedMinutes: number = 0;
     public totalMinutes: number = 60;
 
 
@@ -63,9 +67,13 @@ export class HomeComponent {
         private auth: Auth,
         public  categoryService: CategoryService,
         private userService: UserService,
+        private cardService: CardService
 
     ) {
+        this.fetchProgress();
         this.fetchPreview();
+
+
         //this.loadFav();
         //this.fetchFavoriteModules();
     }
@@ -93,6 +101,13 @@ export class HomeComponent {
         }
     }
 
+    //für die Favoriten
+    /*getProgress(category: any): number {
+        const answeredQuestions = category.answeredQuestions || 0;
+        const totalQuestions = category.totalQuestions || 1; // Vermeide Division durch Null
+        return (answeredQuestions / totalQuestions) * 100;
+    }*/
+
     async loadFav() {
           const currentUser = this.auth.currentUser;
           if (currentUser) {
@@ -110,11 +125,20 @@ export class HomeComponent {
         }
     }
 
+    async fetchProgress(){
+        const currentUser = this.auth.currentUser;
+        if (currentUser) {
+            const learningSessions: DocumentData[] = await this.cardService.getLearningSessions(currentUser.uid);
+            this.learnedMinutes = learningSessions.reduce((total, session) => total + session['duration'], 0 );
+            console.log('learnedMinutes', this.learnedMinutes);
+        }
+
+    }
+
     ionViewWillEnter() {
         this.loadFav();
         this.userName = localStorage.getItem('userName') || 'User';
         console.log('IonViewWillEnter');
     }
-
 
 }
