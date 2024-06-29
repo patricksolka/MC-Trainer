@@ -12,34 +12,35 @@
         <ion-text slot="start">
             <h1>Hallo, <br> <span class="userName">{{ userName }}</span></h1></ion-text>
         <ion-buttons slot="end">
-            <ion-button [routerLink]="['/profile']">
-                <ion-icon name="person-circle"></ion-icon>
-            </ion-button>
+            <!--<ion-button [routerLink]="['/profile']">-->
+                <ion-icon name="person-circle" [routerLink]="['/profile']"></ion-icon>
+            <!--</ion-button>-->
         </ion-buttons>
     </ion-toolbar>
 
-    <ion-card class="progress-card">
+    <ion-card class="progressCard">
         <ion-card-content>
             <ion-grid>
                 <ion-row>
-                    <ion-col size="8" class="learned-today">
-                        <p>Learned today</p>
+                    <ion-col size="8" class="learnedToday">
+                        <p>Lernfortschritt heute</p>
                         <h2 *ngIf="loaded; else loading">
-                            {{ learnedMinutes < 1 ? '<1 min' : learnedMinutes + ' min' }} / {{ totalMinutes }} min
+                            {{ learnedMinutes < 1 ? '<1 min' : (learnedMinutes > 60 ? '60 min' : learnedMinutes + ' min') }} / {{ totalMinutes }} min
                         </h2>
                         <ng-template #loading>
                             <ion-skeleton-text style="width: 150px ; height: 30px"
                                                [animated]="true"></ion-skeleton-text>
                         </ng-template>
                     </ion-col>
-                    <ion-col size="4" class="my-courses" >
-                        <p [routerLink]="['/meine-module']" >My courses</p>
+                    <ion-col size="4" class="stats" >
+                        <p [routerLink]="['/total-stats']">Statistik</p>
                     </ion-col>
                 </ion-row>
                 <ion-row>
                     <ion-col size="12">
-                        <div class="progress-bar-container">
-                            <div class="progress-bar" [style.width.%]="(learnedMinutes / totalMinutes) * 100"></div>
+                        <div class="progressBarContainer">
+                            <div class="progressBar" [style.width.%]="(learnedMinutes /
+                            totalMinutes) * 100"></div>
                         </div>
                     </ion-col>
                 </ion-row>
