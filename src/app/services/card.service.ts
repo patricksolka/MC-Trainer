@@ -83,6 +83,10 @@ export class CardService {
         });
     }
 
+    async setCategoryDone(categoryId: string, attribute: string, done: boolean): Promise<void> {
+        this.categoryService.setDone(categoryId, attribute, done);
+    }
+
     async resetCardAnsweredCounter(cardid: string, counter: string) {
         const userDoc = doc(this.firestore, `users/${this.authService.auth.currentUser.uid}/answers/${cardid}`);
         const newCount = 0;

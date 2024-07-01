@@ -13,7 +13,7 @@ import {
     limit,
     QueryDocumentSnapshot,
     SnapshotOptions,
-    orderBy, onSnapshot, getDocs, Unsubscribe
+    orderBy, onSnapshot, getDocs, Unsubscribe, setDoc
 } from '@angular/fire/firestore';
 import { Category } from '../models/categories.model';
 
@@ -141,15 +141,44 @@ export class CategoryService {
         }
     };
 
-    startQuiz(categoryId: string) {
+    async startQuiz(categoryId: string) {
         if (categoryId) {
-            this.startTime = new Date();
-            console.log('Service Quiz started at:', this.startTime);
-            this.router.navigate(['/cards', categoryId]);
+            const result = await this.isDone(categoryId);
+            if(result == false) {
+                this.startTime = new Date();
+                console.log('Service Quiz started at:', this.startTime);
+                this.router.navigate(['/cards', categoryId]);
+            } else {
+                //TODO
+                console.log("Nichts zu tun!");
+            }
         } else {
             console.error('Invalid categoryId:', categoryId);
         }
 
+    }
+
+    async setDone(categoryId: string, attribute: string, done: boolean): Promise<void>{
+        const userDoc = doc(this.firestore, `categories/${categoryId}`);
+        const val = done;
+        await updateDoc(userDoc, {
+            [`${attribute}`]: val
+        });
+    }
+
+    async isDone(categoryId: string): Promise<boolean> {
+        const userDoc = doc(this.firestore, `categories/${categoryId}`);
+        const userSnap = await getDoc(userDoc);
+
+        if (userSnap.exists()) {
+            const data = userSnap.data();
+            /*const counter = data?.['counter'] || 0;
+            return counter;*/
+            return data['done'] || false;
+        } else {
+            await this.setDone(categoryId, "done", false);
+            return false;
+        }
     }
 
     filterCategories(): void {
