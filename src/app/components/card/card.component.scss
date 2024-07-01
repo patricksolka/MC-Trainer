@@ -29,3 +29,10 @@ ion-item {
   font-weight: bold; /* Fett formatierte Antwort */
   background-color: #e0e0e0; /* Hintergrundfarbe für ausgewählte Antwort */
 }
+// LIGHT MODE
+@media (prefers-color-scheme: light) {}
+
+// DARK MODE
+@media (prefers-color-scheme: dark) {
+
+}
