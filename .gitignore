@@ -70,6 +70,7 @@ node_modules
 dist
 www
 .angular
+out-tsc
 app-debug.apk
 package-lock.json
 # Firebase
