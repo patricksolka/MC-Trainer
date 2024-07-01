@@ -83,6 +83,14 @@ export class CardService {
         });
     }
 
+    async resetCardAnsweredCounter(cardid: string, counter: string) {
+        const userDoc = doc(this.firestore, `users/${this.authService.auth.currentUser.uid}/answers/${cardid}`);
+        const newCount = 0;
+        await updateDoc(userDoc, {
+            [`${counter}`]: newCount
+        });
+    }
+
     async getCardAnsweredCounter(cardid: string): Promise<number> {
         const userDoc = doc(this.firestore, `users/${this.authService.auth.currentUser.uid}/answers/${cardid}`);
         const userSnap = await getDoc(userDoc);

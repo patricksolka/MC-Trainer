@@ -172,6 +172,7 @@ export class CardComponent implements OnInit, OnDestroy {
 
             if (counter <= 6) {
                 this.currentQuestion = this.questions[index];
+                console.log("Frage: " + this.currentQuestion.id);
                 return;
             }
         }
@@ -187,18 +188,18 @@ export class CardComponent implements OnInit, OnDestroy {
         });
     }
 
-/*
-    checkAnswers(): void {
-       const isCorrect = this.selectedAnswers.every(answer => this.currentQuestion.correctAnswer.includes(answer)) && this.currentQuestion.correctAnswer.every(answer => this.selectedAnswers.includes(answer));
-        if(isCorrect) {
-            this.correctAnswersCount++
-            this.cardService.updateCardAnsweredCounter(this.currentQuestion.id, "counter");
-        } else {
-            this.incorrectAnswersCount++;
+    /*
+        checkAnswers(): void {
+           const isCorrect = this.selectedAnswers.every(answer => this.currentQuestion.correctAnswer.includes(answer)) && this.currentQuestion.correctAnswer.every(answer => this.selectedAnswers.includes(answer));
+            if(isCorrect) {
+                this.correctAnswersCount++
+                this.cardService.updateCardAnsweredCounter(this.currentQuestion.id, "counter");
+            } else {
+                this.incorrectAnswersCount++;
+            }
+            this.showResult = true;
         }
-        this.showResult = true;
-    }
- */
+     */
 
 
     checkAnswers(): void {
@@ -216,7 +217,9 @@ export class CardComponent implements OnInit, OnDestroy {
             console.log("not correct");
             this.correctAnswer = false;
             this.incorrectAnswersCount++;
-           // this.cardService.updateCardAnsweredCounter(this.currentQuestion.id, "counterIncorrect");
+            this.cardService.resetCardAnsweredCounter(this.currentQuestion.id, "counter");
+
+            // this.cardService.updateCardAnsweredCounter(this.currentQuestion.id, "counterIncorrect");
         }
         this.showResult = true;
     }
@@ -238,21 +241,21 @@ export class CardComponent implements OnInit, OnDestroy {
         console.log('CardComponent', this.startTime);
     }
 
-   /* async endQuiz() {
-        if (this.categoryService.startTime) {
-            //const endTime = new Date();
-            console.log('endQuiz', this.categoryService.startTime);
-            try {
-                await this.cardService.addLearningSession(this.auth.currentUser.uid, this.categoryId, this.currentQuestion.id, this.startTime, endTime);
+    /* async endQuiz() {
+         if (this.categoryService.startTime) {
+             //const endTime = new Date();
+             console.log('endQuiz', this.categoryService.startTime);
+             try {
+                 await this.cardService.addLearningSession(this.auth.currentUser.uid, this.categoryId, this.currentQuestion.id, this.startTime, endTime);
 
-            } catch (error) {
-                console.error('Error adding learning session:', error);
-            }
-            //this.startTime = null; // Reset der Startzeit
-        } else {
-            console.error('Start time is not set.');
-        }
-    }*/
+             } catch (error) {
+                 console.error('Error adding learning session:', error);
+             }
+             //this.startTime = null; // Reset der Startzeit
+         } else {
+             console.error('Start time is not set.');
+         }
+     }*/
 
     async endQuiz() {
         if (this.categoryService.startTime) {
