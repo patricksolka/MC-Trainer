@@ -25,7 +25,7 @@
                     <ion-col size="8" class="learnedToday">
                         <p>Lernfortschritt heute</p>
                         <h2 *ngIf="loaded; else loading">
-                            {{ learnedMinutes < 1 ? ' - ' : (learnedMinutes > 30 ? '30 min' :
+                            {{ learnedMinutes < 1 ? ' - min ' : (learnedMinutes > 30 ? '30 min' :
                             learnedMinutes + ' min') }} / {{ totalMinutes }} min
                         </h2>
                         <ng-template #loading>

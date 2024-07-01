@@ -112,6 +112,24 @@ export class CardService {
         await updateDoc(categoryDoc, {questionCount: (categoryData['questionCount'] || 1) - 1});
     }
 
+    getLearningSessions(uid: string): Observable<DocumentData[]> {
+        return new Observable<DocumentData[]>(observer => {
+            const learningSessionsRef = collection(this.firestore, `users/${uid}/learningSessions`);
+
+            // Einmaliges Abrufen der Daten
+            getDocs(learningSessionsRef).then(docSnap => {
+                const result = docSnap.docs.map(doc => doc.data());
+                observer.next(result); // Emit the initial data
+            });
+
+            // Hinzufügen eines Snapshot-Listeners
+            this.subscription = onSnapshot(learningSessionsRef, (snapshot) => {
+                const data: DocumentData[] = snapshot.docs.map(doc => doc.data());
+                observer.next(data); // Emit the updated data
+            });
+        });
+    }
+
     async addLearningSession(uid: string, categoryId: string, cardId: string, startTime: Date, endTime: Date): Promise<void> {
         try {
             const learningSessionsRef = collection(this.firestore, `users/${uid}/learningSessions`);
@@ -199,23 +217,7 @@ export class CardService {
      }*/
 
     //als Observable
-    getLearningSessions(uid: string): Observable<DocumentData[]> {
-        return new Observable<DocumentData[]>(observer => {
-            const learningSessionsRef = collection(this.firestore, `users/${uid}/learningSessions`);
 
-            // Einmaliges Abrufen der Daten
-            getDocs(learningSessionsRef).then(docSnap => {
-                const result = docSnap.docs.map(doc => doc.data());
-                observer.next(result); // Emit the initial data
-            });
-
-            // Hinzufügen eines Snapshot-Listeners
-            this.subscription = onSnapshot(learningSessionsRef, (snapshot) => {
-                const data: DocumentData[] = snapshot.docs.map(doc => doc.data());
-                observer.next(data); // Emit the updated data
-            });
-        });
-    }
 
     ngOnDestroy() {
         if (this.subscription) {
