@@ -1,18 +1,49 @@
-
-
-ion-searchbar{
-/*   --background: var(--ion-background-color); */
-  color: white;
-  background-color: transparent;
-  box-shadow: none;
+/**
+DARK MODE
+ **/
+@media (prefers-color-scheme: dark) {
+  ion-toolbar {
+    border: none;
+    --ion-toolbar-background: #0f0f1c;
+    --padding-start: var(--ion-padding, 16px);
+    --padding-end: var(--ion-padding, 16px);
+    --padding-top: var(--ion-padding, 16px);
+    --padding-bottom: var(--ion-padding, 16px);
+  }
+  ion-searchbar {
+    --cancel-button-color: #111; /* Setzt die Farbe des Cancel-Buttons */
+    background-color: white;
+    box-shadow: none;
+    padding: 16px;
+  }
 }
-.sc-ion-searchbar-md-h{
-  --box-shadow: none;
-}
 
-ion-toolbar {
-  border: none;
-  --background: var(--ion-background-color);
+/**
+LIGHT MODE
+ **/
+@media (prefers-color-scheme: light) {
+  ion-toolbar {
+    border: none;
+    --ion-toolbar-background: #b3b3cc;
+    --padding-start: var(--ion-padding, 16px);
+    --padding-end: var(--ion-padding, 16px);
+    --padding-top: var(--ion-padding, 16px);
+    --padding-bottom: var(--ion-padding, 16px);
+    color: #FFF;
+    ion-icon{
+      color: #FFF;
+    }
+  }
+  ion-searchbar {
+    --cancel-button-color: #FFF; /* Setzt die Farbe des Cancel-Buttons */
+    background-color: transparent;
+    color: white;
+    box-shadow: none;
+    padding: 16px;
+    ion-icon{
+      color: #FFF;
+    }
+  }
 }
 
 .categoryImage {
@@ -25,7 +56,7 @@ ion-toolbar {
   justify-content: center;
   object-fit: cover;
   opacity: 0.5;
- //transition: opacity 0.5s ease;
+  //transition: opacity 0.5s ease;
 }
 
 /*.categorySkeleton{
@@ -62,7 +93,7 @@ ion-toolbar {
   .categoryImage {
     height: 150px; /* Erhöhte Höhe für größere Bildschirme */
   }
-  .categorySkeleton{
+  .categorySkeleton {
     height: 150px; /* Erhöhte Höhe für größere Bildschirme */
 
   }
