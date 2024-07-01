@@ -203,6 +203,7 @@ http://ionicframework.com/docs/theming/ */
     --ion-tab-bar-background: #e0e0ff; /* heller lila Hintergrund für Tab-Bar */
     --ion-card-background: #ffffff; /* weißer Hintergrund für Karten */
     --ion-card-border-color: #ccccee; /* helles lila für Border für Karten */
+    --ion-card-title: white; /* dunkler Text für Karten-Titel */
   }
 
   .md ion-modal {
@@ -222,10 +223,11 @@ http://ionicframework.com/docs/theming/ */
     --ion-background-color: #1F1F39;
     --ion-text-color: #ffffff;
     --ion-item-background: #35354d;
-    --ion-toolbar-background: transparentize();
-    // --ion-toolbar-background: #35354d;
+    //--ion-toolbar-background: transparentize();
+    --ion-toolbar-background: #35354d;
     --ion-card-background: #2F2F42;
     --ion-border-color: #222222;
+
   }
 
   .ios body {
