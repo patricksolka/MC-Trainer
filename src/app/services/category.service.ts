@@ -16,6 +16,7 @@ import {
     orderBy, onSnapshot, getDocs, Unsubscribe, setDoc
 } from '@angular/fire/firestore';
 import { Category } from '../models/categories.model';
+import { AlertController } from '@ionic/angular'; // Import AlertController
 
 import {Router} from "@angular/router";
 import {Storage} from "@angular/fire/storage";
@@ -33,7 +34,8 @@ export class CategoryService {
 
     categoriesCollectionRef: CollectionReference<DocumentData>;
 
-    constructor(private firestore: Firestore, private router: Router, private userService: UserService) {
+    constructor(private firestore: Firestore, private router: Router, private userService: UserService,
+                private alertController: AlertController) {
         this.categoriesCollectionRef = collection(firestore, 'categories');
         this.filteredCategories = this.categories;
     }
@@ -150,14 +152,23 @@ export class CategoryService {
                 this.router.navigate(['/cards', categoryId]);
             } else {
                 //TODO
+                this.showNoTasksAlert(); // Zeigt ein Pop-up an, wenn nichts zu tun ist
                 console.log("Nichts zu tun!");
             }
         } else {
             console.error('Invalid categoryId:', categoryId);
         }
-
     }
 
+    async showNoTasksAlert() {
+        const alert = await this.alertController.create({
+            header: 'Bereits abgeschlossen',
+            message: 'Du hast dieses Modul bereits abgeschlossen!',
+            buttons: ['OK']
+        });
+
+        await alert.present();
+    }
     async setDone(categoryId: string, attribute: string, done: boolean): Promise<void>{
         const userDoc = doc(this.firestore, `categories/${categoryId}`);
         const val = done;
