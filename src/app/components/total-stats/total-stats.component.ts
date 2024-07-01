@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { TotalStatsService } from '../../services/total-stats.service';
-import { IonicModule } from '@ionic/angular';
-import { CommonModule } from "@angular/common";
-import { Router } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {TotalStatsService} from '../../services/total-stats.service';
+import {IonicModule} from '@ionic/angular';
+import {CommonModule} from "@angular/common";
+import {Router} from '@angular/router';
 import {AlertController} from "@ionic/angular/standalone";
+import {onAuthStateChanged} from "@angular/fire/auth";
 
 @Component({
     selector: 'app-total-stats',
@@ -30,16 +31,8 @@ export class TotalStatsComponent implements OnInit {
         this.totalCorrectAnswers = this.totalStatsService.getTotalCorrectAnswers();
         this.totalIncorrectAnswers = this.totalStatsService.getTotalIncorrectAnswers();
     }
-    /*
-        resetTotalStats() {
-            this.totalStatsService.resetStats();
-            this.totalCorrectAnswers = 0;
-            this.totalIncorrectAnswers = 0;
-        }
 
-     */
-
-    backToHome(){
+    backToHome() {
         this.router.navigate(['/home']);
     }
 
@@ -63,5 +56,9 @@ export class TotalStatsComponent implements OnInit {
         });
 
         await alert.present();
+    }
+
+    ionViewWillEnter() {
+        this.updateTotalStats();
     }
 }
