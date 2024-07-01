@@ -19,10 +19,10 @@ ion-toolbar ion-icon{
 h1{
     font-size: 20px;
     font-weight: 500;
-    .userName{
-        font-size: 24px;
-        font-weight: 800;
-    }
+.userName{
+    font-size: 24px;
+    font-weight: 800;
+}
 }
 
 
@@ -40,7 +40,7 @@ ion-card-content {
     width: 96px;
     height: 96px;
     float: right;
-   /* //position: static;*/
+    /* //position: static;*/
 }
 
 ion-card-content p {
@@ -152,8 +152,3 @@ ion-col {
 .favorites{
     margin-top:  0.3rem;
 }
-
-
-
-
-
