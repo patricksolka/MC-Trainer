@@ -5,10 +5,8 @@ import {
     collection,
     collectionData,
     doc,
-    addDoc,
     updateDoc,
     deleteDoc,
-    docData,
     query,
     where,
     CollectionReference,
@@ -18,7 +16,6 @@ import {Card} from '../models/card.model';
 import {Observable, combineLatest} from 'rxjs';
 import {Category} from '../models/categories.model';
 import {map, switchMap} from 'rxjs/operators';
-import {CategoryService} from "./category.service";
 import {AuthService} from "./auth.service";
 
 
@@ -26,20 +23,20 @@ import {AuthService} from "./auth.service";
     providedIn: 'root'
 })
 export class CardService {
-    private cardsCollection: CollectionReference<Card>;
-    private userCollection: CollectionReference<DocumentData>;
+    private readonly cardsCollection: CollectionReference<Card>;
+    // private userCollection: CollectionReference<DocumentData>;
     private subscription: Unsubscribe | null = null;
 
-    constructor(private firestore: Firestore, private categoryService: CategoryService, private authService: AuthService) {
+    constructor(private firestore: Firestore, private authService: AuthService) {
         this.cardsCollection = collection(firestore, 'cards') as CollectionReference<Card>;
-        this.userCollection = collection(firestore, 'users') as CollectionReference<DocumentData>;
+        // this.userCollection = collection(firestore, 'users') as CollectionReference<DocumentData>;
     }
-
+/*
     getCategories(): Observable<Category[]> {
         const categoriesCollection = collection(this.firestore, 'categories') as CollectionReference<Category>;
         return collectionData(categoriesCollection, {idField: 'id'});
     }
-
+    */
     // CRUD-Operationen für Karten
     getAllCardsForCategory(categoryId: string): Observable<Card[]> {
         const categoryCardsQuery = query(this.cardsCollection, where('categoryId', '==', categoryId));
@@ -63,17 +60,20 @@ export class CardService {
         );
     }
 
+    /*
     getCardById(id: string): Observable<Card> {
         const cardDoc = doc(this.firestore, `cards/${id}`);
         return docData(cardDoc, {idField: 'id'}) as Observable<Card>;
     }
-
+    */
+    /*
     async addCard(card: Card): Promise<void> {
         await addDoc(this.cardsCollection, card);
         const categoryDoc = doc(this.firestore, `categories/${card['categoryId']}`);
         const categoryData = await docData(categoryDoc).toPromise();
         await updateDoc(categoryDoc, {questionCount: (categoryData['questionCount'] || 0) + 1});
     }
+    */
 
     async updateCardAnsweredCounter(cardid: string, counter: string) {
         const userDoc = doc(this.firestore, `users/${this.authService.auth.currentUser.uid}/answers/${cardid}`);
@@ -98,6 +98,7 @@ export class CardService {
         }
     }
 
+    /*
     updateCard(id: string, card: Partial<Card>): Promise<void> {
         const cardDoc = doc(this.firestore, `cards/${id}`);
         return updateDoc(cardDoc, card);
@@ -111,6 +112,7 @@ export class CardService {
         const categoryData = await docData(categoryDoc).toPromise();
         await updateDoc(categoryDoc, {questionCount: (categoryData['questionCount'] || 1) - 1});
     }
+    */
 
     getLearningSessions(uid: string): Observable<DocumentData[]> {
         return new Observable<DocumentData[]>(observer => {
@@ -150,7 +152,7 @@ export class CardService {
 
                 });
             } else {
-               //if learningSessions exists add new duration to existing duration
+                //if learningSessions exists add new duration to existing duration
                 const currentDuration = docSnap.data()['duration'] || 0;
                 const updatedDuration = currentDuration + newDuration;
                 await updateDoc(docRef, {
@@ -217,7 +219,6 @@ export class CardService {
      }*/
 
     //als Observable
-
 
     ngOnDestroy() {
         if (this.subscription) {

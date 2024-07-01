@@ -1,21 +1,12 @@
 import { Injectable } from '@angular/core';
 import {
     Firestore,
-    collection,
-    collectionData,
     doc,
-    addDoc,
     updateDoc,
-    deleteDoc,
-    docData,
-    query,
-    where,
-    CollectionReference,
     getDoc
 } from '@angular/fire/firestore';
-import {Card} from "../models/card.model";
-import {User} from "../models/user.model";
-import {UserService} from "./user.service";
+// import {Card} from "../models/card.model";
+// import {UserService} from "./user.service";
 import {AuthService} from "./auth.service";
 
 
@@ -27,9 +18,9 @@ export class TotalStatsService {
     private totalCorrectAnswers: number = 0;
     private totalIncorrectAnswers: number = 0;
 
-    private cardsCollection: CollectionReference<Card>;
+// private cardsCollection: CollectionReference<Card>;
 
-    constructor(private firestore: Firestore, private userService: UserService, private authService: AuthService) {
+    constructor(private firestore: Firestore, private authService: AuthService) {
 
         this.initializeStats();
         console.log(this.totalCorrectAnswers);
@@ -45,7 +36,6 @@ export class TotalStatsService {
         console.log(this.authService.auth.currentUser.uid);
         this.updatedateFirebaseStats(this.authService.auth.currentUser.uid, "correctAnswers", this.totalCorrectAnswers);
         this.updatedateFirebaseStats(this.authService.auth.currentUser.uid, "incorrectAnswers", this.totalIncorrectAnswers);
-
     }
 
     async initializeStats(){
@@ -84,6 +74,6 @@ export class TotalStatsService {
         this.totalCorrectAnswers = 0;
         this.totalIncorrectAnswers = 0;
         this.updatedateFirebaseStats(this.authService.auth.currentUser.uid, "correctAnswers", 0);
-        this.updatedateFirebaseStats(this.authService.auth.currentUser.uid, "incorrectAnswers", 0);
+        this.updatedateFirebaseStats(this.authService.auth.currentUser.uid, "incorrectAnswers", 0)
     }
 }
