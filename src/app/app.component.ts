@@ -4,7 +4,6 @@ import {
     IonFooter,
     IonHeader,
     IonRouterOutlet,
-    NavController
 } from "@ionic/angular/standalone";
 import {addIcons} from "ionicons";
 import {
@@ -28,7 +27,6 @@ import {
 import {Router} from "@angular/router";
 import {HttpClientModule} from "@angular/common/http";
 import {CardService} from './services/card.service';
-import {Question} from './models/_question.model';
 import {FooterPage} from "./components/footer/footer.page";
 import {NgIf} from "@angular/common";
 
