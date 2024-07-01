@@ -158,7 +158,7 @@
                 </ion-item-sliding>
             </ion-list>-->
 
-            <ion-list class="favoriteItem" *ngIf="favCategories.length > 0">
+            <ion-list class="favoriteItem" *ngIf="favCategories.length > 0" [inset]="true">
                 <ion-item-sliding *ngFor="let category of favCategories">
                     <ion-item lines="none" (click)="categoryService.startQuiz(category.id)">
                         {{ category.name }}

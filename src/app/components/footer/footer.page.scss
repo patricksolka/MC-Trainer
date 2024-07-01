@@ -91,15 +91,25 @@ ion-tab-button.active {
     }
   }
 }
+[data-theme="dark"] {
+  --ion-background-color-dark: #0f0f1c;
+}
 
 /* Dark Mode Specific Styles */
 @media (prefers-color-scheme: dark) {
   ion-footer {
+//    background-color: var(--ion-background-color-dark);
+    background-color: var(--ion-background-color-dark);
+    // border-radius: 5px 10px 0 0;
 
     ion-tab-bar {
-      background-color: var(--ion-background-color-md);
+      width: 100%;
+      background-color:transparent;
 
-      border-color: transparent;
+      // border-width: 0 0 0 0;
+      // border-style: solid;
+      // border-color: #35354c;
+      // box-shadow: 20px 4px 6px 0 rgba(0, 0, 0, 0.5);
 
       ion-tab-button {
         background-color: transparent;
