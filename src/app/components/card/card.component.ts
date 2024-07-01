@@ -74,7 +74,7 @@ export class CardComponent implements OnInit, OnDestroy {
     async checkAllAnswered(): Promise<Card | null> {
         for (const card of this.questions) {
             const counter = await this.cardService.getCardAnsweredCounter(card.id);
-            if (counter < 6) {
+            if (counter <= 6) {
                 return card;
             }
         }
@@ -179,7 +179,10 @@ export class CardComponent implements OnInit, OnDestroy {
 
         // Wenn alle verbleibenden Fragen mehr als 6 Mal beantwortet wurden
         this.totalStatsService.updateStats(this.correctAnswersCount, this.incorrectAnswersCount);
-
+        const question = await this.checkAllAnswered();
+        if (!question){
+            this.cardService.setCategoryDone(this.categoryId, "done", true);
+        }
         this.router.navigate(['/stats'], {
             state: {
                 correctAnswers: this.correctAnswersCount,
