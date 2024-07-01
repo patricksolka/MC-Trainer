@@ -1,10 +1,10 @@
 // categories.component.ts
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {CommonModule, NgOptimizedImage} from '@angular/common';
 import {Category} from '../../models/categories.model';
 import {CategoryService} from '../../services/category.service';
 import {Router, RouterLink} from '@angular/router';
-import {FormBuilder, FormGroup, FormsModule} from '@angular/forms';
+import {FormBuilder, FormsModule} from '@angular/forms';
 import {FooterPage} from "../footer/footer.page";
 import {from, Observable, tap} from "rxjs";
 import {ChangeDetectorRef} from "@angular/core";
@@ -50,22 +50,17 @@ export class CategoriesComponent {
         this.loadCategories();
     }
 
-    /* async loadCategories(): Promise<void> {
-         //this.loaded = false; // Start loading
-         console.log('Ladezustand1', this.loaded);
-         try {
-             this.categories = await this.categoryService.getCategories();
-             console.log('Geladene Kategorien:', this.categories); // Protokollierung hinzufügen
-             // Assuming the service updates imagesLoaded:
-             //this.loaded = this.categories.every(category => category.imageLoaded); // Check if
-             // all images loaded
-             this.loaded = true; // End loading
-             console.log('Ladezustand2', this.loaded);
-         } catch (error) {
-             console.error('Error loading categories:', error);
-             // Handle error
-         }
-     }*/
+    toggleSeach(){
+        this.searchBarVisible = !this.searchBarVisible;
+        if (this.searchBarVisible) {
+            setTimeout(() => {
+                this.#searchBar?.setFocus();
+            }, 1);
+        } else {
+            this.categoryService.searchCategory = '';
+            this.categoryService.filterCategories();
+        }
+    }
 
     async loadCategories(): Promise<void> {
         console.log('Ladezustand1', this.loaded);

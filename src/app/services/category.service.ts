@@ -89,26 +89,6 @@ export class CategoryService {
         }
     }
 
-    /*getCategories(): Observable<Category[]> {
-        return new Observable<Category[]>(observer => {
-            const filterQuery = query(this.categoriesCollectionRef, orderBy('name'));
-            const refWithConverter = filterQuery.withConverter(this.categoryConverter);
-
-            const unsubscribe = onSnapshot(refWithConverter, (snapshot) => {
-                const categories: Category[] = [];
-                snapshot.docs.forEach(doc => {
-                    categories.push(doc.data());
-                });
-                observer.next(categories);
-            }, error => {
-                observer.error(error);
-            });
-
-            // Provide a way of canceling and disposing the source
-            return unsubscribe;
-        });
-    }*/
-
     // get first 4 categories for Preview
     async getPreviewCategories(): Promise<Category[]> {
         try {
