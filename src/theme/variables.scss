@@ -214,7 +214,7 @@ http://ionicframework.com/docs/theming/ */
   }
 
   ion-toolbar ion-icon {
-    color: var(--ion-color-primary-tint); /* kräftiges Lila für Icons in der Toolbar */
+    color: var(--ion-card-background) /* kräftiges Lila für Icons in der Toolbar */
   }
 }
 
@@ -224,8 +224,8 @@ http://ionicframework.com/docs/theming/ */
     --ion-background-color: #1F1F39;
     --ion-text-color: #ffffff;
     --ion-item-background: #18182d;
-    --ion-toolbar-background: transparent;
-    // --ion-toolbar-background: #35354d;
+     --ion-toolbar-background: transparent;
+    // --ion-toolbar-background: #0f0f1c;
     --ion-card-background: #2F2F42;
     --ion-background-color-lightdark: #18182d;
     --ion-background-color-dark: #0f0f1c;
@@ -263,7 +263,7 @@ http://ionicframework.com/docs/theming/ */
     --ion-text-color-rgb: 255, 255, 255;
     // --ion-border-color: #fff;
     --ion-item-background: #18182d;
-    // --ion-toolbar-background: #35354d;
+    --ion-toolbar-background: #0f0f1c;
     --ion-tab-bar-background: #35354d;
 //    --ion-card-background:  #1d1d2b;
     --ion-card-border-color: #fff;

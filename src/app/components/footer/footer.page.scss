@@ -72,18 +72,15 @@ ion-tab-button.active {
 @media (prefers-color-scheme: light) {
   ion-footer {
     ion-tab-bar {
-      background-color: transparent;
-
+      background-color: #b3b3cc;
       ion-tab-button {
         background-color: transparent;
         color: var(--ion-text-color-dark);
         --color-selected: var(--ion-color-primary-light);
         --color-selected-hover: var(--ion-color-primary-light);
-
         ion-icon {
           color: var(--ion-color-medium);
         }
-
         ion-label {
           color: var(--ion-color-medium);
         }
@@ -91,6 +88,8 @@ ion-tab-button.active {
     }
   }
 }
+
+// DARK THEME VARIABLES
 [data-theme="dark"] {
   --ion-background-color-dark: #0f0f1c;
 }
