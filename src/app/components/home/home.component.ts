@@ -1,15 +1,12 @@
 import {Component} from '@angular/core';
-import {LoadingController} from '@ionic/angular';
 import {CommonModule} from '@angular/common';
 import {Router, RouterModule} from '@angular/router';
 import {UserService} from 'src/app/services/user.service';
-import {AuthService} from 'src/app/services/auth.service';
 import {FormsModule} from "@angular/forms";
 import {FooterPage} from "../footer/footer.page";
 import {Auth} from "@angular/fire/auth";
 import {CategoryService} from 'src/app/services/category.service';
 import {Category} from '../../models/categories.model';
-import {Observable, Subscription} from 'rxjs';
 import {
     IonButton,
     IonButtons,
@@ -33,11 +30,10 @@ import {
     IonText,
     IonToolbar
 } from "@ionic/angular/standalone";
-import {CardComponent} from "../card/card.component";
+
 import {CardService} from "../../services/card.service";
-import {card} from "ionicons/icons";
-import {firestore} from "firebase-admin";
-import DocumentData = firestore.DocumentData;
+
+
 
 
 
@@ -164,7 +160,7 @@ export class HomeComponent  {
         this.loaded = false;
         const currentUser = this.auth.currentUser;
         if (currentUser) {
-            this.cardService.getLearningSessions(currentUser.uid).subscribe(learningSessions => {
+            this.cardService.getLearningSession(currentUser.uid).subscribe(learningSessions => {
                 //calculate learning Duration
                 //round to nearest minute
                 this.learnedMinutes = Math.round(learningSessions.reduce((total, session) => total + session['duration'], 0 ));

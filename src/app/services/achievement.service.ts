@@ -9,7 +9,7 @@ export class AchievementService {
 
     constructor() {}
 
-    checkAchievements(stats: { completedQuizzes: number; correctAnswers: number; totalQuestions: number }) {
+    checkAchievements(stats: { completedQuizzes: number; correctAnswers: number, incorrectAnswers: number, totalQuestions: number }) {
         return ACHIEVEMENTS.filter(achievement => achievement.condition(stats))
             .filter(achievement => !this.achieved.has(achievement.id))
             .map(achievement => {
