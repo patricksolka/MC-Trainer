@@ -29,21 +29,8 @@ export class AuthService {
                 email: firebaseUser.email,
                 firstName,
                 lastName,
-                stats: {
-                    completedQuizzes: 0,
-                    correctAnswers: 0,
-                    totalQuestions: 0,
-                },
-                //favoriteCategories: [],
-                //favoriteCategoriesWithTimestamps:  {}
             };
 
-            // move up if needed ^
-            /* stats: {
-                 completedQuizzes: 0,
-                     correctAnswers: 0,
-                     totalQuestions: 0,
-             }*/
 
 
             const userRef = doc(this.firestore, `users/${user.uid}`);

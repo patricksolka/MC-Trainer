@@ -114,20 +114,20 @@ export class CardService {
     }
     */
 
-    getLearningSessions(uid: string): Observable<DocumentData[]> {
+    getLearningSession(uid: string): Observable<DocumentData[]> {
         return new Observable<DocumentData[]>(observer => {
             const learningSessionsRef = collection(this.firestore, `users/${uid}/learningSessions`);
 
             // Einmaliges Abrufen der Daten
             getDocs(learningSessionsRef).then(docSnap => {
                 const result = docSnap.docs.map(doc => doc.data());
-                observer.next(result); // Emit the initial data
+                observer.next(result);
             });
 
-            // Hinzufügen eines Snapshot-Listeners
+            // Snapshot-Listeners
             this.subscription = onSnapshot(learningSessionsRef, (snapshot) => {
                 const data: DocumentData[] = snapshot.docs.map(doc => doc.data());
-                observer.next(data); // Emit the updated data
+                observer.next(data);
             });
         });
     }
@@ -178,8 +178,8 @@ export class CardService {
 
             docSnap.docs.forEach(doc => {
                 const data = doc.data();
-                const endTime = data['endTime'].toDate().getTime(); // Konvertieren Sie das Timestamp-Feld in Millisekunden
-                if (currentTime - endTime > 24 * 60 * 60 * 1000) { // Überprüfen Sie, ob die Lernsitzung älter als 24 Stunden ist
+                const endTime = data['endTime'].toDate().getTime();
+                if (currentTime - endTime > 24 * 60 * 60 * 1000) {
                     deleteDoc(doc.ref);
                 }
             });

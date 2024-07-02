@@ -13,7 +13,7 @@
             <h1>Hallo, <br> <span class="userName">{{ userName }}</span></h1></ion-text>
         <ion-buttons slot="end">
             <!--<ion-button [routerLink]="['/profile']">-->
-                <ion-icon name="person-circle" [routerLink]="['/profile']"></ion-icon>
+            <ion-icon name="person-circle" [routerLink]="['/profile']"></ion-icon>
             <!--</ion-button>-->
         </ion-buttons>
     </ion-toolbar>
@@ -50,23 +50,23 @@
         </ion-card-content>
     </ion-card>
 
-<!--
-    <ion-card class="ion-padding ion-margin-bottom progressCard" [routerLink]="['/total-stats']">
-        <ion-card-content class="ion-no-padding">
-            <p class="progress">Überprüfe deinen Lernfortschritt <br> und schaue dir deine <br>Achievements
-                an</p>
-            <ion-img slot="end" class="medal" [src]="'assets/medalbg.png'" alt="medal"></ion-img>
-        </ion-card-content>
+    <!--
+        <ion-card class="ion-padding ion-margin-bottom progressCard" [routerLink]="['/total-stats']">
+            <ion-card-content class="ion-no-padding">
+                <p class="progress">Überprüfe deinen Lernfortschritt <br> und schaue dir deine <br>Achievements
+                    an</p>
+                <ion-img slot="end" class="medal" [src]="'assets/medalbg.png'" alt="medal"></ion-img>
+            </ion-card-content>
 
-        &lt;!&ndash;<ion-button routerLink="/total-stats" class="achievementsButton"
-                    style="&#45;&#45;background:
-        #FF6905;">Fortschritt
-        </ion-button>&ndash;&gt;
-        &lt;!&ndash;
-                <ion-button routerLink="/total-stats" class="stats-button" style ="&#45;&#45;background: #FF6905;">Total-Stats</ion-button>
-        &ndash;&gt;
+            &lt;!&ndash;<ion-button routerLink="/total-stats" class="achievementsButton"
+                        style="&#45;&#45;background:
+            #FF6905;">Fortschritt
+            </ion-button>&ndash;&gt;
+            &lt;!&ndash;
+                    <ion-button routerLink="/total-stats" class="stats-button" style ="&#45;&#45;background: #FF6905;">Total-Stats</ion-button>
+            &ndash;&gt;
 
-    </ion-card>-->
+        </ion-card>-->
 
 
     <ion-grid>
@@ -110,35 +110,35 @@
                 </ion-col>
             </ion-row>
 
-           <!-- <ng-container *ngIf="favCategories.length === 0" class="favorites">
-                <ion-item>
-                    <ion-text class="ion-text-start">Du hast noch keine favorisierten Module
-                        😢</ion-text>
+            <!-- <ng-container *ngIf="favCategories.length === 0" class="favorites">
+                 <ion-item>
+                     <ion-text class="ion-text-start">Du hast noch keine favorisierten Module
+                         😢</ion-text>
 
-                        <ion-button slot="end"  [routerLink]="['/meine-module']"
-                                    class="meine-module"
-                                     style="&#45;&#45;background: #FF6905;"> Module hinzufügen</ion-button>
+                         <ion-button slot="end"  [routerLink]="['/meine-module']"
+                                     class="meine-module"
+                                      style="&#45;&#45;background: #FF6905;"> Module hinzufügen</ion-button>
 
-                </ion-item>
-            </ng-container>
-               &lt;!&ndash; <ion-card *ngIf="favoriteModules.length === 0">Sie haben noch keine Module
-                    ausgewählt.
-                    <ion-button routerLink="/meine-module" class="meine-module"
-                                style="&#45;&#45;background: #FF6905;"> Module hinzufügen
-                    </ion-button>
-                </ion-card>&ndash;&gt;
-            <ion-list class="favoriteItem"> &lt;!&ndash;*ngIf="favCategories.length < 0" class="favorites"&ndash;&gt;
-                <ion-item-sliding  *ngFor="let category of favCategories">
-                    <ion-item lines="none" (click)="categoryService.startQuiz(category.id)">
-                        {{ category.name }}
-                    </ion-item>
-                    <ion-item-options side="end">
-                        <ion-item-option color="danger" (click)="removeFav(category)">
-                            <ion-icon slot="icon-only" name="trash"></ion-icon>
-                        </ion-item-option>
-                    </ion-item-options>
-                </ion-item-sliding>
-            </ion-list>-->
+                 </ion-item>
+             </ng-container>
+                &lt;!&ndash; <ion-card *ngIf="favoriteModules.length === 0">Sie haben noch keine Module
+                     ausgewählt.
+                     <ion-button routerLink="/meine-module" class="meine-module"
+                                 style="&#45;&#45;background: #FF6905;"> Module hinzufügen
+                     </ion-button>
+                 </ion-card>&ndash;&gt;
+             <ion-list class="favoriteItem"> &lt;!&ndash;*ngIf="favCategories.length < 0" class="favorites"&ndash;&gt;
+                 <ion-item-sliding  *ngFor="let category of favCategories">
+                     <ion-item lines="none" (click)="categoryService.startQuiz(category.id)">
+                         {{ category.name }}
+                     </ion-item>
+                     <ion-item-options side="end">
+                         <ion-item-option color="danger" (click)="removeFav(category)">
+                             <ion-icon slot="icon-only" name="trash"></ion-icon>
+                         </ion-item-option>
+                     </ion-item-options>
+                 </ion-item-sliding>
+             </ion-list>-->
 
             <!--<ion-list class="favoriteItem">
                 <ion-item-sliding  *ngFor="let category of favCategories">
@@ -158,7 +158,7 @@
                 </ion-item-sliding>
             </ion-list>-->
 
-            <ion-list class="favoriteItem" *ngIf="favCategories.length > 0" [inset]="true">
+            <ion-list class="favoriteItem" *ngIf="favCategories.length > 0">
                 <ion-item-sliding *ngFor="let category of favCategories">
                     <ion-item lines="none" (click)="categoryService.startQuiz(category.id)">
                         {{ category.name }}
@@ -172,17 +172,17 @@
             </ion-list>
 
 
-                <!-- Hier wird die Card angezeigt, wenn favCategories leer ist -->
-                <ion-list class="favoriteItem" *ngIf="favCategories.length === 0">
-                        <ion-item lines="none">
-                        <ion-text >Du hast noch keine favorisierten Module
-                            😢</ion-text>
+            <!-- Hier wird die Card angezeigt, wenn favCategories leer ist -->
+            <ion-list class="favoriteItem" *ngIf="favCategories.length === 0">
+                <ion-item lines="none">
+                    <ion-text >Du hast noch keine favorisierten Module
+                        😢</ion-text>
 
-                        <ion-button color="warning" slot="end"
-                                    [routerLink]="['/meine-module']"
-                                    class="meine-module"> Module hinzufügen</ion-button>
-                        </ion-item>
-                </ion-list>
+                    <ion-button color="warning" slot="end"
+                                [routerLink]="['/meine-module']"
+                                class="meine-module"> Module hinzufügen</ion-button>
+                </ion-item>
+            </ion-list>
 
         </ion-grid>
     </div>

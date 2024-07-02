@@ -327,6 +327,11 @@ $secondary-color: var(--ion-color-secondary, $secondary-color-fallback);
 // Dark Theme
 @media (prefers-color-scheme: dark) {
 
+  ion-toolbar {
+    --background: none;
+    --padding-start: 10px;
+  }
+
   ion-toolbar ion-button {
     justify-content: end;
   }

@@ -17,13 +17,14 @@ import {
     IonTitle,
     IonToolbar
 } from "@ionic/angular/standalone";
-//import {IonicModule} from "@ionic/angular";
+
 import {FooterPage} from "../footer/footer.page";
 import { TotalStatsService } from '../../services/total-stats.service';
 import {CategoryService} from "../../services/category.service";
 import {AuthService} from "../../services/auth.service";
 import {Auth} from "@angular/fire/auth";
-import {UserService} from "../../services/user.service"; // Importiere den TotalStatsService
+import {UserService} from "../../services/user.service";
+import {Stats} from "../../models/stats.model"; // Importiere den TotalStatsService
 
 
 
@@ -44,6 +45,7 @@ export class CardComponent implements OnInit, OnDestroy {
     selectedAnswers: string[] = [];
     correctAnswersCount = 0;
     incorrectAnswersCount = 0;
+    completedQuizzes = 0;
     totalQuestions = 0;
     questions: Card[] = []; // Array für alle Fragen
     correctAnswer: boolean = false;
@@ -177,9 +179,25 @@ export class CardComponent implements OnInit, OnDestroy {
         }
 
         // Wenn alle verbleibenden Fragen mehr als 6 Mal beantwortet wurden
-        this.totalStatsService.updateStats(this.correctAnswersCount, this.incorrectAnswersCount);
 
-        this.router.navigate(['/stats'], {
+        //TODO: Completed Quizzes
+        //await this.totalStatsService.incrementQuizzes(this.auth.currentUser.uid);
+
+        const newStats = {
+            correctAnswers: this.correctAnswersCount,
+            incorrectAnswers: this.incorrectAnswersCount,
+            completedQuizzes: 1
+        };
+
+        const stats = new Stats(newStats);
+        console.log('Stats111:', stats);
+        await this.totalStatsService.persistStats(this.auth.currentUser.uid, this.categoryId, stats);
+
+        //console.log(this.totalStatsService.persistStats(this.auth.currentUser.uid,
+        // this.categoryId, stats));
+
+
+        await this.router.navigate(['/stats'], {
             state: {
                 correctAnswers: this.correctAnswersCount,
                 incorrectAnswers: this.incorrectAnswersCount,
@@ -209,8 +227,8 @@ export class CardComponent implements OnInit, OnDestroy {
 
         if (isCorrect) {
             console.log("correct");
-            this.correctAnswersCount++;
             this.correctAnswer = true;
+            this.correctAnswersCount++;
             this.cardService.updateCardAnsweredCounter(this.currentQuestion.id, "counter");
         } else {
             console.log("not correct");

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from "@angular/common";
+//import {TotalStatsService} from "../../services/total-stats.service";
 
 @Component({
   selector: 'app-stats',
@@ -30,9 +31,12 @@ export class StatsComponent implements OnInit {
   }
   */
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+
+  }
 
   ngOnInit() {
+    /*const stats = this.totalStatsService.getStats();*/
     const navigation = this.router.getCurrentNavigation();
     const state = navigation?.extras.state as { correctAnswers: number; incorrectAnswers: number };
     if (state) {

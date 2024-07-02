@@ -1,41 +1,53 @@
-import {Component, OnInit} from '@angular/core';
-import {TotalStatsService} from '../../services/total-stats.service';
-import {IonicModule} from '@ionic/angular';
-import {CommonModule} from "@angular/common";
-import {Router} from '@angular/router';
-import {AlertController} from "@ionic/angular/standalone";
-import {onAuthStateChanged} from "@angular/fire/auth";
+import { Component, OnInit } from '@angular/core';
+import { TotalStatsService } from '../../services/total-stats.service';
+import { CommonModule } from "@angular/common";
+import { Router } from '@angular/router';
+import {
+    AlertController, IonButton,
+    IonCard, IonCardContent,
+    IonCardHeader,
+    IonCardTitle,
+    IonContent
+} from "@ionic/angular/standalone";
+import {AuthService} from "../../services/auth.service";
+import {CategoryService} from "../../services/category.service";
+import {Category} from "../../models/categories.model";
 
 @Component({
     selector: 'app-total-stats',
     templateUrl: './total-stats.component.html',
     standalone: true,
-    imports: [CommonModule, IonicModule]
+    imports: [CommonModule,IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton]
 })
 export class TotalStatsComponent implements OnInit {
-    totalCorrectAnswers: number = 0;
-    totalIncorrectAnswers: number = 0;
+    categories: Category[] = [];
+    totalCorrectAnswers: number
+    totalIncorrectAnswers: number
+    completedQuizzes: number = 0;
 
     constructor(private totalStatsService: TotalStatsService, private router: Router,
-                private alertController: AlertController) {
-        this.totalStatsService.initializeStats().then(() => {
-            this.updateTotalStats();
-        });
+                private alertController: AlertController, private authService: AuthService, private categoryService: CategoryService) {
     }
 
     ngOnInit() {
-        this.updateTotalStats();
+            this.loadStats();
     }
 
-    updateTotalStats() {
-        this.totalCorrectAnswers = this.totalStatsService.getTotalCorrectAnswers();
-        this.totalIncorrectAnswers = this.totalStatsService.getTotalIncorrectAnswers();
+    async loadStats(){
+        this.totalStatsService.calculateTotalStats(this.authService.auth.currentUser.uid)
+            .then(stats => {
+                this.totalCorrectAnswers = stats.totalCorrectAnswers;
+                this.totalIncorrectAnswers = stats.totalIncorrectAnswers;
+                this.completedQuizzes = stats.completedQuizzes;
+            });
     }
+
 
     backToHome() {
         this.router.navigate(['/home']);
     }
 
+    //TODO: Will man seine Statistik überhaupt zurücksetzen können?
     async resetTotalStats() {
         const alert = await this.alertController.create({
             header: 'Statistik zurücksetzen',
@@ -49,7 +61,7 @@ export class TotalStatsComponent implements OnInit {
                     text: 'Ja',
                     handler: () => {
                         this.totalStatsService.resetStats();
-                        this.updateTotalStats();
+                        //this.updateTotalStats();
                     }
                 }
             ]
@@ -59,6 +71,6 @@ export class TotalStatsComponent implements OnInit {
     }
 
     ionViewWillEnter() {
-        this.updateTotalStats();
+       this.loadStats();
     }
 }
