@@ -173,8 +173,8 @@ export class HomeComponent  {
     }
 
     ionViewWillEnter() {
-        /*this.fetchPreview();
-        this.loadFav();*/
+        //this.fetchPreview();
+        this.loadFav();
         this.userName = localStorage.getItem('userName') || 'User';
         console.log('IonViewWillEnter');
     }
