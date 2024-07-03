@@ -1,27 +1,37 @@
-<ion-header>
+<ion-header class="ion-padding">
+    @if (searchBarVisible) {
     <ion-toolbar>
-        <ion-buttons slot="start">
-            <ion-back-button defaultHref="/home"></ion-back-button>
-        </ion-buttons>
-        <ion-title>Module Management</ion-title>
-        <ion-buttons slot="end">
-            <ion-button (click)="toggleSearch()">
-                <ion-icon name="search"></ion-icon>
-            </ion-button>
-        </ion-buttons>
+        <ion-searchbar [(ngModel)]="categoryService.searchCategory"
+                       (ionInput)="categoryService.filterCategories()"
+                       (ionCancel)="toggleSearch()"
+                       placeholder="nach Kategorie suchen"
+                       show-cancel-button="always"
+                       show-clear-button="focus"
+        ></ion-searchbar>
     </ion-toolbar>
+    } @else {
+    <ion-toolbar>
+        <ion-title>Meine Module</ion-title>
+        @if (categoryService.categories) {
+    <ion-buttons slot="end">
+        <ion-button (click)="toggleSearch()">
+            <ion-icon slot="icon-only" name="search-outline"></ion-icon>
+        </ion-button>
+    </ion-buttons>
+    }
+    </ion-toolbar>
+    }
 </ion-header>
 
 <ion-content class="ion-padding">
-    <!--  <ion-searchbar *ngIf="searchVisible" [(ngModel)]="searchTerm" (ionInput)="filterCategories()"></ion-searchbar>-->
     <h2>Meine Module</h2>
     <ion-card
             *ngIf="favCategories.length === 0"><ion-text>Sie haben noch keine Module favorisiert
         😢</ion-text> </ion-card>
     <ion-list class="ion-padding" *ngFor="let category of favCategories">
         <ion-item-sliding>
-        <ion-item>
-            {{ category.name }} ({{ category.questionCount }})
+        <ion-item lines="none" (click)="categoryService.startQuiz(category.id)">
+            {{ category.name }} {{category.completedCards}} / {{ category.questionCount }}
         </ion-item>
             <ion-item-options side="end">
                 <ion-item-option color="danger" (click)="removeFav(category)">
@@ -31,12 +41,59 @@
         </ion-item-sliding>
     </ion-list>
 
+
+    <div *ngIf="categoryService.completedCategories.length > 0">
+    <h2>Absolviert</h2>
+    <ion-list class="ion-padding" *ngFor="let category of categoryService.completedCategories">
+        <ion-item-sliding>
+            <ion-item lines="none" [disabled]="true">
+                {{ category.name }} ({{ category.questionCount }})
+            </ion-item>
+            <ion-item-options side="end">
+                <ion-item-option color="danger" (click)="removeFav(category)">
+                    <ion-icon slot="icon-only" name="trash"></ion-icon>
+                </ion-item-option>
+            </ion-item-options>
+        </ion-item-sliding>
+    </ion-list>
+    </div>
+
     <h2>Entdecken</h2>
-    <ion-list class="ion-padding" *ngFor="let category of categories">
+    <ion-list class="ion-padding" *ngFor="let category of categoryService.pendingCategories">
         <ion-item (click)="addFav(category.id, category.name, category.questionCount)">
             {{ category.name }} ({{ category.questionCount }})
         </ion-item>
     </ion-list>
+
+
+
+
+
+
+
+
+
+    <!--<div class="categories-container">
+        <h2>Absolviert</h2>
+
+        <ion-list *ngIf="completedCategories.length > 0">
+            <ion-item *ngFor="let category of completedCategories">
+                <ion-label>{{ category.name }}</ion-label>
+            </ion-item>
+        </ion-list>
+
+        <p *ngIf="completedCategories.length === 0">Keine abgeschlossenen Kategorien vorhanden.</p>
+
+        <h2>Entdecken</h2>
+
+        <ion-list *ngIf="pendingCategories.length > 0">
+            <ion-item *ngFor="let category of pendingCategories">
+                <ion-label>{{ category.name }}</ion-label>
+            </ion-item>
+        </ion-list>
+
+        <p *ngIf="pendingCategories.length === 0">Alle Kategorien entdeckt!</p>
+    </div>-->
 </ion-content>
 
 

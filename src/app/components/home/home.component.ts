@@ -38,6 +38,7 @@ import {CardService} from "../../services/card.service";
 import {card} from "ionicons/icons";
 import {firestore} from "firebase-admin";
 import DocumentData = firestore.DocumentData;
+import {collection, Firestore, onSnapshot, Unsubscribe} from "@angular/fire/firestore";
 
 
 
@@ -52,16 +53,19 @@ export class HomeComponent  {
     public userName: string = localStorage.getItem('userName') || 'User';
     public categories: Category[] = [];
     public loaded: boolean = false;
-    public favCategories: { id: string; name: string }[] = [];
+    public favCategories: { id: string; name: string, questionCount: number, completedCards?: number }[] = [];
 
     //progressBar
     public learnedMinutes: number = 0;
     public totalMinutes: number = 30;
     public progress: number ;
 
+    private subscription: Unsubscribe | null = null;
+
 
 
 //TODO: LooadingController fixen sodass er nur beim starten der App angezeigt wird
+
 
     constructor(
         //private authService: AuthService,
@@ -70,7 +74,8 @@ export class HomeComponent  {
         private auth: Auth,
         public  categoryService: CategoryService,
         private userService: UserService,
-        private cardService: CardService
+        private cardService: CardService,
+        private firestore: Firestore
 
     ) {
         this.auth.onAuthStateChanged(user =>{
@@ -82,7 +87,7 @@ export class HomeComponent  {
                 });
                 this.fetchProgress();
                 this.fetchPreview();
-                this.loadFav();
+                this.observeFavCategories(user.uid);
                 this.cardService.resetLearningSession(user.uid);
                 console.log('tetst' ,this.progress);
             }
@@ -99,6 +104,16 @@ export class HomeComponent  {
             this.timerSubscription.unsubscribe();
         }
     }*/
+
+    // In HomeComponent
+    observeFavCategories(uid: string) {
+        const favCategoriesRef = collection(this.firestore, `users/${uid}/favoriteCategories`);
+        this.subscription = onSnapshot(favCategoriesRef, (snapshot) => {
+            this.favCategories = snapshot.docs.map(doc => ({ id: doc.id, name: doc.data()['name'], questionCount: doc.data()['questionCount'], completedCards: doc.data()['completedCards'] || 0}));
+            console.log(this.favCategories);
+        });
+
+    }
 
 
     //TODO: LoadingController vorerst nicht nötig
