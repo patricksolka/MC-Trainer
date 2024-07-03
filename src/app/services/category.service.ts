@@ -32,9 +32,11 @@ export class CategoryService {
     private cardsCollection: CollectionReference<Card>;
     public categories: Category[];
     public filteredCategories: Category[] = [];
-    public startTime: Date |null = null;
-    public searchCategory: string = '';
+    public completedCategories: Category[] = [];
+    public pendingCategories: Category[] = [];
 
+    public searchCategory: string = '';
+    public startTime: Date |null = null;
 
     categoriesCollectionRef: CollectionReference<DocumentData>;
 
@@ -45,7 +47,7 @@ export class CategoryService {
         this.filteredCategories = this.categories;
     }
 
-    // In CategoryService
+
 
 
     getAllCardsForCategory(categoryId: string): Observable<Card[]> {
@@ -78,14 +80,12 @@ export class CategoryService {
             const filterQuery = query(this.categoriesCollectionRef, orderBy('name'));
             const refWithConverter = filterQuery.withConverter(this.categoryConverter);
 
-            // Subscribe to real-time updates (optional)
             onSnapshot(refWithConverter, (snapshot) => {
                 snapshot.docs.forEach(docData => {
                    // console.log(docData.data());
                 });
             });
 
-            // Fetch categories once
             const categoryDocs = await getDocs(refWithConverter);
             const categories: Category[] = [];
             categoryDocs.forEach(categoryDoc => {
@@ -185,10 +185,11 @@ export class CategoryService {
             if(result == false) {
                 this.startTime = new Date();
                 console.log('Service Quiz started at:', this.startTime);
-                this.router.navigate(['/cards', categoryId]);
+                await this.router.navigate(['/cards', categoryId]);
             } else {
                 //TODO
-                this.showNoTasksAlert(categoryId); // Übergebe categoryId, um den Fortschritt zurückzusetzen
+                await this.showNoTasksAlert(categoryId); // Übergebe categoryId, um den Fortschritt
+                // zurückzusetzen
                 console.log("Nichts zu tun!");
             }
         } else {
@@ -235,11 +236,11 @@ export class CategoryService {
     }
 
     async isDone(categoryId: string): Promise<boolean> {
-        const userDoc = doc(this.firestore, `categories/${categoryId}`);
-        const userSnap = await getDoc(userDoc);
+        const docRef = doc(this.firestore, `categories/${categoryId}`);
+        const docSnap = await getDoc(docRef);
 
-        if (userSnap.exists()) {
-            const data = userSnap.data();
+        if (docSnap.exists()) {
+            const data = docSnap.data();
             /*const counter = data?.['counter'] || 0;
             return counter;*/
             return data['done'] || false;
@@ -249,15 +250,14 @@ export class CategoryService {
         }
     }
 
-    filterCategories(): void {
-        if (this.searchCategory) {
-            this.filteredCategories = this.categories.filter(category =>
-                category.name.toLowerCase().includes(this.searchCategory.toLowerCase()) /*||
-                category.moduleNr.toLowerCase().includes(this.searchCategory.toLowerCase())*/
-            );
-        } else {
-            this.filteredCategories = this.categories;
-        }
+    filterCategories() {
+        const searchQuery = this.searchCategory.toLowerCase();
+        this.completedCategories = this.categories.filter(category =>
+            category.done && category.name.toLowerCase().includes(searchQuery)
+        );
+        this.pendingCategories = this.categories.filter(category =>
+            !category.done && category.name.toLowerCase().includes(searchQuery)
+        );
     }
 
   /* async endQuiz(userId: string, categoryId: string, cardId: string) {
