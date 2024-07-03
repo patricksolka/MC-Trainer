@@ -162,8 +162,8 @@
                 <ion-item-sliding *ngFor="let category of favCategories">
                     <ion-item lines="none">
                         <ion-grid>
-                            <ion-row>
-                                <ion-col size="2">
+                            <ion-row class="ion-align-items-center">
+                                <ion-col class="centerCircle" size="2">
                                     <svg class="progressCircle" width="30" height="30" viewBox="0 0 50 50">
                                         <circle class="progressCircleBack" cx="25" cy="25" r="20"
                                                 fill="none" stroke="#eee" stroke-width="5"/>
@@ -189,7 +189,6 @@
                     </ion-item-options>
                 </ion-item-sliding>
             </ion-list>
-
 
                 <!-- Hier wird die Card angezeigt, wenn favCategories leer ist -->
                 <ion-list class="favoriteItem" *ngIf="favCategories.length === 0">

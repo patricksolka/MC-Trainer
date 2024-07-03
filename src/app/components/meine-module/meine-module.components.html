@@ -28,11 +28,42 @@
     <ion-card
             *ngIf="favCategories.length === 0"><ion-text>Sie haben noch keine Module favorisiert
         😢</ion-text> </ion-card>
-    <ion-list class="ion-padding" *ngFor="let category of favCategories">
+    <!--<ion-list class="ion-padding" *ngFor="let category of favCategories">
         <ion-item-sliding>
         <ion-item lines="none" (click)="categoryService.startQuiz(category.id)">
             {{ category.name }} {{category.completedCards}} / {{ category.questionCount }}
         </ion-item>
+            <ion-item-options side="end">
+                <ion-item-option color="danger" (click)="removeFav(category)">
+                    <ion-icon slot="icon-only" name="trash"></ion-icon>
+                </ion-item-option>
+            </ion-item-options>
+        </ion-item-sliding>
+    </ion-list>-->
+    <ion-list class="favoriteItem" *ngIf="favCategories.length > 0">
+        <ion-item-sliding *ngFor="let category of favCategories">
+            <ion-item lines="none">
+                <ion-grid>
+                    <ion-row class="ion-align-items-center">
+                        <ion-col class="centerCircle" size="2">
+                            <svg class="progressCircle" width="30" height="30" viewBox="0 0 50 50">
+                                <circle class="progressCircleBack" cx="25" cy="25" r="20"
+                                        fill="none" stroke="#eee" stroke-width="5"/>
+                                <circle class="progressCircleFront" cx="25" cy="25" r="20"
+                                        fill="none" stroke="#ff6f61" stroke-width="5"
+                                        [attr.stroke-dasharray]="125.6"
+                                        [attr.stroke-dashoffset]="125.6 - (category.completedCards / category.questionCount * 125.6)"/>
+                            </svg>
+                        </ion-col>
+                        <ion-col size="6">
+                            {{ category.name }}
+                        </ion-col>
+                        <ion-col size="4" class="ion-text-right">
+                            {{category.completedCards}} / {{ category.questionCount }}
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-item>
             <ion-item-options side="end">
                 <ion-item-option color="danger" (click)="removeFav(category)">
                     <ion-icon slot="icon-only" name="trash"></ion-icon>
