@@ -136,8 +136,8 @@ export class MeineModuleComponents {
     async removeFav(category: Category) {
         const currentUser = this.auth.currentUser;
         if (currentUser) {
-            await this.userService.removeFavCategory(currentUser.uid, category.id).then(() => {
-            });
+            await this.userService.deleteAlert(currentUser.uid, category.id);
+
         }
     }
 
