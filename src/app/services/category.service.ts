@@ -13,33 +13,47 @@ import {
     limit,
     QueryDocumentSnapshot,
     SnapshotOptions,
-    orderBy, onSnapshot, getDocs, Unsubscribe
+    orderBy, onSnapshot, getDocs, Unsubscribe, setDoc, where, collectionData
 } from '@angular/fire/firestore';
 import { Category } from '../models/categories.model';
+import { AlertController } from '@ionic/angular'; // Import AlertController
 
 import {Router} from "@angular/router";
 import {Storage} from "@angular/fire/storage";
 import {UserService} from "./user.service";
+import {Card} from "../models/card.model";
+import {Observable} from "rxjs";
+import {AuthService} from "./auth.service";
 
 @Injectable({
     providedIn: 'root'
 })
 export class CategoryService {
+    private cardsCollection: CollectionReference<Card>;
     public categories: Category[];
     public filteredCategories: Category[] = [];
-    public startTime: Date |null = null;
-    public searchCategory: string = '';
+    public completedCategories: Category[] = [];
+    public pendingCategories: Category[] = [];
 
+    public searchCategory: string = '';
+    public startTime: Date |null = null;
 
     categoriesCollectionRef: CollectionReference<DocumentData>;
 
-    constructor(private firestore: Firestore, private router: Router, private userService: UserService) {
+    constructor(private firestore: Firestore, private router: Router, private userService: UserService,
+                private alertController: AlertController, private authService: AuthService) {
         this.categoriesCollectionRef = collection(firestore, 'categories');
+        this.cardsCollection = collection(firestore, 'cards') as CollectionReference<Card>;
         this.filteredCategories = this.categories;
     }
 
-    // In CategoryService
 
+
+
+    getAllCardsForCategory(categoryId: string): Observable<Card[]> {
+        const categoryCardsQuery = query(this.cardsCollection, where('categoryId', '==', categoryId));
+        return collectionData(categoryCardsQuery, {idField: 'id'}) as Observable<Card[]>;
+    }
 
     // get category by id
     async getCategoryById(id: string): Promise<Category | null> {
@@ -66,14 +80,12 @@ export class CategoryService {
             const filterQuery = query(this.categoriesCollectionRef, orderBy('name'));
             const refWithConverter = filterQuery.withConverter(this.categoryConverter);
 
-            // Subscribe to real-time updates (optional)
             onSnapshot(refWithConverter, (snapshot) => {
                 snapshot.docs.forEach(docData => {
                    // console.log(docData.data());
                 });
             });
 
-            // Fetch categories once
             const categoryDocs = await getDocs(refWithConverter);
             const categories: Category[] = [];
             categoryDocs.forEach(categoryDoc => {
@@ -87,6 +99,32 @@ export class CategoryService {
             console.error('Error fetching categories:', error);
             return null;
         }
+    }
+
+    async resetCardAnsweredCounter(cardid: string, counter: string) {
+        const userDoc = doc(this.firestore, `users/${this.authService.auth.currentUser.uid}/answers/${cardid}`);
+        const newCount = 0;
+        await updateDoc(userDoc, {
+            [`${counter}`]: newCount
+        });
+    }
+
+    resetCardCounterForCategory(categoryId: string): void {
+        const cards = this.getAllCardsForCategory(categoryId);
+        const cardsSubscription = cards.subscribe(
+            async (cards) => {
+                if (cards.length > 0) {
+                    for(const card of cards){
+                        this.resetCardAnsweredCounter(card.id, "counter");
+                    }
+                } else {
+                    console.warn('Keine Karten gefunden für die Kategorie mit ID:', categoryId);
+                }
+            },
+            (error) => {
+                console.error('Fehler beim Laden der Karten:', error);
+            }
+        );
     }
 
     /*getCategories(): Observable<Category[]> {
@@ -141,26 +179,85 @@ export class CategoryService {
         }
     };
 
-    startQuiz(categoryId: string) {
+    async startQuiz(categoryId: string) {
         if (categoryId) {
-            this.startTime = new Date();
-            console.log('Service Quiz started at:', this.startTime);
-            this.router.navigate(['/cards', categoryId]);
+            const result = await this.isDone(categoryId);
+            if(result == false) {
+                this.startTime = new Date();
+                console.log('Service Quiz started at:', this.startTime);
+                await this.router.navigate(['/cards', categoryId]);
+            } else {
+                //TODO
+                await this.showNoTasksAlert(categoryId); // Übergebe categoryId, um den Fortschritt
+                // zurückzusetzen
+                console.log("Nichts zu tun!");
+            }
         } else {
             console.error('Invalid categoryId:', categoryId);
         }
-
     }
 
-    filterCategories(): void {
-        if (this.searchCategory) {
-            this.filteredCategories = this.categories.filter(category =>
-                category.name.toLowerCase().includes(this.searchCategory.toLowerCase()) /*||
-                category.moduleNr.toLowerCase().includes(this.searchCategory.toLowerCase())*/
-            );
+    async showNoTasksAlert(categoryId: string) {
+        const alert = await this.alertController.create({
+            header: 'Keine Aufgaben',
+            message: 'Es gibt nichts zu tun! Möchten Sie den Fortschritt zurücksetzen?',
+            buttons: [
+                {
+                    text: 'Abbrechen',
+                    role: 'cancel',
+                    handler: () => {
+                        console.log('Reset abgebrochen');
+                    }
+                },
+                {
+                    text: 'Zurücksetzen',
+                    handler: async () => {
+                        await this.resetProgress(categoryId);
+                        console.log('Fortschritt zurückgesetzt');
+                    }
+                }
+            ]
+        });
+        await alert.present();
+    }
+
+    async resetProgress(categoryId: string) {
+        await this.setDone(categoryId, "done", false);
+        await this.resetCardCounterForCategory(categoryId);
+        console.log(`Progress for category ${categoryId} has been reset.`);
+    }
+
+    async setDone(categoryId: string, attribute: string, done: boolean): Promise<void>{
+        const userDoc = doc(this.firestore, `categories/${categoryId}`);
+        const val = done;
+        await updateDoc(userDoc, {
+            [`${attribute}`]: val
+        });
+    }
+
+    async isDone(categoryId: string): Promise<boolean> {
+        const docRef = doc(this.firestore, `categories/${categoryId}`);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            /*const counter = data?.['counter'] || 0;
+            return counter;*/
+            return data['done'] || false;
         } else {
-            this.filteredCategories = this.categories;
+            await this.setDone(categoryId, "done", false);
+            return false;
         }
+    }
+
+    filterCategories() {
+        const searchQuery = this.searchCategory.toLowerCase();
+        this.completedCategories = this.categories.filter(category =>
+            category.done && category.name.toLowerCase().includes(searchQuery)
+        );
+        this.pendingCategories = this.categories.filter(category =>
+            !category.done && category.name.toLowerCase().includes(searchQuery)
+        );
     }
 
   /* async endQuiz(userId: string, categoryId: string, cardId: string) {
@@ -168,7 +265,7 @@ export class CategoryService {
        await this.userService.addLearningSession(userId, categoryId, cardId, this.startTime, endTime);
        this.startTime = null; // Reset der Startzeit
      } */
-     
+
 
     /*async addFavCategory(uid: string, categoryId: string): Promise<void> {
         try {

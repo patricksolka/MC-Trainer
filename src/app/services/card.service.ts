@@ -17,6 +17,7 @@ import {Observable, combineLatest} from 'rxjs';
 import {Category} from '../models/categories.model';
 import {map, switchMap} from 'rxjs/operators';
 import {AuthService} from "./auth.service";
+import {CategoryService} from "./category.service";
 
 
 @Injectable({
@@ -27,7 +28,7 @@ export class CardService {
     // private userCollection: CollectionReference<DocumentData>;
     private subscription: Unsubscribe | null = null;
 
-    constructor(private firestore: Firestore, private authService: AuthService) {
+    constructor(private firestore: Firestore, private authService: AuthService, private categoryService: CategoryService) {
         this.cardsCollection = collection(firestore, 'cards') as CollectionReference<Card>;
         // this.userCollection = collection(firestore, 'users') as CollectionReference<DocumentData>;
     }
@@ -83,6 +84,18 @@ export class CardService {
         });
     }
 
+    async setCategoryDone(categoryId: string, attribute: string, done: boolean): Promise<void> {
+        await this.categoryService.setDone(categoryId, attribute, done);
+    }
+
+    async resetCardAnsweredCounter(cardid: string, counter: string) {
+        const userDoc = doc(this.firestore, `users/${this.authService.auth.currentUser.uid}/answers/${cardid}`);
+        const newCount = 0;
+        await updateDoc(userDoc, {
+            [`${counter}`]: newCount
+        });
+    }
+
     async getCardAnsweredCounter(cardid: string): Promise<number> {
         const userDoc = doc(this.firestore, `users/${this.authService.auth.currentUser.uid}/answers/${cardid}`);
         const userSnap = await getDoc(userDoc);
@@ -98,7 +111,7 @@ export class CardService {
         }
     }
 
-    /*
+   /*
     updateCard(id: string, card: Partial<Card>): Promise<void> {
         const cardDoc = doc(this.firestore, `cards/${id}`);
         return updateDoc(cardDoc, card);
@@ -118,7 +131,7 @@ export class CardService {
         return new Observable<DocumentData[]>(observer => {
             const learningSessionsRef = collection(this.firestore, `users/${uid}/learningSessions`);
 
-            // Einmaliges Abrufen der Daten
+
             getDocs(learningSessionsRef).then(docSnap => {
                 const result = docSnap.docs.map(doc => doc.data());
                 observer.next(result);

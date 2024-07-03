@@ -239,89 +239,89 @@ $secondary-color: var(--ion-color-secondary, $secondary-color-fallback);
     --background-rgb: 188, 188, 188;
   }
 
-// Auskommentierter Code
-/*
-.progress-button {
-  display: inline-block;
-  width: 100px;
-  font-size: 12px;
-  text-transform: none;
-  background-color: $button-background; // Orange Farbe für den Button
-  color: white;
-  margin: 0 0 0 5px;
-  border-radius: 10px;
-  padding: 10px 20px;
-  text-align: center;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  text-decoration: none;
+  // Auskommentierter Code
+  /*
+  .progress-button {
+    display: inline-block;
+    width: 100px;
+    font-size: 12px;
+    text-transform: none;
+    background-color: $button-background; // Orange Farbe für den Button
+    color: white;
+    margin: 0 0 0 5px;
+    border-radius: 10px;
+    padding: 10px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-decoration: none;
 
-  &:hover {
-    background-color: darken($button-background, 10%);
+    &:hover {
+      background-color: darken($button-background, 10%);
+    }
+
+    &:disabled {
+      background-color: lighten($button-background, 30%);
+      cursor: not-allowed;
+    }
   }
 
-  &:disabled {
-    background-color: lighten($button-background, 30%);
-    cursor: not-allowed;
+  .progress-button-auto {
+    display: inline-block;
+    width: auto;
+    font-size: 12px;
+    text-transform: none;
+    background-color: $button-background; // Orange Farbe für den Button
+    color: white;
+    border-radius: 10px;
+    padding: 10px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-decoration: none;
+
+    &:hover {
+      background-color: darken($button-background, 10%);
+    }
+
+    &:disabled {
+      background-color: lighten($button-background, 30%);
+      cursor: not-allowed;
+    }
   }
-}
 
-.progress-button-auto {
-  display: inline-block;
-  width: auto;
-  font-size: 12px;
-  text-transform: none;
-  background-color: $button-background; // Orange Farbe für den Button
-  color: white;
-  border-radius: 10px;
-  padding: 10px 20px;
-  text-align: center;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  text-decoration: none;
-
-  &:hover {
-    background-color: darken($button-background, 10%);
+  .circle-progress {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    position: relative;
+    background: conic-gradient(
+                    #78C000 0deg,
+                    #78C000 calc(var(--progress) * 3.6deg),
+                    #C7E596 calc(var(--progress) * 3.6deg),
+                    #C7E596 360deg
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  &:disabled {
-    background-color: lighten($button-background, 30%);
-    cursor: not-allowed;
+  .circle-inner {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #1d1d2b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1em;
   }
-}
 
-.circle-progress {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  position: relative;
-  background: conic-gradient(
-                  #78C000 0deg,
-                  #78C000 calc(var(--progress) * 3.6deg),
-                  #C7E596 calc(var(--progress) * 3.6deg),
-                  #C7E596 360deg
-  );
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.circle-inner {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: #1d1d2b;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-size: 1em;
-}
-
-.circle-progress span {
-  font-size: 0.8em;
-}
-*/
+  .circle-progress span {
+    font-size: 0.8em;
+  }
+  */
 }
 
 // Dark Theme
@@ -561,87 +561,32 @@ $secondary-color: var(--ion-color-secondary, $secondary-color-fallback);
   }
 }
 
-// Auskommentierter Code
-  /*
-.progress-button {
-  display: inline-block;
-  width: 100px;
-  font-size: 12px;
-  text-transform: none;
-  background-color: $button-background; // Orange Farbe für den Button
-  color: white;
-  margin: 0 0 0 5px;
-  border-radius: 10px;
-  padding: 10px 20px;
-  text-align: center;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  text-decoration: none;
 
-  &:hover {
-    background-color: darken($button-background, 10%);
-  }
+/*.progressCircleContainer {
+  width: 100%;
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  margin-top: 5px;
+}*/
 
-  &:disabled {
-    background-color: lighten($button-background, 30%);
-    cursor: not-allowed;
-  }
+.progressCircleBack,
+.progressCircleFront {
+  stroke-linecap: round;
 }
 
-.progress-button-auto {
-  display: inline-block;
-  width: auto;
-  font-size: 12px;
-  text-transform: none;
-  background-color: $button-background; // Orange Farbe für den Button
-  color: white;
-  border-radius: 10px;
-  padding: 10px 20px;
-  text-align: center;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  text-decoration: none;
-
-  &:hover {
-    background-color: darken($button-background, 10%);
-  }
-
-  &:disabled {
-    background-color: lighten($button-background, 30%);
-    cursor: not-allowed;
-  }
+.progressCircleFront {
+  stroke: #b58988;
+  transition: stroke-dashoffset 0.3s ease;
 }
 
-.circle-progress {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  position: relative;
-  background: conic-gradient(
-                  #78C000 0deg,
-                  #78C000 calc(var(--progress) * 3.6deg),
-                  #C7E596 calc(var(--progress) * 3.6deg),
-                  #C7E596 360deg
-  );
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.progressCircle {
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
 }
 
-.circle-inner {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: #1d1d2b;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-size: 1em;
+.centerCircle {
+  align-content: center;
 }
 
-.circle-progress span {
-  font-size: 0.8em;
-}
-}
-*/
+
+
