@@ -76,7 +76,7 @@ export class CardComponent implements OnInit, OnDestroy {
     async checkAllAnswered(): Promise<Card | null> {
         for (const card of this.questions) {
             const counter = await this.cardService.getCardAnsweredCounter(card.id);
-            if (counter < 6) {
+            if (counter <= 6) {
                 return card;
             }
         }
@@ -174,14 +174,17 @@ export class CardComponent implements OnInit, OnDestroy {
 
             if (counter <= 6) {
                 this.currentQuestion = this.questions[index];
+                console.log("Frage: " + this.currentQuestion.id);
                 return;
             }
         }
 
         // Wenn alle verbleibenden Fragen mehr als 6 Mal beantwortet wurden
-
-        //TODO: Completed Quizzes
-        //await this.totalStatsService.incrementQuizzes(this.auth.currentUser.uid);
+        this.totalStatsService.updateStats(this.correctAnswersCount, this.incorrectAnswersCount);
+        const question = await this.checkAllAnswered();
+        if (!question){
+            this.cardService.setCategoryDone(this.categoryId, "done", true);
+        }
 
         const newStats = {
             correctAnswers: this.correctAnswersCount,
@@ -193,11 +196,7 @@ export class CardComponent implements OnInit, OnDestroy {
         console.log('Stats111:', stats);
         await this.totalStatsService.persistStats(this.auth.currentUser.uid, this.categoryId, stats);
 
-        //console.log(this.totalStatsService.persistStats(this.auth.currentUser.uid,
-        // this.categoryId, stats));
-
-
-        await this.router.navigate(['/stats'], {
+       await this.router.navigate(['/stats'], {
             state: {
                 correctAnswers: this.correctAnswersCount,
                 incorrectAnswers: this.incorrectAnswersCount,
@@ -205,18 +204,18 @@ export class CardComponent implements OnInit, OnDestroy {
         });
     }
 
-/*
-    checkAnswers(): void {
-       const isCorrect = this.selectedAnswers.every(answer => this.currentQuestion.correctAnswer.includes(answer)) && this.currentQuestion.correctAnswer.every(answer => this.selectedAnswers.includes(answer));
-        if(isCorrect) {
-            this.correctAnswersCount++
-            this.cardService.updateCardAnsweredCounter(this.currentQuestion.id, "counter");
-        } else {
-            this.incorrectAnswersCount++;
+    /*
+        checkAnswers(): void {
+           const isCorrect = this.selectedAnswers.every(answer => this.currentQuestion.correctAnswer.includes(answer)) && this.currentQuestion.correctAnswer.every(answer => this.selectedAnswers.includes(answer));
+            if(isCorrect) {
+                this.correctAnswersCount++
+                this.cardService.updateCardAnsweredCounter(this.currentQuestion.id, "counter");
+            } else {
+                this.incorrectAnswersCount++;
+            }
+            this.showResult = true;
         }
-        this.showResult = true;
-    }
- */
+     */
 
 
     checkAnswers(): void {
@@ -227,14 +226,16 @@ export class CardComponent implements OnInit, OnDestroy {
 
         if (isCorrect) {
             console.log("correct");
-            this.correctAnswer = true;
             this.correctAnswersCount++;
+            this.correctAnswer = true;
             this.cardService.updateCardAnsweredCounter(this.currentQuestion.id, "counter");
         } else {
             console.log("not correct");
             this.correctAnswer = false;
             this.incorrectAnswersCount++;
-           // this.cardService.updateCardAnsweredCounter(this.currentQuestion.id, "counterIncorrect");
+            this.cardService.resetCardAnsweredCounter(this.currentQuestion.id, "counter");
+
+            // this.cardService.updateCardAnsweredCounter(this.currentQuestion.id, "counterIncorrect");
         }
         this.showResult = true;
     }
@@ -256,21 +257,21 @@ export class CardComponent implements OnInit, OnDestroy {
         console.log('CardComponent', this.startTime);
     }
 
-   /* async endQuiz() {
-        if (this.categoryService.startTime) {
-            //const endTime = new Date();
-            console.log('endQuiz', this.categoryService.startTime);
-            try {
-                await this.cardService.addLearningSession(this.auth.currentUser.uid, this.categoryId, this.currentQuestion.id, this.startTime, endTime);
+    /* async endQuiz() {
+         if (this.categoryService.startTime) {
+             //const endTime = new Date();
+             console.log('endQuiz', this.categoryService.startTime);
+             try {
+                 await this.cardService.addLearningSession(this.auth.currentUser.uid, this.categoryId, this.currentQuestion.id, this.startTime, endTime);
 
-            } catch (error) {
-                console.error('Error adding learning session:', error);
-            }
-            //this.startTime = null; // Reset der Startzeit
-        } else {
-            console.error('Start time is not set.');
-        }
-    }*/
+             } catch (error) {
+                 console.error('Error adding learning session:', error);
+             }
+             //this.startTime = null; // Reset der Startzeit
+         } else {
+             console.error('Start time is not set.');
+         }
+     }*/
 
     async endQuiz() {
         if (this.categoryService.startTime) {

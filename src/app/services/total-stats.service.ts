@@ -32,6 +32,15 @@ export class TotalStatsService {
 
     }
 
+    updateStats(correct: number, incorrect: number) {
+        this.totalCorrectAnswers += correct;
+        this.totalIncorrectAnswers += incorrect;
+        console.log(this.authService.auth.currentUser.uid);
+
+
+    }
+
+
     //Funktioniert auch
     async persistStats(uid: string, categoryId: string, stats: Stats) {
         const statsCollectionRef = doc(this.firestore, `users/${uid}/stats/${categoryId}`);

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
@@ -11,34 +11,44 @@ import {AuthService} from "../../services/auth.service";
 import {FooterPage} from "../footer/footer.page";
 import {
     IonBackButton, IonButton,
-    IonButtons, IonCard, IonContent, IonHeader,
+    IonButtons, IonCard, IonCol, IonContent, IonGrid, IonHeader,
     IonIcon, IonItem,
     IonItemOption,
-    IonItemOptions, IonItemSliding, IonList, IonText, IonTitle,
+    IonItemOptions, IonItemSliding, IonLabel, IonList, IonRow, IonSearchbar, IonText, IonTitle,
     IonToolbar
 } from "@ionic/angular/standalone";
 import {collection, Firestore, onSnapshot, Unsubscribe} from "@angular/fire/firestore";
-import {Subscription} from "rxjs";
+
 
 @Component({
     selector: 'app-meine-module',
     templateUrl: './meine-module.components.html',
     styleUrls: ['./meine-module.components.scss'],
     standalone: true,
-    imports: [CommonModule, FormsModule, RouterLink, FooterPage, IonIcon, IonItemOption, IonItemOptions, IonToolbar, IonButtons, IonBackButton, IonTitle, IonButton, IonContent, IonList, IonItemSliding, IonHeader, IonItem, IonCard, IonText]
+    imports: [CommonModule, FormsModule, RouterLink, FooterPage, IonIcon, IonItemOption, IonItemOptions, IonToolbar, IonButtons, IonBackButton, IonTitle, IonButton, IonContent, IonList, IonItemSliding, IonHeader, IonItem, IonCard, IonText, IonSearchbar, IonLabel, IonCol, IonGrid, IonRow]
 })
 export class MeineModuleComponents {
     public categories: Category[] = [];
-    public favCategories: { id: string; name: string, questionCount: number }[] = [];
-    private filteredCategories: Category[] = [];
-    private searchVisible: boolean = false;
-    private searchTerm: string = '';
+    public favCategories: { id: string; name: string, questionCount: number, isDone?: boolean, completedCards?: number}[] = [];
+
+
+    searchBarVisible = false;
+    #searchBar: IonSearchbar | undefined;
     private subscription: Unsubscribe | null = null;
+    //public isDone: boolean;
+
+    @ViewChild(IonSearchbar)
+    set searchbar(sb: IonSearchbar) {
+        if (sb) {
+            setTimeout(() => sb.setFocus(), 0);
+            this.#searchBar = sb;
+        }
+    }
 
 
     constructor(
         public userService: UserService,
-        private categoriesService: CategoryService,
+        public categoryService: CategoryService,
         private authService: AuthService,
         private auth: Auth,
         private firestore: Firestore
@@ -46,7 +56,6 @@ export class MeineModuleComponents {
         onAuthStateChanged(this.authService.auth, (user) => {
             if (user) {
                 console.log('User is logged in:', user);
-                //this.loadFavCategories();
                 this.observeFavCategories(user.uid);
             } else {
                 console.log('User is logged out');
@@ -58,42 +67,60 @@ export class MeineModuleComponents {
     observeFavCategories(uid: string) {
         const favCategoriesRef = collection(this.firestore, `users/${uid}/favoriteCategories`);
         this.subscription = onSnapshot(favCategoriesRef, (snapshot) => {
-            this.favCategories = snapshot.docs.map(doc => ({ id: doc.id, name: doc.data()['name'], questionCount: doc.data()['questionCount'] }));
+            this.favCategories = snapshot.docs.map(doc => ({ id: doc.id, name: doc.data()['name'], questionCount: doc.data()['questionCount'], completedCards: doc.data()['completedCards'] || 0}));
+            console.log(this.favCategories);
             this.loadCategories();
         });
+
     }
 
+    /*async loadFav() {
+        const currentUser = this.auth.currentUser;
+        if (currentUser) {
+
+            this.favCategories = await this.userService.getFavCategories(currentUser.uid);
+            console.log(this.favCategories);
+        }
+    }*/
+
+    /*observeFavCategories(uid: string) {
+        const favCategoriesRef = collection(this.firestore, `users/${uid}/favoriteCategories`);
+        this.subscription = onSnapshot(favCategoriesRef, async (snapshot) => {
+            const favCategories = snapshot.docs.map(doc => ({
+                id: doc.id,
+                name: doc.data()['name'],
+                questionCount: doc.data()['questionCount'],
+                isDone: false // default value
+            }));
+
+            // Update isDone status for each favorite category
+            for (let category of favCategories) {
+                category.isDone = await this.categoriesService.isDone(category.id);
+            }
+
+            this.favCategories = favCategories;
+            this.loadCategories();
+        });
+    }*/
 
 
-        loadCategories() {
-            this.categoriesService.getCategories().then(categories => {
+
+       /* async loadCategories() {
+            await this.categoriesService.getCategories().then(categories => {
                 this.categories = categories.filter(category =>
                     !this.favCategories.find(fav => fav.id === category.id)
                 );
             });
+
+        }*/
+
+    async loadCategories() {
+        const categories = await this.categoryService.getCategories();
+        if (categories) {
+            this.categoryService.filterCategories();
+            //this.separateCategories(categories);
         }
-
-
-
-    /*async loadCategories() {
-        await this.categoriesService.getCategories()/!*.then(categories => {
-            //this.categories = categories;
-            //this.updateFilteredCategories();
-            this.categories = categories.filter(category =>
-                !this.favCategories.find(fav => fav.id === category.id)
-            );
-        });*!/
-    }*/
-
-   /* async loadFavCategories() {
-        const currentUser = this.auth.currentUser;
-        if (currentUser) {
-            await this.userService.getFavCategories(currentUser.uid).then(favCategories => {
-                this.favCategories = favCategories; // Assign the favoriteModules
-                //this.updateFilteredCategories();
-            });
-        }
-    }*/
+    }
 
     async addFav(categoryId: string, categoryName: string, questionCount: number) {
         const currentUser = this.auth.currentUser;
@@ -109,22 +136,26 @@ export class MeineModuleComponents {
     async removeFav(category: Category) {
         const currentUser = this.auth.currentUser;
         if (currentUser) {
-            await this.userService.removeFavCategory(currentUser.uid, category.id).then(() => {
-            });
+            await this.userService.deleteAlert(currentUser.uid, category.id);
+
         }
     }
 
 
 
     toggleSearch() {
-        this.searchVisible = !this.searchVisible;
-        if (!this.searchVisible) {
-            this.searchTerm = '';
-            this.filterCategories();
+        this.searchBarVisible = !this.searchBarVisible;
+        if (this.searchBarVisible) {
+            setTimeout(() => {
+                this.#searchBar?.setFocus();
+            }, 1);
+        } else {
+            this.categoryService.searchCategory = '';
+            this.categoryService.filterCategories();
         }
     }
 
-    filterCategories() {
+    /*filterCategories() {
         if (this.searchTerm.trim() === '') {
             //this.updateFilteredCategories();
         } else {
@@ -133,7 +164,7 @@ export class MeineModuleComponents {
                 category.name.toLowerCase().includes(this.searchTerm.toLowerCase())
             );
         }
-    }
+    }*/
 
     /*ionViewWillEnter() {
         //this.loadFavCategories();

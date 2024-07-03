@@ -1,19 +1,17 @@
-// categories.component.ts
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component,ViewChild} from '@angular/core';
 import {CommonModule, NgOptimizedImage} from '@angular/common';
 import {Category} from '../../models/categories.model';
 import {CategoryService} from '../../services/category.service';
 import {Router, RouterLink} from '@angular/router';
 import {FormBuilder, FormGroup, FormsModule} from '@angular/forms';
 import {FooterPage} from "../footer/footer.page";
-import {from, Observable, tap} from "rxjs";
 import {ChangeDetectorRef} from "@angular/core";
 import {
     IonButton,
     IonButtons,
     IonCol,
     IonContent, IonGrid,
-    IonHeader, IonIcon,
+    IonHeader, IonIcon, IonItem, IonItemDivider, IonItemGroup, IonLabel,
     IonList,
     IonRow, IonSearchbar, IonSkeletonText, IonText, IonTitle,
     IonToolbar
@@ -25,16 +23,15 @@ import {
     templateUrl: './categories.component.html',
     styleUrls: ['./categories.component.scss'],
     standalone: true,
-    imports: [CommonModule, FormsModule, RouterLink, FooterPage, IonCol, IonRow, IonContent, IonHeader, IonToolbar, IonList, IonButtons, IonButton, IonTitle, IonIcon, IonGrid, IonSearchbar, IonText, IonSkeletonText, NgOptimizedImage]
+    imports: [CommonModule, FormsModule, RouterLink, FooterPage, IonCol, IonRow, IonContent, IonHeader, IonToolbar, IonList, IonButtons, IonButton, IonTitle, IonIcon, IonGrid, IonSearchbar, IonText, IonSkeletonText, NgOptimizedImage, IonItemGroup, IonItemDivider, IonItem, IonLabel]
 })
 export class CategoriesComponent {
-    //TODO: Fix Observable vs Promise handling
-    //categories$: Observable<Category[] | null>;
+    public categories: Category[] | null;
+    public loaded: boolean = false;
 
-    categories: Category[] | null;
     searchBarVisible = false;
     #searchBar: IonSearchbar | undefined;
-    public loaded: boolean = false;
+
 
     @ViewChild(IonSearchbar)
     set searchbar(sb: IonSearchbar) {
@@ -44,34 +41,17 @@ export class CategoriesComponent {
         }
     }
 
-    //public imageLoaded: boolean;
-
     constructor(public categoryService: CategoryService, private router: Router, private fb: FormBuilder, private cdr: ChangeDetectorRef) {
         this.loadCategories();
     }
 
-    /* async loadCategories(): Promise<void> {
-         //this.loaded = false; // Start loading
-         console.log('Ladezustand1', this.loaded);
-         try {
-             this.categories = await this.categoryService.getCategories();
-             console.log('Geladene Kategorien:', this.categories); // Protokollierung hinzufügen
-             // Assuming the service updates imagesLoaded:
-             //this.loaded = this.categories.every(category => category.imageLoaded); // Check if
-             // all images loaded
-             this.loaded = true; // End loading
-             console.log('Ladezustand2', this.loaded);
-         } catch (error) {
-             console.error('Error loading categories:', error);
-             // Handle error
-         }
-     }*/
 
-    async loadCategories(): Promise<void> {
+    async loadCategories():Promise<void> {
         console.log('Ladezustand1', this.loaded);
         try {
             this.loaded = false;
             this.categories = await this.categoryService.getCategories();
+            this.loaded = false;
             this.categories.forEach(category => category.imageLoaded = false);
 
             const imageLoaded = this.categories.map(category =>
@@ -92,6 +72,7 @@ export class CategoriesComponent {
             await Promise.all(imageLoaded);
 
             if (imageLoaded) {
+                this.categoryService.filterCategories();
                 this.loaded = true;
                 console.log('Ladezustand2', this.loaded);
             }
@@ -100,8 +81,6 @@ export class CategoriesComponent {
             this.loaded = true;
         }
     }
-
-
 
     toggleSearch() {
         this.searchBarVisible = !this.searchBarVisible;
@@ -133,38 +112,13 @@ export class CategoriesComponent {
     }
 
 
-    /*addCategory(newCategoryName: string): void {
-        if (newCategoryName.trim() !== '') {
-            const newCategory: Category = {
-                id: '',
-                name: newCategoryName,
-                lastViewed: Date.now() // Add the lastViewed property
-            };
-            this.categoryService.addCategory(newCategory).then(() => {
-                this.newCategoryName = '';
-                //this.loadCategories();
-            }).catch(error => {
-                console.error('Error adding category:', error);
-            });
-        } else {
-            console.warn('Category name cannot be empty');
-        }
-    }*/
-
-
     categoryHasQuestions(category: Category): boolean {
         return category.questionCount && category.questionCount > 0;
     }
 
-    /*ionImgDidLoad(categoryId: string) {
-        //this.loadCategories();
-    console.log('Image loaded');
-    const category = this.categories.find(c => c.id === categoryId);
-    if (category) {
-        category.imageLoaded = true;
-        this.imageLoaded = true;
+    ionViewWillEnter() {
+        this.loadCategories();
     }
-    }*/
 }
 
 

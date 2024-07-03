@@ -5,7 +5,8 @@ export class Category {
     id: string; // Firebase generiert automatisch eine ID
     name: string;
     questionCount?: number; // Anzahl der Fragen
-    //lastViewed: number;
     imagePath?: string;
-   imageLoaded?: boolean = false;
+    imageLoaded?: boolean = false;
+    done?: boolean = false;
+
 }
