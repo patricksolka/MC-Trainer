@@ -32,6 +32,10 @@ export const routes: Routes = [
     path: 'categories',
     loadComponent: () => import('./components/categories/categories.component').then(m => m.CategoriesComponent),
     ...canActivate(redirectUnauthorizedToOnboarding)
+  },{
+    path: 'categories-modal',
+    loadComponent: () => import('./components/categories/categories-modal/categories-modal.component').then(m => m.CategoriesModalComponent),
+    ...canActivate(redirectUnauthorizedToOnboarding)
   },
   {
     path: 'cards/:categoryId',

@@ -86,7 +86,7 @@ export class CardService {
     }
 
     async setCategoryDone(categoryId: string, attribute: string, done: boolean): Promise<void> {
-        this.categoryService.setDone(categoryId, attribute, done);
+        await this.categoryService.setDone(categoryId, attribute, done);
     }
 
     async resetCardAnsweredCounter(cardid: string, counter: string) {
@@ -130,13 +130,13 @@ export class CardService {
         return new Observable<DocumentData[]>(observer => {
             const learningSessionsRef = collection(this.firestore, `users/${uid}/learningSessions`);
 
-            // Einmaliges Abrufen der Daten
+
             getDocs(learningSessionsRef).then(docSnap => {
                 const result = docSnap.docs.map(doc => doc.data());
                 observer.next(result); // Emit the initial data
             });
 
-            // Hinzufügen eines Snapshot-Listeners
+
             this.subscription = onSnapshot(learningSessionsRef, (snapshot) => {
                 const data: DocumentData[] = snapshot.docs.map(doc => doc.data());
                 observer.next(data); // Emit the updated data

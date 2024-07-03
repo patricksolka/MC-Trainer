@@ -8,4 +8,5 @@ export class Category {
     imagePath?: string;
     imageLoaded?: boolean = false;
     done?: boolean = false;
+
 }
