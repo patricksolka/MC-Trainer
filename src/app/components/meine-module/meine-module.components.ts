@@ -11,10 +11,10 @@ import {AuthService} from "../../services/auth.service";
 import {FooterPage} from "../footer/footer.page";
 import {
     IonBackButton, IonButton,
-    IonButtons, IonCard, IonContent, IonHeader,
+    IonButtons, IonCard, IonCol, IonContent, IonGrid, IonHeader,
     IonIcon, IonItem,
     IonItemOption,
-    IonItemOptions, IonItemSliding, IonLabel, IonList, IonSearchbar, IonText, IonTitle,
+    IonItemOptions, IonItemSliding, IonLabel, IonList, IonRow, IonSearchbar, IonText, IonTitle,
     IonToolbar
 } from "@ionic/angular/standalone";
 import {collection, Firestore, onSnapshot, Unsubscribe} from "@angular/fire/firestore";
@@ -25,7 +25,7 @@ import {collection, Firestore, onSnapshot, Unsubscribe} from "@angular/fire/fire
     templateUrl: './meine-module.components.html',
     styleUrls: ['./meine-module.components.scss'],
     standalone: true,
-    imports: [CommonModule, FormsModule, RouterLink, FooterPage, IonIcon, IonItemOption, IonItemOptions, IonToolbar, IonButtons, IonBackButton, IonTitle, IonButton, IonContent, IonList, IonItemSliding, IonHeader, IonItem, IonCard, IonText, IonSearchbar, IonLabel]
+    imports: [CommonModule, FormsModule, RouterLink, FooterPage, IonIcon, IonItemOption, IonItemOptions, IonToolbar, IonButtons, IonBackButton, IonTitle, IonButton, IonContent, IonList, IonItemSliding, IonHeader, IonItem, IonCard, IonText, IonSearchbar, IonLabel, IonCol, IonGrid, IonRow]
 })
 export class MeineModuleComponents {
     public categories: Category[] = [];
