@@ -102,7 +102,6 @@ export class CategoriesComponent {
     }
 
 
-
     toggleSearch() {
         this.searchBarVisible = !this.searchBarVisible;
         if (this.searchBarVisible) {

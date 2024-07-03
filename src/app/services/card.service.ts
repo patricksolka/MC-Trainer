@@ -46,6 +46,8 @@ export class CardService {
         return collectionData(categoryCardsQuery, {idField: 'id'}) as Observable<Card[]>;
     }
 
+
+
     getCategoriesWithQuestionCounts(): Observable<Category[]> {
         const categoriesCollection = collection(this.firestore, 'categories') as CollectionReference<Category>;
         return collectionData(categoriesCollection, {idField: 'id'}).pipe(
