@@ -195,7 +195,7 @@ export class CardComponent implements OnInit, OnDestroy {
         const stats = new Stats(newStats);
         console.log('Stats111:', stats);
         await this.totalStatsService.persistStats(this.auth.currentUser.uid, this.categoryId, stats);
-
+        await this.endQuiz();
        await this.router.navigate(['/stats'], {
             state: {
                 correctAnswers: this.correctAnswersCount,

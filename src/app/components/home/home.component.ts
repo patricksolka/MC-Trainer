@@ -183,13 +183,22 @@ export class HomeComponent  {
             this.cardService.getLearningSession(currentUser.uid).subscribe(learningSessions => {
                 //calculate learning Duration
                 //round to nearest minute
-                this.learnedMinutes = Math.round(learningSessions.reduce((total, session) => total + session['duration'], 0 ));
-                this.progress = this.learnedMinutes;
+                this.learnedMinutes = Math.round(learningSessions.reduce((total, session) =>
+                total + session['duration'], 0 ));
+               // this.progress = this.learnedMinutes;
+                this.progress = this.calcPercentage();
                 console.log('learnedMinutes', this.learnedMinutes);
                 console.log('progress', this.progress);
                 this.loaded = true;
             });
         }
+    }
+
+    //ProgressBar berechnen
+    calcPercentage() {
+        const displayedMinutes = Math.max(this.learnedMinutes, 1);
+        const progressPercentage = (displayedMinutes / this.totalMinutes) * 100;
+        return Math.min(progressPercentage, 100); // Begrenze den Wert auf maximal 100%
     }
 
 

@@ -32,8 +32,7 @@
             </ion-list>
             <ion-button *ngIf="!showResult" (click)="checkAnswers()">Antworten überprüfen</ion-button>
             <ion-button *ngIf="showResult" (click)="getNextQuestion()">Nächste Frage</ion-button>
-            <ion-button *ngIf="showResult" (click)="endQuiz()">Beenden
-            </ion-button>
+
             <p *ngIf="showResult && !this.correctAnswer">Falsch! Die richtige(n) Antwort(en) ist/sind:
                 {{ currentQuestion.correctAnswer.join(', ') }}</p>
         </ion-card-content>
