@@ -161,7 +161,7 @@
             <ion-list class="favoriteItem" *ngIf="favCategories.length > 0">
                 <ion-item-sliding *ngFor="let category of favCategories">
                     <ion-item lines="none" (click)="categoryService.startQuiz(category.id)">
-                        {{ category.name }}
+                        {{ category.name }} {{category.completedCards}} / {{ category.questionCount }}
                     </ion-item>
                     <ion-item-options side="end">
                         <ion-item-option color="danger" (click)="removeFav(category)">
