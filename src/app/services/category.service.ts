@@ -228,7 +228,7 @@ export class CategoryService {
     }
 
     async setDone(categoryId: string, attribute: string, done: boolean): Promise<void>{
-        const userDoc = doc(this.firestore, `categories/${categoryId}`);
+        const userDoc = doc(this.firestore, `users/${this.authService.auth.currentUser.uid}/categories/${categoryId}`);
         const val = done;
         await updateDoc(userDoc, {
             [`${attribute}`]: val
@@ -236,7 +236,7 @@ export class CategoryService {
     }
 
     async isDone(categoryId: string): Promise<boolean> {
-        const docRef = doc(this.firestore, `categories/${categoryId}`);
+        const docRef = doc(this.firestore, `users/${this.authService.auth.currentUser.uid}/categories/${categoryId}`);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
@@ -245,7 +245,7 @@ export class CategoryService {
             return counter;*/
             return data['done'] || false;
         } else {
-            await this.setDone(categoryId, "done", false);
+            await setDoc(docRef, {done: false});
             return false;
         }
     }

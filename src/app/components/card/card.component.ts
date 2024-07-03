@@ -76,7 +76,7 @@ export class CardComponent implements OnInit, OnDestroy {
     async checkAllAnswered(): Promise<Card | null> {
         for (const card of this.questions) {
             const counter = await this.cardService.getCardAnsweredCounter(card.id);
-            if (counter < 2) {
+            if (counter < 6) {
                 return card;
             }
         }
@@ -172,7 +172,7 @@ export class CardComponent implements OnInit, OnDestroy {
             index++;
             const counter = await this.cardService.getCardAnsweredCounter(this.questions[index].id);
 
-            if (counter < 2) {
+            if (counter < 6) {
                 this.currentQuestion = this.questions[index];
                 console.log("Frage: " + this.currentQuestion.id);
                 return;
