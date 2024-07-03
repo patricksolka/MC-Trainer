@@ -11,6 +11,7 @@ import {CategoryService} from 'src/app/services/category.service';
 import {Category} from '../../models/categories.model';
 import {Observable, Subscription} from 'rxjs';
 import {
+    AlertController,
     IonButton,
     IonButtons,
     IonCard,
@@ -75,7 +76,8 @@ export class HomeComponent  {
         public  categoryService: CategoryService,
         private userService: UserService,
         private cardService: CardService,
-        private firestore: Firestore
+        private firestore: Firestore,
+        private alertController: AlertController
 
     ) {
         this.auth.onAuthStateChanged(user =>{
@@ -141,20 +143,20 @@ export class HomeComponent  {
         return (answeredQuestions / totalQuestions) * 100;
     }*/
 
-    async loadFav() {
+   /* async loadFav() {
           const currentUser = this.auth.currentUser;
           if (currentUser) {
 
               this.favCategories = await this.userService.getFavCategories(currentUser.uid);
               console.log(this.favCategories);
           }
-      }
+      }*/
+
     async removeFav(category: Category) {
         const currentUser = this.auth.currentUser;
         if (currentUser) {
-            await this.userService.removeFavCategory(currentUser.uid, category.id).then(() => {
-                this.favCategories = this.favCategories.filter(c => c.id !== category.id);
-            });
+            await this.userService.deleteAlert(currentUser.uid, category.id);
+
         }
     }
 
@@ -190,6 +192,7 @@ export class HomeComponent  {
             });
         }
     }
+
 
     ionViewWillEnter() {
         /*this.fetchPreview();

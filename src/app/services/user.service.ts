@@ -90,7 +90,8 @@ export class UserService {
         id: string;
         name: string;
         timestamp: number;
-        questionCount: number
+        questionCount: number,
+        completedCards: number
     }[]> {
         try {
             const favCategoriesRef = collection(this.firestore, `users/${uid}/favoriteCategories`);
@@ -101,13 +102,15 @@ export class UserService {
                 id: string;
                 name: string;
                 timestamp: number;
-                questionCount: number
+                questionCount: number,
+                completedCards: number
             }[] = [];
             favDocs.forEach(favoriteDoc => {
                 const data = favoriteDoc.data() as {
                     name: string;
                     timestamp: number;
-                    questionCount: number
+                    questionCount: number,
+                    completedCards: number
                 };
                 categories.push({id: favoriteDoc.id, ...data});
             });
@@ -189,6 +192,37 @@ export class UserService {
         const userRef = doc(this.firestore, 'users', userId);
         return collection(userRef, 'favoriteCategories');
     }*/
+
+    async deleteAlert(uid: string, categoryId: string) {
+            const alert = await this.alertController.create({
+                header: 'Favorit entfernen',
+                message: `Möchten Sie dieses Modul wirklich aus Ihren Favoriten entfernen? Ihr Fortschritt geht dadurch verloren.`,
+                buttons: [
+                    {
+                        text: 'Abbrechen',
+                        role: 'cancel',
+                        handler: () => {
+                            console.log('Entfernen abgebrochen');
+                        }
+                    },
+                    {
+                        text: 'Entfernen',
+                        handler: async () => {
+                            try {
+                                await this.removeFavCategory(uid, categoryId);
+                                console.log('Favorit entfernt');
+                                // Optional: Rückmeldung geben oder Liste der Favoriten aktualisieren
+                            } catch (error) {
+                                console.error('Fehler beim Entfernen des Favoriten', error);
+                                // Optional: Fehlermeldung anzeigen
+                            }
+                        }
+                    }
+                ]
+            });
+
+        await alert.present();
+    }
 
     async showAlert(header: string, message: string) {
         const alert = await this.alertController.create({
