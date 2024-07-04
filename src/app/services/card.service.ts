@@ -131,10 +131,11 @@ export class CardService {
         return new Observable<DocumentData[]>(observer => {
             const learningSessionsRef = collection(this.firestore, `users/${uid}/learningSessions`);
 
-
             getDocs(learningSessionsRef).then(docSnap => {
-                const result = docSnap.docs.map(doc => doc.data());
-                observer.next(result);
+                    const result = docSnap.docs.map(doc => doc.data());
+                    observer.next(result);
+                    console.log('learningSession',result);
+
             });
 
             // Snapshot-Listeners
@@ -144,6 +145,25 @@ export class CardService {
             });
         });
     }
+
+
+
+    /*async getLearningSession(uid: string): Promise<DocumentData[]> {
+        try {
+            const learningSessionsRef = collection(this.firestore, `users/${uid}/learningSessions`);
+            const docSnap = await getDocs(learningSessionsRef);
+
+            if (!docSnap.empty) {
+                return docSnap.docs.map(doc => doc.data());
+            } else {
+                console.log("No learning sessions found.");
+                return null;
+            }
+        } catch (error) {
+            console.error("Error fetching learning sessions: ", error);
+            throw new Error('Error fetching learning sessions');
+        }
+    }*/
 
     async addLearningSession(uid: string, categoryId: string, cardId: string, startTime: Date, endTime: Date): Promise<void> {
         try {

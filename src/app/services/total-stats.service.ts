@@ -36,10 +36,7 @@ export class TotalStatsService {
         this.totalCorrectAnswers += correct;
         this.totalIncorrectAnswers += incorrect;
         console.log(this.authService.auth.currentUser.uid);
-
-
     }
-
 
     //Funktioniert auch
     async persistStats(uid: string, categoryId: string, stats: Stats) {

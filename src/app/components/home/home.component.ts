@@ -90,7 +90,6 @@ export class HomeComponent  {
                 this.fetchPreview();
                 this.observeFavCategories(user.uid);
                 this.cardService.resetLearningSession(user.uid);
-                console.log('tetst' ,this.progress);
             }
         });
 
@@ -184,8 +183,9 @@ export class HomeComponent  {
                 //calculate learning Duration
                 //round to nearest minute
                 this.learnedMinutes = Math.round(learningSessions.reduce((total, session) =>
-                total + session['duration'], 0 ));
-               // this.progress = this.learnedMinutes;
+                    total + session['duration'], 0 ));
+
+                // this.progress = this.learnedMinutes;
                 this.progress = this.calcPercentage();
                 console.log('learnedMinutes', this.learnedMinutes);
                 console.log('progress', this.progress);
@@ -194,13 +194,13 @@ export class HomeComponent  {
         }
     }
 
+    //TODO: Wenn keine learningSessions vorhanden, dann auch keinen progress anzeigen!!
     //ProgressBar berechnen
     calcPercentage() {
         const displayedMinutes = Math.max(this.learnedMinutes, 1);
         const progressPercentage = (displayedMinutes / this.totalMinutes) * 100;
         return Math.min(progressPercentage, 100); // Begrenze den Wert auf maximal 100%
     }
-
 
     ionViewWillEnter() {
         /*this.fetchPreview();

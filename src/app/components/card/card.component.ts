@@ -180,10 +180,10 @@ export class CardComponent implements OnInit, OnDestroy {
         }
 
         // Wenn alle verbleibenden Fragen mehr als 6 Mal beantwortet wurden
-        this.totalStatsService.updateStats(this.correctAnswersCount, this.incorrectAnswersCount);
+        //this.totalStatsService.updateStats(this.correctAnswersCount, this.incorrectAnswersCount);
         const question = await this.checkAllAnswered();
         if (!question){
-            this.cardService.setCategoryDone(this.categoryId, "done", true);
+            await this.cardService.setCategoryDone(this.categoryId, "done", true);
         }
 
         const newStats = {
@@ -193,10 +193,10 @@ export class CardComponent implements OnInit, OnDestroy {
         };
 
         const stats = new Stats(newStats);
-        console.log('Stats111:', stats);
+        console.log('Stats:', stats);
         await this.totalStatsService.persistStats(this.auth.currentUser.uid, this.categoryId, stats);
         await this.endQuiz();
-       await this.router.navigate(['/stats'], {
+        await this.router.navigate(['/stats'], {
             state: {
                 correctAnswers: this.correctAnswersCount,
                 incorrectAnswers: this.incorrectAnswersCount,
