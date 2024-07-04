@@ -31,6 +31,7 @@ import {
     IonToolbar
 } from "@ionic/angular/standalone";
 import {Subscription} from "rxjs";
+import {AuthService} from "../../services/auth.service";
 
 
 @Component({
@@ -43,7 +44,7 @@ import {Subscription} from "rxjs";
 export class MeineModuleComponents {
     public categories: Category[] = [];
     public favCategories: FavCategory[] = [];
-    public user = this.auth.currentUser;
+    public user = this.authService.auth.currentUser;
 
     searchBarVisible = false;
     #searchBar: IonSearchbar | undefined;
@@ -61,11 +62,12 @@ export class MeineModuleComponents {
         public userService: UserService,
         public categoryService: CategoryService,
         private auth: Auth,
+        private authService: AuthService
     ) {
-        onAuthStateChanged(this.auth, (user) => {
+        onAuthStateChanged(this.auth, async (user) => {
             if (user) {
                 console.log('User is logged in:', user);
-                this.loadFavs();
+                await this.loadFavs();
             } else {
                 console.log('User is logged out');
             }
@@ -73,9 +75,6 @@ export class MeineModuleComponents {
         this.loadCategories();
     }
 
-   /* ngOnInit(): void {
-        this.loadFavs();
-    }*/
 
     async loadFavs(){
         if (this.user) {
@@ -85,7 +84,7 @@ export class MeineModuleComponents {
                     console.log('Aktualisierte Favoriten:', favCategories);
                 },
                 error: (error) => {
-                    console.error('Fehler beim Laden der Favoritenkategorien:', error);
+                    console.error('Fehler beim Laden der Favoriten:', error);
                 }
             });
         }
@@ -130,7 +129,7 @@ export class MeineModuleComponents {
 
     ngOnDestroy(): void {
         if (this.subscription) {
-            this.subscription.unsubscribe(); // Beende das Abonnement beim Zerstören der Komponente
+            this.subscription.unsubscribe();
         }
     }
 

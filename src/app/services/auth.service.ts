@@ -2,11 +2,14 @@ import {Injectable} from '@angular/core';
 import {User} from '../models/user.model';
 import {
     Auth,
-    createUserWithEmailAndPassword, deleteUser,
+    createUserWithEmailAndPassword,
+    deleteUser,
+    GoogleAuthProvider,
     signInWithEmailAndPassword,
-    signOut, GoogleAuthProvider, signInWithPopup
+    signInWithPopup,
+    signOut
 } from '@angular/fire/auth';
-import {doc, Firestore,  getDoc,onSnapshot, setDoc} from "@angular/fire/firestore";
+import {doc, Firestore, getDoc, onSnapshot, setDoc} from "@angular/fire/firestore";
 import {UserService} from "./user.service";
 import {Router} from "@angular/router";
 
@@ -73,8 +76,7 @@ export class AuthService {
     async loginWithGoogle() {
         const provider = new GoogleAuthProvider();
         try {
-            const result = await signInWithPopup(this.auth, provider);
-            return result;
+            return await signInWithPopup(this.auth, provider);
         } catch (error) {
             console.error(error);
             throw error;
