@@ -10,7 +10,7 @@ import {
     query,
     orderBy,
     onSnapshot,
-    CollectionReference, collection, setDoc, Unsubscribe
+    CollectionReference, collection, setDoc
 } from "@angular/fire/firestore";
 import {Injectable} from "@angular/core";
 import {User} from "../models/user.model";
@@ -18,7 +18,6 @@ import {AlertController} from "@ionic/angular";
 import {FavCategory} from "../models/categories.model";
 import {Observable} from "rxjs";
 
-import {Auth} from "@angular/fire/auth";
 
 
 @Injectable({
@@ -31,7 +30,6 @@ export class UserService {
 
     public userCollectionRef: CollectionReference<DocumentData>;
     public favCollectionRef : CollectionReference<DocumentData>;
-
 
     public favCategories: FavCategory[] = [];
 
@@ -282,11 +280,6 @@ export class UserService {
             return copy;
         }
     };
-
-    /*getFavcollectionRef(userId: string): CollectionReference<DocumentData> {
-        const userRef = doc(this.firestore, 'users', userId);
-        return collection(userRef, 'favoriteCategories');
-    }*/
 
     async deleteAlert(uid: string, categoryId: string) {
             const alert = await this.alertController.create({

@@ -32,6 +32,7 @@ import {
 } from "@ionic/angular/standalone";
 import {Subscription} from "rxjs";
 import {AuthService} from "../../services/auth.service";
+import {User} from "../../models/user.model";
 
 
 @Component({
@@ -44,7 +45,7 @@ import {AuthService} from "../../services/auth.service";
 export class MeineModuleComponents {
     public categories: Category[] = [];
     public favCategories: FavCategory[] = [];
-    public user = this.authService.auth.currentUser;
+    public user: User;
 
     searchBarVisible = false;
     #searchBar: IonSearchbar | undefined;
@@ -66,8 +67,13 @@ export class MeineModuleComponents {
     ) {
         onAuthStateChanged(this.auth, async (user) => {
             if (user) {
-                console.log('User is logged in:', user);
-                await this.loadFavs();
+                console.log('User is logged in:', user.uid);
+                this.user = await this.authService.getUserDetails(user.uid);
+                if (this.user) {
+                    localStorage.setItem('userName', this.user.firstName);
+                    console.log('Loaded user details:', this.user);
+                    await this.loadFavs();
+                }
             } else {
                 console.log('User is logged out');
             }
