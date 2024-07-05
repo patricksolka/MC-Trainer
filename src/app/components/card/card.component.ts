@@ -17,14 +17,16 @@ import {
     IonTitle,
     IonToolbar
 } from "@ionic/angular/standalone";
-
-import {FooterPage} from "../footer/footer.page";
+import { FooterPage } from "../footer/footer.page";
 import { TotalStatsService } from '../../services/total-stats.service';
-import {CategoryService} from "../../services/category.service";
-import {AuthService} from "../../services/auth.service";
-import {Auth} from "@angular/fire/auth";
-import {UserService} from "../../services/user.service";
-import {Stats} from "../../models/stats.model"; // Importiere den TotalStatsService
+import { CategoryService } from "../../services/category.service";
+import { AuthService } from "../../services/auth.service";
+import { Auth } from "@angular/fire/auth";
+import { UserService } from "../../services/user.service";
+import { Stats } from "../../models/stats.model";
+import { AchievementService } from "../../services/achievement.service";
+import { ToastController } from '@ionic/angular';
+
 
 
 
@@ -59,8 +61,9 @@ export class CardComponent implements OnInit, OnDestroy {
                 private totalStatsService: TotalStatsService,
                 private categoryService: CategoryService,
                 private auth: Auth,
-                private userService: UserService
-
+                private userService: UserService,
+                private achievementService: AchievementService,
+                private toastController: ToastController
     ) { }
 
     ngOnInit(): void {
@@ -168,41 +171,50 @@ export class CardComponent implements OnInit, OnDestroy {
 
         let index = this.questions.indexOf(this.currentQuestion);
 
-        while (index < this.questions.length - 1) {
+        if (index < this.questions.length - 1) {
             index++;
-            const counter = await this.cardService.getCardAnsweredCounter(this.questions[index].id);
-
-            if (counter < 6) {
-                this.currentQuestion = this.questions[index];
-                console.log("Frage: " + this.currentQuestion.id);
-                return;
-            }
-        }
-
-        // Wenn alle verbleibenden Fragen mehr als 6 Mal beantwortet wurden
-        //this.totalStatsService.updateStats(this.correctAnswersCount, this.incorrectAnswersCount);
-        const question = await this.checkAllAnswered();
-        if (!question){
-            await this.cardService.setCategoryDone(this.categoryId, "done", true);
-        }
-
-        const newStats = {
-            correctAnswers: this.correctAnswersCount,
-            incorrectAnswers: this.incorrectAnswersCount,
-            completedQuizzes: 1
-        };
-
-        const stats = new Stats(newStats);
-        console.log('Stats:', stats);
-        await this.totalStatsService.persistStats(this.auth.currentUser.uid, this.categoryId, stats);
-        await this.endQuiz();
-        await this.router.navigate(['/stats'], {
-            state: {
+            this.currentQuestion = this.questions[index];
+            console.log("Question: " + this.currentQuestion.id);
+        } else {
+            console.log("No more questions");
+            const newStats = {
                 correctAnswers: this.correctAnswersCount,
                 incorrectAnswers: this.incorrectAnswersCount,
-            }
+                completedQuizzes: 1
+            };
+
+            const stats = new Stats(newStats);
+            console.log('Stats:', stats);
+            await this.totalStatsService.persistStats(this.auth.currentUser.uid, this.categoryId, stats);
+            await this.endQuiz();
+            await this.router.navigate(['/stats'], {
+                state: {
+                    correctAnswers: this.correctAnswersCount,
+                    incorrectAnswers: this.incorrectAnswersCount,
+                }
+            });
+        }
+    }
+
+
+    checkForNewAchievements(stats) {
+        const newAchievements = this.achievementService.checkAchievements(stats);
+        newAchievements.forEach(achievement => {
+            this.showAchievementToast(achievement);
         });
     }
+
+    async showAchievementToast(achievement) {
+        const toast = await this.toastController.create({
+            header: 'Congratulations!',
+            message: `${achievement.name}: ${achievement.description}`,
+            duration: 2000, // Toast duration in milliseconds
+            position: 'top', // Position of the toast
+        });
+
+        await toast.present();
+    }
+
 
     /*
         checkAnswers(): void {
@@ -219,9 +231,7 @@ export class CardComponent implements OnInit, OnDestroy {
 
 
     checkAnswers(): void {
-        // Überprüfen, ob alle ausgewählten Antworten korrekt sind
         const allSelectedCorrect = this.selectedAnswers.every(answer => this.currentQuestion.correctAnswer.includes(answer));
-        // Überprüfen, ob die Anzahl der ausgewählten Antworten der Anzahl der korrekten Antworten entspricht
         const isCorrect = allSelectedCorrect && this.selectedAnswers.length === this.currentQuestion.correctAnswer.length;
 
         if (isCorrect) {
@@ -229,16 +239,24 @@ export class CardComponent implements OnInit, OnDestroy {
             this.correctAnswersCount++;
             this.correctAnswer = true;
             this.cardService.updateCardAnsweredCounter(this.currentQuestion.id, "counter");
+
+            // Call checkForNewAchievements with the updated stats
+            const stats = {
+                completedQuizzes: this.completedQuizzes,
+                correctAnswers: this.correctAnswersCount,
+                incorrectAnswers: this.incorrectAnswersCount,
+                totalQuestions: this.totalQuestions
+            };
+            this.checkForNewAchievements(stats);
         } else {
             console.log("not correct");
             this.correctAnswer = false;
             this.incorrectAnswersCount++;
             this.cardService.resetCardAnsweredCounter(this.currentQuestion.id, "counter");
-
-            // this.cardService.updateCardAnsweredCounter(this.currentQuestion.id, "counterIncorrect");
         }
         this.showResult = true;
     }
+
 
 
     isCorrectAnswer(answer: string): boolean {
@@ -298,6 +316,24 @@ export class CardComponent implements OnInit, OnDestroy {
         } else {
             console.error('Start time is not set.');
         }
+        const newStats = {
+            completedQuizzes: this.completedQuizzes + 1,
+            correctAnswers: this.correctAnswersCount,
+            incorrectAnswers: this.incorrectAnswersCount,
+            totalQuestions: this.totalQuestions
+        };
+
+        const stats = new Stats(newStats);
+        console.log('Stats:', stats);
+        await this.totalStatsService.persistStats(this.auth.currentUser.uid, this.categoryId, stats);
+        this.checkForNewAchievements(stats); // Check for new achievements
+
+        await this.router.navigate(['/stats'], {
+            state: {
+                correctAnswers: this.correctAnswersCount,
+                incorrectAnswers: this.incorrectAnswersCount,
+            }
+        });
     }
 
 

@@ -1,11 +1,21 @@
-<!-- achievements.component.html -->
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/home"></ion-back-button>
+        </ion-buttons>
+        <ion-title>Achievements</ion-title>
+    </ion-toolbar>
+</ion-header>
+
 <ion-content>
-    <ion-card *ngFor="let achievement of achievements">
-        <ion-card-header>
-            {{ achievement.name }}
-        </ion-card-header>
-        <ion-card-content>
-            {{ achievement.description }}
-        </ion-card-content>
-    </ion-card>
+    <ion-col>
+        <ion-card *ngFor="let achievement of achievements">
+            <ion-card-header>
+                {{ achievement.name }}
+            </ion-card-header>
+            <ion-card-content>
+                {{ achievement.description }}
+            </ion-card-content>
+        </ion-card>
+    </ion-col>
 </ion-content>

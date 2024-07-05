@@ -34,8 +34,9 @@
                                  [style.width.%]="(learnedMinutes /
                             totalMinutes) * 100"></div> -->
                             <div class="progressBar" [ngClass]="{'full': progress >= 30}"
-                                 [style.width.%]="progress"></div>
+                            [style.width.%]="progress"></div>
                         </div>
+                        <p [routerLink]="['/achievements']">Achievements</p>
                     </ion-col>
                 </ion-row>
             </ion-grid>
