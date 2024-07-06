@@ -1,62 +1,129 @@
 // LIGHT MODE
 @media (prefers-color-scheme: light) {
-  ion-card-header.ion-inherit-color.ios {
-    color: #2fdf75;
+  ion-toolbar {
+    border: none;
+    --ion-toolbar-background: var(--ion-background-color-darker);
+    --padding-start: var(--ion-padding, 16px);
+    --padding-end: var(--ion-padding, 16px);
+    --padding-top: var(--ion-padding, 16px);
+    --padding-bottom: var(--ion-padding, 16px);
   }
-  .selected {
-    color: #e0ac08;
-    border: 2px solid var(--ion-color-primary);
-    background-color: #d9d9d9;
-    font-weight: bold;
-  }
-  .correct {
-    border: 3px solid green;
-    background-color: #a5d6a7;
-    color: var(--ion-color-success);
-  }
-  .incorrect {
-    border: 3px solid red;
-    background-color: #ef9a9a;
-    color: var(--ion-color-danger);
-  }
+
   ion-card {
     margin: 20px;
+
+    ion-card-header {
+      color: var(--ion-text-color);
+    }
+
+    ion-card-content {
+      ion-list {
+        background-color: transparent;
+        border-radius: 10px;
+        ion-item {
+          cursor: pointer;
+          --background: var(--ion-background-color-darker); /* Setzt die Hintergrundfarbe des Listenelements */
+          &.selected {
+            color: #e0ac08 !important;
+            border: 2px solid var(--ion-color-primary) !important;
+            --background: var(--ion-background-color-darker) !important;
+            font-weight: bold !important;
+          }
+
+          &.correct {
+            border: 3px solid green !important;
+            --background: var(--ion-color-success-tint) !important;
+            color: green !important;
+          }
+
+          &.incorrect {
+            border: 3px solid red !important;
+            --background: #ef9a9a !important;
+            color: var(--ion-color-danger) !important;
+          }
+
+          &.selected-answer {
+            color: var(--ion-color-primary-tint) !important;
+            font-weight: bold !important;
+          }
+        };
+      }
+    }
   }
-  ion-item {
-    cursor: pointer;
-  }
-  .selected-answer {
-    color: var(--ion-color-primary-tint);
-    font-weight: bold;
+
+  ion-button {
+    margin-top: 15px;
+    &.specific-class {
+      --background: var(--ion-color-secondary) !important;
+      color: var(--ion-color-light) !important;
+    }
   }
 }
 
 // DARK MODE
 @media (prefers-color-scheme: dark) {
-  .selected {
-    color: var(--ion-color-tertiary-contrast);
-    border: 2px solid var(--ion-color-primary);
-    background-color: #d9d9d9;
-    font-weight: bold;
+  ion-toolbar {
+    border: none;
+    --ion-toolbar-background: #0f0f1c;
+    --padding-start: var(--ion-padding, 16px);
+    --padding-end: var(--ion-padding, 16px);
+    --padding-top: var(--ion-padding, 16px);
+    --padding-bottom: var(--ion-padding, 16px);
   }
-  .correct {
-    border: 3px solid green;
-    background-color: #a5d6a7;
-    color: var(--ion-color-success);
-  }
-  .incorrect {
-    border: 3px solid red;
-    background-color: #ef9a9a;
-    color: var(--ion-color-danger);
-  }
+
   ion-card {
     margin: 20px;
+    background-color: var(--ion-color-dark-shade);
+
+    ion-card-header {
+      color: var(--ion-text-color);
+    }
+
+    ion-card-content {
+      ion-list {
+        background-color: transparent;
+        border-radius: 10px;
+        ion-item {
+          cursor: pointer;
+          --background: var(--ion-color-dark-tint); /* Setzt die Hintergrundfarbe des Listenelements */
+
+          &.selected {
+            color: var(--ion-color-tertiary-contrast) !important;
+            border: 2px solid var(--ion-color-primary) !important;
+            --background: #d9d9d9 !important;
+            font-weight: bold !important;
+          }
+
+          &.correct {
+            border: 3px solid green !important;
+            --background: #a5d6a7 !important;
+            color: var(--ion-color-success) !important;
+          }
+
+          &.incorrect {
+            border: 3px solid red !important;
+            --background: #ef9a9a !important;
+            color: var(--ion-color-danger) !important;
+          }
+
+          &.selected-answer {
+            color: var(--ion-color-primary-tint) !important;
+            font-weight: bold !important;
+          }
+
+          .item-native {
+            background-color: var(--ion-color-primary) !important;
+          }
+        }
+      }
+    }
   }
-  ion-item {
-    cursor: pointer;
-  }
-  .selected-answer {
-    color: var(--ion-color-primary-tint);
-    font-weight: bold;
+
+  ion-button {
+    margin-top: 15px;
+    &.specific-class {
+      --background: var(--ion-color-secondary) !important;
+      color: var(--ion-color-light) !important;
+    }
   }
 }

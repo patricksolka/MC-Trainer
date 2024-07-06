@@ -21,7 +21,7 @@ import {
 import {FooterPage} from "../footer/footer.page";
 import { TotalStatsService } from '../../services/total-stats.service';
 import {CategoryService} from "../../services/category.service";
-import {AuthService} from "../../services/auth.service";
+// import {AuthService} from "../../services/auth.service";
 import {Auth} from "@angular/fire/auth";
 import {UserService} from "../../services/user.service";
 import {Stats} from "../../models/stats.model"; // Importiere den TotalStatsService
@@ -68,10 +68,11 @@ export class CardComponent implements OnInit, OnDestroy {
         console.log('Category ID:', this.categoryId);
         this.loadCards(this.categoryId);
     }
-
+    /*
     loadCategories(): void {
         this.categories$ = this.cardService.getCategoriesWithQuestionCounts();
     }
+    */
 
     async checkAllAnswered(): Promise<Card | null> {
         for (const card of this.questions) {
@@ -299,7 +300,6 @@ export class CardComponent implements OnInit, OnDestroy {
             console.error('Start time is not set.');
         }
     }
-
 
     ngOnDestroy(): void {
         if (this.cardsSubscription) {
