@@ -1,51 +1,114 @@
-ion-icon {
-  width: 32px;
-  height: 32px;
+// LIGHT MODE
+@media (prefers-color-scheme: light) {
+  .header {
+    display: flex;
+    align-items: center;
+  }
+
+  ion-content {
+    display: flex;
+
+    ion-icon {
+      width: 32px;
+      height: 32px;
+    }
+
+    .input-wrapper.sc-ion-input-ios {
+      border-radius: 10px; // Border radius für das Input-Feld
+    }
+
+    .native-wrapper.sc-ion-input-ios {
+      border-radius: 10px; // Border radius für den Wrapper
+    }
+
+    ion-input {
+      --background: var(--ion-background-color-darker);
+      color: #858597;
+      font-weight: 500;
+      font-size: 16px;
+      height: 70px;
+      border-radius: 10px; // Falls direkt auf ion-input angewendet werden muss
+    }
+
+    .profile {
+      font-size: 30pt;
+      font-weight: bold;
+    }
+
+    .ulp {
+      font-size: 16px;
+      font-weight: 500;
+      text-transform: none;
+      --background: #3D5CFF;
+      --border-radius: 10px; // Falls über eine Ionic Variable angewendet wird
+      height: 70px;
+      min-width: 380px;
+    }
+
+    .backButton {
+      --background: transparentize(#3D5CFF, 0);
+    }
+
+    .backButton {
+      margin-right: auto;
+    }
+  }
 }
 
-ion-input {
-  --background: #3E3E55;
-  color: #858597;
-  font-weight: 500;
-  font-size: 16px;
-  height: 70px;
-}
 
-.input-fill-outline.sc-ion-input-md-h{
-  --border-radius: 10px !important;
-  --border-color: none;
+// DARK MODE
+@media (prefers-color-scheme: dark) {
+  .header {
+    display: flex;
+    align-items: center;
+  }
 
-}
+  ion-content {
+    display: flex;
 
-ion-content {
-  --ion-background-color: #1F1F39 !important;
-}
+    ion-icon {
+      width: 32px;
+      height: 32px;
+    }
 
-.profile{
-  font-size: 30pt;
-  font-weight: bold;
-}
+    .input-wrapper.sc-ion-input-ios {
+      border-radius: 10px; // Border radius für das Input-Feld
+    }
 
-.ulp {
-  font-size: 16px;
-  font-weight: 500;
-  text-transform: none;
-  --background: #3D5CFF;
-  --border-radius: 10px;
-  height: 70px;
-  min-width: 380px;
-}
+    .native-wrapper.sc-ion-input-ios {
+      border-radius: 10px; // Border radius für den Wrapper
+    }
 
-.backButton{
-  --background: transparentize(#3D5CFF, 0);
-}
+    ion-input {
+      --background: #3E3E55;
+      color: #858597;
+      font-weight: 500;
+      font-size: 16px;
+      height: 70px;
+      border-radius: 10px; // Falls direkt auf ion-input angewendet werden muss
+    }
 
+    .profile {
+      font-size: 30pt;
+      font-weight: bold;
+    }
 
-.header {
-  display: flex;
-  align-items: center;
-}
+    .ulp {
+      font-size: 16px;
+      font-weight: 500;
+      text-transform: none;
+      --background: #3D5CFF;
+      --border-radius: 10px; // Falls über eine Ionic Variable angewendet wird
+      height: 70px;
+      min-width: 380px;
+    }
 
-.backButton {
-  margin-right: auto;
+    .backButton {
+      --background: transparentize(#3D5CFF, 0);
+    }
+
+    .backButton {
+      margin-right: auto;
+    }
+  }
 }

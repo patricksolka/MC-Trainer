@@ -90,28 +90,32 @@ DARK MODE
 LIGHT MODE
  **/
 @media (prefers-color-scheme: light) {
-  ion-toolbar {
-    border: none;
-    --ion-toolbar-background: #b3b3cc;
-    --padding-start: var(--ion-padding, 16px);
-    --padding-end: var(--ion-padding, 16px);
-    --padding-top: var(--ion-padding, 16px);
-    --padding-bottom: var(--ion-padding, 16px);
-    color: #FFF;
+  ion-header {
+    background-color: var(--ion-background-color-dark);
 
-    ion-icon {
+    ion-toolbar {
+      border: none;
+      --ion-toolbar-background: #b3b3cc;
+      --padding-start: var(--ion-padding, 16px);
+      --padding-end: var(--ion-padding, 16px);
+      --padding-top: var(--ion-padding, 16px);
+      --padding-bottom: var(--ion-padding, 16px);
       color: #FFF;
+
+      ion-icon {
+        color: #FFF;
+      }
     }
-  }
-  ion-searchbar {
-    --cancel-button-color: #0000ff; /* Setzt die Farbe des Cancel-Buttons auf Blau */
-    background-color: transparent;
-    color: white;
-    box-shadow: none;
-    padding: 16px;
+    ion-searchbar {
+      --cancel-button-color: #0000ff; /* Setzt die Farbe des Cancel-Buttons auf Blau */
+      background-color: transparent;
+      color: white;
+      box-shadow: none;
+      padding: 16px;
 
-    ion-icon {
-      color: #FFF;
+      ion-icon {
+        color: #FFF;
+      }
     }
   }
   .categoryImage {
