@@ -11,5 +11,17 @@
             <ion-button (click)="resetTotalStats()" color="danger">Statistik zurücksetzen</ion-button>
         </ion-card-content>
     </ion-card>
+
+    <ion-card *ngFor="let module of modules">
+        <ion-card-header>
+            <ion-card-title>{{ module.name }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <p>Richtige Antworten: {{ module.correctAnswers }}</p>
+            <p>Falsche Antworten: {{ module.incorrectAnswers }}</p>
+            <p>Abgeschlossene Quizze: {{ module.completedQuizzes }}</p>
+            <ion-progress-bar [value]="module.correctAnswers / (module.correctAnswers + module.incorrectAnswers)"></ion-progress-bar>
+        </ion-card-content>
+    </ion-card>
 </ion-content>
 
