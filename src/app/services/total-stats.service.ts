@@ -24,7 +24,6 @@ export class TotalStatsService {
     private totalCorrectAnswers: number = 0;
     private totalIncorrectAnswers: number = 0;
     private subscription: Unsubscribe | null = null;
-
     private userCollection: CollectionReference<DocumentData>;
 
     constructor(private firestore: Firestore, private userService: UserService, private authService: AuthService) {
@@ -104,12 +103,13 @@ export class TotalStatsService {
         let totalIncorrectAnswers = 0;
         let completedQuizzes = 0;
 
+        /*
         this.subscription = onSnapshot(refWithConverter, (snapshot) => {
             snapshot.docs.forEach(docData => {
                 console.log(docData.data());
             });
         });
-
+    */
         const statsDocs = await getDocs(refWithConverter);
         statsDocs.forEach((doc) => {
             const stats = doc.data();
