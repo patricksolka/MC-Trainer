@@ -93,7 +93,7 @@ export class CategoriesComponent {
             this.categoryService.filterCategories();
         }
     }
-
+    /*
     shareRecords() {
         // Implementiere deine Funktion hier
     }
@@ -101,6 +101,7 @@ export class CategoriesComponent {
     navigateHome() {
         // Implementiere deine Funktion hier
     }
+    */
 
     selectCategory(categoryId: string) {
         if (categoryId) {
@@ -110,8 +111,6 @@ export class CategoriesComponent {
             // Handle invalid categoryId case, e.g., show error message or navigate to a default route
         }
     }
-
-
     categoryHasQuestions(category: Category): boolean {
         return category.questionCount && category.questionCount > 0;
     }
