@@ -73,8 +73,8 @@ export const routes: Routes = [
 
   },
   {
-    path: 'meine-module',
-    loadComponent: () => import('./components/meine-module/meine-module.components').then(m => m.MeineModuleComponents),
+    path: 'personalFavorites',
+    loadComponent: () => import('./components/personalFavorites/personalFavorites').then(m => m.PersonalFavorites),
     ...canActivate(redirectUnauthorizedToOnboarding)
   },
 
