@@ -1,0 +1,30 @@
+// LIGHT MODE
+@media (prefers-color-scheme: light) {
+  ion-header {
+    background-color: var(--ion-background-color);
+    ion-toolbar {
+      border: none;
+      --ion-toolbar-background: var(--ion-background-color-darker);
+      --padding-start: var(--ion-padding, 16px);
+      --padding-end: var(--ion-padding, 16px);
+      --padding-top: var(--ion-padding, 16px);
+      --padding-bottom: var(--ion-padding, 16px);
+    }
+  }
+}
+
+// LIGHT MODE
+@media (prefers-color-scheme: dark) {
+  ion-header {
+    background-color: var(--ion-background-color-dark);
+
+    ion-toolbar {
+      border: none;
+      --ion-toolbar-background: none;
+      --padding-start: var(--ion-padding, 16px);
+      --padding-end: var(--ion-padding, 16px);
+      --padding-top: var(--ion-padding, 16px);
+      --padding-bottom: var(--ion-padding, 16px);
+    }
+  }
+}

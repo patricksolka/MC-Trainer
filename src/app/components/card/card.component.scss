@@ -11,10 +11,15 @@
 
   ion-card {
     margin: 20px;
+    // background-color: var(--ion-color-dark-shade);
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
 
     ion-card-header {
-      //  color: var(--ion-text-color);
-      color: transparent;
+      color: var(--ion-text-color-light);
+      font-weight: bold !important;
+      font-size: var(--ion-font-size, 20px);
     }
 
     ion-card-content {
@@ -23,25 +28,42 @@
         border-radius: 10px;
 
         ion-item {
+          width: auto;
+          display: block;
           cursor: pointer;
-          // --background: var(--ion-background-color-darker); /* Setzt die Hintergrundfarbe des Listenelements */
+          --background: var(--ion-card-background-mockup); /* Setzt die Hintergrundfarbe des Listenelements */
+          // background-color: var(--ion-color-dark);
+          margin: 10px;
+          height: auto;
+          font-size: x-large;
+          border-radius: 10px;
+          box-shadow: 3px 3px 3px var(--ion-border-color);
+          /* Entfernt die Standard-Unterlinie */
+          --inner-border-color: transparent;
+          --inner-border-width: 0;
+
+          &:focus {
+            --inner-border-color: transparent;
+            --inner-border-width: 0;
+          }
+
           &.selected {
             color: #e0ac08 !important;
             border: 2px solid var(--ion-color-primary) !important;
-            --background: var(--ion-background-color-darker) !important;
+            --background: var(--ion-card-background-mockup) !important;
             font-weight: bold !important;
           }
 
           &.correct {
-            border: 3px solid green !important;
-            --background: var(--ion-color-success-tint) !important;
-            color: green !important;
+            border: 3px solid #8fce00 !important;
+            --background: var(--ion-card-background-mockup)!important;
+            color: var(--ion-text-color-light)!important;
           }
 
           &.incorrect {
             border: 3px solid red !important;
-            --background: #ef9a9a !important;
-            color: var(--ion-color-danger) !important;
+            --background: var(--ion-card-background-mockup)!important;
+            color: var(--ion-text-color-light) !important;
           }
 
           &.selected-answer {
@@ -54,17 +76,46 @@
     }
   }
 
-  ion-button {
+  ion-header ion-toolbar ion-button.button-solid {
+    --background: var(--ion-color-base) !important;
+    color: var(--ion-color-light) !important;
     margin-top: 15px;
 
-    &.specific-class {
-      --background: var(--ion-color-secondary) !important;
-      color: var(--ion-color-light) !important;
+    // Hintergrundfarbe für den aktiven Zustand anpassen
+    &:active,
+    &:focus {
+      --background: var(--ion-color-base) !important;
     }
 
-    &.button-solid {
-      background-color: #123123 !important;
+    // Optional: Hintergrundfarbe beim Drücken anpassen
+    ion-ripple-effect {
+      --ion-ripple-color: var(--ion-color-base);
     }
+
+    // Schatten entfernen
+    --box-shadow: none !important;
+    box-shadow: none !important;
+  }
+
+  // Optional: spezifische Regel für .specific-class, falls benötigt
+  ion-button.specific-class {
+    color: var(--ion-color-light) !important;
+  }
+  /* SCSS für das Zentrieren der Buttons */
+  .button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+  }
+
+  /* Optional: Zusätzliche Stile für die Buttons */
+  .buttonAfterlist {
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    --background: var(--ion-color-warning);
+    --color: var(--ion-color-light);
+    box-shadow: none; /* Entfernt den Schatten */
   }
 }
 
@@ -131,14 +182,14 @@
 
           &.correct {
             border: 3px solid #8fce00 !important;
-            --background: #d2eb99 !important;
-            color: var(--ion-color-success-text) !important;
+            --background: var(--ion-card-background-mockup)!important;
+            color: var(--ion-color-light)!important;
           }
 
           &.incorrect {
             border: 3px solid red !important;
-            --background: #ef9a9a !important;
-            color: var(--ion-color-danger) !important;
+            --background: var(--ion-card-background-mockup)!important;
+            color: var(--ion-color-light) !important;
           }
 
           &.selected-answer {

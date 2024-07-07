@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { TotalStatsService } from '../../services/total-stats.service';
 import { CommonModule } from "@angular/common";
-import { Router } from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {
-    AlertController, IonButton,
+    AlertController, IonButton, IonButtons,
     IonCard, IonCardContent,
     IonCardHeader,
     IonCardTitle,
-    IonContent, IonProgressBar
+    IonContent, IonHeader, IonIcon, IonProgressBar, IonTitle, IonToolbar
 } from "@ionic/angular/standalone";
 import {AuthService} from "../../services/auth.service";
 import {CategoryService} from "../../services/category.service";
@@ -16,8 +16,9 @@ import {Category} from "../../models/categories.model";
 @Component({
     selector: 'app-total-stats',
     templateUrl: './total-stats.component.html',
+    styleUrls: ['./total-stats.page.scss'],
     standalone: true,
-    imports: [CommonModule, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, IonProgressBar]
+    imports: [CommonModule, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, IonProgressBar, IonButtons, IonHeader, IonIcon, IonTitle, IonToolbar, RouterLink]
 })
 export class TotalStatsComponent implements OnInit {
     categories: Category[] = [];
