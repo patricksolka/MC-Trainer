@@ -1,11 +1,37 @@
-<!-- achievements.component.html -->
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/home"></ion-back-button>
+        </ion-buttons>
+        <ion-title>Achievements</ion-title>
+    </ion-toolbar>
+</ion-header>
+
 <ion-content>
-    <ion-card *ngFor="let achievement of achievements">
-        <ion-card-header>
-            {{ achievement.name }}
-        </ion-card-header>
-        <ion-card-content>
-            {{ achievement.description }}
-        </ion-card-content>
-    </ion-card>
+    <ion-col>
+        <ion-card *ngFor="let achievement of achievements">
+            <ion-card-header>
+                {{ achievement.name }}
+            </ion-card-header>
+            <ion-card-content>
+                {{ achievement.description }}
+            </ion-card-content>
+        </ion-card>
+
+        <!-- Add this block for the no achievements message -->
+        <ng-template #noAchievements>
+            <ion-row class="ion-justify-content-center ion-align-items-center" style="height: 100vh; text-align: center;">
+                <div>
+                    <ion-icon name="sad-outline" style="font-size: 3rem;"></ion-icon>
+                    <h2>Du hast noch keine Erfolge freigeschaltet.</h2>
+                    <p>Gib nicht auf, und du wirst Ziele erreichen!</p>
+                </div>
+            </ion-row>
+        </ng-template>
+
+        <!-- Show the message if there are no achievements -->
+        <div *ngIf="achievements.length === 0">
+            <ng-container *ngTemplateOutlet="noAchievements"></ng-container>
+        </div>
+    </ion-col>
 </ion-content>
