@@ -123,7 +123,7 @@ export class UserService {
     }
 
     //mit subcollection
-    async addFavCategory(uid: string, categoryId: string, categoryName: string, questionCount: number): Promise<void> {
+    async addFavCategory(uid: string, categoryId: string, categoryName: string, questionCount: number, completedCount: number): Promise<void> {
         try {
             /*const favCategoriesRef = this.getFavcollectionRef(uid);*/
             const favCategoriesRef = collection(this.firestore, `users/${uid}/favoriteCategories`);
@@ -135,6 +135,7 @@ export class UserService {
                     name: categoryName,
                     timestamp: new Date().getTime(),
                     questionCount: questionCount,
+                    completedCount: completedCount
                     //isFavorite: true
                 });
 

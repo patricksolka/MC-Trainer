@@ -125,7 +125,7 @@ export class PersonalFavorites {
     async addFav(categoryId: string, categoryName: string, questionCount: number) {
         const currentUser = this.auth.currentUser;
         if (currentUser) {
-            await this.userService.addFavCategory(currentUser.uid, categoryId, categoryName, questionCount);
+            await this.userService.addFavCategory(currentUser.uid, categoryId, categoryName, questionCount, 0);
             //this.loadFavCategories();
 
 
