@@ -1,10 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Card } from '../../models/card.model';
-import { Category } from '../../models/categories.model';
-import { CardService } from '../../services/card.service';
-import { Observable, Subscription } from 'rxjs';
+import {Component, OnInit, OnDestroy} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Card} from '../../models/card.model';
+import {Category} from '../../models/categories.model';
+import {CardService} from '../../services/card.service';
+import {Observable, Subscription} from 'rxjs';
 import {
     AlertController,
     IonButton,
@@ -17,17 +17,15 @@ import {
     IonTitle,
     IonToolbar
 } from "@ionic/angular/standalone";
-import { FooterPage } from "../footer/footer.page";
-import { TotalStatsService } from '../../services/total-stats.service';
-import { CategoryService } from "../../services/category.service";
-import { AuthService } from "../../services/auth.service";
-import { Auth } from "@angular/fire/auth";
-import { UserService } from "../../services/user.service";
-import { Stats } from "../../models/stats.model";
-import { AchievementService } from "../../services/achievement.service";
-import { ToastController } from '@ionic/angular';
-
-
+import {FooterPage} from "../footer/footer.page";
+import {TotalStatsService} from '../../services/total-stats.service';
+import {CategoryService} from "../../services/category.service";
+import {AuthService} from "../../services/auth.service";
+import {Auth} from "@angular/fire/auth";
+import {UserService} from "../../services/user.service";
+import {Stats} from "../../models/stats.model";
+import {AchievementService} from "../../services/achievement.service";
+import {ToastController} from '@ionic/angular';
 
 
 @Component({
@@ -64,7 +62,8 @@ export class CardComponent implements OnInit, OnDestroy {
                 private userService: UserService,
                 private achievementService: AchievementService,
                 private toastController: ToastController
-    ) { }
+    ) {
+    }
 
     ngOnInit(): void {
         this.categoryId = this.route.snapshot.paramMap.get('categoryId');
@@ -96,7 +95,7 @@ export class CardComponent implements OnInit, OnDestroy {
                     this.questions = this.shuffleArray(cards); // Mische die Fragen
                     this.totalQuestions = this.questions.length;
                     const question = await this.checkAllAnswered();
-                    if(question){
+                    if (question) {
                         this.currentQuestion = question;
                     } else {
                         console.log("Fehler! Alle Karten wurden beantwortet!")
@@ -164,49 +163,84 @@ export class CardComponent implements OnInit, OnDestroy {
     }
 
      */
-
     async getNextQuestion(): Promise<void> {
         this.showResult = false;
         this.selectedAnswers = [];
 
         let index = this.questions.indexOf(this.currentQuestion);
 
-        while (index < this.questions.length - 1) {
+        if (index < this.questions.length - 1) {
             index++;
-            const counter = await this.cardService.getCardAnsweredCounter(this.questions[index].id);
-
-            if (counter < 6) {
-                this.currentQuestion = this.questions[index];
-                console.log("Frage: " + this.currentQuestion.id);
-                return;
-            }
-        }
-
-        // Wenn alle verbleibenden Fragen mehr als 6 Mal beantwortet wurden
-        //this.totalStatsService.updateStats(this.correctAnswersCount, this.incorrectAnswersCount);
-        const question = await this.checkAllAnswered();
-        if (!question){
-            await this.cardService.setCategoryDone(this.categoryId, "done", true);
-        }
-
-        const newStats = {
-            correctAnswers: this.correctAnswersCount,
-            incorrectAnswers: this.incorrectAnswersCount,
-            completedQuizzes: 1
-        };
-
-        const stats = new Stats(newStats);
-        console.log('Stats:', stats);
-        await this.totalStatsService.persistStats(this.auth.currentUser.uid, this.categoryId, stats);
-        await this.endQuiz();
-        await this.router.navigate(['/stats'], {
-            state: {
+            this.currentQuestion = this.questions[index];
+            console.log("Question: " + this.currentQuestion.id);
+        } else {
+            console.log("No more questions");
+            const newStats = {
                 correctAnswers: this.correctAnswersCount,
                 incorrectAnswers: this.incorrectAnswersCount,
-            }
-        });
+                completedQuizzes: 1
+            };
+
+            const stats = new Stats(newStats);
+            console.log('Stats:', stats);
+            await this.totalStatsService.persistStats(this.auth.currentUser.uid, this.categoryId, stats);
+            await this.endQuiz();
+            await this.router.navigate(['/stats'], {
+                state: {
+                    correctAnswers: this.correctAnswersCount,
+                    incorrectAnswers: this.incorrectAnswersCount,
+                }
+            });
+        }
     }
 
+    /***
+     *
+     ***/
+
+    /*
+        async getNextQuestion(): Promise<void> {
+            this.showResult = false;
+            this.selectedAnswers = [];
+
+            let index = this.questions.indexOf(this.currentQuestion);
+
+            while (index < this.questions.length - 1) {
+                index++;
+                const counter = await this.cardService.getCardAnsweredCounter(this.questions[index].id);
+
+                if (counter < 6) {
+                    this.currentQuestion = this.questions[index];
+                    console.log("Frage: " + this.currentQuestion.id);
+                    return;
+                }
+            }
+
+            // Wenn alle verbleibenden Fragen mehr als 6 Mal beantwortet wurden
+            //this.totalStatsService.updateStats(this.correctAnswersCount, this.incorrectAnswersCount);
+            const question = await this.checkAllAnswered();
+            if (!question){
+                await this.cardService.setCategoryDone(this.categoryId, "done", true);
+            }
+
+            const newStats = {
+                correctAnswers: this.correctAnswersCount,
+                incorrectAnswers: this.incorrectAnswersCount,
+                completedQuizzes: 1
+            };
+
+            const stats = new Stats(newStats);
+            console.log('Stats:', stats);
+            await this.totalStatsService.persistStats(this.auth.currentUser.uid, this.categoryId, stats);
+            await this.endQuiz();
+            await this.router.navigate(['/stats'], {
+                state: {
+                    correctAnswers: this.correctAnswersCount,
+                    incorrectAnswers: this.incorrectAnswersCount,
+                }
+            });
+        }
+    */
 
     checkForNewAchievements(stats) {
         const newAchievements = this.achievementService.checkAchievements(stats);

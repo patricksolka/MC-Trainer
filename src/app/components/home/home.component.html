@@ -100,7 +100,7 @@
                                                 [attr.stroke-dashoffset]="125.6 - (category.completedCards / category.questionCount * 125.6)"/>
                                     </svg>
                                 </ion-col>
-                                <ion-col size="6">
+                                <ion-col size="6" (click)="categoryService.startQuiz(category.id)">
                                     {{ category.name }}
                                 </ion-col>
                                 <ion-col size="4" class="ion-text-right">
