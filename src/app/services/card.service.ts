@@ -32,12 +32,7 @@ export class CardService {
         this.cardsCollection = collection(firestore, 'cards') as CollectionReference<Card>;
         // this.userCollection = collection(firestore, 'users') as CollectionReference<DocumentData>;
     }
-/*
-    getCategories(): Observable<Category[]> {
-        const categoriesCollection = collection(this.firestore, 'categories') as CollectionReference<Category>;
-        return collectionData(categoriesCollection, {idField: 'id'});
-    }
-    */
+
     // CRUD-Operationen für Karten
     getAllCardsForCategory(categoryId: string): Observable<Card[]> {
         const categoryCardsQuery = query(this.cardsCollection, where('categoryId', '==', categoryId));
@@ -60,21 +55,6 @@ export class CardService {
             })
         );
     }
-
-    /*
-    getCardById(id: string): Observable<Card> {
-        const cardDoc = doc(this.firestore, `cards/${id}`);
-        return docData(cardDoc, {idField: 'id'}) as Observable<Card>;
-    }
-    */
-    /*
-    async addCard(card: Card): Promise<void> {
-        await addDoc(this.cardsCollection, card);
-        const categoryDoc = doc(this.firestore, `categories/${card['categoryId']}`);
-        const categoryData = await docData(categoryDoc).toPromise();
-        await updateDoc(categoryDoc, {questionCount: (categoryData['questionCount'] || 0) + 1});
-    }
-    */
 
     async updateCardAnsweredCounter(cardid: string, counter: string) {
         const userDoc = doc(this.firestore, `users/${this.authService.auth.currentUser.uid}/answers/${cardid}`);
@@ -111,22 +91,6 @@ export class CardService {
         }
     }
 
-   /*
-    updateCard(id: string, card: Partial<Card>): Promise<void> {
-        const cardDoc = doc(this.firestore, `cards/${id}`);
-        return updateDoc(cardDoc, card);
-    }
-
-    async deleteCard(id: string): Promise<void> {
-        const cardDoc = doc(this.firestore, `cards/${id}`);
-        const cardData = await docData(cardDoc).toPromise();
-        await deleteDoc(cardDoc);
-        const categoryDoc = doc(this.firestore, `categories/${cardData['categoryId']}`);
-        const categoryData = await docData(categoryDoc).toPromise();
-        await updateDoc(categoryDoc, {questionCount: (categoryData['questionCount'] || 1) - 1});
-    }
-    */
-
     getLearningSession(uid: string): Observable<DocumentData[]> {
         return new Observable<DocumentData[]>(observer => {
             const learningSessionsRef = collection(this.firestore, `users/${uid}/learningSessions`);
@@ -135,9 +99,7 @@ export class CardService {
                     const result = docSnap.docs.map(doc => doc.data());
                     observer.next(result);
                     console.log('learningSession',result);
-
             });
-
             // Snapshot-Listeners
             this.subscription = onSnapshot(learningSessionsRef, (snapshot) => {
                 const data: DocumentData[] = snapshot.docs.map(doc => doc.data());
@@ -145,25 +107,6 @@ export class CardService {
             });
         });
     }
-
-
-
-    /*async getLearningSession(uid: string): Promise<DocumentData[]> {
-        try {
-            const learningSessionsRef = collection(this.firestore, `users/${uid}/learningSessions`);
-            const docSnap = await getDocs(learningSessionsRef);
-
-            if (!docSnap.empty) {
-                return docSnap.docs.map(doc => doc.data());
-            } else {
-                console.log("No learning sessions found.");
-                return null;
-            }
-        } catch (error) {
-            console.error("Error fetching learning sessions: ", error);
-            throw new Error('Error fetching learning sessions');
-        }
-    }*/
 
     async addLearningSession(uid: string, categoryId: string, cardId: string, startTime: Date, endTime: Date): Promise<void> {
         try {
@@ -221,37 +164,6 @@ export class CardService {
         }
     }
 
-
-    /*async getLearningSessions(uid: string): Promise<DocumentData[]> {
-      try {
-        //const userRef = doc(this.firestore, `users/${userId}`);
-        const learningSessionsRef = collection(this.firestore, `users/${uid}/learningSessions`);
-        const snapshot = await getDocs(learningSessionsRef);
-        return snapshot.docs.map(doc => doc.data());
-
-      } catch (error) {
-        console.error('Error fetching learning sessions:', error);
-        return [];
-      }
-    }*/
-    // als Promise
-    /* async getLearningSessions(uid: string): Promise<DocumentData[]> {
-       const learningSessionsRef = collection(this.firestore, `users/${uid}/learningSessions`);
-
-       // Einmaliges Abrufen der Daten
-       const docSnap = await getDocs(learningSessionsRef);
-       const result = docSnap.docs.map(doc => doc.data());
-
-       // Hinzufügen eines Snapshot-Listeners
-       this.subscription = onSnapshot(learningSessionsRef, (snapshot) => {
-         const duration: number[] = snapshot.docs.map(doc => doc.data()['duration']);
-         console.log('balbaa', duration); // Hier können Sie die erhaltenen Daten weiterverarbeiten' oder speichern
-       });
-
-       return result;
-     }*/
-
-    //als Observable
 
     ngOnDestroy() {
         if (this.subscription) {

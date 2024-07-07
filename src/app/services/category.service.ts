@@ -127,26 +127,6 @@ export class CategoryService {
         );
     }
 
-    /*getCategories(): Observable<Category[]> {
-        return new Observable<Category[]>(observer => {
-            const filterQuery = query(this.categoriesCollectionRef, orderBy('name'));
-            const refWithConverter = filterQuery.withConverter(this.categoryConverter);
-
-            const unsubscribe = onSnapshot(refWithConverter, (snapshot) => {
-                const categories: Category[] = [];
-                snapshot.docs.forEach(doc => {
-                    categories.push(doc.data());
-                });
-                observer.next(categories);
-            }, error => {
-                observer.error(error);
-            });
-
-            // Provide a way of canceling and disposing the source
-            return unsubscribe;
-        });
-    }*/
-
     // get first 4 categories for Preview
     async getPreviewCategories(): Promise<Category[]> {
         try {
@@ -259,40 +239,4 @@ export class CategoryService {
             !category.done && category.name.toLowerCase().includes(searchQuery)
         );
     }
-
-  /* async endQuiz(userId: string, categoryId: string, cardId: string) {
-       const endTime = new Date();
-       await this.userService.addLearningSession(userId, categoryId, cardId, this.startTime, endTime);
-       this.startTime = null; // Reset der Startzeit
-     } */
-
-
-    /*async addFavCategory(uid: string, categoryId: string): Promise<void> {
-        try {
-            // Hier könnte zusätzliche Logik hinzugefügt werden, bevor die Kategorie hinzugefügt wird
-            await this.userService.addFavUser(uid, categoryId);
-            console.log(`Category ${categoryId} added to favorites for user ${uid}`);
-        } catch (error) {
-            console.error('Error adding category to favorites:', error);
-            throw error; // Fehler weitergeben, falls nötig
-        }
-    }*/
-
-
-    /*async addCategory(category: Category): Promise<void> {
-        await addDoc(this.categoriesCollectionRef, { name: category.name, questionCount: 0 });
-    }
-
-    async updateCategory(id: string, category: Partial<Category>): Promise<void> {
-        const categoryDoc = doc(this.firestore, `categories/${id}`);
-        await updateDoc(categoryDoc, category);
-    }
-
-    async deleteCategory(id: string): Promise<void> {
-        const categoryDoc = doc(this.firestore, `categories/${id}`);
-        await deleteDoc(categoryDoc);
-    }*/
-
-
-
 }

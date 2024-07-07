@@ -47,14 +47,6 @@ export class ProfilePage {
         this.fetchUser();
     }
 
-    /*inputDidChange(){
-            return this.credentials.pristine ||
-                (this.credentials.value.firstName === this.user.firstName &&
-                    this.credentials.value.lastName === this.user.lastName &&
-                    this.credentials.value.email === this.user.email );
-                    //this.credentials.value.password === this.user.password
-    }*/
-
     fetchUser() {
         const uid = this.authService.auth.currentUser.uid;
         this.userService.getUser(uid).then(user => {
@@ -119,7 +111,6 @@ export class ProfilePage {
         console.log('AuthService.auth:', this.authService.auth);
         console.log('AuthService.auth.currentUser:', this.authService.auth.currentUser);
 
-
         onAuthStateChanged(this.authService.auth, (user) => {
             if (user) {
                 console.log('User is logged in:', user);
@@ -127,7 +118,6 @@ export class ProfilePage {
                 console.log('User is logged out');
             }
         });
-
     }
 
     ionViewDidLeave(){
@@ -139,10 +129,4 @@ export class ProfilePage {
             }
         });
     }
-
-
 }
-
-
-//const uid = this.authService.auth.currentUser.uid;
-//this.userService.getUser(uid);

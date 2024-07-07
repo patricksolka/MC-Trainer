@@ -118,14 +118,6 @@ export class TotalStatsService {
             completedQuizzes += stats.completedQuizzes || 0;
         });
 
-/*
-        docSnap.forEach((doc) => {
-            const data = this.statsConverter.fromFirestore(doc, {}); // Verwenden Sie den Konverter hier
-            totalCorrectAnswers += data.correctAnswers;
-            totalIncorrectAnswers += data.incorrectAnswers;
-            console.log("Ausgabe:", data);
-        });*/
-
         console.log("Ausgabe:", totalCorrectAnswers, totalIncorrectAnswers);
         return {
             totalCorrectAnswers,
@@ -134,87 +126,6 @@ export class TotalStatsService {
         };
     }
 
-    //TODO: Ursprünglich
-    /* async persistTotalStats(uid: string, correct: number, incorrect: number) {
-         const userDoc = doc(this.firestore, `users/${uid}`);
-         const userSnap = await getDoc(userDoc);
-
-         if (userSnap.exists()) {
-             const data = userSnap.data();
-             const totalCorrectAnswers = data?.['totalCorrectAnswers'] || 0;
-             const totalIncorrectAnswers = data?.['totalIncorrectAnswers'] || 0;
-
-             const persistCorrectAnswers = totalCorrectAnswers + correct;
-             const persistIncorrectAnswers = totalIncorrectAnswers + incorrect;
-
-             await updateDoc(userDoc, {
-                 totalStats: {
-                     totalCorrectAnswers: persistCorrectAnswers,
-                     totalIncorrectAnswers: persistIncorrectAnswers,
-                 }
-             });
-         } else {
-             console.log("No such document!");
-         }
-     }*/
-
-    /* async persistTotalStats1(uid: string, correct: number, incorrect: number): Promise<void> {
-         try {
-             const userDocRef = doc(this.firestore, `users/${uid}`);
-             const userSnap = await getDoc(userDocRef);
-
-             if (userSnap.exists()) {
-                 const data = userSnap.data() as TotalStats;
-                 const updatedStats: TotalStats = {
-                     totalCorrectAnswers: data.totalCorrectAnswers + correct,
-                     totalIncorrectAnswers: data.totalIncorrectAnswers + incorrect,
-                     completedQuizzes: data.completedQuizzes || 0 // Sicherstellen, dass completedQuizzes vorhanden ist
-                 };
-                 await updateDoc(userDocRef, { totalStats: updatedStats });
-                 console.log('Total stats updated successfully:', updatedStats);
-             } else {
-                 const totalStats: TotalStats = {
-                     totalCorrectAnswers: correct,
-                     totalIncorrectAnswers: incorrect,
-                     completedQuizzes: +1
-                 };
-                 await setDoc(userDocRef, { totalStats: totalStats });
-                 console.log('New total stats document created:', totalStats);
-             }
-         } catch (error) {
-             console.error('Error persisting total stats:', error);
-             throw error; // Fehler weiterwerfen für die weitere Fehlerbehandlung oder Protokollierung
-         }
-     }
-
-     async persistTotalStats(uid: string, correct: number, incorrect: number): Promise<void> {
-         try {
-             const userDocRef = doc(this.firestore, `users/${uid}`);
-             const userSnap = await getDoc(userDocRef);
-
-             if (userSnap.exists()) {
-                 const data = this.totalStatsConverter.fromFirestore(userSnap, {});
-                 const updatedStats: TotalStats = {
-                     totalCorrectAnswers: (data.totalCorrectAnswers || 0) + correct,
-                     totalIncorrectAnswers: (data.totalIncorrectAnswers || 0) + incorrect,
-                     completedQuizzes: (data.completedQuizzes || 0) +1
-                 };
-
-                 await updateDoc(userDocRef, { totalStats: this.totalStatsConverter.toFirestore(updatedStats) });
-             } else {
-                 const totalStats: TotalStats = {
-                     totalCorrectAnswers: correct,
-                     totalIncorrectAnswers: incorrect,
-                     completedQuizzes: +1
-                 };
-                 await setDoc(userDocRef, { totalStats: this.totalStatsConverter.toFirestore(totalStats) });
-             }
-         } catch (error) {
-             console.error('Error persisting total stats:', error);
-             throw error;
-         }
-     }*/
-
     ngOnDestroy() {
         if (this.subscription) {
             this.subscription();
@@ -222,34 +133,6 @@ export class TotalStatsService {
         }
     }
 
-
-    //Gesamtstatistik abrufen
-    /*async getTotalStats(uid: string) {
-        console.log('totalStats called')
-        const userDoc = doc(this.firestore, `users/${uid}`);
-        const userSnap = await getDoc(userDoc);
-
-        if (userSnap.exists()) {
-            return this.totalStatsConverter.fromFirestore(userSnap, {});
-           /!* const data = userSnap.data();
-            console.log("Data:", data)
-            const totalStats = data?.['totalStats'] || {
-                totalCorrectAnswers: 0,
-                totalIncorrectAnswers: 0
-            };
-
-            return {
-                totalCorrectAnswers: totalStats.totalCorrectAnswers,
-                totalIncorrectAnswers: totalStats.totalIncorrectAnswers,
-                //completedQuizzes: totalStats.completedQuizzes
-            };*!/
-
-        } else {
-            console.log("No such document!");
-            return null;
-        }
-    }
-*/
     private statsConverter = {
         fromFirestore: (snapshot: QueryDocumentSnapshot, options: SnapshotOptions): Stats => {
             const data = snapshot.data(options);
@@ -259,8 +142,6 @@ export class TotalStatsService {
             return {...stats};
         }
     };
-
-
 
     resetStats() {
         this.totalCorrectAnswers = 0;
