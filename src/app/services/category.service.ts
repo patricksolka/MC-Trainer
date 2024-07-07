@@ -55,7 +55,8 @@ export class CategoryService {
         return collectionData(categoryCardsQuery, {idField: 'id'}) as Observable<Card[]>;
     }
 
-    // get category by id
+    // get category by id -> Wird nicht verwendet: Maybe löschen?
+    /*
     async getCategoryById(id: string): Promise<Category | null> {
         try {
             const docRef = doc(this.firestore, 'categories', id);
@@ -72,7 +73,7 @@ export class CategoryService {
             console.error('Error fetching category by id:', error);
             return null;
         }
-    }
+    } */
 
     //get all categories
     async getCategories(): Promise<Category[] | null> {
@@ -99,6 +100,12 @@ export class CategoryService {
             console.error('Error fetching categories:', error);
             return null;
         }
+    }
+    // Get Categories by Id:
+    async getCategoryById(categoryId: string): Promise<Category> {
+        const categoryDoc = doc(this.firestore, `categories/${categoryId}`);
+        const categorySnapshot = await getDoc(categoryDoc);
+        return categorySnapshot.data() as Category;
     }
 
     async resetCardAnsweredCounter(cardid: string, counter: string) {

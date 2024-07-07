@@ -1,4 +1,4 @@
-// LIGHT MODE
+/* LIGHT MODE */
 @media (prefers-color-scheme: light) {
   ion-toolbar {
     border: none;
@@ -13,7 +13,8 @@
     margin: 20px;
 
     ion-card-header {
-      color: var(--ion-text-color);
+      //  color: var(--ion-text-color);
+      color: transparent;
     }
 
     ion-card-content {
@@ -22,7 +23,7 @@
         border-radius: 10px;
         ion-item {
           cursor: pointer;
-          --background: var(--ion-background-color-darker); /* Setzt die Hintergrundfarbe des Listenelements */
+          // --background: var(--ion-background-color-darker); /* Setzt die Hintergrundfarbe des Listenelements */
           &.selected {
             color: #e0ac08 !important;
             border: 2px solid var(--ion-color-primary) !important;
@@ -46,21 +47,27 @@
             color: var(--ion-color-primary-tint) !important;
             font-weight: bold !important;
           }
-        };
+        }
+      ;
       }
     }
   }
 
   ion-button {
     margin-top: 15px;
+
     &.specific-class {
       --background: var(--ion-color-secondary) !important;
       color: var(--ion-color-light) !important;
     }
+
+    &.button-solid {
+      background-color: #123123 !important;
+    }
   }
 }
 
-// DARK MODE
+/* DARK MODE */
 @media (prefers-color-scheme: dark) {
   ion-toolbar {
     border: none;
@@ -73,19 +80,39 @@
 
   ion-card {
     margin: 20px;
-    background-color: var(--ion-color-dark-shade);
+    // background-color: var(--ion-color-dark-shade);
+    background-color: transparent;
+    border: none;
 
     ion-card-header {
-      color: var(--ion-text-color);
+      color: var(--ion-text-color-light);
+      font-weight: bold !important;
+      font-size: var(--ion-font-size, 16px);
     }
 
     ion-card-content {
+      background-color: transparent;
+      width: 100%;
+      display: block;
+      --background: var(--ion-card-background-mockup); /* Setzt die Hintergrundfarbe des Listenelements */
       ion-list {
         background-color: transparent;
-        border-radius: 10px;
+        // border-radius: 10px;
+        width: auto;
+        display: block;
+
         ion-item {
+          width: auto;
+          display: block;
           cursor: pointer;
-          --background: var(--ion-color-dark-tint); /* Setzt die Hintergrundfarbe des Listenelements */
+          --background: var(--ion-card-background-mockup); /* Setzt die Hintergrundfarbe des Listenelements */
+          // background-color: var(--ion-color-dark);
+          margin: 10px;
+          height: auto;
+          font-size: x-large;
+          border-radius: 10px;
+          // border: 1px solid transparent;
+          box-shadow: 1px 1px 1px var(--ion-color-dark-tint);
 
           &.selected {
             color: var(--ion-color-tertiary-contrast) !important;
@@ -119,11 +146,29 @@
     }
   }
 
-  ion-button {
+  ion-header ion-toolbar ion-button.button-solid {
+    --background: var(--ion-color-base) !important;
+    color: var(--ion-color-light) !important;
     margin-top: 15px;
-    &.specific-class {
-      --background: var(--ion-color-secondary) !important;
-      color: var(--ion-color-light) !important;
+
+    // Hintergrundfarbe für den aktiven Zustand anpassen
+    &:active,
+    &:focus {
+      --background: var(--ion-color-base) !important;
     }
+
+    // Optional: Hintergrundfarbe beim Drücken anpassen
+    ion-ripple-effect {
+      --ion-ripple-color: var(--ion-color-base);
+    }
+
+    // Schatten entfernen
+    --box-shadow: none !important;
+    box-shadow: none !important;
+  }
+
+  // Optional: spezifische Regel für .specific-class, falls benötigt
+  ion-button.specific-class {
+    color: var(--ion-color-light) !important;
   }
 }
