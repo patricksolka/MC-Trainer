@@ -62,10 +62,7 @@ export class HomeComponent  {
 
     private subscription: Unsubscribe | null = null;
 
-
-
 //TODO: LooadingController fixen sodass er nur beim starten der App angezeigt wird
-
 
     constructor(
         //private authService: AuthService,
