@@ -23,7 +23,7 @@ import {
     addOutline,
     searchOutline,
     trash, search,
-    checkmarkCircle
+    checkmarkCircle,sadOutline
 } from "ionicons/icons";
 import {Router} from "@angular/router";
 import {HttpClientModule} from "@angular/common/http";
@@ -71,7 +71,8 @@ export class AppComponent {
             searchOutline,
             trash,
             search,
-            checkmarkCircle
+            checkmarkCircle,
+            sadOutline,
         });
 
         //TODO: Beim Quiz evtl verhalten vom footer anpassen

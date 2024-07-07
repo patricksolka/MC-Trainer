@@ -10,12 +10,14 @@ export class AchievementService {
     constructor() {}
 
     checkAchievements(stats: { completedQuizzes: number; correctAnswers: number, incorrectAnswers: number, totalQuestions: number }) {
+        console.log('Checking achievements with stats:', stats);
         const newAchievements = ACHIEVEMENTS.filter(achievement => achievement.condition(stats))
             .filter(achievement => !this.achieved.has(achievement.id))
             .map(achievement => {
                 this.achieved.add(achievement.id);
                 return achievement;
             });
+        console.log('New achievements:', newAchievements);
         return newAchievements;
     }
 
