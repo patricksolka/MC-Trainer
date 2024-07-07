@@ -21,13 +21,13 @@ import {collection, Firestore, onSnapshot, Unsubscribe} from "@angular/fire/fire
 
 
 @Component({
-    selector: 'app-meine-module',
-    templateUrl: './meine-module.components.html',
-    styleUrls: ['./meine-module.components.scss'],
+    selector: 'app-personalFavorites',
+    templateUrl: './personalFavorites.html',
+    styleUrls: ['./personalFavorites.scss'],
     standalone: true,
     imports: [CommonModule, FormsModule, RouterLink, FooterPage, IonIcon, IonItemOption, IonItemOptions, IonToolbar, IonButtons, IonBackButton, IonTitle, IonButton, IonContent, IonList, IonItemSliding, IonHeader, IonItem, IonCard, IonText, IonSearchbar, IonLabel, IonCol, IonGrid, IonRow]
 })
-export class MeineModuleComponents {
+export class PersonalFavorites {
     public categories: Category[] = [];
     public favCategories: { id: string; name: string, questionCount: number, isDone?: boolean, completedCards?: number}[] = [];
 
