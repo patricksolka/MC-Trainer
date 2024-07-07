@@ -21,6 +21,7 @@
       ion-list {
         background-color: transparent;
         border-radius: 10px;
+
         ion-item {
           cursor: pointer;
           // --background: var(--ion-background-color-darker); /* Setzt die Hintergrundfarbe des Listenelements */
@@ -111,8 +112,15 @@
           height: auto;
           font-size: x-large;
           border-radius: 10px;
-          // border: 1px solid transparent;
           box-shadow: 1px 1px 1px var(--ion-color-dark-tint);
+          /* Entfernt die Standard-Unterlinie */
+          --inner-border-color: transparent;
+          --inner-border-width: 0;
+
+          &:focus {
+            --inner-border-color: transparent;
+            --inner-border-width: 0;
+          }
 
           &.selected {
             color: var(--ion-color-tertiary-contrast) !important;
@@ -138,9 +146,24 @@
             font-weight: bold !important;
           }
 
+          &.specific-class {
+            --inner-border-color: transparent;
+            --inner-border-width: 0;
+          }
+
           .item-native {
             background-color: var(--ion-color-primary) !important;
           }
+        }
+
+        ion-item:hover {
+          --inner-border-color: transparent;
+          --inner-border-width: 0;
+        }
+
+        ion-item:active {
+          --inner-border-color: transparent;
+          --inner-border-width: 0;
         }
       }
     }
