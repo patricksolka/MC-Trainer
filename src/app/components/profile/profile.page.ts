@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {
-    IonButton,
+    IonButton, IonButtons,
     IonContent,
     IonHeader, IonIcon,
     IonInput,
@@ -23,7 +23,7 @@ import {onAuthStateChanged} from "@angular/fire/auth";
     templateUrl: './profile.page.html',
     styleUrls: ['./profile.page.scss'],
     standalone: true,
-    imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonInput, IonNote, IonText, ReactiveFormsModule, IonButton, IonIcon, RouterLink, FooterPage]
+    imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonInput, IonNote, IonText, ReactiveFormsModule, IonButton, IonIcon, RouterLink, FooterPage, IonButtons]
 })
 export class ProfilePage {
     credentials: FormGroup;

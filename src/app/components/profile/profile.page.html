@@ -1,11 +1,14 @@
-
 <ion-content class="ion-padding">
-    <div class="header">
-        <ion-button class="backButton" [routerLink]="['/home']">
-            <ion-icon name="arrow-back-outline" class="arrowBack"></ion-icon>
-        </ion-button>
-        <ion-text><h1 class="profile">Profil</h1></ion-text>
-    </div>
+    <ion-header>
+        <ion-toolbar>
+            <ion-buttons slot="start">
+                <ion-button class="backButton" [routerLink]="['/home']">
+                    <ion-icon name="arrow-back-outline" class="arrowBack"></ion-icon>
+                </ion-button>
+            </ion-buttons>
+            <ion-title>Profil</ion-title>
+        </ion-toolbar>
+    </ion-header>
     <form class="ion-padding-top" [formGroup]="credentials"
           (ngSubmit)="updateProfile()">
         <ion-input
@@ -13,36 +16,39 @@
                 placeholder="Vorname"
                 formControlName="firstName"
                 [clearInput]="true"
-                class="ion-margin-bottom">
+                class="ion-margin-bottom ion-padding-start">
         </ion-input>
         <ion-input
                 fill="outline"
                 placeholder="Nachname"
                 formControlName="lastName"
                 [clearInput]="true"
-                class="ion-margin-bottom">
+                class="ion-margin-bottom ion-padding-start">
         </ion-input>
         <ion-input
                 fill="outline"
                 type="email"
                 placeholder="Email"
                 formControlName="email"
-                [readonly] = "true"
-                class="ion-margin-bottom">
+                [readonly]="true"
+                class="ion-margin-bottom ion-padding-start">
         </ion-input>
         <ion-input fill="outline"
                    type="password"
                    placeholder="Passwort"
                    formControlName="password"
-                   class="ion-margin-bottom">
+                   class="ion-margin-bottom ion-padding-start">
 
         </ion-input>
-        <ion-button class="ulp"  type="button"  (click)="updateProfile()" expand="block"
-                    size="large" disabled>Update</ion-button>
+        <ion-button class="ulp" type="button" (click)="updateProfile()" expand="block"
+                    size="large" disabled>Update
+        </ion-button>
     </form>
-    <ion-button class="ulp"  type="button" color="danger" (click)="logout()" expand="block"
-                size="large">Logout</ion-button>
-    <ion-button class="ulp"  type="button" color="danger" (click)="deleteProfile()" expand="block"
-                size="large">Profil löschen</ion-button>
+    <ion-button class="ulp" type="button" color="danger" (click)="logout()" expand="block"
+                size="large">Logout
+    </ion-button>
+    <ion-button class="ulp" type="button" color="danger" (click)="deleteProfile()" expand="block"
+                size="large">Profil löschen
+    </ion-button>
 </ion-content>
 

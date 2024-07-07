@@ -5,12 +5,12 @@ http://ionicframework.com/docs/theming/ */
 
 /* Light Mode Variables */
 :root {
-  --ion-color-primary: #0E51E3;
+  --ion-color-primary: #0e83e3;
   --ion-color-primary-rgb: 14, 81, 227;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
   --ion-color-primary-shade: #0c47c8;
-  --ion-color-primary-tint: #2662e6;
+  --ion-color-primary-tint: #2696e6;
 
   --ion-color-secondary: #530EE3;
   --ion-color-secondary-rgb: 83, 14, 227;
@@ -33,7 +33,7 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-success-shade: #28bb50;
   --ion-color-success-tint: #42d96b;
   // changed color #E3BC0E
-  --ion-color-warning: #FF6905;
+  --ion-color-warning: #FF6905FF;
   --ion-color-warning-rgb: 227, 188, 14;
   --ion-color-warning-contrast: #ffffff;
   --ion-color-warning-contrast-rgb: 0, 0, 0;
@@ -66,7 +66,7 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-dark-contrast: #ffffff;
   --ion-color-dark-contrast-rgb: 255, 255, 255;
   --ion-color-dark-shade: #292929;
-  --ion-color-dark-tint: #444444;
+  --ion-color-dark-tint: #858585;
 
   /* Background and Text Colors */
   --ion-background-color: #ffffff; /* weißer Hintergrund für den Light Mode */
@@ -178,10 +178,12 @@ http://ionicframework.com/docs/theming/ */
     --ion-background-color-darker: #c9c9e5; /* heller lila Hintergrund */
     --ion-background-color-dark: #b3b3cc; /* heller lila Hintergrund */
     --ion-text-color: #1F1F39; /* dunkler Text */
-    --ion-item-background: #f8f8ff; /* sehr helles Lila für Items */
+    // --ion-item-background: #f8f8ff; /* sehr helles Lila für Items */
+    --ion-item-background: #9c9cb2; /* sehr helles Lila für Items */
     --ion-toolbar-background: transparent; /* heller lila Hintergrund für Toolbar */
     // --ion-card-background: #ffffff; /* weißer Hintergrund für Karten */
-    --ion-border-color: #ddddff; /* helles lila für Border */
+    --ion-card-background-mockup: #ececff;
+    --ion-border-color: #c9c9e5; /* helles lila für Border */
   }
 
   .ios body {
@@ -234,6 +236,7 @@ http://ionicframework.com/docs/theming/ */
     // --ion-toolbar-background: #0f0f1c;
     // --ion-card-background: #2F2F42;
     --ion-card-background-mockup: #3E3E56;
+    --ion-card-background-mockup-text: #c5c5cc;
     --ion-background-color-lightdark: #18182d;
     --ion-background-color-dark: #0f0f1c;
     --ion-background-color-darker: #090911;
