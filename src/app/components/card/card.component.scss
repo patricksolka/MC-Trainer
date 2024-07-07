@@ -78,17 +78,17 @@
     --padding-top: var(--ion-padding, 16px);
     --padding-bottom: var(--ion-padding, 16px);
   }
-
   ion-card {
     margin: 20px;
     // background-color: var(--ion-color-dark-shade);
     background-color: transparent;
     border: none;
+    box-shadow: none;
 
     ion-card-header {
       color: var(--ion-text-color-light);
       font-weight: bold !important;
-      font-size: var(--ion-font-size, 16px);
+      font-size: var(--ion-font-size, 20px);
     }
 
     ion-card-content {
@@ -130,9 +130,9 @@
           }
 
           &.correct {
-            border: 3px solid green !important;
-            --background: #a5d6a7 !important;
-            color: var(--ion-color-success) !important;
+            border: 3px solid #8fce00 !important;
+            --background: #d2eb99 !important;
+            color: var(--ion-color-success-text) !important;
           }
 
           &.incorrect {
@@ -193,5 +193,21 @@
   // Optional: spezifische Regel für .specific-class, falls benötigt
   ion-button.specific-class {
     color: var(--ion-color-light) !important;
+  }
+  /* SCSS für das Zentrieren der Buttons */
+  .button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+  }
+
+  /* Optional: Zusätzliche Stile für die Buttons */
+  .buttonAfterlist {
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    --background: var(--ion-color-warning);
+    --color: var(--ion-color-light);
+    box-shadow: none; /* Entfernt den Schatten */
   }
 }
