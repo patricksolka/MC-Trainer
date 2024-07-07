@@ -52,11 +52,14 @@ export class AchievementService {
     getAchievements() {
         return ACHIEVEMENTS.filter(achievement => this.achieved.has(achievement.id));
     }
-
-    ngOnInit(){
+    setAchievements(){
         const userId = this.authService.auth.currentUser.uid;
         this.loadAchievements(userId).subscribe(achievements => {
             this.achieved = achievements;
         });
+    }
+
+    ngOnInit(){
+        this.setAchievements();
     }
 }

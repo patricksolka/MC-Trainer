@@ -39,6 +39,7 @@ import {card} from "ionicons/icons";
 import {firestore} from "firebase-admin";
 import DocumentData = firestore.DocumentData;
 import {collection, Firestore, onSnapshot, Unsubscribe} from "@angular/fire/firestore";
+import {AchievementService} from "../../services/achievement.service";
 
 
 
@@ -73,13 +74,13 @@ export class HomeComponent  {
         private userService: UserService,
         private cardService: CardService,
         private firestore: Firestore,
-        private alertController: AlertController
+        private alertController: AlertController,
+        private achievementsService: AchievementService
 
     ) {
         this.auth.onAuthStateChanged(user =>{
             if (user){
 
-                console.log('hfjgfjgfjjf changed', user.uid);
                 this.userService.getUser(user.uid).then(user => {
                     localStorage.setItem('userName', user.firstName);
                 });
@@ -87,6 +88,7 @@ export class HomeComponent  {
                 this.fetchPreview();
                 this.observeFavCategories(user.uid);
                 this.cardService.resetLearningSession(user.uid);
+                this.achievementsService.setAchievements();
             }
         });
 
@@ -106,7 +108,7 @@ export class HomeComponent  {
     observeFavCategories(uid: string) {
         const favCategoriesRef = collection(this.firestore, `users/${uid}/favoriteCategories`);
         this.subscription = onSnapshot(favCategoriesRef, (snapshot) => {
-            this.favCategories = snapshot.docs.map(doc => ({ id: doc.id, name: doc.data()['name'], questionCount: doc.data()['questionCount'], completedCards: doc.data()['completedCards'] || 0}));
+            this.favCategories = snapshot.docs.map(doc => ({ id: doc.id, name: doc.data()['name'], questionCount: doc.data()['questionCount'], completedCards: doc.data()['completedCount'] || 0}));
             console.log(this.favCategories);
         });
 
