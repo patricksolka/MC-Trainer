@@ -1,13 +1,19 @@
 <ion-content>
     <ion-header>
         <ion-toolbar>
-            <ion-title>Quiz Kategorien</ion-title>
+            <ion-buttons slot="start">
+                <ion-button class="button-solid" [routerLink]="['/categories']">
+                    <ion-icon name="arrow-back-outline" class="arrowBack"></ion-icon>
+                </ion-button>
+            </ion-buttons>
+            <ion-title>{{ categoryName || 'Kategorie' }}</ion-title>
         </ion-toolbar>
     </ion-header>
 
     <ion-list>
         <ng-container *ngFor="let category of categories$ | async">
-            <ion-item *ngIf="category.questionCount && category.questionCount > 0" (click)="selectCategory(category.id)">
+            <ion-item *ngIf="category.questionCount && category.questionCount > 0"
+                      (click)="selectCategory(category.id)">
                 {{ category.name }}
             </ion-item>
         </ng-container>

@@ -1,44 +1,45 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Card} from '../../models/card.model';
-import {Category} from '../../models/categories.model';
-import {CardService} from '../../services/card.service';
-import {Observable, Subscription} from 'rxjs';
+// card.component.ts
+import { Category } from '../../models/categories.model';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import { Card } from '../../models/card.model';
+import { CardService } from '../../services/card.service';
+import { CategoryService } from '../../services/category.service';
+import { Observable, Subscription } from 'rxjs';
 import {
     AlertController,
-    IonButton,
+    IonButton, IonButtons,
     IonCard, IonCardContent,
     IonCardHeader,
     IonContent,
-    IonHeader,
+    IonHeader, IonIcon,
     IonItem,
     IonList,
     IonTitle,
     IonToolbar
 } from "@ionic/angular/standalone";
-import {FooterPage} from "../footer/footer.page";
-import {TotalStatsService} from '../../services/total-stats.service';
-import {CategoryService} from "../../services/category.service";
+import { FooterPage } from "../footer/footer.page";
+import { Auth } from "@angular/fire/auth";
 import {AuthService} from "../../services/auth.service";
-import {Auth} from "@angular/fire/auth";
-import {UserService} from "../../services/user.service";
-import {Stats} from "../../models/stats.model";
-import {AchievementService} from "../../services/achievement.service";
-import {ToastController} from '@ionic/angular';
-
+import { UserService } from "../../services/user.service";
+import { Stats } from "../../models/stats.model";
+import { AchievementService } from "../../services/achievement.service";
+import { ToastController } from '@ionic/angular';
+import {TotalStatsService} from '../../services/total-stats.service';
 
 @Component({
     selector: 'app-card',
     templateUrl: './card.component.html',
     styleUrls: ['./card.component.scss'],
     standalone: true,
-    imports: [CommonModule, IonHeader, IonContent, IonToolbar, IonTitle, IonList, IonItem, IonCard, IonCardHeader, IonCardContent, IonButton, FooterPage]
+    imports: [CommonModule, IonHeader, IonContent, IonToolbar, IonTitle, IonList, IonItem, IonCard, IonCardHeader, IonCardContent, IonButton, FooterPage, IonIcon, RouterLink, IonButtons]
 })
 export class CardComponent implements OnInit, OnDestroy {
     categories$: Observable<Category[]>;
     cards$: Observable<Card[]>;
     categoryId: string;
+    categoryName: string; // Neue Variable für den Kategorie-Namen
     selectedCategoryId: string;
     currentQuestion: Card;
     showResult = false;
@@ -51,7 +52,6 @@ export class CardComponent implements OnInit, OnDestroy {
     correctAnswer: boolean = false;
     public startTime: Date | null = null;
 
-//    currentQuestionIndex: number = 0; // Neue Variable für den Index der aktuellen Frage
     private cardsSubscription: Subscription;
 
     constructor(private cardService: CardService, private route: ActivatedRoute, private router: Router,
@@ -65,9 +65,13 @@ export class CardComponent implements OnInit, OnDestroy {
     ) {
     }
 
-    ngOnInit(): void {
+    async ngOnInit(): Promise<void> {
         this.categoryId = this.route.snapshot.paramMap.get('categoryId');
         console.log('Category ID:', this.categoryId);
+        if (this.categoryId) {
+            const category = await this.categoryService.getCategoryById(this.categoryId);
+            this.categoryName = category.name; // Kategorie-Namen speichern
+        }
         this.loadCards(this.categoryId);
     }
 
