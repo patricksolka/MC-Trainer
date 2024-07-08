@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Diese Datei enthält die Implementierung der TotalStatsComponent-Komponente,
+ * die die Gesamtstatistiken der Benutzerquizze anzeigt.
+ */
 import { Component, OnInit } from '@angular/core';
 import { TotalStatsService } from '../../services/total-stats.service';
 import { CommonModule } from "@angular/common";
@@ -13,6 +17,11 @@ import {AuthService} from "../../services/auth.service";
 import {CategoryService} from "../../services/category.service";
 import {Category} from "../../models/categories.model";
 
+/**
+ * @component TotalStatsComponent
+ * @description Diese Komponente zeigt die Gesamtstatistiken der Quiz-Ergebnisse des Benutzers an,
+ * einschließlich der Anzahl richtiger und falscher Antworten sowie abgeschlossener Quizze.
+ */
 @Component({
     selector: 'app-total-stats',
     templateUrl: './total-stats.component.html',
@@ -28,13 +37,32 @@ export class TotalStatsComponent implements OnInit {
     percentageCorrectAnswers: number = 0;
     modules: any[] = [];
 
-    constructor(private totalStatsService: TotalStatsService, private router: Router,
-                private alertController: AlertController, private authService: AuthService, private categoryService: CategoryService) {
+    /**
+     * @constructor
+     * @param {TotalStatsService} totalStatsService - Service zur Berechnung der Gesamtstatistiken.
+     * @param {Router} router - Router zum Navigieren zwischen Seiten.
+     * @param {AlertController} alertController - Controller für Alerts.
+     * @param {AuthService} authService - Service für Authentifizierungsoperationen.
+     * @param {CategoryService} categoryService - Service für Kategorieoperationen.
+     */
+    constructor(private totalStatsService: TotalStatsService,
+                private router: Router,
+                private alertController: AlertController,
+                private authService: AuthService,
+                private categoryService: CategoryService) {
     }
 
+    /**
+     * @method ngOnInit
+     * @description Lebenszyklus-Hook, der nach der Initialisierung der Komponente aufgerufen wird.
+     */
     ngOnInit() {
             this.loadStats();
     }
+    /**
+     * @method loadStats
+     * @description Lädt die Gesamtstatistiken des Benutzers aus dem TotalStatsService.
+     */
     async loadStats() {
         const stats = await this.totalStatsService.calculateTotalStats(this.authService.auth.currentUser.uid);
         this.totalCorrectAnswers = stats.totalCorrectAnswers;
@@ -43,9 +71,18 @@ export class TotalStatsComponent implements OnInit {
         this.percentageCorrectAnswers = (this.totalCorrectAnswers / (this.totalCorrectAnswers + this.totalIncorrectAnswers)) * 100;
     }
 
+    /**
+     * @method backToHome
+     * @description Navigiert zurück zur Startseite.
+     */
     backToHome() {
         this.router.navigate(['/home']);
     }
+
+    /**
+     * @method ionViewWillEnter
+     * @description Lebenszyklus-Hook, der aufgerufen wird, wenn die Ansicht in den Vordergrund tritt.
+     */
     ionViewWillEnter() {
        this.loadStats();
     }

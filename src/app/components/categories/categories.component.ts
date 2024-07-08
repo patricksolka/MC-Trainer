@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Diese Datei enthält die Implementierung der CategoriesComponent-Komponente,
+ * die eine Liste von Kategorien anzeigt und ermöglicht, nach Kategorien zu suchen und eine Kategorie auszuwählen.
+ */
+
 import {Component,ViewChild} from '@angular/core';
 import {CommonModule, NgOptimizedImage} from '@angular/common';
 import {Category} from '../../models/categories.model';
@@ -17,6 +22,10 @@ import {
     IonToolbar
 } from "@ionic/angular/standalone";
 
+/**
+ * @component CategoriesComponent
+ * @description Diese Komponente zeigt eine Liste von Kategorien an und ermöglicht die Suche und Auswahl von Kategorien.
+ */
 
 @Component({
     selector: 'app-categories',
@@ -41,11 +50,24 @@ export class CategoriesComponent {
         }
     }
 
-    constructor(public categoryService: CategoryService, private router: Router, private fb: FormBuilder, private cdr: ChangeDetectorRef) {
+    /**
+     * @constructor
+     * @param {CategoryService} categoryService - Service für Kategorieoperationen.
+     * @param {Router} router - Router zum Navigieren zwischen Seiten.
+     * @param {FormBuilder} fb - Formular-Builder zum Erstellen von reaktiven Formularen.
+     * @param {ChangeDetectorRef} cdr - Service zum Erkennen und Behandeln von Änderungen.
+     */
+    constructor(public categoryService: CategoryService,
+                private router: Router,
+                private fb: FormBuilder,
+                private cdr: ChangeDetectorRef) {
         this.loadCategories();
     }
 
-
+    /**
+     * @method loadCategories
+     * @description Lädt die Kategorien und setzt den Ladezustand.
+     */
     async loadCategories():Promise<void> {
         console.log('Ladezustand1', this.loaded);
         try {
@@ -82,6 +104,10 @@ export class CategoriesComponent {
         }
     }
 
+    /**
+     * @method toggleSearch
+     * @description Schaltet die Sichtbarkeit der Suchleiste um.
+     */
     toggleSearch() {
         this.searchBarVisible = !this.searchBarVisible;
         if (this.searchBarVisible) {
@@ -103,6 +129,11 @@ export class CategoriesComponent {
     }
     */
 
+    /**
+     * @method selectCategory
+     * @description Navigiert zur Kartenansicht der ausgewählten Kategorie.
+     * @param {string} categoryId - ID der ausgewählten Kategorie.
+     */
     selectCategory(categoryId: string) {
         if (categoryId) {
             this.router.navigate(['/cards', categoryId]);
@@ -111,10 +142,21 @@ export class CategoriesComponent {
             // Handle invalid categoryId case, e.g., show error message or navigate to a default route
         }
     }
+
+    /**
+     * @method categoryHasQuestions
+     * @description Überprüft, ob eine Kategorie Fragen enthält.
+     * @param {Category} category - Die zu überprüfende Kategorie.
+     * @returns {boolean} - true, wenn die Kategorie Fragen enthält, andernfalls false.
+     */
     categoryHasQuestions(category: Category): boolean {
         return category.questionCount && category.questionCount > 0;
     }
 
+    /**
+     * @method ionViewWillEnter
+     * @description Lebenszyklus-Hook, der aufgerufen wird, wenn die Ansicht in den Vordergrund tritt.
+     */
     ionViewWillEnter() {
         this.loadCategories();
     }

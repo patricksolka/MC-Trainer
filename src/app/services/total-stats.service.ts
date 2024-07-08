@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Diese Datei enthält den TotalStatsService, der die Gesamtstatistiken der Benutzerquizze verwaltet.
+ */
+
 import {Injectable} from '@angular/core';
 import {
     collection,
@@ -16,7 +20,10 @@ import {UserService} from "./user.service";
 import {AuthService} from "./auth.service";
 import {Stats} from "../models/stats.model";
 
-
+/**
+ * @class TotalStatsService
+ * @description Dieser Service verwaltet die Gesamtstatistiken der Benutzerquizze.
+ */
 @Injectable({
     providedIn: 'root'
 })
@@ -26,17 +33,36 @@ export class TotalStatsService {
     private subscription: Unsubscribe | null = null;
     private userCollection: CollectionReference<DocumentData>;
 
+    /**
+     * @constructor
+     * @param {Firestore} firestore - Firebase Firestore-Instanz.
+     * @param {UserService} userService - Service für Benutzeroperationen.
+     * @param {AuthService} authService - Service für Authentifizierungsoperationen.
+     *
+     */
     constructor(private firestore: Firestore, private userService: UserService, private authService: AuthService) {
         this.userCollection = collection(firestore, 'users') as CollectionReference<DocumentData>;
-
     }
 
+    /**
+     * @method updateStats
+     * @description Aktualisiert die Gesamtstatistiken.
+     * @param {number} correct - Anzahl der richtigen Antworten.
+     * @param {number} incorrect - Anzahl der falschen Antworten.
+     */
     updateStats(correct: number, incorrect: number) {
         this.totalCorrectAnswers += correct;
         this.totalIncorrectAnswers += incorrect;
         console.log(this.authService.auth.currentUser.uid);
     }
 
+    /**
+     * @method persistStats
+     * @description Speichert die Statistiken eines Benutzers in Firestore.
+     * @param {string} uid - Die Benutzer-ID.
+     * @param {string} categoryId - Die Kategorie-ID.
+     * @param {Stats} stats - Die zu speichernden Statistiken.
+     */
     //Funktioniert auch
     async persistStats(uid: string, categoryId: string, stats: Stats) {
         const statsCollectionRef = doc(this.firestore, `users/${uid}/stats/${categoryId}`);
@@ -66,6 +92,13 @@ export class TotalStatsService {
         }
     }
 
+    /**
+     * @method getStats
+     * @description Holt die Statistiken eines Benutzers für eine bestimmte Kategorie aus Firestore.
+     * @param {string} uid - Die Benutzer-ID.
+     * @param {string} categoryId - Die Kategorie-ID.
+     * @returns {Promise<Stats | null>} - Die Statistiken oder null, wenn keine vorhanden sind.
+     */
     async getStats(uid: string, categoryId: string) {
         const statsCollectionRef = doc(this.firestore, `users/${uid}/stats/${categoryId}`);
         //const docSnap = await getDoc(doc(statsCollectionRef, categoryId));
@@ -79,6 +112,13 @@ export class TotalStatsService {
         }
     }
 
+    /**
+     * @method getStatsById
+     * @description Holt die Statistiken eines Benutzers für eine bestimmte Kategorie anhand der ID aus Firestore.
+     * @param {string} uid - Die Benutzer-ID.
+     * @param {string} categoryId - Die Kategorie-ID.
+     * @returns {Promise<Stats | null>} - Die Statistiken oder null, wenn keine vorhanden sind.
+     */
     async getStatsById(uid: string, categoryId: string) {
         const statsCollectionRef = doc(this.firestore, `users/${uid}/stats/${categoryId}`);
         const docSnap = await getDoc(statsCollectionRef);
@@ -94,6 +134,12 @@ export class TotalStatsService {
 
     }
 
+    /**
+     * @method calculateTotalStats
+     * @description Berechnet die Gesamtstatistiken eines Benutzers.
+     * @param {string} uid - Die Benutzer-ID.
+     * @returns {Promise<Object>} - Ein Objekt mit den Gesamtstatistiken.
+     */
     //TODO: Subscription evtl rausnehemn
     async calculateTotalStats(uid: string) {
         const statsCollectionRef = collection(this.firestore, `users/${uid}/stats/`);
@@ -126,6 +172,10 @@ export class TotalStatsService {
         };
     }
 
+    /**
+     * @method ngOnDestroy
+     * @description Lebenszyklus-Hook, der bei der Zerstörung der Komponente aufgerufen wird und die Abonnements beendet.
+     */
     ngOnDestroy() {
         if (this.subscription) {
             this.subscription();
@@ -143,6 +193,10 @@ export class TotalStatsService {
         }
     };
 
+    /**
+     * @method resetStats
+     * @description Setzt die Gesamtstatistiken zurück.
+     */
     resetStats() {
         this.totalCorrectAnswers = 0;
         this.totalIncorrectAnswers = 0;
