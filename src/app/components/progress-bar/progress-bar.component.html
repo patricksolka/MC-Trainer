@@ -1,0 +1,34 @@
+<ion-card class="progressCard">
+    <ion-card-content>
+        <ion-grid>
+            <ion-row>
+                <ion-col size="8" class="learnedToday">
+                    <p>Lernfortschritt heute</p>
+                    <h2 *ngIf="loaded; else loading">
+                        {{ learnedMinutes < 1 ? ' 1 min ' : (learnedMinutes > 30 ? '30 min' :
+                        learnedMinutes + ' min') }} / {{ totalMinutes }} min
+                    </h2>
+                    <ng-template #loading>
+                        <ion-skeleton-text style="width: 150px ; height: 30px"
+                                           [animated]="true"></ion-skeleton-text>
+                    </ng-template>
+                </ion-col>
+                <ion-col size="4" class="stats">
+                    <p [routerLink]="['/total-stats']">Statistik</p>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="12">
+                    <div class="progressBarContainer">
+                        <!--<div class="progressBar" [ngClass]="{'full': progress >= 30}"
+                             [style.width.%]="(learnedMinutes /
+                        totalMinutes) * 100"></div> -->
+                        <div class="progressBar" [ngClass]="{'full': progress >= 30}"
+                             [style.width.%]="progress"></div>
+                    </div>
+                    <p [routerLink]="['/achievements']">Achievements</p>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-card-content>
+</ion-card>

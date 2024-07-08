@@ -2,22 +2,21 @@ import { __decorate } from "tslib";
 import { Component } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from "@angular/common";
+//import {TotalStatsService} from "../../services/total-stats.service";
 let StatsComponent = class StatsComponent {
     constructor(router) {
         this.router = router;
         this.correctAnswers = 0;
         this.incorrectAnswers = 0;
+    }
+    ngOnInit() {
+        /*const stats = this.totalStatsService.getStats();*/
         const navigation = this.router.getCurrentNavigation();
         const state = navigation?.extras.state;
         if (state) {
             this.correctAnswers = state.correctAnswers;
             this.incorrectAnswers = state.incorrectAnswers;
         }
-    }
-    ngOnInit() {
-        const state = window.history.state;
-        this.correctAnswers = state && state.correctAnswers ? state.correctAnswers : 0;
-        this.incorrectAnswers = state && state.incorrectAnswers ? state.incorrectAnswers : 0;
     }
     resetQuizHome() {
         // Setze die Statistiken zurück und navigiere zur Startseite
