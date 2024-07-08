@@ -25,6 +25,7 @@ import {Card} from "../models/card.model";
 import {Observable} from "rxjs";
 import {AuthService} from "./auth.service";
 import {User} from "../models/user.model";
+import {TotalStatsService} from "./total-stats.service";
 
 @Injectable({
     providedIn: 'root'
@@ -43,7 +44,7 @@ export class CategoryService {
     cardsCollectionRef: CollectionReference<Card>;
 
     constructor(private firestore: Firestore, private router: Router, private userService: UserService,
-                private alertController: AlertController, private authService: AuthService) {
+                private alertController: AlertController, private authService: AuthService, private ts: TotalStatsService) {
 
         this.categoriesCollectionRef = collection(firestore, 'categories');
         this.cardsCollectionRef = collection(firestore, 'cards') as CollectionReference<Card>;
@@ -254,7 +255,7 @@ export class CategoryService {
 
     async startQuiz(categoryId: string) {
         if (categoryId) {
-            const result = await this.isDone(categoryId);
+            const result = await this.ts.isDone(categoryId);
             if(result == false) {
                 this.startTime = new Date();
                 console.log('Service Quiz started at:', this.startTime);
@@ -295,7 +296,7 @@ export class CategoryService {
 
     async resetProgress(categoryId: string) {
         try {
-            await this.setDone(categoryId, false);
+            await this.ts.setDone(categoryId, false);
             this.resetCardCounter(categoryId);
             console.log(`Fortschritt für Kategorie ${categoryId} wurde zurückgesetzt.`);
         } catch (error) {
@@ -303,7 +304,7 @@ export class CategoryService {
         }
     }
 
-    async setDone(categoryId: string, done: boolean): Promise<void> {
+   /* async setDone(categoryId: string, done: boolean): Promise<void> {
         try {
             const docRef = doc(this.firestore, `users/${this.authService.auth.currentUser.uid}`);
             const statsRef = collection(docRef, 'stats');
@@ -314,9 +315,9 @@ export class CategoryService {
             console.error('Error setting category done status:', error);
             throw error;
         }
-    }
+    }*/
 
-    async isDone(categoryId: string): Promise<boolean> {
+   /* async isDone(categoryId: string): Promise<boolean> {
         try {
             const docRef = doc(this.firestore, `users/${this.authService.auth.currentUser.uid}`);
             const statsRef = doc(docRef, `stats/${categoryId}`);
@@ -333,7 +334,7 @@ export class CategoryService {
             console.error('Fehler beim Abrufen des Dokuments:', error);
             throw error;
         }
-    }
+    }*/
 
     filterCategories() {
         const searchQuery = this.searchCategory.toLowerCase();
