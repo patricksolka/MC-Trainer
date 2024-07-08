@@ -1,0 +1,57 @@
+/* LIGHT MODE */
+@media (prefers-color-scheme: light) {
+  .header-ios ion-toolbar {
+    --border-width: 0 !important; /* Entfernen der Border für iOS Modus */
+    --box-shadow: none !important; /* Entfernen des Shadows für MD Modus */
+  }
+  .header-md ion-toolbar {
+    --border-width: 0 !important; /* Entfernen der Border für iOS Modus */
+    --box-shadow: none !important; /* Entfernen des Shadows für MD Modus */
+    --border-style: none;
+  }
+
+  ion-header {
+    padding: 0;
+
+    ion-toolbar {
+      --background: transparent;
+      --border-width: 0;
+      --box-shadow: none !important;
+      --border-style: none;
+    }
+
+    ion-title {
+      font-size: x-large;
+      color: var(--ion-text-color);
+    }
+  }
+}
+
+/* DARK MODE */
+@media (prefers-color-scheme: dark) {
+  .header-ios ion-toolbar {
+    --border-width: 0 !important; /* Entfernen der Border für iOS Modus */
+    --box-shadow: none !important; /* Entfernen des Shadows für MD Modus */
+  }
+  .header-md ion-toolbar {
+    --border-width: 0 !important; /* Entfernen der Border für iOS Modus */
+    --box-shadow: none !important; /* Entfernen des Shadows für MD Modus */
+    --border-style: none;
+  }
+
+  ion-header {
+    padding: 0;
+
+    ion-toolbar {
+      --background: transparent;
+      --border-width: 0;
+      --box-shadow: none !important;
+      --border-style: none;
+    }
+
+    ion-title {
+      font-size: x-large;
+      color: var(--ion-text-color);
+    }
+  }
+}

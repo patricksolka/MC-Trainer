@@ -1,40 +1,27 @@
 // LIGHT MODE
 @media (prefers-color-scheme: light) {
-  .header-ios ion-toolbar:last-of-type {
-    --border-width: 0 0 0 !important; /* Entfernen der Border */
-    // background-color: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
+  .header-ios ion-toolbar {
+    --border-width: 0 !important; /* Entfernen der Border für iOS Modus */
+    --box-shadow: none !important; /* Entfernen des Shadows für MD Modus */
+  }
+  ion-header-md {
+    .header-md ion-toolbar {
+      --border-width: 0 !important; /* Entfernen der Border für iOS Modus */
+      --box-shadow: none !important; /* Entfernen des Shadows für MD Modus */
+      --border-style: none;
+    }
   }
 
   ion-header {
-    .header-ios ion-toolbar:last-of-type {
-      background-color: transparent !important;
-      border: none !important;
-      box-shadow: none !important;
-    }
-
     ion-toolbar {
-      background-color: transparent !important;
-      border: none !important;
-      box-shadow: none !important;
-
-      .toolbar-background {
-        background-color: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
-      }
-
-      .toolbar-container {
-        background-color: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
-
-        ion-title {
-          font-size: xx-large;
-          color: var(--ion-text-color);
-        }
-      }
+      --background: transparent;
+      --border-width: 0;
+      --box-shadow: none !important;
+      --border-style: none;
+    }
+    ion-title {
+      font-size: xx-large;
+      color: var(--ion-text-color);
     }
   }
 
@@ -52,16 +39,13 @@
       --border-radius: 10px !important;
     }
 
-    .input-wrapper {
-      border-radius: 10px !important; // Border radius für das Input-Feld
-    }
-
+    .input-wrapper,
     .native-wrapper {
-      border-radius: 10px !important; // Border radius für den Wrapper
+      border-radius: 10px !important;
     }
 
     .native-input {
-      font-size: 14px !important; // Beispiel-Schriftgröße
+      font-size: 14px !important;
     }
 
     .ulp {
@@ -76,9 +60,6 @@
 
     .backButton {
       --background: transparentize(#3D5CFF, 0) !important;
-    }
-
-    .backButton {
       margin-right: auto !important;
     }
 
@@ -93,92 +74,74 @@
 
 // DARK MODE
 @media (prefers-color-scheme: dark) {
-  .header-ios ion-toolbar:last-of-type {
-    --border-width: 0 0 0 !important; /* Entfernen der Border */
-    border: none !important;
-    box-shadow: none !important;
+  .header-ios ion-toolbar {
+    --border-width: 0 !important; /* Entfernen der Border für iOS Modus */
+    --box-shadow: none !important; /* Entfernen des Shadows für MD Modus */
+  }
+  .header-md ion-toolbar {
+    --border-width: 0 !important; /* Entfernen der Border für iOS Modus */
+    --box-shadow: none !important; /* Entfernen des Shadows für MD Modus */
+    --border-style: none;
   }
 
   ion-header {
-    .header-ios ion-toolbar:last-of-type {
-      background-color: transparent !important;
-      border: none !important;
-      box-shadow: none !important;
-    }
-
+    padding: 0;
     ion-toolbar {
-      // background-color: transparent !important;
-      border: none !important;
-      box-shadow: none !important;
-
-      .toolbar-background {
-        background-color: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
-      }
-
-      .toolbar-container {
-        background-color: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
-
-        ion-title {
-          font-size: xx-large;
-          color: var(--ion-text-color);
-        }
-      }
+      --background: transparent;
+      --border-width: 0;
+      --box-shadow: none !important;
+      --border-style: none;
     }
+    ion-title {
+      font-size: x-large;
+      color: var(--ion-text-color);
+    }
+}
+
+ion-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  ion-input {
+    --background: var(--ion-card-background-mockup) !important;
+    color: var(--ion-card-background-mockup-text) !important;
+    font-weight: 500 !important;
+    font-size: 16px !important;
+    height: 70px !important;
+    --border-radius: 10px !important;
   }
 
-  ion-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    ion-input {
-      --background: var(--ion-card-background-mockup) !important;
-      color: var(--ion-card-background-mockup-text) !important;
-      font-weight: 500 !important;
-      font-size: 16px !important;
-      height: 70px !important;
-      --border-radius: 10px !important;
-    }
-
-    .input-wrapper {
-      border-radius: 10px !important; // Border radius für das Input-Feld
-    }
-
-    .native-wrapper {
-      border-radius: 10px !important; // Border radius für den Wrapper
-    }
-
-    .native-input {
-      font-size: 14px !important; // Beispiel-Schriftgröße
-    }
-
-    .ulp {
-      font-size: 16px !important;
-      font-weight: 500 !important;
-      text-transform: none !important;
-      --background: #3D5CFF !important;
-      --border-radius: 10px !important;
-      height: 70px !important;
-      min-width: 380px !important;
-    }
-
-    .backButton {
-      --background: transparentize(#3D5CFF, 0) !important;
-    }
-
-    .backButton {
-      margin-right: auto !important;
-    }
-
-    .buttonAfterlist {
-      display: flex !important;
-      justify-content: center !important;
-      align-items: center !important;
-      margin-top: 20px !important;
-    }
+  .input-wrapper,
+  .native-wrapper {
+    border-radius: 10px !important;
   }
+
+  .native-input {
+    font-size: 14px !important;
+  }
+
+  .ulp {
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    text-transform: none !important;
+    --background: #3D5CFF !important;
+    --border-radius: 10px !important;
+    height: 70px !important;
+    min-width: 380px !important;
+  }
+
+  .backButton {
+    --background: transparentize(#3D5CFF, 0) !important;
+    margin-right: auto !important;
+  }
+
+  .buttonAfterlist {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin-top: 20px !important;
+  }
+}
+
 }

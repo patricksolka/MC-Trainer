@@ -2,6 +2,8 @@ import { __decorate } from "tslib";
 import { Component } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from "@angular/common";
+import { RouterLink } from '@angular/router';
+import { IonButton, IonButtons, IonHeader, IonIcon, IonTitle, IonToolbar } from "@ionic/angular/standalone";
 //import {TotalStatsService} from "../../services/total-stats.service";
 let StatsComponent = class StatsComponent {
     constructor(router) {
@@ -29,8 +31,9 @@ StatsComponent = __decorate([
     Component({
         selector: 'app-stats',
         templateUrl: './stats.component.html',
+        styleUrls: ['./stats.component.scss'],
         standalone: true,
-        imports: [CommonModule, IonicModule]
+        imports: [CommonModule, IonicModule, IonHeader, IonToolbar, IonButton, IonButtons, IonIcon, IonTitle, RouterLink, RouterLink]
     })
 ], StatsComponent);
 export { StatsComponent };

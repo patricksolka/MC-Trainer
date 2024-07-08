@@ -1,19 +1,24 @@
-<ion-header>
+<ion-header class="ion-no-border">
     <ion-toolbar>
-        <ion-title>Ergebnis des aktuellen Quiz</ion-title>
+        <ion-buttons slot="start">
+            <ion-button class="backButton ion-padding-top" [routerLink]="['/home']">
+                <ion-icon name="arrow-back-outline" class="arrowBack"></ion-icon>
+            </ion-button>
+            <ion-title class="ion-padding-top">Ergebnis des aktuellen Quiz</ion-title>
+        </ion-buttons>
     </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
-  <ion-card>
-    <ion-card-header>
-      Statistik
-    </ion-card-header>
-    <ion-card-content>
-      <p>Richtig beantwortete Fragen: {{ correctAnswers }}</p>
-      <p>Falsch beantwortete Fragen: {{ incorrectAnswers }}</p>
-      <ion-button (click)="resetQuizHome()">Zur Startseite</ion-button>
-    </ion-card-content>
-  </ion-card>
+    <ion-card>
+        <ion-card-header>
+            Statistik
+        </ion-card-header>
+        <ion-card-content>
+            <p>Richtig beantwortete Fragen: {{ correctAnswers }}</p>
+            <p>Falsch beantwortete Fragen: {{ incorrectAnswers }}</p>
+            <ion-button (click)="resetQuizHome()">Zur Startseite</ion-button>
+        </ion-card-content>
+    </ion-card>
 </ion-content>
 
 

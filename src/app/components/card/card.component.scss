@@ -56,13 +56,13 @@
 
           &.correct {
             border: 3px solid #8fce00 !important;
-            --background: var(--ion-card-background-mockup)!important;
-            color: var(--ion-text-color-light)!important;
+            --background: var(--ion-card-background-mockup) !important;
+            color: var(--ion-text-color-light) !important;
           }
 
           &.incorrect {
             border: 3px solid red !important;
-            --background: var(--ion-card-background-mockup)!important;
+            --background: var(--ion-card-background-mockup) !important;
             color: var(--ion-text-color-light) !important;
           }
 
@@ -121,25 +121,47 @@
 
 /* DARK MODE */
 @media (prefers-color-scheme: dark) {
-  ion-toolbar {
-    border: none;
-    --ion-toolbar-background: #0f0f1c;
-    --padding-start: var(--ion-padding, 16px);
-    --padding-end: var(--ion-padding, 16px);
-    --padding-top: var(--ion-padding, 16px);
-    --padding-bottom: var(--ion-padding, 16px);
+  .header-ios ion-toolbar {
+    --border-width: 0 !important; /* Entfernen der Border für iOS Modus */
+    --box-shadow: none !important; /* Entfernen des Shadows für MD Modus */
+  }
+  .header-md ion-toolbar {
+    --border-width: 0 !important; /* Entfernen der Border für iOS Modus */
+    --box-shadow: none !important; /* Entfernen des Shadows für MD Modus */
+    --border-style: none;
+
+    ion-searchbar {
+      --cancel-button-color: var(--ion-text-color);
+      box-shadow: none;
+      padding: 10px;
+      color: white;
+    }
+  }
+
+  ion-header {
+    ion-toolbar {
+      --background: transparent;
+      --box-shadow: none !important;
+      --border-style: none;
+    }
+
+    ion-title {
+      font-size: x-large;
+      color: var(--ion-text-color);
+    }
   }
   ion-card {
-    margin: 20px;
-    // background-color: var(--ion-color-dark-shade);
     background-color: transparent;
     border: none;
     box-shadow: none;
+    margin-top: 0;
+    padding-top: 0;
 
     ion-card-header {
+      width: auto;
       color: var(--ion-text-color-light);
       font-weight: bold !important;
-      font-size: var(--ion-font-size, 20px);
+      font-size: var(--ion-font-size, 24px);
     }
 
     ion-card-content {
@@ -182,13 +204,13 @@
 
           &.correct {
             border: 3px solid #8fce00 !important;
-            --background: var(--ion-card-background-mockup)!important;
-            color: var(--ion-color-light)!important;
+            --background: var(--ion-card-background-mockup) !important;
+            color: var(--ion-color-light) !important;
           }
 
           &.incorrect {
             border: 3px solid red !important;
-            --background: var(--ion-card-background-mockup)!important;
+            --background: var(--ion-card-background-mockup) !important;
             color: var(--ion-color-light) !important;
           }
 
@@ -218,27 +240,6 @@
         }
       }
     }
-  }
-
-  ion-header ion-toolbar ion-button.button-solid {
-    --background: var(--ion-color-base) !important;
-    color: var(--ion-color-light) !important;
-    margin-top: 15px;
-
-    // Hintergrundfarbe für den aktiven Zustand anpassen
-    &:active,
-    &:focus {
-      --background: var(--ion-color-base) !important;
-    }
-
-    // Optional: Hintergrundfarbe beim Drücken anpassen
-    ion-ripple-effect {
-      --ion-ripple-color: var(--ion-color-base);
-    }
-
-    // Schatten entfernen
-    --box-shadow: none !important;
-    box-shadow: none !important;
   }
 
   // Optional: spezifische Regel für .specific-class, falls benötigt

@@ -2,24 +2,33 @@
 DARK MODE
  **/
 @media (prefers-color-scheme: dark) {
+  .header-ios ion-toolbar {
+    --border-width: 0 !important; /* Entfernen der Border für iOS Modus */
+    --box-shadow: none !important; /* Entfernen des Shadows für MD Modus */
+  }
+  .header-md ion-toolbar {
+    --border-width: 0 !important; /* Entfernen der Border für iOS Modus */
+    --box-shadow: none !important; /* Entfernen des Shadows für MD Modus */
+    --border-style: none;
+  }
+
   ion-header {
-    background-color: #0f0f1c;
-
+    padding: 0;
     ion-toolbar {
-      border: none;
-      --ion-toolbar-background: #0f0f1c;
-      --padding-start: var(--ion-padding, 16px);
-      --padding-end: var(--ion-padding, 16px);
-      --padding-top: var(--ion-padding, 16px);
-      --padding-bottom: var(--ion-padding, 16px);
+      --background: transparent;
+      --border-width: 0;
+      --box-shadow: none !important;
+      --border-style: none;
     }
-
+    ion-title {
+      font-size: x-large;
+      color: var(--ion-text-color);
+    }
     ion-searchbar {
-      --cancel-button-color: var(--ion-text-color); /* Setzt die Farbe des Cancel-Buttons */
-      // background-color: white;
+      --cancel-button-color: var(--ion-text-color);
       box-shadow: none;
-      padding: 1px;
-      width: auto;
+      padding: 10px;
+      color: white;
     }
   }
   .categoryImage {
@@ -32,7 +41,6 @@ DARK MODE
     justify-content: center;
     object-fit: cover;
     opacity: 0.5;
-    //transition: opacity 0.5s ease;
   }
   .text-overlay {
     position: absolute;
@@ -62,25 +70,20 @@ DARK MODE
 
     }
   }
-
   ion-col {
     --padding: 0 !important;
   }
-
   .image-container {
     position: relative;
     width: 100%;
     height: auto;
   }
-
   .card {
     transition: transform 0.5s ease;
   }
-
   .card:hover {
     transform: scale(1.05);
   }
-
   .card:active {
     transform: scale(0.95);
   }
@@ -91,31 +94,48 @@ LIGHT MODE
  **/
 @media (prefers-color-scheme: light) {
   ion-header {
-    background-color: var(--ion-background-color-dark);
+    .header-ios ion-toolbar:last-of-type {
+      background-color: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
 
     ion-toolbar {
-      border: none;
-      --ion-toolbar-background: #b3b3cc;
+      background-color: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
       --padding-start: var(--ion-padding, 16px);
       --padding-end: var(--ion-padding, 16px);
       --padding-top: var(--ion-padding, 16px);
       --padding-bottom: var(--ion-padding, 16px);
-      color: #FFF;
 
-      ion-icon {
-        color: #FFF;
+      .toolbar-background {
+        background-color: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
+
+      .toolbar-container {
+        background-color: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+
+        ion-title {
+          font-size: xx-large;
+          color: var(--ion-text-color);
+        }
       }
     }
-    ion-searchbar {
-      --cancel-button-color: #0000ff; /* Setzt die Farbe des Cancel-Buttons auf Blau */
-      background-color: transparent;
-      color: white;
-      box-shadow: none;
-      padding: 16px;
 
-      ion-icon {
-        color: #FFF;
-      }
+    ion-searchbar {
+      --cancel-button-color: var(--ion-text-color);
+      box-shadow: none;
+      padding: 1px;
+      width: auto;
+    }
+
+    ion-icon {
+      color: var(--ion-text-color-dark);
     }
   }
   .categoryImage {
@@ -181,76 +201,3 @@ LIGHT MODE
     transform: scale(0.95);
   }
 }
-
-/*
-.categoryImage {
-  width: 100%;
-  height: 100px;
-  border-radius: 10px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  object-fit: cover;
-  opacity: 0.5;
-  //transition: opacity 0.5s ease;
-}
-.text-overlay {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
-  font-size: 20px;
-  font-weight: 500;
-  text-align: center;
-  pointer-events: none;
-}
-
-.categoryImage p {
-  position: absolute;
-  color: white;
-  font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-@media (min-width: 768px) {
-  .categoryImage {
-    height: 150px;
-  }
-  .categorySkeleton {
-    height: 150px;
-
-  }
-}
-
-ion-col {
-  --padding: 0 !important;
-}
-
-.image-container {
-  position: relative;
-  width: 100%;
-  height: auto;
-}
-
-.card {
-  transition: transform 0.5s ease;
-}
-
-.card:hover {
-  transform: scale(1.05);
-}
-
-.card:active {
-  transform: scale(0.95);
-}
-
-/*.categoryImage {
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-
-.categoryImage.loaded {
-  opacity: 1;
-}*/

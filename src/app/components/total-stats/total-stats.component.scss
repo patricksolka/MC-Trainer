@@ -1,0 +1,63 @@
+/* LIGHT MODE */
+@media (prefers-color-scheme: light) {
+  ion-header {
+    ion-toolbar {
+      --background: transparent;
+      --border-width: 0;
+      --box-shadow: none !important;
+      --border-style: none;
+    }
+
+    ion-title {
+      font-size: x-large;
+      color: var(--ion-text-color);
+    }
+  }
+
+  ion-content {
+    ion-card {
+      border: none;
+      box-shadow: none;
+      margin-top: 0;
+      padding-top: 0;
+
+      ion-card-header {
+        width: auto;
+        font-weight: bold !important;
+        font-size: var(--ion-font-size, 24px);
+        background-color: #a326e6; // Beispielhafte Hintergrundfarbe
+      }
+    }
+  }
+}
+
+/* DARK MODE */
+@media (prefers-color-scheme: dark) {
+  ion-header {
+    ion-toolbar {
+      background-color: transparent; // Beispielhafte Hintergrundfarbe
+      --border-width: 0;
+      --box-shadow: none !important;
+      --border-style: none;
+    }
+
+    ion-title {
+      font-size: x-large;
+      color: var(--ion-text-color);
+    }
+  }
+}
+
+ion-content ion-card {
+  --border: none;
+  --box-shadow: none;
+  margin-top: 0;
+  padding-top: 0;
+
+  ion-card-header {
+    width: auto;
+    font-weight: bold !important;
+    font-size: var(--ion-font-size, 24px);
+    background-color: #a326e6; // Beispielhafte Hintergrundfarbe
+  }
+}
