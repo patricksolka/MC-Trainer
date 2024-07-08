@@ -85,7 +85,7 @@ export class CardService {
     }
 
     async setCategoryDone(categoryId: string, attribute: string, done: boolean): Promise<void> {
-        await this.categoryService.setDone(categoryId, attribute, done);
+        await this.categoryService.setDone(categoryId, done);
     }
 
     async resetCardAnsweredCounter(cardid: string, counter: string) {
