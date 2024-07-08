@@ -1,5 +1,5 @@
 export const environment = {
-    production: true,
+    production: false,
     firebaseConfig: {
         apiKey: "AIzaSyBQzZEQ0F-IPgkmGB1vNgDU9g1dCByGCqc",
         authDomain: "ema-ss24-mc-haupt.firebaseapp.com",
@@ -10,6 +10,6 @@ export const environment = {
         measurementId: "G-ZDKT9D95PM",
         // @ts-ignore
         locationId: 'europe-west'
-    }
+    },
 };
 //# sourceMappingURL=environment.js.map

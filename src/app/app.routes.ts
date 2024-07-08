@@ -77,6 +77,10 @@ export const routes: Routes = [
     loadComponent: () => import('./components/personalFavorites/personalFavorites').then(m => m.PersonalFavorites),
     ...canActivate(redirectUnauthorizedToOnboarding)
   },
+  {
+    path: 'progressbar',
+    loadComponent: () => import('./components/progress-bar/progress-bar.component').then( m => m.ProgressBarComponent)
+  },
 
 
 ];

@@ -6,12 +6,15 @@ let AchievementService = class AchievementService {
         this.achieved = new Set();
     }
     checkAchievements(stats) {
-        return ACHIEVEMENTS.filter(achievement => achievement.condition(stats))
+        console.log('Checking achievements with stats:', stats);
+        const newAchievements = ACHIEVEMENTS.filter(achievement => achievement.condition(stats))
             .filter(achievement => !this.achieved.has(achievement.id))
             .map(achievement => {
             this.achieved.add(achievement.id);
             return achievement;
         });
+        console.log('New achievements:', newAchievements);
+        return newAchievements;
     }
     getAchievements() {
         return ACHIEVEMENTS.filter(achievement => this.achieved.has(achievement.id));

@@ -1,41 +1,92 @@
 import { __decorate } from "tslib";
 import { Component } from '@angular/core';
-import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCol, IonContent, IonGrid, IonItem, IonList, IonRow } from "@ionic/angular/standalone";
-import { NgForOf, NgIf, NgClass } from "@angular/common";
-import { IonApp, IonRouterOutlet, IonAlert, } from "@ionic/angular/standalone";
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonContent, IonHeader, IonIcon, IonItem, IonList, IonTitle, IonToolbar } from "@ionic/angular/standalone";
+import { FooterPage } from "../footer/footer.page";
+import { Stats } from "../../models/stats.model";
 let CardComponent = class CardComponent {
-    constructor(cardService, router, achievementService, alertController) {
+    constructor(cardService, route, router, alertController, totalStatsService, categoryService, auth, userService, achievementService, toastController) {
         this.cardService = cardService;
+        this.route = route;
         this.router = router;
-        this.achievementService = achievementService;
         this.alertController = alertController;
-        this.questions = [];
-        this.currentQuestionIndex = 0;
-        this.currentQuestion = { question: '', answers: [], correctAnswer: [] }; // Ändern Sie dies zu einem Array von Strings
-        this.selectedAnswers = [];
-        this.isAnswerRevealed = false;
+        this.totalStatsService = totalStatsService;
+        this.categoryService = categoryService;
+        this.auth = auth;
+        this.userService = userService;
+        this.achievementService = achievementService;
+        this.toastController = toastController;
         this.showResult = false;
-        this.isAnswerCorrect = false;
+        this.selectedAnswers = [];
         this.correctAnswersCount = 0;
         this.incorrectAnswersCount = 0;
-        this.totalQuestions = 0;
         this.completedQuizzes = 0;
-        this.resetQuiz();
+        this.totalQuestions = 0;
+        this.questions = []; // Array für alle Fragen
+        this.correctAnswer = false;
+        this.startTime = null;
     }
-    ngOnInit() {
-        this.questions = this.cardService.getQuestions();
-        this.currentQuestion = this.questions[this.currentQuestionIndex];
+    async ngOnInit() {
+        this.categoryId = this.route.snapshot.paramMap.get('categoryId');
+        console.log('Category ID:', this.categoryId);
+        if (this.categoryId) {
+            const category = await this.categoryService.getCategoryById(this.categoryId);
+            this.categoryName = category.name; // Kategorie-Namen speichern
+        }
+        this.loadCards(this.categoryId);
     }
-    resetQuiz() {
-        this.correctAnswersCount = 0;
-        this.incorrectAnswersCount = 0;
-        this.currentQuestionIndex = 0;
-        this.selectedAnswers = [];
-        this.showResult = false;
-        //  this.currentQuestion = this.questions[this.currentQuestionIndex];
-        this.currentQuestion = this.questions[0];
+    loadCategories() {
+        this.categories$ = this.cardService.getCategoriesWithQuestionCounts();
+    }
+    async checkAllAnswered() {
+        for (const card of this.questions) {
+            const counter = await this.cardService.getCardAnsweredCounter(card.id);
+            if (counter < 6) {
+                return card;
+            }
+        }
+        return null;
+    }
+    async loadCards(categoryId) {
+        this.cards$ = this.cardService.getAllCardsForCategory(categoryId);
+        this.cardsSubscription = this.cards$.subscribe(async (cards) => {
+            console.log('Geladene Karten:', cards);
+            if (cards.length > 0) {
+                this.questions = this.shuffleArray(cards); // Mische die Fragen
+                this.totalQuestions = this.questions.length;
+                const question = await this.checkAllAnswered();
+                if (question) {
+                    this.currentQuestion = question;
+                }
+                else {
+                    console.log("Fehler! Alle Karten wurden beantwortet!");
+                }
+                //this.currentQuestion = this.questions[0];
+            }
+            else {
+                console.warn('Keine Karten gefunden für die Kategorie mit ID:', categoryId);
+            }
+        }, (error) => {
+            console.error('Fehler beim Laden der Karten:', error);
+        });
+    }
+    shuffleArray(array) {
+        // Fisher-Yates Shuffle Algorithmus
+        for (let i = array.length - 1; i >= 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+    selectCategory(categoryId) {
+        this.selectedCategoryId = categoryId;
+        this.loadCards(categoryId);
     }
     toggleAnswer(answer) {
+        if (this.showResult) {
+            return; // Wenn die Antworten überprüft wurden, keine weiteren Antworten auswählen
+        }
         if (this.selectedAnswers.includes(answer)) {
             this.selectedAnswers = this.selectedAnswers.filter(a => a !== answer);
         }
@@ -43,66 +94,134 @@ let CardComponent = class CardComponent {
             this.selectedAnswers.push(answer);
         }
     }
-    async checkAnswers() {
-        this.isAnswerCorrect = this.selectedAnswers.every(answer => this.currentQuestion.correctAnswer.includes(answer)) &&
-            this.currentQuestion.correctAnswer.every(answer => this.selectedAnswers.includes(answer));
-        this.showResult = true;
-        this.addToStats();
-        this.completedQuizzes++;
-        const stats = {
-            completedQuizzes: this.completedQuizzes,
-            correctAnswers: this.correctAnswersCount,
-            totalQuestions: this.totalQuestions,
-        };
-        const newAchievements = this.achievementService.checkAchievements(stats);
-        if (newAchievements.length) {
-            const alert = await this.alertController.create({
-                header: 'New Achievements',
-                message: `New Achievements: ${newAchievements.map(a => a.name).join(', ')}`,
-                buttons: ['OK']
-            });
-            await alert.present();
-        }
-    }
-    addToStats() {
-        let isCorrect = true;
-        // Überprüfe jede ausgewählte Antwort
-        for (const selectedAnswer of this.selectedAnswers) {
-            if (!this.currentQuestion.correctAnswer.includes(selectedAnswer)) {
-                isCorrect = false; // Wenn eine ausgewählte Antwort nicht in den richtigen Antworten enthalten ist, ist die gesamte Antwort falsch
-                break; // Beende die Schleife, da bereits eine falsche Antwort gefunden wurde
-            }
-        }
-        // Überprüfe, ob alle richtigen Antworten ausgewählt wurden
-        for (const correctAnswer of this.currentQuestion.correctAnswer) {
-            if (!this.selectedAnswers.includes(correctAnswer)) {
-                isCorrect = false; // Wenn nicht alle richtigen Antworten ausgewählt wurden, ist die gesamte Antwort falsch
-                break; // Beende die Schleife, da nicht alle richtigen Antworten ausgewählt wurden
-            }
-        }
-        // Erhöhe den Zähler basierend auf dem Ergebnis
-        if (isCorrect) {
-            this.correctAnswersCount++;
-        }
-        else {
-            this.incorrectAnswersCount++;
-        }
-    }
-    getNextQuestion() {
+    async getNextQuestion() {
         this.showResult = false;
         this.selectedAnswers = [];
-        this.currentQuestionIndex++;
-        if (this.currentQuestionIndex < this.questions.length) {
-            this.currentQuestion = this.questions[this.currentQuestionIndex];
+        let index = this.questions.indexOf(this.currentQuestion);
+        while (index < this.questions.length - 1) {
+            index++;
+            const counter = await this.cardService.getCardAnsweredCounter(this.questions[index].id);
+            if (counter < 6) {
+                this.currentQuestion = this.questions[index];
+                console.log("Frage: " + this.currentQuestion.id);
+                return;
+            }
+        }
+        // Wenn alle verbleibenden Fragen mehr als 6 Mal beantwortet wurden
+        const question = await this.checkAllAnswered();
+        if (!question) {
+            await this.cardService.setCategoryDone(this.categoryId, "done", true);
+        }
+        const newStats = {
+            correctAnswers: this.correctAnswersCount,
+            incorrectAnswers: this.incorrectAnswersCount,
+            completedQuizzes: 1
+        };
+        const stats = new Stats(newStats);
+        console.log('Stats:', stats);
+        await this.totalStatsService.persistStats(this.auth.currentUser.uid, this.categoryId, stats);
+        await this.endQuiz();
+        await this.router.navigate(['/stats'], {
+            state: {
+                correctAnswers: this.correctAnswersCount,
+                incorrectAnswers: this.incorrectAnswersCount,
+            }
+        });
+    }
+    checkForNewAchievements(stats) {
+        const newAchievements = this.achievementService.checkAchievements(stats);
+        newAchievements.forEach(achievement => {
+            this.showAchievementToast(achievement);
+        });
+    }
+    async showAchievementToast(achievement) {
+        const toast = await this.toastController.create({
+            header: 'Congratulations!',
+            message: `${achievement.name}: ${achievement.description}`,
+            duration: 2000,
+            position: 'top', // Position of the toast
+        });
+        await toast.present();
+    }
+    checkAnswers() {
+        // Überprüfen, ob alle ausgewählten Antworten korrekt sind
+        const allSelectedCorrect = this.selectedAnswers.every(answer => this.currentQuestion.correctAnswer.includes(answer));
+        // Überprüfen, ob die Anzahl der ausgewählten Antworten der Anzahl der korrekten Antworten entspricht
+        const isCorrect = allSelectedCorrect && this.selectedAnswers.length === this.currentQuestion.correctAnswer.length;
+        if (isCorrect) {
+            console.log("correct");
+            this.correctAnswersCount++;
+            this.correctAnswer = true;
+            this.cardService.updateCardAnsweredCounter(this.currentQuestion.id, "counter");
+            // Call checkForNewAchievements with the updated stats
+            const stats = {
+                completedQuizzes: this.completedQuizzes,
+                correctAnswers: this.correctAnswersCount,
+                incorrectAnswers: this.incorrectAnswersCount,
+                totalQuestions: this.totalQuestions
+            };
+            this.checkForNewAchievements(stats);
         }
         else {
-            // Navigiere zur Statistikseite und übergebe die Ergebnisse
-            this.router.navigate(['/stats'], {
-                state: {
-                    correctAnswers: this.correctAnswersCount,
-                    incorrectAnswers: this.incorrectAnswersCount
-                }
-            });
+            console.log("not correct");
+            this.correctAnswer = false;
+            this.incorrectAnswersCount++;
+            this.cardService.resetCardAnsweredCounter(this.currentQuestion.id, "counter");
+            // this.cardService.updateCardAnsweredCounter(this.currentQuestion.id, "counterIncorrect");
+        }
+        this.showResult = true;
+    }
+    isCorrectAnswer(answer) {
+        return this.currentQuestion.correctAnswer.includes(answer);
+        //return this.correctAnswer;
+    }
+    isAnswerCorrect() {
+        return this.currentQuestion.correctAnswer.every((ans) => this.selectedAnswers.includes(ans));
+    }
+    startQuiz(categoryId) {
+        this.startTime = new Date();
+        this.categoryService.startQuiz(categoryId); // Startet das Quiz
+        console.log('CardComponent', this.startTime);
+    }
+    async endQuiz() {
+        if (this.categoryService.startTime) {
+            const endTime = new Date(); // Aktuelle Zeit als Endzeitpunkt
+            console.log('endQuiz', this.categoryService.startTime);
+            try {
+                await this.cardService.addLearningSession(this.auth.currentUser.uid, this.categoryId, this.currentQuestion.id, this.categoryService.startTime, // Verwenden der Startzeit aus dem CategoryService
+                endTime // Verwenden der aktuellen Zeit als Endzeitpunkt
+                );
+                console.log('Learning session added successfully.', this.categoryService.startTime, endTime);
+            }
+            catch (error) {
+                console.error('Error adding learning session:', error);
+            }
+            // Optional: Zurücksetzen der Startzeit nach der Erfassung der Lernsitzung
+            this.categoryService.startTime = null;
+        }
+        else {
+            console.error('Start time is not set.');
+        }
+        const newStats = {
+            completedQuizzes: this.completedQuizzes + 1,
+            correctAnswers: this.correctAnswersCount,
+            incorrectAnswers: this.incorrectAnswersCount,
+            totalQuestions: this.totalQuestions
+        };
+        const stats = new Stats(newStats);
+        console.log('Stats:', stats);
+        await this.totalStatsService.persistStats(this.auth.currentUser.uid, this.categoryId, stats);
+        this.checkForNewAchievements(stats); // Check for new achievements
+        await this.router.navigate(['/stats'], {
+            state: {
+                correctAnswers: this.correctAnswersCount,
+                incorrectAnswers: this.incorrectAnswersCount,
+            }
+        });
+    }
+    ngOnDestroy() {
+        if (this.cardsSubscription) {
+            this.cardsSubscription.unsubscribe();
         }
     }
 };
@@ -110,103 +229,10 @@ CardComponent = __decorate([
     Component({
         selector: 'app-card',
         templateUrl: './card.component.html',
+        styleUrls: ['./card.component.scss'],
         standalone: true,
-        imports: [
-            NgIf,
-            IonAlert,
-            IonApp,
-            IonRouterOutlet,
-            IonCard,
-            IonCardHeader,
-            IonCardContent,
-            IonList,
-            IonItem,
-            IonContent,
-            NgForOf,
-            NgClass,
-            IonButton,
-            IonGrid,
-            IonRow,
-            IonCol
-        ],
-        styleUrls: ['./card.component.css']
+        imports: [CommonModule, IonHeader, IonContent, IonToolbar, IonTitle, IonList, IonItem, IonCard, IonCardHeader, IonCardContent, IonButton, FooterPage, IonIcon, RouterLink, IonButtons]
     })
 ], CardComponent);
 export { CardComponent };
-// funktioniert:
-/*
-  checkAnswers() {
-    this.isAnswerCorrect = this.selectedAnswers.every(answer => this.currentQuestion.correctAnswer.includes(answer)) &&
-      this.currentQuestion.correctAnswer.every(answer => this.selectedAnswers.includes(answer));
-    this.showResult = true;
-  }
-
-  getNextQuestion() {
-      this.showResult = false;
-      this.selectedAnswers = [];
-      this.currentQuestionIndex++;
-      if (this.currentQuestionIndex < this.questions.length) {
-        this.currentQuestion = this.questions[this.currentQuestionIndex];
-      } else {
-        // Navigiere zur Statistikseite und übergebe die Ergebnisse
-        this.router.navigate(['/stats'], {
-          state: {
-            correctAnswers: this.correctAnswersCount,
-            incorrectAnswers: this.incorrectAnswersCount
-          }
-        });
-      }
-    }
-  }
-
- */
-//oberes funktioniert
-/*
-selectAnswer(answer: string) {
-  this.selectedAnswer = answer;
-}
-
-revealAnswer() {
-  this.isAnswerRevealed = true;
-}
-
-getNextQuestion() {
-  this.currentQuestionIndex++;
-  if (this.currentQuestionIndex < this.questions.length) {
-    this.currentQuestion = this.questions[this.currentQuestionIndex];
-    this.selectedAnswer = null;
-    this.isAnswerRevealed = false;
-  } else {
-    // Alle Fragen wurden beantwortet
-    console.log('Alle Fragen wurden beantwortet');
-  }
-}
-
-isCorrectAnswer(answer: string): boolean {
-  return answer === this.currentQuestion.correctAnswer;
-}
-}
-*/
-/*
-checkAnswer(selectedAnswer: string) {
-  if (selectedAnswer === this.currentQuestion.correctAnswer) {
-    console.log("Richtig!");
-    // Hier könntest du weitere Logik für eine richtige Antwort implementieren
-  } else {
-    console.log("Falsch! Die richtige Antwort ist: " + this.currentQuestion.correctAnswer);
-    // Hier könntest du weitere Logik für eine falsche Antwort implementieren
-  }
-}
-
-getNextQuestion() {
-  this.currentQuestionIndex++;
-  if (this.currentQuestionIndex < this.questions.length) {
-    this.currentQuestion = this.questions[this.currentQuestionIndex];
-  } else {
-    // Wenn alle Fragen beantwortet wurden, könntest du hier eine entsprechende Logik implementieren
-    console.log("Alle Fragen wurden beantwortet!");
-  }
-}
-}
-*/
 //# sourceMappingURL=card.component.js.map

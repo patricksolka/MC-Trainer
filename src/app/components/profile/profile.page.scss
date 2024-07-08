@@ -95,7 +95,6 @@
 @media (prefers-color-scheme: dark) {
   .header-ios ion-toolbar:last-of-type {
     --border-width: 0 0 0 !important; /* Entfernen der Border */
-    // background-color: transparent !important;
     border: none !important;
     box-shadow: none !important;
   }

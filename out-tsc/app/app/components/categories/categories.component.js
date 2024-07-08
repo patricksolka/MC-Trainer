@@ -1,46 +1,105 @@
 import { __decorate } from "tslib";
-import { Component } from '@angular/core';
-import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonFab, IonFabButton, IonFooter, IonGrid, IonHeader, IonIcon, IonItem, IonList, IonNav, IonRippleEffect, IonRow, IonSegment, IonTabBar, IonTabButton, IonTabs, IonTitle, IonToolbar } from "@ionic/angular/standalone";
-import { IonicModule } from "@ionic/angular";
+import { Component, ViewChild } from '@angular/core';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { FooterPage } from "../footer/footer.page";
+import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonItem, IonItemDivider, IonItemGroup, IonLabel, IonList, IonRow, IonSearchbar, IonSkeletonText, IonText, IonTitle, IonToolbar } from "@ionic/angular/standalone";
 let CategoriesComponent = class CategoriesComponent {
-    constructor() { }
-    ngOnInit() { }
+    #searchBar;
+    set searchbar(sb) {
+        if (sb) {
+            setTimeout(() => sb.setFocus(), 0);
+            this.#searchBar = sb;
+        }
+    }
+    constructor(categoryService, router, fb, cdr) {
+        this.categoryService = categoryService;
+        this.router = router;
+        this.fb = fb;
+        this.cdr = cdr;
+        this.loaded = false;
+        this.searchBarVisible = false;
+        this.loadCategories();
+    }
+    async loadCategories() {
+        console.log('Ladezustand1', this.loaded);
+        try {
+            this.loaded = false;
+            this.categories = await this.categoryService.getCategories();
+            this.loaded = false;
+            this.categories.forEach(category => category.imageLoaded = false);
+            const imageLoaded = this.categories.map(category => new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => {
+                    category.imageLoaded = true;
+                    resolve();
+                };
+                img.onerror = (error) => {
+                    console.error(`Fehler beim Laden des Bildes für Kategorie ${category.id}:`, error);
+                    reject(error);
+                };
+                img.src = category.imagePath;
+            }));
+            await Promise.all(imageLoaded);
+            if (imageLoaded) {
+                this.categoryService.filterCategories();
+                this.loaded = true;
+                console.log('Ladezustand2', this.loaded);
+            }
+        }
+        catch (error) {
+            console.error('Error loading categories:', error);
+            this.loaded = true;
+        }
+    }
+    toggleSearch() {
+        this.searchBarVisible = !this.searchBarVisible;
+        if (this.searchBarVisible) {
+            setTimeout(() => {
+                this.#searchBar?.setFocus();
+            }, 1);
+        }
+        else {
+            this.categoryService.searchCategory = '';
+            this.categoryService.filterCategories();
+        }
+    }
+    /*
+    shareRecords() {
+        // Implementiere deine Funktion hier
+    }
+
+    navigateHome() {
+        // Implementiere deine Funktion hier
+    }
+    */
+    selectCategory(categoryId) {
+        if (categoryId) {
+            this.router.navigate(['/cards', categoryId]);
+        }
+        else {
+            console.error('Invalid categoryId:', categoryId);
+            // Handle invalid categoryId case, e.g., show error message or navigate to a default route
+        }
+    }
+    categoryHasQuestions(category) {
+        return category.questionCount && category.questionCount > 0;
+    }
+    ionViewWillEnter() {
+        this.loadCategories();
+    }
 };
+__decorate([
+    ViewChild(IonSearchbar)
+], CategoriesComponent.prototype, "searchbar", null);
 CategoriesComponent = __decorate([
     Component({
         selector: 'app-categories',
         templateUrl: './categories.component.html',
-        standalone: true,
         styleUrls: ['./categories.component.scss'],
-        imports: [
-            IonHeader,
-            IonContent,
-            IonFooter,
-            IonSegment,
-            IonNav,
-            IonToolbar,
-            IonTitle,
-            IonFab,
-            IonFabButton,
-            IonIcon,
-            IonRow,
-            IonCol,
-            IonList,
-            IonItem,
-            IonButton,
-            IonRippleEffect,
-            IonTabs,
-            IonTabBar,
-            IonTabButton,
-            IonGrid,
-            IonButtons,
-            IonCard,
-            IonCardHeader,
-            IonCardTitle,
-            IonCardSubtitle,
-            IonCardContent,
-            IonicModule
-        ]
+        standalone: true,
+        imports: [CommonModule, FormsModule, RouterLink, FooterPage, IonCol, IonRow, IonContent, IonHeader, IonToolbar, IonList, IonButtons, IonButton, IonTitle, IonIcon, IonGrid, IonSearchbar, IonText, IonSkeletonText, NgOptimizedImage, IonItemGroup, IonItemDivider, IonItem, IonLabel]
     })
 ], CategoriesComponent);
 export { CategoriesComponent };
