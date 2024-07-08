@@ -25,11 +25,10 @@ export class TotalStatsService {
     private totalIncorrectAnswers: number = 0;
     private subscription: Unsubscribe | null = null;
 
-    private userCollection: CollectionReference<DocumentData>;
+    userCollectionRef: CollectionReference<DocumentData>;
 
     constructor(private firestore: Firestore, private userService: UserService, private authService: AuthService) {
-        this.userCollection = collection(firestore, 'users') as CollectionReference<DocumentData>;
-
+        this.userCollectionRef = collection(firestore, 'users') as CollectionReference<DocumentData>;
     }
 
     updateStats(correct: number, incorrect: number) {
@@ -38,9 +37,8 @@ export class TotalStatsService {
         console.log(this.authService.auth.currentUser.uid);
     }
 
-    //Funktioniert auch
     async persistStats(uid: string, categoryId: string, stats: Stats) {
-        const statsCollectionRef = doc(this.firestore, `users/${uid}/stats/${categoryId}`);
+        const statsCollectionRef = doc(this.userCollectionRef, uid, 'stats', categoryId);
 
         try {
             const docSnap = await getDoc(statsCollectionRef);
@@ -67,6 +65,7 @@ export class TotalStatsService {
         }
     }
 
+
     async getStats(uid: string, categoryId: string) {
         const statsCollectionRef = doc(this.firestore, `users/${uid}/stats/${categoryId}`);
         //const docSnap = await getDoc(doc(statsCollectionRef, categoryId));
@@ -77,6 +76,39 @@ export class TotalStatsService {
             return docSnap.data() as Stats;
         } else {
             return null;
+        }
+    }
+
+    async setDone(categoryId: string, done: boolean): Promise<void> {
+        try {
+            const docRef = doc(this.userCollectionRef, this.authService.auth.currentUser.uid);
+           // const docRef = doc(this.firestore, `users/${this.authService.auth.currentUser.uid}`);
+            const statsRef = collection(docRef, 'stats');
+
+            // Füge das Dokument für die Kategorie in der Subcollection stats hinzu oder aktualisiere es
+            await setDoc(doc(statsRef, categoryId), { done }, { merge: true });
+        } catch (error) {
+            console.error('Error setting category done status:', error);
+            throw error;
+        }
+    }
+
+    async isDone(categoryId: string): Promise<boolean> {
+        try {
+            const docRef = doc(this.userCollectionRef, this.authService.auth.currentUser.uid);
+            const statsRef = doc(docRef, `stats/${categoryId}`);
+            const docSnap = await getDoc(statsRef);
+
+            if (docSnap.exists()) {
+                const statsData = docSnap.data();
+                console.log('Kategorie ist abgeschlossen:', statsData['done']);
+                return statsData['done'] || false;
+
+            }
+            return false;
+        } catch (error) {
+            console.error('Fehler beim Abrufen des Dokuments:', error);
+            throw error;
         }
     }
 
@@ -92,7 +124,6 @@ export class TotalStatsService {
             console.log("No stats found for id bdbdb:"); // Hinzugefügte Protokollierung
             return null;
         }
-
     }
 
     //TODO: Subscription evtl rausnehemn
