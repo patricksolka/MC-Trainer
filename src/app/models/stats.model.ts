@@ -32,6 +32,7 @@ export class Stats {
     correctAnswers: number;
     incorrectAnswers: number;
     completedQuizzes: number;
+    totalQuestions?: number;
 
     constructor(currentStats?: Stats, newStats?: Stats) {
         this.correctAnswers = (currentStats?.correctAnswers || 0) + (newStats?.correctAnswers || 0);

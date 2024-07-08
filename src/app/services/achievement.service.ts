@@ -22,7 +22,7 @@ export class AchievementService {
                 this.setAchievement(achievement.id);
                 return achievement;
             });
-        console.log('New achievements:', newAchievements);
+        console.log("Gefilterte Achievements vor der Rückgabe: ", newAchievements);
         return newAchievements;
     }
 
@@ -33,6 +33,7 @@ export class AchievementService {
     async setAchievement(id: number): Promise<void> {
         const userDoc = doc(this.firestore, `users/${this.authService.auth.currentUser.uid}/achievements/${id}`);
         const userSnap = await setDoc(userDoc, {done: true});
+        console.log('Achievement set:', userSnap)
     }
 
     loadAchievements(userId: string): Observable<Set<number>> {

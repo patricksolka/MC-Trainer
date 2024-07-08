@@ -38,7 +38,7 @@ export class TotalStatsService {
     }
 
     //Funktioniert auch
-    async persistStats(uid: string, categoryId: string, stats: Stats) {
+   /* async persistStats(uid: string, categoryId: string, stats: Stats) {
         const statsCollectionRef = doc(this.firestore, `users/${uid}/stats/${categoryId}`);
 
         try {
@@ -64,7 +64,70 @@ export class TotalStatsService {
         } catch (e) {
             console.error("Error persisting stats:", e);
         }
+    }*/
+
+    //kumuliert die werte
+   /* async persistStats(uid: string, categoryId: string, stats: Stats, isQuizCompleted: boolean) {
+        const statsCollectionRef = doc(this.firestore, `users/${uid}/stats/${categoryId}`);
+
+        try {
+            const docSnap = await getDoc(statsCollectionRef);
+
+            if (docSnap.exists()) {
+                const currentStats = docSnap.data() as Stats;
+                const updatedStats = {
+                    correctAnswers: currentStats.correctAnswers + stats.correctAnswers,
+                    incorrectAnswers: currentStats.incorrectAnswers + stats.incorrectAnswers,
+                    completedQuizzes: currentStats.completedQuizzes + (isQuizCompleted ? 1 : 0) // Increment completedQuizzes only if isQuizCompleted is true
+                };
+                await updateDoc(statsCollectionRef, updatedStats);
+                console.log("Existing document updated with stats:", updatedStats);
+            } else {
+                const statsData: DocumentData = {
+                    ...this.statsConverter.toFirestore(stats),
+                    completedQuizzes: isQuizCompleted ? 1 : 0 // Initialize completedQuizzes only if the quiz is completed
+                };
+                await setDoc(statsCollectionRef, statsData);
+                console.log("New document created with stats:", statsData);
+            }
+        } catch (e) {
+            console.error("Error persisting stats:", e);
+        }
     }
+*/
+
+    async persistStats(uid: string, categoryId: string, stats: Stats, isQuizCompleted: boolean) {
+        const statsCollectionRef = doc(this.firestore, `users/${uid}/stats/${categoryId}`);
+
+        try {
+            const docSnap = await getDoc(statsCollectionRef);
+
+            if (docSnap.exists()) {
+                const currentStats = docSnap.data() as Stats;
+
+                // Calculate new stats values
+                const updatedStats = {
+                    correctAnswers: stats.correctAnswers, // Set to the new value
+                    incorrectAnswers: stats.incorrectAnswers, // Set to the new value
+                    completedQuizzes: currentStats.completedQuizzes + (isQuizCompleted ? 1 : 0) // Increment completedQuizzes only if isQuizCompleted is true
+                };
+
+                await updateDoc(statsCollectionRef, updatedStats);
+                console.log("Existing document updated with stats:", updatedStats);
+            } else {
+                const statsData: DocumentData = {
+                    ...this.statsConverter.toFirestore(stats),
+                    completedQuizzes: isQuizCompleted ? 1 : 0 // Initialize completedQuizzes only if the quiz is completed
+                };
+
+                await setDoc(statsCollectionRef, statsData);
+                console.log("New document created with stats:", statsData);
+            }
+        } catch (e) {
+            console.error("Error persisting stats:", e);
+        }
+    }
+
 
     async getStats(uid: string, categoryId: string) {
         const statsCollectionRef = doc(this.firestore, `users/${uid}/stats/${categoryId}`);
@@ -95,7 +158,7 @@ export class TotalStatsService {
     }
 
     //TODO: Subscription evtl rausnehemn
-    async calculateTotalStats(uid: string) {
+   /* async calculateTotalStats(uid: string) {
         const statsCollectionRef = collection(this.firestore, `users/${uid}/stats/`);
         const refWithConverter = statsCollectionRef.withConverter(this.statsConverter);
        // const docSnap = await getDocs(statsCollectionRef);
@@ -103,13 +166,13 @@ export class TotalStatsService {
         let totalIncorrectAnswers = 0;
         let completedQuizzes = 0;
 
-        /*
+        /!*
         this.subscription = onSnapshot(refWithConverter, (snapshot) => {
             snapshot.docs.forEach(docData => {
                 console.log(docData.data());
             });
         });
-    */
+    *!/
         const statsDocs = await getDocs(refWithConverter);
         statsDocs.forEach((doc) => {
             const stats = doc.data();
@@ -123,6 +186,33 @@ export class TotalStatsService {
             totalCorrectAnswers,
             totalIncorrectAnswers,
             completedQuizzes
+        };
+    }*/
+
+    async calculateTotalStats(uid: string): Promise<{ totalCorrectAnswers: number, totalIncorrectAnswers: number, completedQuizzes: number, totalQuestions: number }> {
+        const statsCollectionRef = collection(this.firestore, `users/${uid}/stats/`);
+        const refWithConverter = statsCollectionRef.withConverter(this.statsConverter);
+
+        let totalCorrectAnswers = 0;
+        let totalIncorrectAnswers = 0;
+        let completedQuizzes = 0;
+        let totalQuestions = 0;
+
+        // Dokumente abrufen und Gesamtstatistiken berechnen
+        const statsDocs = await getDocs(refWithConverter);
+        statsDocs.forEach((doc) => {
+            const stats = doc.data();
+            totalCorrectAnswers += stats.correctAnswers || 0;
+            totalIncorrectAnswers += stats.incorrectAnswers || 0;
+            completedQuizzes += stats.completedQuizzes || 0;
+            totalQuestions += stats.totalQuestions || 0;
+        });
+
+        return {
+            totalCorrectAnswers,
+            totalIncorrectAnswers,
+            completedQuizzes,
+            totalQuestions
         };
     }
 

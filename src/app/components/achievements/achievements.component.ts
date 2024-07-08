@@ -18,7 +18,7 @@ export class AchievementsComponent implements OnInit {
 
     async ngOnInit() {
         this.achievementService.setAchievements();
-        this.achievements = await this.achievementService.getAchievements();
+        this.achievements = this.achievementService.getAchievements();
         console.log('Achievements', this.achievements);
     }
 }

@@ -81,11 +81,22 @@ export class CardComponent implements OnInit, OnDestroy {
         for (const card of this.questions) {
             const counter = await this.cardService.getCardAnsweredCounter(card.id);
             if (counter < 6) {
-                return card;
+                return card; // Gib die Karte zurück, wenn sie noch nicht vollständig beantwortet wurde
             }
         }
-        return null;
+        return null; // Gib null zurück, wenn alle Fragen vollständig beantwortet wurden
     }
+
+    async answeredOnce(card: Card[]): Promise<boolean> {
+        for (const card of this.questions){
+            const counter = await this.cardService.getCardAnsweredCounter(card.id);
+            if (counter <1){
+                return false;
+            }
+        }
+        return true;
+    }
+
 
 
     async loadCards(categoryId: string): Promise<void> {
@@ -138,6 +149,132 @@ export class CardComponent implements OnInit, OnDestroy {
         }
     }
 
+    /*async getNextQuestion(): Promise<void> {
+        this.showResult = false;
+        this.selectedAnswers = [];
+
+        let index = this.questions.indexOf(this.currentQuestion);
+
+        while (index < this.questions.length - 1) {
+            index++;
+            const counter = await this.cardService.getCardAnsweredCounter(this.questions[index].id);
+
+            if (counter < 6) {
+                this.currentQuestion = this.questions[index];
+                console.log("Frage: " + this.currentQuestion.id);
+                return;
+            }
+        }
+        // if all questions are answered more than 6 times
+        const newStats = {
+            correctAnswers: this.correctAnswersCount,
+            incorrectAnswers: this.incorrectAnswersCount,
+            completedQuizzes: 1,
+            totalQuestions: this.totalQuestions
+        };
+
+        const stats = new Stats(newStats);
+        console.log('Stats:', stats);
+        await this.totalStatsService.persistStats(this.auth.currentUser.uid, this.categoryId, stats);
+        await this.checkForNewAchievements();
+
+        //check if all questions are answered
+        const question = await this.checkAllAnswered();
+        if (!question){
+            await this.cardService.setCategoryDone(this.categoryId, "done", true);
+        }
+
+        await this.endQuiz();
+        await this.router.navigate(['/stats'], {
+            state: {
+                correctAnswers: this.correctAnswersCount,
+                incorrectAnswers: this.incorrectAnswersCount,
+            }
+        });
+    }*/
+    /*async getNextQuestion(): Promise<void> {
+        this.showResult = false;
+        this.selectedAnswers = [];
+
+        let index = this.questions.indexOf(this.currentQuestion);
+
+        while (index < this.questions.length - 1) {
+            index++;
+            const counter = await this.cardService.getCardAnsweredCounter(this.questions[index].id);
+
+            if (counter < 6) {
+                this.currentQuestion = this.questions[index];
+                console.log("Frage: " + this.currentQuestion.id);
+                return;
+            }
+        }
+
+        // Check if all questions are answered
+        const allAnswered = await this.checkAllAnswered();
+        const isQuizCompleted = allAnswered === null; // Set isQuizCompleted to true if all questions are answered
+
+        // Update stats for the current question
+        if (!isQuizCompleted) {
+            if (this.correctAnswer) {
+                this.correctAnswersCount++;
+            } else {
+                this.incorrectAnswersCount++;
+            }
+
+            // Call checkForNewAchievements with the updated stats
+            const newStats = {
+                completedQuizzes: this.completedQuizzes, // Removed increment here
+                correctAnswers: this.correctAnswersCount,
+                incorrectAnswers: this.incorrectAnswersCount,
+                totalQuestions: this.totalQuestions
+            };
+
+            const stats = new Stats(newStats);
+            console.log('Stats:', stats);
+            await this.totalStatsService.persistStats(this.auth.currentUser.uid, this.categoryId, stats, false); // Pass false for isQuizCompleted
+
+            console.log("Statistiken für checkForNewAchievements: ", stats);
+
+            // Diese Methode muss asynchron aufgerufen werden, da calculateTotalStats ein Promise zurückgibt
+            this.checkForNewAchievements().then(() => {
+                console.log('checkForNewAchievements abgeschlossen');
+            }).catch(error => {
+                console.error('Fehler beim Überprüfen der Achievements:', error);
+            });
+        } else {
+            // Quiz is completed
+            this.completedQuizzes++; // Increment only when quiz is completed
+
+            // Update stats for the completed quiz
+            const newStats = {
+                completedQuizzes: this.completedQuizzes,
+                correctAnswers: this.correctAnswersCount,
+                incorrectAnswers: this.incorrectAnswersCount,
+                totalQuestions: this.totalQuestions
+            };
+
+            const stats = new Stats(newStats);
+            console.log('Stats:', stats);
+            await this.totalStatsService.persistStats(this.auth.currentUser.uid, this.categoryId, stats, true); // Pass true for isQuizCompleted
+
+            console.log("Statistiken für checkForNewAchievements: ", stats);
+
+            // Set category as done if all questions are answered
+            await this.cardService.setCategoryDone(this.categoryId, "done", true);
+
+            await this.endQuiz();
+            await this.router.navigate(['/stats'], {
+                state: {
+                    correctAnswers: this.correctAnswersCount,
+                    incorrectAnswers: this.incorrectAnswersCount,
+                }
+            });
+        }
+
+        // Show the result for the current question
+        this.showResult = true;
+    }*/
+
     async getNextQuestion(): Promise<void> {
         this.showResult = false;
         this.selectedAnswers = [];
@@ -155,26 +292,124 @@ export class CardComponent implements OnInit, OnDestroy {
             }
         }
 
-        // Wenn alle verbleibenden Fragen mehr als 6 Mal beantwortet wurden
-        const question = await this.checkAllAnswered();
-        if (!question) {
-            await this.cardService.setCategoryDone(this.categoryId, "done", true);
-        }
-        await this.endQuiz();
-        await this.router.navigate(['/stats'], {
-            state: {
+        // If no suitable question found, check if quiz is completed
+        const allAnswered = await this.answeredOnce(this.questions);
+        const isQuizCompleted = allAnswered === null;
+
+        // Show the result for the current question
+        if (isQuizCompleted) {
+            // Quiz ist abgeschlossen, führe entsprechende Aktionen aus
+
+            // Erhöhe die Anzahl der abgeschlossenen Quizze
+            this.completedQuizzes++;
+
+            // Aktualisiere die Statistiken für das abgeschlossene Quiz
+            const stats = new Stats({
+                completedQuizzes: this.completedQuizzes,
                 correctAnswers: this.correctAnswersCount,
                 incorrectAnswers: this.incorrectAnswersCount,
-            }
-        });
+                totalQuestions: this.totalQuestions
+            });
+            console.log('Stats für abgeschlossenes Quiz:', stats);
+
+            // Persistiere die Statistiken
+            await this.totalStatsService.persistStats(this.auth.currentUser.uid, this.categoryId, stats, true);
+
+            // Markiere die Kategorie als abgeschlossen, da alle Fragen beantwortet wurden
+            await this.cardService.setCategoryDone(this.categoryId, "done", true);
+
+            // Beende das Quiz und navigiere zur Statistikseite
+
+        } else {
+            await this.endQuiz();
+            await this.router.navigate(['/stats'], {
+                state: {
+                    correctAnswers: this.correctAnswersCount,
+                    incorrectAnswers: this.incorrectAnswersCount,
+                }
+            });
+            // Wenn das Quiz noch nicht abgeschlossen ist, zeige die letzte Frage erneut an
+
+        }
     }
 
-    checkForNewAchievements(stats) {
+
+    async checkAnswers(): Promise<void> {
+        // Überprüfen, ob alle ausgewählten Antworten korrekt sind
+        const allSelectedCorrect = this.selectedAnswers.every(answer => this.currentQuestion.correctAnswer.includes(answer));
+        // Überprüfen, ob die Anzahl der ausgewählten Antworten der Anzahl der korrekten Antworten entspricht
+        const isCorrect = allSelectedCorrect && this.selectedAnswers.length === this.currentQuestion.correctAnswer.length;
+
+        if (isCorrect) {
+            console.log("correct");
+            this.correctAnswersCount++;
+            console.log("Aktuelle Anzahl richtiger Antworten: ", this.correctAnswersCount);
+            this.correctAnswer = true;
+            this.cardService.updateCardAnsweredCounter(this.currentQuestion.id, "counter");
+
+        } else {
+            console.log("not correct");
+            this.correctAnswer = false;
+            this.incorrectAnswersCount++;
+            this.cardService.resetCardAnsweredCounter(this.currentQuestion.id, "counter");
+        }
+
+        // Update stats for the current question
+        const stats = new Stats({
+            completedQuizzes: this.completedQuizzes,
+            correctAnswers: this.correctAnswersCount,
+            incorrectAnswers: this.incorrectAnswersCount,
+            totalQuestions: this.totalQuestions
+        });
+        console.log('Stats:', stats);
+        await this.totalStatsService.persistStats(this.auth.currentUser.uid, this.categoryId, stats, false);
+
+        console.log("Statistiken für checkForNewAchievements: ", stats);
+
+        // Diese Methode muss asynchron aufgerufen werden, da calculateTotalStats ein Promise zurückgibt
+        this.checkForNewAchievements().then(() => {
+            console.log('checkForNewAchievements abgeschlossen');
+        }).catch(error => {
+            console.error('Fehler beim Überprüfen der Achievements:', error);
+        });
+
+        this.showResult = true;
+    }
+
+
+
+
+
+
+
+
+
+
+    /*checkForNewAchievements(stats) {
+        const newAchievements = this.achievementService.checkAchievements(stats);
+        newAchievements.forEach(achievement => {
+            this.showAchievementToast(achievement);
+        });
+    }*/
+
+
+    async checkForNewAchievements() {
+        const userId = this.auth.currentUser.uid;
+        const totalStats = await this.totalStatsService.calculateTotalStats(userId);
+
+        const stats = {
+            completedQuizzes: totalStats.completedQuizzes,
+            correctAnswers: totalStats.totalCorrectAnswers,
+            incorrectAnswers: totalStats.totalIncorrectAnswers,
+            totalQuestions: totalStats.totalQuestions // Füge die Gesamtzahl der Fragen hinzu
+        };
+
         const newAchievements = this.achievementService.checkAchievements(stats);
         newAchievements.forEach(achievement => {
             this.showAchievementToast(achievement);
         });
     }
+
 
     async showAchievementToast(achievement) {
         const toast = await this.toastController.create({
@@ -187,24 +422,16 @@ export class CardComponent implements OnInit, OnDestroy {
         await toast.present();
     }
 
-    checkAnswers(): void {
+    /*async checkAnswers(): Promise<void> {
         // Überprüfen, ob alle ausgewählten Antworten korrekt sind
         const allSelectedCorrect = this.selectedAnswers.every(answer => this.currentQuestion.correctAnswer.includes(answer));
         // Überprüfen, ob die Anzahl der ausgewählten Antworten der Anzahl der korrekten Antworten entspricht
         const isCorrect = allSelectedCorrect && this.selectedAnswers.length === this.currentQuestion.correctAnswer.length;
 
-        // Call checkForNewAchievements with the updated stats
-        const stats = {
-            completedQuizzes: this.completedQuizzes,
-            correctAnswers: this.totalStatsService.totalCorrectAnswers + this.correctAnswersCount,
-            incorrectAnswers: this.incorrectAnswersCount,
-            totalQuestions: this.totalQuestions
-        };
-        this.checkForNewAchievements(stats);
-
         if (isCorrect) {
             console.log("correct");
             this.correctAnswersCount++;
+            console.log("Aktuelle Anzahl richtiger Antworten: ", this.correctAnswersCount);
             this.correctAnswer = true;
             this.cardService.updateCardAnsweredCounter(this.currentQuestion.id, "counter");
 
@@ -216,8 +443,73 @@ export class CardComponent implements OnInit, OnDestroy {
 
             // this.cardService.updateCardAnsweredCounter(this.currentQuestion.id, "counterIncorrect");
         }
+
+        // Call checkForNewAchievements with the updated stats
+        const newStats = {
+            completedQuizzes: this.completedQuizzes, // Removed increment here
+            correctAnswers: this.correctAnswersCount,
+            incorrectAnswers: this.incorrectAnswersCount,
+            totalQuestions: this.totalQuestions
+        };
+
+        const stats = new Stats(newStats);
+        console.log('Stats:', stats);
+        this.totalStatsService.persistStats(this.auth.currentUser.uid, this.categoryId, stats, false);
+
+        console.log("Statistiken für checkForNewAchievements: ", stats);
+
+        // Diese Methode muss asynchron aufgerufen werden, da calculateTotalStats ein Promise zurückgibt
+        this.checkForNewAchievements().then(() => {
+            console.log('checkForNewAchievements abgeschlossen');
+        }).catch(error => {
+            console.error('Fehler beim Überprüfen der Achievements:', error);
+        });
+
+        this.showResult = true;
+    }*/
+
+   /* async checkAnswers(): Promise<void> {
+        // Überprüfen, ob alle ausgewählten Antworten korrekt sind
+        const allSelectedCorrect = this.selectedAnswers.every(answer => this.currentQuestion.correctAnswer.includes(answer));
+        // Überprüfen, ob die Anzahl der ausgewählten Antworten der Anzahl der korrekten Antworten entspricht
+        const isCorrect = allSelectedCorrect && this.selectedAnswers.length === this.currentQuestion.correctAnswer.length;
+
+        if (isCorrect) {
+            console.log("correct");
+            this.correctAnswersCount++;
+            console.log("Aktuelle Anzahl richtiger Antworten: ", this.correctAnswersCount);
+            this.correctAnswer = true; // Setze die correctAnswer Variable auf true für diese Frage
+            await this.cardService.updateCardAnsweredCounter(this.currentQuestion.id, "counter");
+        } else {
+            console.log("not correct");
+            this.correctAnswer = false; // Setze die correctAnswer Variable auf false für diese Frage
+            this.incorrectAnswersCount++;
+            await this.cardService.resetCardAnsweredCounter(this.currentQuestion.id, "counter");
+        }
+
+        // Call checkForNewAchievements with the updated stats
+        const stats = new Stats({
+            completedQuizzes: this.completedQuizzes,
+            correctAnswers: this.correctAnswersCount,
+            incorrectAnswers: this.incorrectAnswersCount,
+            totalQuestions: this.totalQuestions
+        });
+        console.log('Stats:', stats);
+        await this.totalStatsService.persistStats(this.auth.currentUser.uid, this.categoryId, stats, false);
+
+        console.log("Statistiken für checkForNewAchievements: ", stats);
+
+        // Diese Methode muss asynchron aufgerufen werden, da calculateTotalStats ein Promise zurückgibt
+        this.checkForNewAchievements().then(() => {
+            console.log('checkForNewAchievements abgeschlossen');
+        }).catch(error => {
+            console.error('Fehler beim Überprüfen der Achievements:', error);
+        });
+
         this.showResult = true;
     }
+*/
+
 
     isCorrectAnswer(answer: string): boolean {
         return this.currentQuestion.correctAnswer.includes(answer);
@@ -260,25 +552,8 @@ export class CardComponent implements OnInit, OnDestroy {
         } else {
             console.error('Start time is not set.');
         }
-        const newStats = {
-            completedQuizzes: this.completedQuizzes + 1,
-            correctAnswers: this.correctAnswersCount,
-            incorrectAnswers: this.incorrectAnswersCount,
-            totalQuestions: this.totalQuestions
-        };
-
-        const stats = new Stats(newStats);
-        console.log('Stats:', stats);
-        await this.totalStatsService.persistStats(this.auth.currentUser.uid, this.categoryId, stats);
-        this.checkForNewAchievements(stats); // Check for new achievements
-
-        await this.router.navigate(['/stats'], {
-            state: {
-                correctAnswers: this.correctAnswersCount,
-                incorrectAnswers: this.incorrectAnswersCount,
-            }
-        });
     }
+
 
     ngOnDestroy(): void {
         if (this.cardsSubscription) {
