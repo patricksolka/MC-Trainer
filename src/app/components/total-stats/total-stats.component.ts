@@ -35,7 +35,7 @@ export class TotalStatsComponent implements OnInit {
             this.loadStats();
     }
     async loadStats() {
-        const stats = await this.totalStatsService.calculateTotalStats(this.authService.auth.currentUser.uid);
+        const stats = await this.totalStatsService.calcTotalStats(this.authService.auth.currentUser.uid);
         this.totalCorrectAnswers = stats.totalCorrectAnswers;
         this.totalIncorrectAnswers = stats.totalIncorrectAnswers;
         this.completedQuizzes = stats.completedQuizzes;

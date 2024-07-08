@@ -30,15 +30,21 @@ export class TotalStatsService {
 
     userCollectionRef: CollectionReference<DocumentData>;
 
-    constructor(private firestore: Firestore, private userService: UserService, private authService: AuthService) {
+    constructor(
+        private firestore: Firestore,
+        private userService: UserService,
+        private authService: AuthService,
+        private achievementService: AchievementService,
+        private toastController: ToastController
+    ) {
         this.userCollectionRef = collection(firestore, 'users') as CollectionReference<DocumentData>;
     }
 
-    updateStats(correct: number, incorrect: number) {
+   /* updateStats(correct: number, incorrect: number) {
         this.totalCorrectAnswers += correct;
         this.totalIncorrectAnswers += incorrect;
         console.log(this.authService.auth.currentUser.uid);
-    }
+    }*/
 
     checkForNewAchievements(stats) {
         const newAchievements = this.achievementService.checkAchievements(stats);
@@ -66,7 +72,6 @@ export class TotalStatsService {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    //Funktioniert auch
     async persistStats(uid: string, categoryId: string, stats: Stats) {
         const statsCollectionRef = doc(this.userCollectionRef, uid, 'stats', categoryId);
 
@@ -100,7 +105,7 @@ export class TotalStatsService {
             };
 
              */
-            const newStats = await this.calculateTotalStats(this.authService.auth.currentUser.uid);
+            const newStats = await this.calcTotalStats(this.authService.auth.currentUser.uid);
             const updatedStats = {
                 correctAnswers: newStats.totalCorrectAnswers,
                 incorrectAnswers: newStats.totalIncorrectAnswers,
@@ -112,7 +117,7 @@ export class TotalStatsService {
         }
     }
 
-
+    //Get stats for a specific category
     async getStats(uid: string, categoryId: string) {
         const statsCollectionRef = doc(this.firestore, `users/${uid}/stats/${categoryId}`);
         //const docSnap = await getDoc(doc(statsCollectionRef, categoryId));
@@ -126,6 +131,21 @@ export class TotalStatsService {
         }
     }
 
+    async getStatsById(uid: string, categoryId: string) {
+        const statsCollectionRef = doc(this.firestore, `users/${uid}/stats/${categoryId}`);
+        const docSnap = await getDoc(statsCollectionRef);
+
+        if (docSnap.exists()) {
+            const result = docSnap.data() as Stats;
+            console.log("Retrieved stats for id:", result);
+            return result;
+        } else {
+            console.log("No stats found for id bdbdb:"); // Hinzugefügte Protokollierung
+            return null;
+        }
+    }
+
+    //Set category to done
     async setDone(categoryId: string, done: boolean): Promise<void> {
         try {
             const docRef = doc(this.userCollectionRef, this.authService.auth.currentUser.uid);
@@ -140,6 +160,7 @@ export class TotalStatsService {
         }
     }
 
+    //Check if isDone
     async isDone(categoryId: string): Promise<boolean> {
         try {
             const docRef = doc(this.userCollectionRef, this.authService.auth.currentUser.uid);
@@ -159,22 +180,10 @@ export class TotalStatsService {
         }
     }
 
-    async getStatsById(uid: string, categoryId: string) {
-        const statsCollectionRef = doc(this.firestore, `users/${uid}/stats/${categoryId}`);
-        const docSnap = await getDoc(statsCollectionRef);
 
-        if (docSnap.exists()) {
-            const result = docSnap.data() as Stats;
-            console.log("Retrieved stats for id:", result);
-            return result;
-        } else {
-            console.log("No stats found for id bdbdb:"); // Hinzugefügte Protokollierung
-            return null;
-        }
-    }
 
     //TODO: Subscription evtl rausnehemn
-    async calculateTotalStats(uid: string) {
+    async calcTotalStats(uid: string) {
         const statsCollectionRef = collection(this.firestore, `users/${uid}/stats/`);
         const refWithConverter = statsCollectionRef.withConverter(this.statsConverter);
        // const docSnap = await getDocs(statsCollectionRef);
@@ -221,14 +230,6 @@ export class TotalStatsService {
             return {...stats};
         }
     };
-
-    resetStats() {
-        this.totalCorrectAnswers = 0;
-        this.totalIncorrectAnswers = 0;
-        //this.updatedateFirebaseStats(this.authService.auth.currentUser.uid, "correctAnswers", 0);
-        //this.updatedateFirebaseStats(this.authService.auth.currentUser.uid,
-        // "incorrectAnswers", 0);
-    }
 }
 
 
