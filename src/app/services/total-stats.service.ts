@@ -21,7 +21,7 @@ import {Stats} from "../models/stats.model";
     providedIn: 'root'
 })
 export class TotalStatsService {
-    private totalCorrectAnswers: number = 0;
+    public totalCorrectAnswers: number = 0;
     private totalIncorrectAnswers: number = 0;
     private subscription: Unsubscribe | null = null;
     private userCollection: CollectionReference<DocumentData>;

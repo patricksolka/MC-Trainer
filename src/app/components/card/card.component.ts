@@ -54,14 +54,16 @@ export class CardComponent implements OnInit, OnDestroy {
 //    currentQuestionIndex: number = 0; // Neue Variable für den Index der aktuellen Frage
     private cardsSubscription: Subscription;
 
-    constructor(private cardService: CardService, private route: ActivatedRoute, private router: Router,
+    constructor(private cardService: CardService,
+                private route: ActivatedRoute,
+                private router: Router,
                 private alertController: AlertController,
                 private totalStatsService: TotalStatsService,
                 private categoryService: CategoryService,
                 private auth: Auth,
                 private userService: UserService,
                 private achievementService: AchievementService,
-                private toastController: ToastController
+                private toastController: ToastController,
     ) {
     }
 
@@ -191,20 +193,21 @@ export class CardComponent implements OnInit, OnDestroy {
         // Überprüfen, ob die Anzahl der ausgewählten Antworten der Anzahl der korrekten Antworten entspricht
         const isCorrect = allSelectedCorrect && this.selectedAnswers.length === this.currentQuestion.correctAnswer.length;
 
+        // Call checkForNewAchievements with the updated stats
+        const stats = {
+            completedQuizzes: this.completedQuizzes,
+            correctAnswers: this.totalStatsService.totalCorrectAnswers + this.correctAnswersCount,
+            incorrectAnswers: this.incorrectAnswersCount,
+            totalQuestions: this.totalQuestions
+        };
+        this.checkForNewAchievements(stats);
+
         if (isCorrect) {
             console.log("correct");
             this.correctAnswersCount++;
             this.correctAnswer = true;
             this.cardService.updateCardAnsweredCounter(this.currentQuestion.id, "counter");
 
-            // Call checkForNewAchievements with the updated stats
-            const stats = {
-                completedQuizzes: this.completedQuizzes,
-                correctAnswers: this.correctAnswersCount,
-                incorrectAnswers: this.incorrectAnswersCount,
-                totalQuestions: this.totalQuestions
-            };
-            this.checkForNewAchievements(stats);
         } else {
             console.log("not correct");
             this.correctAnswer = false;
