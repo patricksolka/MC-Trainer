@@ -1,5 +1,5 @@
 <ion-header class="ion-no-border">
-<ion-toolbar>
+    <ion-toolbar>
         <ion-buttons slot="start">
             <ion-button class="backButton ion-padding-top" [routerLink]="['/home']">
                 <ion-icon name="arrow-back-outline" class="arrowBack"></ion-icon>
@@ -9,28 +9,46 @@
     </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
+    <app-progress-bar></app-progress-bar>
+    <ion-title>Gesamt Statistik</ion-title>
     <ion-card>
-        <ion-card-header>
-            <ion-card-title>Gesamtstatistik</ion-card-title>
-        </ion-card-header>
         <ion-card-content>
-            <p>GESAMT Richtige Antworten: {{ totalCorrectAnswers }}</p>
-            <p>GESAMT Falsche Antworten: {{ totalIncorrectAnswers }}</p>
-            <p>GESAMT Absolvierte Quizze: {{ completedQuizzes }}</p>
-            <ion-button (click)="backToHome()">Zurück zu Home</ion-button>
+            <ion-item class="ion-no-padding">
+                <ion-grid class="ion-no-padding ion-no-margin">
+                    <ion-row>
+                        <ion-col class="ion-no-padding">Richtige Antworten:</ion-col>
+                        <ion-col class="ion-no-padding ion-text-end" size="auto">{{ totalCorrectAnswers }}</ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-item>
+            <ion-item class="ion-no-padding">
+                <ion-grid class="ion-no-padding ion-no-margin">
+                    <ion-row>
+                        <ion-col class="ion-no-padding">Falsche Antworten:</ion-col>
+                        <ion-col class="ion-no-padding ion-text-end" size="auto">{{ totalIncorrectAnswers }}</ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-item>
+            <ion-item class="ion-no-padding">
+                <ion-grid class="ion-no-padding ion-no-margin">
+                    <ion-row>
+                        <ion-col class="ion-no-padding">Anzahl Quizzes:</ion-col>
+                        <ion-col class="ion-no-padding ion-text-end" size="auto">{{ completedQuizzes }}</ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-item>
         </ion-card-content>
     </ion-card>
-
-    <ion-card *ngFor="let module of modules">
-        <ion-card-header>
-            <ion-card-title>{{ module.name }}</ion-card-title>
-        </ion-card-header>
+    <ion-title>Statistik deiner Module</ion-title>
+    <ion-card>
         <ion-card-content>
-            <p>Richtige Antworten: {{ module.correctAnswers }}</p>
-            <p>Falsche Antworten: {{ module.incorrectAnswers }}</p>
-            <p>Abgeschlossene Quizze: {{ module.completedQuizzes }}</p>
-            <ion-progress-bar
-                    [value]="module.correctAnswers / (module.correctAnswers + module.incorrectAnswers)"></ion-progress-bar>
+            <ion-item>CARD MODULE</ion-item>
+        </ion-card-content>
+    </ion-card>
+    <ion-title>Archiments</ion-title>
+    <ion-card>
+        <ion-card-content>
+            <ion-item>Archiments Card</ion-item>
         </ion-card-content>
     </ion-card>
 </ion-content>
