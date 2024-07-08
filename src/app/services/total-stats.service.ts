@@ -15,6 +15,9 @@ import {Card} from "../models/card.model";
 import {UserService} from "./user.service";
 import {AuthService} from "./auth.service";
 import {Stats} from "../models/stats.model";
+import {CardComponent} from "../components/card/card.component";
+import {AchievementService} from "./achievement.service";
+import {ToastController} from "@ionic/angular/standalone";
 
 
 @Injectable({
@@ -26,7 +29,7 @@ export class TotalStatsService {
     private subscription: Unsubscribe | null = null;
     private userCollection: CollectionReference<DocumentData>;
 
-    constructor(private firestore: Firestore, private userService: UserService, private authService: AuthService) {
+    constructor(private firestore: Firestore, private userService: UserService, private authService: AuthService, private achievementService: AchievementService, private toastController: ToastController) {
         this.userCollection = collection(firestore, 'users') as CollectionReference<DocumentData>;
 
     }
@@ -35,6 +38,24 @@ export class TotalStatsService {
         this.totalCorrectAnswers += correct;
         this.totalIncorrectAnswers += incorrect;
         console.log(this.authService.auth.currentUser.uid);
+    }
+
+    checkForNewAchievements(stats) {
+        const newAchievements = this.achievementService.checkAchievements(stats);
+        newAchievements.forEach(achievement => {
+            this.showAchievementToast(achievement);
+        });
+    }
+
+    async showAchievementToast(achievement) {
+        const toast = await this.toastController.create({
+            header: 'Congratulations!',
+            message: `${achievement.name}: ${achievement.description}`,
+            duration: 2000, // Toast duration in milliseconds
+            position: 'top', // Position of the toast
+        });
+
+        await toast.present();
     }
 
     //Funktioniert auch
@@ -61,6 +82,23 @@ export class TotalStatsService {
                 await setDoc(statsCollectionRef, statsData);
                 console.log("New document created with stats:", statsData);
             }
+            /*
+            const newDocSnap = await getDoc(statsCollectionRef);
+            const currentStats = newDocSnap.data() as Stats;
+            const updatedStats = {
+                correctAnswers: currentStats.correctAnswers,
+                incorrectAnswers: currentStats.incorrectAnswers,
+                completedQuizzes: currentStats.completedQuizzes
+            };
+
+             */
+            const newStats = await this.calculateTotalStats(this.authService.auth.currentUser.uid);
+            const updatedStats = {
+                correctAnswers: newStats.totalCorrectAnswers,
+                incorrectAnswers: newStats.totalIncorrectAnswers,
+                completedQuizzes: newStats.completedQuizzes
+            };
+            this.checkForNewAchievements(updatedStats);
         } catch (e) {
             console.error("Error persisting stats:", e);
         }

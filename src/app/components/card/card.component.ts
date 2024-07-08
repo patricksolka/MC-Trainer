@@ -168,7 +168,7 @@ export class CardComponent implements OnInit, OnDestroy {
             }
         });
     }
-
+/*
     checkForNewAchievements(stats) {
         const newAchievements = this.achievementService.checkAchievements(stats);
         newAchievements.forEach(achievement => {
@@ -187,6 +187,8 @@ export class CardComponent implements OnInit, OnDestroy {
         await toast.present();
     }
 
+ */
+
     checkAnswers(): void {
         // Überprüfen, ob alle ausgewählten Antworten korrekt sind
         const allSelectedCorrect = this.selectedAnswers.every(answer => this.currentQuestion.correctAnswer.includes(answer));
@@ -200,7 +202,7 @@ export class CardComponent implements OnInit, OnDestroy {
             incorrectAnswers: this.incorrectAnswersCount,
             totalQuestions: this.totalQuestions
         };
-        this.checkForNewAchievements(stats);
+        //this.checkForNewAchievements(stats);
 
         if (isCorrect) {
             console.log("correct");
@@ -270,7 +272,7 @@ export class CardComponent implements OnInit, OnDestroy {
         const stats = new Stats(newStats);
         console.log('Stats:', stats);
         await this.totalStatsService.persistStats(this.auth.currentUser.uid, this.categoryId, stats);
-        this.checkForNewAchievements(stats); // Check for new achievements
+        //this.checkForNewAchievements(stats); // Check for new achievements
 
         await this.router.navigate(['/stats'], {
             state: {
