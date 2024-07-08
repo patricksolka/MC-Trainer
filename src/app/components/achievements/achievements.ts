@@ -1,6 +1,11 @@
 // src/app/components/achievements/achievements.ts
 import { Stats } from '../../models/stats.model';
 
+/**
+ * @constant ACHIEVEMENTS
+ * @description Liste der Errungenschaften mit ihren Bedingungen.
+ */
+
 export const ACHIEVEMENTS = [
     { id: 1, name: 'First Step', description: 'First correct answer!', condition: (stats: Stats) => stats.correctAnswers >= 1 },
     { id: 2, name: 'Quick Learner', description: 'Five correct answers!', condition: (stats: Stats) => stats.correctAnswers >= 5 },

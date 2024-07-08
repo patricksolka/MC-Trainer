@@ -1,4 +1,8 @@
 // card.service.ts
+/**
+ * @fileoverview Diese Datei enthält den CardService, der die Verwaltung und Operationen von Karten übernimmt.
+ */
+
 import {Injectable} from '@angular/core';
 import {
     Firestore,
@@ -19,7 +23,10 @@ import {map, switchMap} from 'rxjs/operators';
 import {AuthService} from "./auth.service";
 import {CategoryService} from "./category.service";
 
-
+/**
+ * @class CardService
+ * @description Dieser Service verwaltet die Kartenoperationen und Lernsessions des Benutzers.
+ */
 @Injectable({
     providedIn: 'root'
 })
@@ -28,17 +35,37 @@ export class CardService {
     // private userCollection: CollectionReference<DocumentData>;
     private subscription: Unsubscribe | null = null;
 
-    constructor(private firestore: Firestore, private authService: AuthService, private categoryService: CategoryService) {
+    /**
+     * @constructor
+     * @param {Firestore} firestore - Firebase Firestore-Instanz.
+     * @param {AuthService} authService - Service für Authentifizierungsoperationen.
+     * @param {CategoryService} categoryService - Service für Kategorieoperationen.
+     */
+    constructor(private firestore: Firestore,
+                private authService: AuthService,
+                private categoryService: CategoryService)
+    {
         this.cardsCollection = collection(firestore, 'cards') as CollectionReference<Card>;
         // this.userCollection = collection(firestore, 'users') as CollectionReference<DocumentData>;
     }
 
+    /**
+     * @method getAllCardsForCategory
+     * @description Holt alle Karten für eine bestimmte Kategorie.
+     * @param {string} categoryId - Die ID der Kategorie.
+     * @returns {Observable<Card[]>} - Ein Observable mit den Karten.
+     */
     // CRUD-Operationen für Karten
     getAllCardsForCategory(categoryId: string): Observable<Card[]> {
         const categoryCardsQuery = query(this.cardsCollection, where('categoryId', '==', categoryId));
         return collectionData(categoryCardsQuery, {idField: 'id'}) as Observable<Card[]>;
     }
 
+    /**
+     * @method getCategoriesWithQuestionCounts
+     * @description Holt alle Kategorien und zählt die Fragen jeder Kategorie.
+     * @returns {Observable<Category[]>} - Ein Observable mit den Kategorien und ihren Frageanzahlen.
+     */
     getCategoriesWithQuestionCounts(): Observable<Category[]> {
         const categoriesCollection = collection(this.firestore, 'categories') as CollectionReference<Category>;
         return collectionData(categoriesCollection, {idField: 'id'}).pipe(
@@ -56,6 +83,12 @@ export class CardService {
         );
     }
 
+    /**
+     * @method updateCardAnsweredCounter
+     * @description Aktualisiert den Zähler für beantwortete Fragen einer Karte.
+     * @param {string} cardid - Die ID der Karte.
+     * @param {string} counter - Der Zählername.
+     */
     async updateCardAnsweredCounter(cardid: string, counter: string) {
         const userDoc = doc(this.firestore, `users/${this.authService.auth.currentUser.uid}/answers/${cardid}`);
         const newCount = await this.getCardAnsweredCounter(cardid) + 1;
@@ -64,10 +97,23 @@ export class CardService {
         });
     }
 
+    /**
+     * @method setCategoryDone
+     * @description Setzt den Status einer Kategorie auf 'done'.
+     * @param {string} categoryId - Die ID der Kategorie.
+     * @param {string} attribute - Der Attributname.
+     * @param {boolean} done - Der Status.
+     */
     async setCategoryDone(categoryId: string, attribute: string, done: boolean): Promise<void> {
         await this.categoryService.setDone(categoryId, attribute, done);
     }
 
+    /**
+     * @method resetCardAnsweredCounter
+     * @description Setzt den Zähler für beantwortete Fragen einer Karte zurück.
+     * @param {string} cardId - Die ID der Karte.
+     * @param {string} counter - Der Zählername.
+     */
     async resetCardAnsweredCounter(cardid: string, counter: string) {
         const userDoc = doc(this.firestore, `users/${this.authService.auth.currentUser.uid}/answers/${cardid}`);
         const newCount = 0;
@@ -76,6 +122,12 @@ export class CardService {
         });
     }
 
+    /**
+     * @method getCardAnsweredCounter
+     * @description Holt den Zähler für beantwortete Fragen einer Karte.
+     * @param {string} cardId - Die ID der Karte.
+     * @returns {Promise<number>} - Der Zählerwert.
+     */
     async getCardAnsweredCounter(cardid: string): Promise<number> {
         const userDoc = doc(this.firestore, `users/${this.authService.auth.currentUser.uid}/answers/${cardid}`);
         const userSnap = await getDoc(userDoc);
@@ -91,6 +143,12 @@ export class CardService {
         }
     }
 
+    /**
+     * @method getLearningSession
+     * @description Holt die Lernsitzungen eines Benutzers.
+     * @param {string} uid - Die Benutzer-ID.
+     * @returns {Observable<DocumentData[]>} - Ein Observable mit den Lernsitzungen.
+     */
     getLearningSession(uid: string): Observable<DocumentData[]> {
         return new Observable<DocumentData[]>(observer => {
             const learningSessionsRef = collection(this.firestore, `users/${uid}/learningSessions`);
@@ -108,6 +166,15 @@ export class CardService {
         });
     }
 
+    /**
+     * @method addLearningSession
+     * @description Fügt eine neue Lernsitzung hinzu oder aktualisiert die Dauer einer bestehenden Sitzung.
+     * @param {string} uid - Die Benutzer-ID.
+     * @param {string} categoryId - Die Kategorie-ID.
+     * @param {string} cardId - Die Karten-ID.
+     * @param {Date} startTime - Die Startzeit der Sitzung.
+     * @param {Date} endTime - Die Endzeit der Sitzung.
+     */
     async addLearningSession(uid: string, categoryId: string, cardId: string, startTime: Date, endTime: Date): Promise<void> {
         try {
             const learningSessionsRef = collection(this.firestore, `users/${uid}/learningSessions`);
@@ -145,6 +212,11 @@ export class CardService {
     }
 
     //Reset if older than 24 hours
+    /**
+     * @method resetLearningSession
+     * @description Löscht Lernsitzungen, die älter als 24 Stunden sind.
+     * @param {string} uid - Die Benutzer-ID.
+     */
     async resetLearningSession(uid: string) {
         try {
             const learningSessionsRef = collection(this.firestore, `users/${uid}/learningSessions`);
@@ -164,7 +236,10 @@ export class CardService {
         }
     }
 
-
+    /**
+     * @method ngOnDestroy
+     * @description Lebenszyklus-Hook, der bei der Zerstörung der Komponente aufgerufen wird und die Abonnements beendet.
+     */
     ngOnDestroy() {
         if (this.subscription) {
             this.subscription();

@@ -1,12 +1,30 @@
+/**
+ * @fileoverview Diese Datei enthält die Routing-Konfiguration für die Anwendung.
+ */
+
 import { Routes } from '@angular/router';
 import { redirectUnauthorizedTo, redirectLoggedInTo, canActivate } from "@angular/fire/auth-guard";
 
+/**
+ * @function redirectUnauthorizedToOnboarding
+ * @description Leitet nicht autorisierte Benutzer zur Onboarding-Seite weiter.
+ * @returns {function} - Die Umleitungsfunktion.
+ */
 const redirectUnauthorizedToOnboarding = () => {
   return redirectUnauthorizedTo(['onboarding']);
 };
 
+/**
+ * @function redirectLoggedInToHome
+ * @description Leitet eingeloggte Benutzer zur Startseite weiter.
+ * @returns {function} - Die Umleitungsfunktion.
+ */
 const redirectLoggedInToHome = () => redirectLoggedInTo(['home']);
 
+/**
+ * @constant routes
+ * @description Die Routen-Konfiguration für die Anwendung.
+ */
 export const routes: Routes = [
   {
     path: '',

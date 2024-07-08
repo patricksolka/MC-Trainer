@@ -26,6 +26,15 @@ export class Stats {
 
 // models/stats.model.ts
 
+/**
+ * @fileoverview Diese Datei enthält die Implementierung der Stats-Klasse,
+ * die die Statistiken der Benutzerquizze speichert.
+ */
+
+/**
+ * @class Stats
+ * @description Diese Klasse speichert die Statistiken der Benutzerquizze, einschließlich der Anzahl der richtigen und falschen Antworten sowie der abgeschlossenen Quizze.
+ */
 export class Stats {
     [key: string]: any;
 
@@ -33,6 +42,11 @@ export class Stats {
     incorrectAnswers: number;
     completedQuizzes: number;
 
+    /**
+     * @constructor
+     * @param {Stats} [currentStats] - Die aktuellen Statistiken.
+     * @param {Stats} [newStats] - Die neuen Statistiken, die hinzugefügt werden sollen.
+     */
     constructor(currentStats?: Stats, newStats?: Stats) {
         this.correctAnswers = (currentStats?.correctAnswers || 0) + (newStats?.correctAnswers || 0);
         this.incorrectAnswers = (currentStats?.incorrectAnswers || 0) + (newStats?.incorrectAnswers || 0);

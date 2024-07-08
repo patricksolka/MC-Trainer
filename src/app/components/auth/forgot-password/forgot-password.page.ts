@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Diese Datei enthält die Implementierung der ForgotPasswordPage-Komponente,
+ * die es dem Benutzer ermöglicht, das Passwort zurückzusetzen.
+ */
+
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -13,6 +18,10 @@ import {
 } from '@ionic/angular/standalone';
 import {RouterLink} from "@angular/router";
 
+/**
+ * @component ForgotPasswordPage
+ * @description Diese Komponente ermöglicht es dem Benutzer, das Passwort zurückzusetzen.
+ */
 @Component({
   selector: 'app-forgot-password',
   templateUrl: './forgot-password.page.html',
@@ -22,6 +31,10 @@ import {RouterLink} from "@angular/router";
 })
 export class ForgotPasswordPage {
 
+  /**
+   * @constructor
+   * Initialisiert die ForgotPasswordPage-Komponente.
+   */
   constructor() { }
 
 
