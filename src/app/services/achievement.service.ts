@@ -29,7 +29,7 @@ export class AchievementService {
         this.userCollectionRef = collection(firestore, 'users');
     }
 
-    checkAchievements(stats: { completedQuizzes: number; correctAnswers: number, incorrectAnswers: number, totalQuestions: number }) {
+    checkAchievements(stats: { completedQuizzes: number; correctAnswers: number, incorrectAnswers: number, totalQuestions: number, completedCards: number }): Achievement[] {
         console.log('Checking achievements with stats:', stats);
         const newAchievements = ACHIEVEMENTS.filter(achievement => achievement.condition(stats))
             .filter(achievement => !this.achieved.has(achievement.id))

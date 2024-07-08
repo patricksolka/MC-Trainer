@@ -49,6 +49,7 @@ export class CardComponent implements OnInit, OnDestroy {
     totalQuestions = 0;
     questions: Card[] = []; // Array für alle Fragen
     correctAnswer: boolean = false;
+    completedCards: number = 0;
     public startTime: Date | null = null;
 
 //    currentQuestionIndex: number = 0; // Neue Variable für den Index der aktuellen Frage
@@ -160,7 +161,8 @@ export class CardComponent implements OnInit, OnDestroy {
         const newStats = {
             correctAnswers: this.correctAnswersCount,
             incorrectAnswers: this.incorrectAnswersCount,
-            completedQuizzes: 1
+            completedQuizzes: 1,
+            completedCards: this.completedCards
         };
 
         const stats = new Stats(newStats);
@@ -183,7 +185,7 @@ export class CardComponent implements OnInit, OnDestroy {
     }
 
 
-    checkAnswers(): void {
+    async checkAnswers(): Promise<void> {
         // Überprüfen, ob alle ausgewählten Antworten korrekt sind
         const allSelectedCorrect = this.selectedAnswers.every(answer => this.currentQuestion.correctAnswer.includes(answer));
         // Überprüfen, ob die Anzahl der ausgewählten Antworten der Anzahl der korrekten Antworten entspricht
@@ -193,15 +195,36 @@ export class CardComponent implements OnInit, OnDestroy {
             console.log("correct");
             this.correctAnswersCount++;
             this.correctAnswer = true;
-            this.cardService.updateCardAnsweredCounter(this.currentQuestion.id, "counter");
+            await this.cardService.updateCardAnsweredCounter(this.currentQuestion.id, "counter");
+            console.log('CardComponent', this.correctAnswersCount);
+
+            await this.cardService.getCardAnsweredCounter(this.currentQuestion.id).then(counter => {
+                console.log('Counter:', counter);
+                if (counter > 6) {
+                    this.completedCards++;
+                    console.log('CardComponent', this.completedCards);
+                    //this.totalStatsService.completedCards(this.auth.currentUser.uid,
+                    // this.completedCards); // Call the method to update Firestore
+                }
+            });
         } else {
             console.log("not correct");
             this.correctAnswer = false;
             this.incorrectAnswersCount++;
-            this.cardService.resetCardAnsweredCounter(this.currentQuestion.id, "counter");
+            await this.cardService.resetCardAnsweredCounter(this.currentQuestion.id, "counter");
         }
         this.showResult = true;
     }
+
+   /* async updateAnswerStats() {
+        const counter = await this.cardService.getCardAnsweredCounter(this.currentQuestion.id);
+        console.log('Counter:', counter);
+        if (counter === 1) {
+            this.completedCards++;
+            console.log('CardComponent', this.completedCards);
+            await this.totalStatsService.completedCards(this.categoryId, this.completedCards);
+        }
+    }*/
 
 
     isCorrectAnswer(answer: string): boolean {

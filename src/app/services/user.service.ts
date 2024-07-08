@@ -174,45 +174,6 @@ export class UserService {
     }
 
 
-
-    /*  async getFavCategories(uid: string): Promise<FavCategory[]> {
-          console.log('getFavcategories called');
-          const favCollectionRef = collection(this.firestore, `users/${uid}/favoriteCategories`)
-          const filterQuery1 = query(favCollectionRef, orderBy('timestamp'));
-          const refWithConverter = filterQuery1.withConverter(this.favConverter);
-
-          try {
-              const favDocs = await getDocs(refWithConverter);
-              const favCategories: FavCategory [] = [];
-              console.log('test123', favDocs);
-
-              favDocs.forEach(favDoc => {
-                  favCategories.push(favDoc.data());
-
-              });
-
-
-              this.favCategories = favCategories;
-              console.log('Favoriten', favCategories);
-
-              this.subscription = onSnapshot(refWithConverter, (snapshot) => {
-                  snapshot.docs.forEach(docData => {
-                  console.log('docData', docData);
-                     // this.favCategories.push(docData.data() as FavCategory);
-                      //this.favCategories = favCategories;
-                  });
-              });
-              return favCategories;
-          } catch (e) {
-              console.error('Error fetching favorite categories:', e);
-              return null;
-          }
-      }*/
-
-
-
-
-
 //mit subcollection
     async addFavCategory(uid: string, categoryId: string, categoryName: string, questionCount: number): Promise<void> {
         try {
@@ -226,9 +187,7 @@ export class UserService {
                     name: categoryName,
                     timestamp: new Date().getTime(),
                     questionCount: questionCount,
-                    //TODO: Was macht das?
-                    //completedCount: completedCount
-                    //isFavorite: true
+                   /* completedCards: 0*/
                 });
 
                 console.log(`Category ${categoryId} added to favorites for user ${uid}`);
