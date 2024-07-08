@@ -42,20 +42,28 @@ export class TotalStatsService {
 
     checkForNewAchievements(stats) {
         const newAchievements = this.achievementService.checkAchievements(stats);
-        newAchievements.forEach(achievement => {
-            this.showAchievementToast(achievement);
-        });
+        this.showAchievementToast(newAchievements);
     }
 
-    async showAchievementToast(achievement) {
-        const toast = await this.toastController.create({
-            header: 'Congratulations!',
-            message: `${achievement.name}: ${achievement.description}`,
-            duration: 2000, // Toast duration in milliseconds
-            position: 'top', // Position of the toast
-        });
+    async showAchievementToast(achievements) {
+        const toasts = [];
+        for(const achievement of achievements) {
+            const toast = await this.toastController.create({
+                header: 'Congratulations!',
+                message: `${achievement.name}: ${achievement.description}`,
+                duration: 2000, // Toast duration in milliseconds
+                position: 'top', // Position of the toast
+            });
+            toasts.push(toast);
+        }
 
-        await toast.present();
+        for (const toast of toasts) {
+            await toast.present();
+            await this.delay(1000);
+        }
+    }
+    delay(ms: number) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     //Funktioniert auch

@@ -99,6 +99,7 @@ export class CardComponent implements OnInit, OnDestroy {
                     const question = await this.checkAllAnswered();
                     if (question) {
                         this.currentQuestion = question;
+                        this.shuffleArray(this.currentQuestion.answers);
                     } else {
                         console.log("Fehler! Alle Karten wurden beantwortet!")
                     }
@@ -150,6 +151,7 @@ export class CardComponent implements OnInit, OnDestroy {
 
             if (counter < 6) {
                 this.currentQuestion = this.questions[index];
+                this.shuffleArray(this.currentQuestion.answers);
                 console.log("Frage: " + this.currentQuestion.id);
                 return;
             }
@@ -196,12 +198,14 @@ export class CardComponent implements OnInit, OnDestroy {
         const isCorrect = allSelectedCorrect && this.selectedAnswers.length === this.currentQuestion.correctAnswer.length;
 
         // Call checkForNewAchievements with the updated stats
-        const stats = {
+
+        /*const stats = {
             completedQuizzes: this.completedQuizzes,
             correctAnswers: this.totalStatsService.totalCorrectAnswers + this.correctAnswersCount,
             incorrectAnswers: this.incorrectAnswersCount,
             totalQuestions: this.totalQuestions
         };
+         */
         //this.checkForNewAchievements(stats);
 
         if (isCorrect) {
