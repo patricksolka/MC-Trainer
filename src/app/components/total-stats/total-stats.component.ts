@@ -12,6 +12,8 @@ import {
 import {AuthService} from "../../services/auth.service";
 import {CategoryService} from "../../services/category.service";
 import {Category} from "../../models/categories.model";
+import {Stats} from "../../models/stats.model";
+import {newspaper} from "ionicons/icons";
 
 @Component({
     selector: 'app-total-stats',
@@ -24,6 +26,7 @@ export class TotalStatsComponent implements OnInit {
     totalCorrectAnswers: number
     totalIncorrectAnswers: number
     completedQuizzes: number = 0;
+    completedCards: number = 0;
     percentageCorrectAnswers: number = 0;
     modules: any[] = [];
 
@@ -35,11 +38,14 @@ export class TotalStatsComponent implements OnInit {
             this.loadStats();
     }
     async loadStats() {
-        const stats = await this.totalStatsService.calcTotalStats(this.authService.auth.currentUser.uid);
-        this.totalCorrectAnswers = stats.totalCorrectAnswers;
-        this.totalIncorrectAnswers = stats.totalIncorrectAnswers;
-        this.completedQuizzes = stats.completedQuizzes;
-        this.percentageCorrectAnswers = (this.totalCorrectAnswers / (this.totalCorrectAnswers + this.totalIncorrectAnswers)) * 100;
+        const data = await this.totalStatsService.calcTotalStats(this.authService.auth.currentUser.uid);
+        this.totalCorrectAnswers = data.totalCorrectAnswers;
+        this.totalIncorrectAnswers = data.totalIncorrectAnswers;
+        this.completedQuizzes = data.completedQuizzes;
+        this.completedCards = data.completedCards;
+
+        this.percentageCorrectAnswers = (this.totalCorrectAnswers / (this.totalCorrectAnswers
+         + this.totalIncorrectAnswers)) * 100;
     }
 
     backToHome() {
