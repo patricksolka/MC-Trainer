@@ -156,12 +156,23 @@ export class CardComponent implements OnInit, OnDestroy {
                 return;
             }
         }
+        // if all questions are answered more than 6 times
+        const newStats = {
+            correctAnswers: this.correctAnswersCount,
+            incorrectAnswers: this.incorrectAnswersCount,
+            completedQuizzes: 1
+        };
 
-        // Wenn alle verbleibenden Fragen mehr als 6 Mal beantwortet wurden
+        const stats = new Stats(newStats);
+        console.log('Stats:', stats);
+        await this.totalStatsService.persistStats(this.auth.currentUser.uid, this.categoryId, stats);
+
+        //check if all questions are answered
         const question = await this.checkAllAnswered();
-        if (!question) {
+        if (!question){
             await this.cardService.setCategoryDone(this.categoryId, "done", true);
         }
+
         await this.endQuiz();
         await this.router.navigate(['/stats'], {
             state: {
@@ -170,26 +181,7 @@ export class CardComponent implements OnInit, OnDestroy {
             }
         });
     }
-/*
-    checkForNewAchievements(stats) {
-        const newAchievements = this.achievementService.checkAchievements(stats);
-        newAchievements.forEach(achievement => {
-            this.showAchievementToast(achievement);
-        });
-    }
 
-    async showAchievementToast(achievement) {
-        const toast = await this.toastController.create({
-            header: 'Congratulations!',
-            message: `${achievement.name}: ${achievement.description}`,
-            duration: 2000, // Toast duration in milliseconds
-            position: 'top', // Position of the toast
-        });
-
-        await toast.present();
-    }
-
- */
 
     checkAnswers(): void {
         // Überprüfen, ob alle ausgewählten Antworten korrekt sind
@@ -197,37 +189,23 @@ export class CardComponent implements OnInit, OnDestroy {
         // Überprüfen, ob die Anzahl der ausgewählten Antworten der Anzahl der korrekten Antworten entspricht
         const isCorrect = allSelectedCorrect && this.selectedAnswers.length === this.currentQuestion.correctAnswer.length;
 
-        // Call checkForNewAchievements with the updated stats
-
-        /*const stats = {
-            completedQuizzes: this.completedQuizzes,
-            correctAnswers: this.totalStatsService.totalCorrectAnswers + this.correctAnswersCount,
-            incorrectAnswers: this.incorrectAnswersCount,
-            totalQuestions: this.totalQuestions
-        };
-         */
-        //this.checkForNewAchievements(stats);
-
         if (isCorrect) {
             console.log("correct");
             this.correctAnswersCount++;
             this.correctAnswer = true;
             this.cardService.updateCardAnsweredCounter(this.currentQuestion.id, "counter");
-
         } else {
             console.log("not correct");
             this.correctAnswer = false;
             this.incorrectAnswersCount++;
             this.cardService.resetCardAnsweredCounter(this.currentQuestion.id, "counter");
-
-            // this.cardService.updateCardAnsweredCounter(this.currentQuestion.id, "counterIncorrect");
         }
         this.showResult = true;
     }
 
+
     isCorrectAnswer(answer: string): boolean {
         return this.currentQuestion.correctAnswer.includes(answer);
-        //return this.correctAnswer;
     }
 
     isAnswerCorrect(): boolean {
@@ -266,7 +244,7 @@ export class CardComponent implements OnInit, OnDestroy {
         } else {
             console.error('Start time is not set.');
         }
-        const newStats = {
+        /*const newStats = {
             completedQuizzes: this.completedQuizzes + 1,
             correctAnswers: this.correctAnswersCount,
             incorrectAnswers: this.incorrectAnswersCount,
@@ -283,7 +261,7 @@ export class CardComponent implements OnInit, OnDestroy {
                 correctAnswers: this.correctAnswersCount,
                 incorrectAnswers: this.incorrectAnswersCount,
             }
-        });
+        });*/
     }
 
     ngOnDestroy(): void {

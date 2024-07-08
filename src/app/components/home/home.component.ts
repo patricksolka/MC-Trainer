@@ -4,7 +4,7 @@ import {Router, RouterModule} from '@angular/router';
 import {UserService} from 'src/app/services/user.service';
 import {FormsModule} from "@angular/forms";
 import {FooterPage} from "../footer/footer.page";
-import {Auth} from "@angular/fire/auth";
+import {Auth, onAuthStateChanged} from "@angular/fire/auth";
 import {CategoryService} from 'src/app/services/category.service';
 import {Category} from '../../models/categories.model';
 import {
@@ -31,16 +31,10 @@ import {
     IonText,
     IonToolbar
 } from "@ionic/angular/standalone";
-
 import {CardService} from "../../services/card.service";
-
-
-import {card} from "ionicons/icons";
-import {firestore} from "firebase-admin";
-import DocumentData = firestore.DocumentData;
-import {collection, Firestore, onSnapshot, Unsubscribe} from "@angular/fire/firestore";
-import {AchievementService} from "../../services/achievement.service";
-
+import {Subscription} from "rxjs";
+import {AuthService} from "../../services/auth.service";
+import {User} from "../../models/user.model";
 
 
 @Component({
@@ -52,6 +46,8 @@ import {AchievementService} from "../../services/achievement.service";
 })
 export class HomeComponent  {
     public userName: string = localStorage.getItem('userName') || 'User';
+    public user : User;
+
     public categories: Category[] = [];
     public loaded: boolean = false;
     public favCategories: { id: string; name: string, questionCount: number, completedCards?: number }[] = [];
@@ -61,129 +57,78 @@ export class HomeComponent  {
     public totalMinutes: number = 30;
     public progress: number ;
 
-    private subscription: Unsubscribe | null = null;
+    private subscription: Subscription | null = null;
 
 //TODO: LooadingController fixen sodass er nur beim starten der App angezeigt wird
-
     constructor(
-        //private authService: AuthService,
+        private authService: AuthService,
         private router: Router,
-        //private loadingController: LoadingController,
         private auth: Auth,
         public  categoryService: CategoryService,
         private userService: UserService,
         private cardService: CardService,
-        private firestore: Firestore,
-        private alertController: AlertController,
-        private achievementsService: AchievementService
+        private alertController: AlertController
 
     ) {
-        this.auth.onAuthStateChanged(user =>{
-            if (user){
-
-                this.userService.getUser(user.uid).then(user => {
-                    localStorage.setItem('userName', user.firstName);
-                });
-                this.fetchProgress();
-                this.fetchPreview();
-                this.observeFavCategories(user.uid);
-                this.cardService.resetLearningSession(user.uid);
-                this.achievementsService.setAchievements();
+        onAuthStateChanged(this.auth, async (user) => {
+            if (user) {
+                console.log('User is logged in:', user.uid);
+                this.user = await this.authService.getUserDetails(user.uid);
+                if (this.user) {
+                    localStorage.setItem('userName', this.user.firstName);
+                    console.log('Loaded user details:', this.user);
+                    await this.fetchProgress();
+                    await this.fetchPreview();
+                    await this.loadFavs();
+                }
+            } else {
+                console.log('User is logged out');
             }
         });
-
-
-
-        //this.loadFav();
-        //this.fetchFavoriteModules();
     }
 
-    /*ngOnDestroy() {
-        if (this.timerSubscription) {
-            this.timerSubscription.unsubscribe();
+    async loadFavs(){
+        if (this.user) {
+            console.log('Benutzer',this.user)
+            this.userService.getFavCategories(this.user.uid).subscribe({
+                next: (favCategories) => {
+                    this.favCategories = favCategories;
+                    console.log('Aktualisierte Favoriten:', favCategories);
+                },
+                error: (error) => {
+                    console.error('Fehler beim Laden der Favoriten:', error);
+                }
+            });
         }
-    }*/
-
-    // In HomeComponent
-    observeFavCategories(uid: string) {
-        const favCategoriesRef = collection(this.firestore, `users/${uid}/favoriteCategories`);
-        this.subscription = onSnapshot(favCategoriesRef, (snapshot) => {
-            this.favCategories = snapshot.docs.map(doc => ({ id: doc.id, name: doc.data()['name'], questionCount: doc.data()['questionCount'], completedCards: doc.data()['completedCount'] || 0}));
-            console.log(this.favCategories);
-        });
-
     }
 
 
     //TODO: LoadingController vorerst nicht nötig
     async fetchPreview() {
-        /*this.isLoading = true;
-        const loading = await this.loadingController.create({
-        });
-        await loading.present();*/
-
         try {
             this.categories = await this.categoryService.getPreviewCategories();
-            //await loading.dismiss();
-            //this.loaded = false;
         } catch (e) {
             console.error('Error fetching preview categories:', e);
-           // await loading.dismiss();
-            //this.loaded = true;
         }
     }
-
-    //für die Favoriten
-    /*getProgress(category: any): number {
-        const answeredQuestions = category.answeredQuestions || 0;
-        const totalQuestions = category.totalQuestions || 1; // Vermeide Division durch Null
-        return (answeredQuestions / totalQuestions) * 100;
-    }*/
-
-   /* async loadFav() {
-          const currentUser = this.auth.currentUser;
-          if (currentUser) {
-
-              this.favCategories = await this.userService.getFavCategories(currentUser.uid);
-              console.log(this.favCategories);
-          }
-      }*/
 
     async removeFav(category: Category) {
-        const currentUser = this.auth.currentUser;
-        if (currentUser) {
-            await this.userService.deleteAlert(currentUser.uid, category.id);
+        if (this.user) {
+            await this.userService.deleteAlert(this.user.uid, category.id);
 
         }
     }
-
-    //als promise
-   /* async fetchProgress(){
-        this.loaded = false;
-        const currentUser = this.auth.currentUser;
-        if (currentUser) {
-            const learningSessions: DocumentData[] = await
-             this.cardService.getLearningSessions(currentUser.uid);
-            //this.learnedMinutes = learningSessions.reduce((total, session) => total +
-            // session['duration'], 0 );
-            this.learnedMinutes = Math.floor(learningSessions.reduce((total, session) => total + Math.max(1, session['duration']), 0 ));
-            console.log('learnedMinutes', this.learnedMinutes);
-            this.loaded = true;
-        }
-
-    }*/
 
     //als observable
     async fetchProgress(){
         this.loaded = false;
-        const currentUser = this.auth.currentUser;
-        if (currentUser) {
-            this.cardService.getLearningSession(currentUser.uid).subscribe(learningSessions => {
+        //const currentUser = this.authService.auth.currentUser;
+        if (this.user) {
+            this.cardService.getLearningSession(this.user.uid).subscribe(learningSessions => {
                 //calculate learning Duration
                 //round to nearest minute
                 this.learnedMinutes = Math.round(learningSessions.reduce((total, session) =>
                     total + session['duration'], 0 ));
-
                 // this.progress = this.learnedMinutes;
                 this.progress = this.calcPercentage();
                 console.log('learnedMinutes', this.learnedMinutes);
@@ -201,9 +146,15 @@ export class HomeComponent  {
         return Math.min(progressPercentage, 100); // Begrenze den Wert auf maximal 100%
     }
 
+    ngOnDestroy(): void {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
+    }
+
     ionViewWillEnter() {
-        /*this.fetchPreview();
-        this.loadFav();*/
+        //this.fetchPreview();
+        //this.loadFavs();
         this.userName = localStorage.getItem('userName') || 'User';
         console.log('IonViewWillEnter');
     }

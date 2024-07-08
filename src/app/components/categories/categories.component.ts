@@ -29,6 +29,8 @@ export class CategoriesComponent {
     public categories: Category[] | null;
     public loaded: boolean = false;
 
+    searchCategory: string = '';
+
     searchBarVisible = false;
     #searchBar: IonSearchbar | undefined;
 
@@ -42,7 +44,7 @@ export class CategoriesComponent {
     }
 
     constructor(public categoryService: CategoryService, private router: Router, private fb: FormBuilder, private cdr: ChangeDetectorRef) {
-        this.loadCategories();
+       // this.loadCategories();
     }
 
 
@@ -51,6 +53,7 @@ export class CategoriesComponent {
         try {
             this.loaded = false;
             this.categories = await this.categoryService.getCategories();
+
             this.loaded = false;
             this.categories.forEach(category => category.imageLoaded = false);
 

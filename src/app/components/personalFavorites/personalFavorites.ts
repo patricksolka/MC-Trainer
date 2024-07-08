@@ -1,9 +1,9 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { UserService } from 'src/app/services/user.service';
-import { CategoryService } from 'src/app/services/category.service';
-import { Category } from 'src/app/models/categories.model';
+import {Component, ViewChild} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {UserService} from 'src/app/services/user.service';
+import {CategoryService} from 'src/app/services/category.service';
+import {Category, FavCategory} from 'src/app/models/categories.model';
 import {Auth, onAuthStateChanged} from '@angular/fire/auth';
 
 import {RouterLink} from "@angular/router";
@@ -14,10 +14,18 @@ import {
     IonButtons, IonCard, IonCol, IonContent, IonGrid, IonHeader,
     IonIcon, IonItem,
     IonItemOption,
-    IonItemOptions, IonItemSliding, IonLabel, IonList, IonRow, IonSearchbar, IonText, IonTitle,
+    IonItemOptions,
+    IonItemSliding,
+    IonLabel,
+    IonList,
+    IonRow,
+    IonSearchbar,
+    IonText,
+    IonTitle,
     IonToolbar
 } from "@ionic/angular/standalone";
-import {collection, Firestore, onSnapshot, Unsubscribe} from "@angular/fire/firestore";
+import {Subscription} from "rxjs";
+import {User} from "../../models/user.model";
 
 
 @Component({
@@ -29,13 +37,12 @@ import {collection, Firestore, onSnapshot, Unsubscribe} from "@angular/fire/fire
 })
 export class PersonalFavorites {
     public categories: Category[] = [];
-    public favCategories: { id: string; name: string, questionCount: number, isDone?: boolean, completedCards?: number}[] = [];
-
+    public favCategories: FavCategory[] = [];
+    public user: User;
 
     searchBarVisible = false;
     #searchBar: IonSearchbar | undefined;
-    private subscription: Unsubscribe | null = null;
-    //public isDone: boolean;
+    private subscription: Subscription | null = null;
 
     @ViewChild(IonSearchbar)
     set searchbar(sb: IonSearchbar) {
@@ -45,74 +52,42 @@ export class PersonalFavorites {
         }
     }
 
-
     constructor(
         public userService: UserService,
         public categoryService: CategoryService,
-        private authService: AuthService,
         private auth: Auth,
-        private firestore: Firestore
+        private authService: AuthService
     ) {
-        onAuthStateChanged(this.authService.auth, (user) => {
+        onAuthStateChanged(this.auth, async (user) => {
             if (user) {
-                console.log('User is logged in:', user);
-                this.observeFavCategories(user.uid);
+                console.log('User is logged in:', user.uid);
+                this.user = await this.authService.getUserDetails(user.uid);
+                if (this.user) {
+                    localStorage.setItem('userName', this.user.firstName);
+                    console.log('Loaded user details:', this.user);
+                    await this.loadFavs();
+                }
             } else {
                 console.log('User is logged out');
             }
         });
-
+        this.loadCategories();
     }
 
-    observeFavCategories(uid: string) {
-        const favCategoriesRef = collection(this.firestore, `users/${uid}/favoriteCategories`);
-        this.subscription = onSnapshot(favCategoriesRef, (snapshot) => {
-            this.favCategories = snapshot.docs.map(doc => ({ id: doc.id, name: doc.data()['name'], questionCount: doc.data()['questionCount'], completedCards: doc.data()['completedCards'] || 0}));
-            console.log(this.favCategories);
-            this.loadCategories();
-        });
 
-    }
-
-    /*async loadFav() {
-        const currentUser = this.auth.currentUser;
-        if (currentUser) {
-
-            this.favCategories = await this.userService.getFavCategories(currentUser.uid);
-            console.log(this.favCategories);
-        }
-    }*/
-
-    /*observeFavCategories(uid: string) {
-        const favCategoriesRef = collection(this.firestore, `users/${uid}/favoriteCategories`);
-        this.subscription = onSnapshot(favCategoriesRef, async (snapshot) => {
-            const favCategories = snapshot.docs.map(doc => ({
-                id: doc.id,
-                name: doc.data()['name'],
-                questionCount: doc.data()['questionCount'],
-                isDone: false // default value
-            }));
-
-            // Update isDone status for each favorite category
-            for (let category of favCategories) {
-                category.isDone = await this.categoriesService.isDone(category.id);
-            }
-
-            this.favCategories = favCategories;
-            this.loadCategories();
-        });
-    }*/
-
-
-
-       /* async loadCategories() {
-            await this.categoriesService.getCategories().then(categories => {
-                this.categories = categories.filter(category =>
-                    !this.favCategories.find(fav => fav.id === category.id)
-                );
+    async loadFavs(){
+        if (this.user) {
+            this.userService.getFavCategories(this.user.uid).subscribe({
+                next: (favCategories) => {
+                    this.favCategories = favCategories;
+                    console.log('Aktualisierte Favoriten:', favCategories);
+                },
+                error: (error) => {
+                    console.error('Fehler beim Laden der Favoriten:', error);
+                }
             });
-
-        }*/
+        }
+    }
 
     async loadCategories() {
         const categories = await this.categoryService.getCategories();
@@ -123,20 +98,14 @@ export class PersonalFavorites {
     }
 
     async addFav(categoryId: string, categoryName: string, questionCount: number) {
-        const currentUser = this.auth.currentUser;
-        if (currentUser) {
-            await this.userService.addFavCategory(currentUser.uid, categoryId, categoryName, questionCount, 0);
-            //this.loadFavCategories();
-
-
-            //this.categories = this.categories.filter(category => category.id !== categoryId);
+        if (this.user) {
+            await this.userService.addFavCategory(this.user.uid, categoryId, categoryName, questionCount);
         }
     }
 
     async removeFav(category: Category) {
-        const currentUser = this.auth.currentUser;
-        if (currentUser) {
-            await this.userService.deleteAlert(currentUser.uid, category.id);
+        if (this.user) {
+            await this.userService.deleteAlert(this.user.uid, category.id);
 
         }
     }
@@ -155,25 +124,12 @@ export class PersonalFavorites {
         }
     }
 
-    /*filterCategories() {
-        if (this.searchTerm.trim() === '') {
-            //this.updateFilteredCategories();
-        } else {
-            this.filteredCategories = this.categories.filter(category =>
-                !this.favCategories.find(fav => fav.id === category.id) &&
-                category.name.toLowerCase().includes(this.searchTerm.toLowerCase())
-            );
-        }
-    }*/
 
-    /*ionViewWillEnter() {
-        //this.loadFavCategories();
-    }*/
 
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         if (this.subscription) {
-            this.subscription();
-            this.subscription = null;
+            this.subscription.unsubscribe();
         }
     }
+
 }

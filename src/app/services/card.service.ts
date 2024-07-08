@@ -18,6 +18,7 @@ import {Category} from '../models/categories.model';
 import {map, switchMap} from 'rxjs/operators';
 import {AuthService} from "./auth.service";
 import {CategoryService} from "./category.service";
+import {TotalStatsService} from "./total-stats.service";
 
 
 @Injectable({
@@ -28,7 +29,7 @@ export class CardService {
     // private userCollection: CollectionReference<DocumentData>;
     private subscription: Unsubscribe | null = null;
 
-    constructor(private firestore: Firestore, private authService: AuthService, private categoryService: CategoryService) {
+    constructor(private firestore: Firestore, private authService: AuthService, private categoryService: CategoryService, private ts: TotalStatsService) {
         this.cardsCollection = collection(firestore, 'cards') as CollectionReference<Card>;
         // this.userCollection = collection(firestore, 'users') as CollectionReference<DocumentData>;
     }
@@ -65,7 +66,7 @@ export class CardService {
     }
 
     async setCategoryDone(categoryId: string, attribute: string, done: boolean): Promise<void> {
-        await this.categoryService.setDone(categoryId, attribute, done);
+        await this.ts.setDone(categoryId, done);
     }
 
     async resetCardAnsweredCounter(cardid: string, counter: string) {
