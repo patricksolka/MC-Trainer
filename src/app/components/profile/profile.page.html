@@ -1,14 +1,14 @@
-<ion-content class="ion-padding">
-    <ion-header>
-        <ion-toolbar>
-            <ion-buttons slot="start">
-                <ion-button class="backButton" [routerLink]="['/home']">
-                    <ion-icon name="arrow-back-outline" class="arrowBack"></ion-icon>
-                </ion-button>
-            </ion-buttons>
-            <ion-title>Profil</ion-title>
-        </ion-toolbar>
-    </ion-header>
+<ion-header class="ion-no-border">
+    <ion-toolbar>
+        <ion-buttons>
+            <ion-button slot="start" class="backButton ion-padding-top" [routerLink]="['/home']">
+                <ion-icon name="arrow-back-outline" class="arrowBack"></ion-icon>
+            </ion-button>
+            <ion-title class="ion-padding-top">Profil</ion-title>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding-top ion-padding-start ion-padding-end">
     <form class="ion-padding-top" [formGroup]="credentials"
           (ngSubmit)="updateProfile()">
         <ion-input
@@ -51,4 +51,3 @@
                 size="large">Profil löschen
     </ion-button>
 </ion-content>
-

@@ -1,14 +1,14 @@
-<ion-content>
-    <ion-header>
-        <ion-toolbar>
-            <ion-buttons slot="start">
-                <ion-button class="backButton" [routerLink]="['/home']">
-                    <ion-icon name="arrow-back-outline" class="arrowBack"></ion-icon>
-                </ion-button>
-            </ion-buttons>
-            <ion-title>Fortschritt</ion-title>
-        </ion-toolbar>
-    </ion-header>
+<ion-header class="ion-no-border">
+<ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button class="backButton ion-padding-top" [routerLink]="['/home']">
+                <ion-icon name="arrow-back-outline" class="arrowBack"></ion-icon>
+            </ion-button>
+            <ion-title class="ion-padding-top">Fortschritt</ion-title>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
     <ion-card>
         <ion-card-header>
             <ion-card-title>Gesamtstatistik</ion-card-title>
@@ -29,8 +29,8 @@
             <p>Richtige Antworten: {{ module.correctAnswers }}</p>
             <p>Falsche Antworten: {{ module.incorrectAnswers }}</p>
             <p>Abgeschlossene Quizze: {{ module.completedQuizzes }}</p>
-            <ion-progress-bar [value]="module.correctAnswers / (module.correctAnswers + module.incorrectAnswers)"></ion-progress-bar>
+            <ion-progress-bar
+                    [value]="module.correctAnswers / (module.correctAnswers + module.incorrectAnswers)"></ion-progress-bar>
         </ion-card-content>
     </ion-card>
 </ion-content>
-

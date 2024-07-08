@@ -190,9 +190,10 @@ http://ionicframework.com/docs/theming/ */
     --ion-background-color: #e0e0ff; /* heller lila Hintergrund */
     --ion-background-color-rgb: 224, 224, 255;
     --ion-text-color: #595966; /* dunkler Text */
+    --ion-text-color-dark: #3e3e47; /* dunkler Text */
+    --ion-text-color-darker: #2c2c33; /* dunkler Text */
     --ion-text-color-rgb: 31, 31, 57;
     --ion-item-background: #f8f8ff; /* sehr helles Lila für Items */
-    // --ion-card-background: #ffffff; /* weißer Hintergrund für Karten */
   }
 
   .ios ion-modal {
@@ -274,7 +275,7 @@ http://ionicframework.com/docs/theming/ */
     --ion-text-color-rgb: 255, 255, 255;
     // --ion-border-color: #fff;
     --ion-item-background: #18182d;
-    --ion-toolbar-background: #0f0f1c;
+    // --ion-toolbar-background: #0f0f1c;
     --ion-tab-bar-background: #35354d;
 //    --ion-card-background:  #1d1d2b;
     --ion-card-border-color: #fff;

@@ -14,7 +14,49 @@
 
 }
 
-.centerCircle{
+.centerCircle {
   display: flex;
   align-content: center;
+}
+
+@media (prefers-color-scheme: light) {
+}
+
+@media (prefers-color-scheme: dark) {
+  .header-ios ion-toolbar {
+    --border-width: 0 !important; /* Entfernen der Border für iOS Modus */
+    --box-shadow: none !important; /* Entfernen des Shadows für MD Modus */
+  }
+  .header-md ion-toolbar {
+    --border-width: 0 !important; /* Entfernen der Border für iOS Modus */
+    --box-shadow: none !important; /* Entfernen des Shadows für MD Modus */
+    --border-style: none;
+    ion-searchbar {
+      --cancel-button-color: var(--ion-text-color);
+      box-shadow: none;
+      padding: 10px;
+      color: white;
+    }
+  }
+
+  ion-header {
+    ion-toolbar {
+      --background: transparent;
+      --box-shadow: none !important;
+      --border-style: none;
+    }
+
+    ion-title {
+      font-size: x-large;
+      color: var(--ion-text-color);
+    }
+
+    ion-searchbar {
+      --cancel-button-color: var(--ion-text-color);
+      box-shadow: none;
+      padding: 10px;
+      width: auto;
+      color: white;
+    }
+  }
 }

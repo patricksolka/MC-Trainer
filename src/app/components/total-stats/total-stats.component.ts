@@ -16,7 +16,7 @@ import {Category} from "../../models/categories.model";
 @Component({
     selector: 'app-total-stats',
     templateUrl: './total-stats.component.html',
-    styleUrls: ['./total-stats.page.scss'],
+    styleUrls: ['./total-stats.component.scss'],
     standalone: true,
     imports: [CommonModule, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, IonProgressBar, IonButtons, IonHeader, IonIcon, IonTitle, IonToolbar, RouterLink]
 })
