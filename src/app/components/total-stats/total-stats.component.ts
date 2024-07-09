@@ -13,13 +13,14 @@ import {AuthService} from "../../services/auth.service";
 import {CategoryService} from "../../services/category.service";
 import {Category} from "../../models/categories.model";
 import {ProgressBarComponent} from "../progress-bar/progress-bar.component";
+import{AchievementsComponent} from "../achievements/achievements.component";
 
 @Component({
     selector: 'app-total-stats',
     templateUrl: './total-stats.component.html',
     styleUrls: ['./total-stats.component.scss'],
     standalone: true,
-    imports: [CommonModule, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, IonProgressBar, IonButtons, IonHeader, IonIcon, IonTitle, IonToolbar, RouterLink, ProgressBarComponent, IonItem, IonGrid, IonRow, IonCol]
+    imports: [CommonModule, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, IonProgressBar, IonButtons, IonHeader, IonIcon, IonTitle, IonToolbar, RouterLink, ProgressBarComponent, IonItem, IonGrid, IonRow, IonCol, AchievementsComponent]
 })
 export class TotalStatsComponent implements OnInit {
     categories: Category[] = [];
@@ -29,7 +30,9 @@ export class TotalStatsComponent implements OnInit {
     completedCards: number = 0;
     percentageCorrectAnswers: number = 0;
     modules: any[] = [];
+
     @ViewChild(ProgressBarComponent) progressBarComponent: ProgressBarComponent;
+    @ViewChild(AchievementsComponent) achievementsComponent: AchievementsComponent;
 
     constructor(private totalStatsService: TotalStatsService, private router: Router,
                 private alertController: AlertController, private authService: AuthService, private categoryService: CategoryService) {
