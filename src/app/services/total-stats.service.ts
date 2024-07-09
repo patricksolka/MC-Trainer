@@ -85,7 +85,8 @@ export class TotalStatsService {
             } else {
                 const statsData: DocumentData = {
                     ...this.statsConverter.toFirestore(stats),
-                    completedQuizzes: 1 // Initialisierung von completedQuizzes auf 1 beim Erstellen eines neuen Dokuments
+                    completedQuizzes: 1,
+                    completedCards: stats.completedCards
                 };
                 await setDoc(statsCollectionRef, statsData);
                 console.log("New document created with stats:", statsData);
@@ -106,20 +107,26 @@ export class TotalStatsService {
     //Get stats for a specific category
     async getStats(uid: string, categoryId: string) {
         const statsCollectionRef = doc(this.firestore, `users/${uid}/stats/${categoryId}`);
-        //const docSnap = await getDoc(doc(statsCollectionRef, categoryId));
+        const refWithConverter = statsCollectionRef.withConverter(this.statsConverter);
+        const docSnap = await getDoc(refWithConverter);
 
-        const docSnap = await getDoc(statsCollectionRef);
+        //const docSnap = await getDoc(statsCollectionRef);
 
         if (docSnap.exists()) {
-            return docSnap.data() as Stats;
+            const result = docSnap.data() as Stats;
+            console.log("Retrieved stats for id:", result);
+            return result;
         } else {
+            console.log("No stats found for id:", categoryId);
             return null;
         }
     }
 
     async getStatsById(uid: string, categoryId: string) {
         const statsCollectionRef = doc(this.firestore, `users/${uid}/stats/${categoryId}`);
-        const docSnap = await getDoc(statsCollectionRef);
+        const refWithConverter = statsCollectionRef.withConverter(this.statsConverter);
+        const docSnap = await getDoc(refWithConverter);
+
 
         if (docSnap.exists()) {
             const result = docSnap.data() as Stats;
