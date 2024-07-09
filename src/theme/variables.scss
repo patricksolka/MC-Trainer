@@ -177,7 +177,9 @@ http://ionicframework.com/docs/theming/ */
     --ion-background-color: #e0e0ff; /* heller lila Hintergrund */
     --ion-background-color-darker: #c9c9e5; /* heller lila Hintergrund */
     --ion-background-color-dark: #b3b3cc; /* heller lila Hintergrund */
-    --ion-text-color: #1F1F39; /* dunkler Text */
+    --ion-text-color: #35354c; /* dunkler Text */
+    --ion-text-color-title: #626274;
+    --ion-text-color-body: #d2eb99;
     // --ion-item-background: #f8f8ff; /* sehr helles Lila für Items */
     --ion-item-background: #9c9cb2; /* sehr helles Lila für Items */
     --ion-toolbar-background: transparent; /* heller lila Hintergrund für Toolbar */
@@ -232,6 +234,8 @@ http://ionicframework.com/docs/theming/ */
   :root {
     --ion-background-color: #1F1F39;
     --ion-text-color: #ffffff;
+    --ion-text-color-title: #787888;
+    --ion-text-color-body: #d2d2d7;
     --ion-item-background: #18182d;
      --ion-toolbar-background: transparent;
     // --ion-toolbar-background: #0f0f1c;

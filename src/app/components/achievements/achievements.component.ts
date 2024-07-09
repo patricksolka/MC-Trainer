@@ -17,7 +17,7 @@ import {
 @Component({
     selector: 'app-achievements',
     templateUrl: './achievements.component.html',
-    // styleUrls: ['./achievements.component.scss'],
+    styleUrls: ['./achievements.component.scss'],
     standalone: true,
     imports: [CommonModule, RouterModule, FooterPage, IonTitle, IonContent, IonCol, IonCard, IonCardHeader, IonCardContent, IonRow, IonIcon, IonGrid, IonText]
 })
