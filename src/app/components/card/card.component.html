@@ -33,6 +33,8 @@
 
             <p *ngIf="showResult && !this.correctAnswer">Falsch! Die richtige(n) Antwort(en) ist/sind:
                 {{ currentQuestion.correctAnswer.join(', ') }}</p>
+
+            <p *ngIf="showResult && this.correctAnswer">Richtig!</p>
         </ion-card-content>
     </ion-card>
 </ion-content>
