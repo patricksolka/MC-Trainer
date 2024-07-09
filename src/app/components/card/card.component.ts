@@ -215,7 +215,7 @@ export class CardComponent implements OnInit, OnDestroy {
     async completeCards(){
         await this.cardService.getCardAnsweredCounter(this.currentQuestion.id).then(counter => {
             console.log('Counter:', counter);
-            if (counter > 6) {
+            if (counter >= 6) {
                 this.completedCards++;
                 console.log('CardComponent', this.completedCards);
                 //this.totalStatsService.completedCards(this.auth.currentUser.uid,
