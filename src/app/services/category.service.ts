@@ -192,23 +192,6 @@ export class CategoryService {
 
 
 
-    /*resetCardCounter(categoryId: string): void {
-        const cards = this.getAllCardsForCategory(categoryId) as Observable<Card[]>;
-        const cardsSubscription = cards.subscribe(
-            async (cards) => {
-                if (cards.length > 0) {
-                    for(const card of cards){
-                       await this.resetCardAnsweredCounter(card.id);
-                    }
-                } else {
-                    console.warn('Keine Karten gefunden für die Kategorie mit ID:', categoryId);
-                }
-            },
-            (error) => {
-                console.error('Fehler beim Laden der Karten:', error);
-            }
-        );
-    }*/
 
     //Gleiche Funktion wie vorher nur das "subsribe" nicht durchgestrichen ist
     resetCardCounter(categoryId: string): void {
@@ -238,8 +221,6 @@ export class CategoryService {
             }
         });
 
-        // Optional: Speichern Sie das Abonnement, um es später zu verwalten oder zu stornieren
-        // this.subscriptions.push(subscription);
     }
 
     // get first 4 categories for Preview
