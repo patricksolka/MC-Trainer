@@ -11,60 +11,61 @@ export const ACHIEVEMENTS: Achievement[] = [
     },
     {
         id: 2,
-        name: 'Schneller Lernen',
+        name: 'Erstes Quiz',
+        description: 'Erstes Quiz abgeschlossen!',
+        icon: 'ribbon-outline',
+        condition: (stats: Stats) => stats.completedQuizzes >= 1
+    },
+    {
+        id: 3,
+        name: 'Schneller Lerner',
         description: 'Fünf richtige Antworten!',
         icon: 'flash-outline',
         condition: (stats: Stats) => stats.correctAnswers >= 5
     },
     {
-        id: 3,
+        id: 4,
         name: 'Durchhaltevermögen I',
         description: 'Zehn richtige Antworten!',
         icon: 'medal-outline',
         condition: (stats: Stats) => stats.correctAnswers >= 10
     },
     {
-        id: 4,
+        id: 5,
         name: 'Durchhaltevermögen II',
         description: 'Zwanzig richtige Antworten!',
         icon: 'star-outline',
         condition: (stats: Stats) => stats.correctAnswers >= 20
     },
     {
-        id: 5,
+        id: 6,
         name: 'Durchhaltevermögen III',
         description: 'Fünfzig richtige Antworten!',
         icon: 'diamond-outline',
         condition: (stats: Stats) => stats.correctAnswers >= 50
     },
     {
-        id: 6,
+        id: 7,
         name: 'Durchhaltevermögen IV',
         description: 'Hundert richtige Antworten!',
         icon: 'podium-outline',
         condition: (stats: Stats) => stats.correctAnswers >= 100
     },
     {
-        id: 7,
+        id: 8,
         name: 'Durchhaltevermögen V',
         description: 'Fünfhundert richtige Antworten!',
         icon: 'flower',
         condition: (stats: Stats) => stats.correctAnswers >= 500
     },
     {
-        id: 8,
+        id: 9,
         name: 'Durchhaltevermögen VI',
         description: 'Tausend richtige Antworten!',
         icon: 'trophy',
         condition: (stats: Stats) => stats.correctAnswers >= 1000
     },
-    {
-        id: 9,
-        name: 'Erstes Modul abgeschlossen',
-        description: 'Erstes Modul abgeschlossen!',
-        icon: 'ribbon-outline',
-        condition: (stats: Stats) => stats.completedQuizzes >= 1
-    },
+
     {
         id: 10,
         name: 'Quiz-Meister',
@@ -72,5 +73,6 @@ export const ACHIEVEMENTS: Achievement[] = [
         icon: 'ribbon',
         condition: (stats: Stats) => stats.completedQuizzes >= 10
     },
+
 ];
 
