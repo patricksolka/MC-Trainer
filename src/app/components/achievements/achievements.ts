@@ -39,27 +39,34 @@ export const ACHIEVEMENTS: Achievement[] = [
     },
     {
         id: 6,
+        name: 'Quiz-Meister',
+        description: 'Zehn Quizze abgeschlossen!',
+        icon: 'ribbon',
+        condition: (stats: Stats) => stats.completedQuizzes >= 10
+    },
+    {
+        id: 7,
         name: 'Meisterleistung',
         description: 'Fünfzig richtige Antworten!',
         icon: 'diamond-outline',
         condition: (stats: Stats) => stats.correctAnswers >= 50
     },
     {
-        id: 7,
+        id: 8,
         name: 'Meilenstein',
         description: 'Hundert richtige Antworten!',
         icon: 'podium-outline',
         condition: (stats: Stats) => stats.correctAnswers >= 100
     },
     {
-        id: 8,
+        id: 9,
         name: 'Triumph',
         description: 'Fünfhundert richtige Antworten!',
         icon: 'flower',
         condition: (stats: Stats) => stats.correctAnswers >= 500
     },
     {
-        id: 9,
+        id: 10,
         name: 'Spitzenleistung',
         description: 'Tausend richtige Antworten!',
         icon: 'trophy',
