@@ -10,3 +10,16 @@ export class Category {
     done?: boolean = false;
 
 }
+
+export class FavCategory{
+        [key: string]: any;
+
+        id: string;
+        name: string;
+        timestamp?: number;
+        questionCount: number;
+        completedCards?: number;
+       /* constructor() {
+            this.completedCards = 0;
+        }*/
+}
