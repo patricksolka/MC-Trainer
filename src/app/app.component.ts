@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Diese Datei enthält die AppComponent, die die Hauptkomponente der Anwendung darstellt.
+ */
 import {Component} from '@angular/core';
 import {
     IonApp, IonContent,
@@ -44,6 +47,10 @@ import {CardService} from './services/card.service';
 import {FooterPage} from "./components/footer/footer.page";
 import {NgIf} from "@angular/common";
 
+/**
+ * @class AppComponent
+ * @description Die Hauptkomponente der Anwendung.
+ */
 @Component({
     selector: 'app-root',
     templateUrl: 'app.component.html',
@@ -64,7 +71,11 @@ export class AppComponent {
 
     public showFooter: boolean;
 
-
+    /**
+     * @constructor
+     * @param {Router} router - Router zum Navigieren zwischen Seiten.
+     * @param {CardService} cardService - Service für Kartenoperationen.
+     */
     constructor(private router: Router, private cardService: CardService) {
         addIcons({
             personOutline,

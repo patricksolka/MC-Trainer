@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Diese Datei enthält den TotalStatsService, der die Gesamtstatistiken der Benutzerquizze verwaltet.
+ */
+
 import {Injectable} from '@angular/core';
 import {
     collection,
@@ -19,7 +23,10 @@ import {CardComponent} from "../components/card/card.component";
 import {AchievementService} from "./achievement.service";
 import {ToastController} from "@ionic/angular/standalone";
 
-
+/**
+ * @class TotalStatsService
+ * @description Dieser Service verwaltet die Gesamtstatistiken der Benutzerquizze.
+ */
 @Injectable({
     providedIn: 'root'
 })
@@ -29,7 +36,15 @@ export class TotalStatsService {
     private subscription: Unsubscribe | null = null;
 
     userCollectionRef: CollectionReference<DocumentData>;
-
+    /**
+     * @constructor
+     * @param {Firestore} firestore - Firebase Firestore-Instanz.
+     * @param {UserService} userService - Service für Benutzeroperationen.
+     * @param {AuthService} authService - Service für Authentifizierungsoperationen.
+     * @param {AchievementService} authService - Service für AchievementService.
+     * @param {ToastController} authService - Service für ToastController.
+     *
+     */
     constructor(
         private firestore: Firestore,
         private userService: UserService,
@@ -65,7 +80,13 @@ export class TotalStatsService {
     delay(ms: number) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
-
+    /**
+     * @method persistStats
+     * @description Speichert die Statistiken eines Benutzers in Firestore.
+     * @param {string} uid - Die Benutzer-ID.
+     * @param {string} categoryId - Die Kategorie-ID.
+     * @param {Stats} stats - Die zu speichernden Statistiken.
+     */
     async persistStats(uid: string, categoryId: string, stats: Stats) {
         const statsCollectionRef = doc(this.userCollectionRef, uid, 'stats', categoryId);
 
@@ -103,8 +124,13 @@ export class TotalStatsService {
             console.error("Error persisting stats:", e);
         }
     }
-
-
+    /**
+     * @method getStats
+     * @description Holt die Statistiken eines Benutzers für eine bestimmte Kategorie aus Firestore.
+     * @param {string} uid - Die Benutzer-ID.
+     * @param {string} categoryId - Die Kategorie-ID.
+     * @returns {Promise<Stats | null>} - Die Statistiken oder null, wenn keine vorhanden sind.
+     */
     async getStats(uid: string, categoryId: string) {
         const statsCollectionRef = doc(this.firestore, `users/${uid}/stats/${categoryId}`);
         const refWithConverter = statsCollectionRef.withConverter(this.statsConverter);
@@ -121,6 +147,13 @@ export class TotalStatsService {
         }
     }
 
+    /**
+     * @method getStatsById
+     * @description Holt die Statistiken eines Benutzers für eine bestimmte Kategorie anhand der ID aus Firestore.
+     * @param {string} uid - Die Benutzer-ID.
+     * @param {string} categoryId - Die Kategorie-ID.
+     * @returns {Promise<Stats | null>} - Die Statistiken oder null, wenn keine vorhanden sind.
+     */
     async getStatsById(uid: string, categoryId: string) {
         const statsCollectionRef = doc(this.firestore, `users/${uid}/stats/${categoryId}`);
         const refWithConverter = statsCollectionRef.withConverter(this.statsConverter);
@@ -169,6 +202,12 @@ export class TotalStatsService {
         }
     }
 
+    /**
+     * @method calculateTotalStats
+     * @description Berechnet die Gesamtstatistiken eines Benutzers.
+     * @param {string} uid - Die Benutzer-ID.
+     * @returns {Promise<Object>} - Ein Objekt mit den Gesamtstatistiken.
+     */
     //TODO: Subscription evtl rausnehemn
     async calcTotalStats(uid: string) {
         const statsCollectionRef = collection(this.firestore, `users/${uid}/stats/`);
@@ -197,6 +236,10 @@ export class TotalStatsService {
         };
     }
 
+    /**
+     * @method ngOnDestroy
+     * @description Lebenszyklus-Hook, der bei der Zerstörung der Komponente aufgerufen wird und die Abonnements beendet.
+     */
     ngOnDestroy() {
         if (this.subscription) {
             this.subscription();
@@ -213,6 +256,18 @@ export class TotalStatsService {
             return {...stats};
         }
     };
+
+    /**
+     * @method resetStats
+     * @description Setzt die Gesamtstatistiken zurück.
+     */
+    resetStats() {
+        this.totalCorrectAnswers = 0;
+        this.totalIncorrectAnswers = 0;
+        //this.updatedateFirebaseStats(this.authService.auth.currentUser.uid, "correctAnswers", 0);
+        //this.updatedateFirebaseStats(this.authService.auth.currentUser.uid,
+        // "incorrectAnswers", 0);
+    }
 }
 
 

@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Diese Datei enthält die Implementierung der HomeComponent-Komponente,
+ * die die Startseite der Anwendung darstellt und verschiedene Kategorien sowie Fortschrittsbalken anzeigt.
+ */
 import {Component, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {Router, RouterModule} from '@angular/router';
@@ -40,6 +44,10 @@ import {User} from "../../models/user.model";
 
 import {collection, Firestore, onSnapshot, Unsubscribe} from "@angular/fire/firestore";
 import {TotalStatsService} from "../../services/total-stats.service";
+/**
+ * @component HomeComponent
+ * @description Diese Komponente stellt die Startseite der Anwendung dar, einschließlich der Anzeige von Kategorien, Fortschrittsbalken und Favoriten.
+ */
 
 @Component({
     selector: 'app-home',
@@ -64,6 +72,17 @@ export class HomeComponent  {
     private subscription: Subscription | null = null;
 
     @ViewChild(ProgressBarComponent) progressBarComponent: ProgressBarComponent;
+
+    /**
+     * @constructor
+     * @param {Router} router - Router zum Navigieren zwischen Seiten.
+     * @param {Auth} auth - Firebase Auth-Instanz.
+     * @param {CategoryService} categoryService - Service für Kategorieoperationen.
+     * @param {UserService} userService - Service für Benutzeroperationen.
+     * @param {CardService} cardService - Service für Kartenoperationen.
+     * @param {Firestore} firestore - Firebase Firestore-Instanz.
+     * @param {AlertController} alertController - Controller für Alerts.
+     */
 
 //TODO: LooadingController fixen sodass er nur beim starten der App angezeigt wird
     constructor(
@@ -132,7 +151,10 @@ export class HomeComponent  {
             console.error(`Favoritenkategorie mit der ID ${categoryId} nicht gefunden.`);
         }
     }
-
+    /**
+     * @method fetchPreview
+     * @description Lädt die Vorschaukategorien aus dem CategoryService.
+     */
     //TODO: LoadingController vorerst nicht nötig
     async fetchPreview() {
         try {
@@ -142,12 +164,23 @@ export class HomeComponent  {
         }
     }
 
+    /**
+     * @method removeFav
+     * @description Entfernt eine Kategorie aus den Favoriten des Benutzers.
+     * @param {Category} category - Kategorie, die entfernt werden soll.
+     */
+
     async removeFav(category: Category) {
         if (this.user) {
             await this.userService.deleteAlert(this.user.uid, category.id);
 
         }
     }
+
+    /**
+     * @method fetchProgress
+     * @description Lädt die Fortschrittsdaten des Benutzers aus dem CardService.
+     */
 
     //als observable
     async fetchProgress(){
@@ -168,6 +201,12 @@ export class HomeComponent  {
         }
     }
 
+    /**
+     * @method calcPercentage
+     * @description Berechnet den Fortschrittsprozentsatz für den Fortschrittsbalken.
+     * @returns {number} - Der berechnete Fortschrittsprozentsatz.
+     */
+
     //TODO: Wenn keine learningSessions vorhanden, dann auch keinen progress anzeigen!!
     //ProgressBar berechnen
     calcPercentage() {
@@ -182,6 +221,10 @@ export class HomeComponent  {
         }
     }
 
+    /**
+     * @method ionViewWillEnter
+     * @description Lebenszyklus-Hook, der aufgerufen wird, wenn die Ansicht in den Vordergrund tritt.
+     */
     ionViewWillEnter() {
         //this.fetchPreview();
         this.loadFavs();

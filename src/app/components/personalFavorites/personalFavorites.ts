@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Diese Datei enthält die Implementierung der PersonalFavorites-Komponente,
+ * die die bevorzugten Kategorien des Benutzers anzeigt und ermöglicht, Kategorien hinzuzufügen oder zu entfernen.
+ */
+
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
@@ -29,6 +34,11 @@ import {User} from "../../models/user.model";
 import {TotalStatsService} from "../../services/total-stats.service";
 import {TenantAwareAuth} from "firebase-admin/lib/auth";
 
+/**
+ * @component PersonalFavorites
+ * @description Diese Komponente zeigt die bevorzugten Kategorien des Benutzers an und ermöglicht es,
+ * Kategorien zu durchsuchen, hinzuzufügen und zu entfernen.
+ */
 
 @Component({
     selector: 'app-personalFavorites',
@@ -56,6 +66,14 @@ export class PersonalFavorites implements OnInit{
         }
     }
 
+    /**
+     * @constructor
+     * @param {UserService} userService - Service für Benutzeroperationen.
+     * @param {CategoryService} categoryService - Service für Kategorieoperationen.
+     * @param {AuthService} authService - Service für Authentifizierungsoperationen.
+     * @param {Auth} auth - Firebase Auth-Instanz.
+     * @param {Firestore} firestore - Firebase Firestore-Instanz.
+     */
     constructor(
         public userService: UserService,
         public categoryService: CategoryService,
@@ -129,10 +147,13 @@ export class PersonalFavorites implements OnInit{
             console.error(`Favoritenkategorie mit der ID ${categoryId} nicht gefunden.`);
         }
     }
-
-
-
-
+    /**
+     * @method addFav
+     * @description Fügt eine Kategorie zu den bevorzugten Kategorien des Benutzers hinzu.
+     * @param {string} categoryId - ID der Kategorie.
+     * @param {string} categoryName - Name der Kategorie.
+     * @param {number} questionCount - Anzahl der Fragen in der Kategorie.
+     */
     async addFav(categoryId: string, categoryName: string, questionCount: number) {
 
         if (this.user) {
@@ -143,7 +164,10 @@ export class PersonalFavorites implements OnInit{
             this.loaded = true;
         }
     }
-
+    /**
+     * @method loadCategories
+     * @description Lädt alle Kategorien und filtert die bevorzugten Kategorien heraus.
+     */
     async loadCategories() {
         const categories = await this.categoryService.getCategories();
         if (categories) {
@@ -151,6 +175,11 @@ export class PersonalFavorites implements OnInit{
 
         }
     }
+    /**
+     * @method removeFav
+     * @description Entfernt eine Kategorie aus den bevorzugten Kategorien des Benutzers.
+     * @param {Category} category - Kategorie, die entfernt werden soll.
+     */
     async removeFav(category: Category) {
         if (this.user) {
             await this.userService.deleteAlert(this.user.uid, category.id);
@@ -159,7 +188,10 @@ export class PersonalFavorites implements OnInit{
     }
 
 
-
+    /**
+     * @method toggleSearch
+     * @description Schaltet die Sichtbarkeit der Suchleiste um.
+     */
     toggleSearch() {
         this.searchBarVisible = !this.searchBarVisible;
         if (this.searchBarVisible) {
@@ -172,9 +204,12 @@ export class PersonalFavorites implements OnInit{
         }
     }
 
-
-
-    ngOnDestroy(): void {
+    /**
+     * @method ngOnDestroy
+     * @description Lebenszyklus-Hook, der bei der Zerstörung der Komponente aufgerufen wird und
+     * die Beobachtung der bevorzugten Kategorien beendet.
+     */
+    ngOnDestroy() {
         if (this.subscription) {
             this.subscription.unsubscribe();
         }

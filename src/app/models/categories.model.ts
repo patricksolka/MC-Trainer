@@ -1,4 +1,11 @@
+/**
+ * @fileoverview Diese Datei enthält die Definitionen der Klassen Category, Stats und User.
+ */
 
+/**
+ * @class Category
+ * @description Diese Klasse repräsentiert eine Kategorie mit ihren Eigenschaften.
+ */
 export class Category {
     [key: string]: any;
 
