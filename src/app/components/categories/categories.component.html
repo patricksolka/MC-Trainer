@@ -57,6 +57,15 @@
                 </ion-col>
             </ion-row>
 
+            <ion-row *ngIf="categoryService.filteredCategories.length === 0">
+                <ion-col size="12">
+                    <ion-text>
+                        <p>Kein Ergebnis gefunden</p>
+                    </ion-text>
+                </ion-col>
+            </ion-row>
+
+
             <ion-row *ngIf="categoryService.completedCategories.length > 0">
                 <ion-col size="12">
                     <h2>Absolviert</h2>
