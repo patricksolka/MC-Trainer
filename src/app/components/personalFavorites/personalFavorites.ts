@@ -76,11 +76,6 @@ export class PersonalFavorites implements OnInit{
                 console.log('User is logged out');
             }
         });
-
-        //this.getCompletedCards();
-        //this.getCompletedCards(); // Replace "categoryId" with your actual
-        // category ID
-
     }
 
     ngOnInit() {
@@ -128,7 +123,7 @@ export class PersonalFavorites implements OnInit{
                 }
             } catch (error) {
                 console.error(`Fehler beim Laden der abgeschlossenen Karten für Kategorie ${categoryId}:`, error);
-                favCategory.completedCards = 0; // Setzen Sie auf 0 oder behandeln Sie den Fehler entsprechend
+                favCategory.completedCards = 0;
             }
         } else {
             console.error(`Favoritenkategorie mit der ID ${categoryId} nicht gefunden.`);

@@ -9,6 +9,7 @@ import {CategoryService} from 'src/app/services/category.service';
 import {Category} from '../../models/categories.model';
 import {ProgressBarComponent} from "../progress-bar/progress-bar.component";
 import {
+    AlertController,
     IonButton,
     IonButtons,
     IonCard,
