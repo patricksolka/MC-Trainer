@@ -25,42 +25,42 @@ export const ACHIEVEMENTS: Achievement[] = [
     },
     {
         id: 4,
-        name: 'Durchhaltevermögen I',
+        name: 'Durchhaltevermögen',
         description: 'Zehn richtige Antworten!',
         icon: 'medal-outline',
         condition: (stats: Stats) => stats.correctAnswers >= 10
     },
     {
         id: 5,
-        name: 'Durchhaltevermögen II',
+        name: 'Glanzleistung',
         description: 'Zwanzig richtige Antworten!',
         icon: 'star-outline',
         condition: (stats: Stats) => stats.correctAnswers >= 20
     },
     {
         id: 6,
-        name: 'Durchhaltevermögen III',
+        name: 'Meisterleistung',
         description: 'Fünfzig richtige Antworten!',
         icon: 'diamond-outline',
         condition: (stats: Stats) => stats.correctAnswers >= 50
     },
     {
         id: 7,
-        name: 'Durchhaltevermögen IV',
+        name: 'Meilenstein',
         description: 'Hundert richtige Antworten!',
         icon: 'podium-outline',
         condition: (stats: Stats) => stats.correctAnswers >= 100
     },
     {
         id: 8,
-        name: 'Durchhaltevermögen V',
+        name: 'Triumph',
         description: 'Fünfhundert richtige Antworten!',
         icon: 'flower',
         condition: (stats: Stats) => stats.correctAnswers >= 500
     },
     {
         id: 9,
-        name: 'Durchhaltevermögen VI',
+        name: 'Spitzenleistung',
         description: 'Tausend richtige Antworten!',
         icon: 'trophy',
         condition: (stats: Stats) => stats.correctAnswers >= 1000
