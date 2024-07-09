@@ -1,4 +1,8 @@
 import { Stats } from '../../models/stats.model';
+/**
+ * @constant ACHIEVEMENTS
+ * @description Liste der Errungenschaften mit ihren Bedingungen.
+ */
 
 import {Achievement} from "../../models/achievement.model";
 export const ACHIEVEMENTS: Achievement[] = [

@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Diese Datei enthält den CategoryService, der die Verwaltung und Operationen von Kategorien übernimmt.
+ */
+
 import { Injectable } from '@angular/core';
 import {
     Firestore,
@@ -17,7 +21,6 @@ import {
 } from '@angular/fire/firestore';
 import { Category } from '../models/categories.model';
 import { AlertController } from '@ionic/angular'; // Import AlertController
-
 import {Router} from "@angular/router";
 import {Storage} from "@angular/fire/storage";
 import {UserService} from "./user.service";
@@ -27,6 +30,10 @@ import {AuthService} from "./auth.service";
 import {User} from "../models/user.model";
 import {TotalStatsService} from "./total-stats.service";
 
+/**
+ * @class CategoryService
+ * @description Dieser Service verwaltet die Kategorieoperationen und Interaktionen mit Firestore.
+ */
 @Injectable({
     providedIn: 'root'
 })
@@ -43,6 +50,14 @@ export class CategoryService {
     categoriesCollectionRef: CollectionReference<DocumentData>;
     cardsCollectionRef: CollectionReference<Card>;
 
+    /**
+     * @constructor
+     * @param {Firestore} firestore - Firebase Firestore-Instanz.
+     * @param {Router} router - Router zum Navigieren zwischen Seiten.
+     * @param {UserService} userService - Service für Benutzeroperationen.
+     * @param {AlertController} alertController - Controller für Alerts.
+     * @param {AuthService} authService - Service für Authentifizierungsoperationen.
+     */
     constructor(private firestore: Firestore, private router: Router, private userService: UserService,
                 private alertController: AlertController, private authService: AuthService, private ts: TotalStatsService) {
 
@@ -50,8 +65,12 @@ export class CategoryService {
         this.cardsCollectionRef = collection(firestore, 'cards') as CollectionReference<Card>;
     }
 
-
-
+    /**
+     * @method getAllCardsForCategory
+     * @description Holt alle Karten für eine bestimmte Kategorie.
+     * @param {string} categoryId - Die ID der Kategorie.
+     * @returns {Observable<Card[]>} - Ein Observable mit den Karten.
+     */
 
     getAllCardsForCategory(categoryId: string): Observable<Card[]> {
         const filterQuery = query(this.cardsCollectionRef, where('categoryId', '==', categoryId));
@@ -125,6 +144,13 @@ export class CategoryService {
         }
     }*/
 
+
+    /**
+     * @method getCategories
+     * @description Holt alle Kategorien aus Firestore.
+     * @returns {Promise<Category[] | null>} - Eine Liste von Kategorien oder null bei einem Fehler.
+     */
+
     async getCategories(): Promise<Category[] | null> {
         try {
             const filterQuery = query(this.categoriesCollectionRef, orderBy('name'));
@@ -168,15 +194,23 @@ export class CategoryService {
         }
     }
     // Get Categories by Id:
+    /**
+     * @method getCategoryById
+     * @description Holt eine Kategorie anhand ihrer ID aus Firestore.
+     * @param {string} categoryId - Die ID der Kategorie.
+     * @returns {Promise<Category>} - Die Kategorie.
+     */
     async getCategoryById(categoryId: string): Promise<Category> {
         const categoryDoc = doc(this.firestore, `categories/${categoryId}`);
         const categorySnapshot = await getDoc(categoryDoc);
         return categorySnapshot.data() as Category;
     }
-
-
-
-
+    /**
+     * @method resetCardAnsweredCounter
+     * @description Setzt den Zähler für beantwortete Fragen einer Karte zurück.
+     * @param {string} cardid - Die ID der Karte.
+     * @param {string} counter - Der Zählername.
+     */
     async resetCardAnsweredCounter(cardId: string) {
         try {
             const docRef = doc(this.firestore, `users/${this.authService.auth.currentUser.uid}/answers/${cardId}`);
@@ -189,10 +223,11 @@ export class CategoryService {
             throw error; // optional: rethrow the error if needed
         }
     }
-
-
-
-
+    /**
+     * @method resetCardCounterForCategory
+     * @description Setzt den Zähler für alle Karten einer Kategorie zurück.
+     * @param {string} categoryId - Die ID der Kategorie.
+     */
     //Gleiche Funktion wie vorher nur das "subsribe" nicht durchgestrichen ist
     resetCardCounter(categoryId: string): void {
         const cardsObservable = this.getAllCardsForCategory(categoryId) as Observable<Card[]>;
@@ -224,6 +259,11 @@ export class CategoryService {
     }
 
     // get first 4 categories for Preview
+    /**
+     * @method getPreviewCategories
+     * @description Holt die ersten vier Kategorien für eine Vorschau.
+     * @returns {Promise<Category[]>} - Eine Liste der ersten vier Kategorien.
+     */
     async getPreviewCategories(): Promise<Category[]> {
         try {
             const filterQuery = query(this.categoriesCollectionRef, limit(4));
@@ -241,6 +281,30 @@ export class CategoryService {
         }
     }
 
+    /**
+     * @constant categoryConverter
+     * @description Konverter für die Umwandlung von Firestore-Dokumenten in Category-Objekte und umgekehrt.
+     */
+    // Dokumente in Catgeory-Objekte umwandeln
+        /*
+    private categoryConverter = {
+        fromFirestore: (snapshot: QueryDocumentSnapshot, options: SnapshotOptions): Category => {
+            const result = Object.assign(new Category(), snapshot.data(options));
+            result.id = snapshot.id;
+            return result;
+        },
+        toFirestore: (category: Category): DocumentData => {
+            const copy = {...category};
+            delete copy.id;
+            return copy;
+        }
+    };
+*/
+    /**
+     * @method startQuiz
+     * @description Startet ein Quiz für eine Kategorie.
+     * @param {string} categoryId - Die ID der Kategorie.
+     */
     async startQuiz(categoryId: string) {
         if (categoryId) {
             const result = await this.ts.isDone(categoryId);
@@ -282,6 +346,11 @@ export class CategoryService {
         await alert.present();
     }
 
+    /**
+     * @method resetProgress
+     * @description Setzt den Fortschritt für eine Kategorie zurück.
+     * @param {string} categoryId - Die ID der Kategorie.
+     */
     async resetProgress(categoryId: string) {
         try {
             await this.ts.setDone(categoryId, false);
@@ -291,7 +360,13 @@ export class CategoryService {
             console.error('Fehler beim Zurücksetzen des Fortschritts:', error);
         }
     }
-
+    /**
+     * @method setDone
+     * @description Setzt den Status einer Kategorie auf 'done'.
+     * @param {string} categoryId - Die ID der Kategorie.
+     * @param {string} attribute - Der Attributname.
+     * @param {boolean} done - Der Status.
+     */
    /* async setDone(categoryId: string, done: boolean): Promise<void> {
         try {
             const docRef = doc(this.firestore, `users/${this.authService.auth.currentUser.uid}`);
@@ -304,7 +379,12 @@ export class CategoryService {
             throw error;
         }
     }*/
-
+    /**
+     * @method isDone
+     * @description Überprüft, ob eine Kategorie als 'done' markiert ist.
+     * @param {string} categoryId - Die ID der Kategorie.
+     * @returns {Promise<boolean>} - true, wenn die Kategorie 'done' ist, andernfalls false.
+     */
    /* async isDone(categoryId: string): Promise<boolean> {
         try {
             const docRef = doc(this.firestore, `users/${this.authService.auth.currentUser.uid}`);
@@ -324,6 +404,10 @@ export class CategoryService {
         }
     }*/
 
+    /**
+     * @method filterCategories
+     * @description Filtert die Kategorien basierend auf dem Suchbegriff.
+     */
     filterCategories() {
         const searchQuery = this.searchCategory.toLowerCase();
         this.filteredCategories = this.categories.filter(category =>

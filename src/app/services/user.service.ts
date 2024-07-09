@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Diese Datei enthält den UserService, der die Verwaltung und Operationen von Benutzerdaten übernimmt.
+ */
+
 import {
     deleteDoc,
     doc,
@@ -19,7 +23,10 @@ import {FavCategory} from "../models/categories.model";
 import {Observable} from "rxjs";
 
 
-
+/**
+ * @class UserService
+ * @description Dieser Service verwaltet die Benutzeroperationen und Interaktionen mit Firestore.
+ */
 @Injectable({
     providedIn: 'root'
 })
@@ -33,7 +40,11 @@ export class UserService {
 
     public favCategories: FavCategory[] = [];
 
-
+    /**
+     * @constructor
+     * @param {Firestore} firestore - Firebase Firestore-Instanz.
+     * @param {AlertController} alertController - Controller für Alerts.
+     */
     constructor(private firestore: Firestore, private alertController: AlertController) {
         this.userCollectionRef = collection(firestore, 'users');
         //this.favCollectionRef = collection(firestore,
@@ -45,6 +56,12 @@ export class UserService {
 
     }
 
+    /**
+     * @method getUser
+     * @description Holt einen Benutzer anhand seiner UID aus Firestore.
+     * @param {string} uid - Die Benutzer-ID.
+     * @returns {Promise<User | null>} - Der Benutzer oder null, wenn er nicht existiert.
+     */
     //get user by ID
     async getUser(uid: string) {
         const userRef = doc(this.firestore, `users/${uid}`);
@@ -59,6 +76,12 @@ export class UserService {
         }
     }
 
+    /**
+     * @method updateUser
+     * @description Aktualisiert die Benutzerdaten in Firestore.
+     * @param {User} user - Der Benutzer mit aktualisierten Daten.
+     * @returns {Promise<void | null>} - Ein Promise, das aufgelöst wird, wenn der Benutzer erfolgreich aktualisiert wurde, oder null bei einem Fehler.
+     */
     async updateUser(user: User) {
         try {
             const userData = this.userConverter.toFirestore(user);
@@ -70,6 +93,12 @@ export class UserService {
         }
     }
 
+    /**
+     * @method deleteUser
+     * @description Löscht einen Benutzer aus Firestore.
+     * @param {string} uid - Die Benutzer-ID.
+     * @returns {Promise<void | null>} - Ein Promise, das aufgelöst wird, wenn der Benutzer erfolgreich gelöscht wurde, oder null bei einem Fehler.
+     */
     async deleteUser(uid: string) {
         try {
             const userRef = doc(this.firestore, `users/${uid}`);
@@ -99,7 +128,12 @@ export class UserService {
             return [];
         }
     }*/
-
+    /**
+     * @method getFavCategories
+     * @description Holt die Favoritenkategorien eines Benutzers.
+     * @param {string} uid - Die Benutzer-ID.
+     * @returns {Promise<Array<{id: string, name: string, timestamp: number, questionCount: number, completedCards: number}>>} - Eine Liste von Favoritenkategorien.
+     */
    /* async getFavCategories(uid: string): Promise<FavCategory> {
         try {
             const favCategoriesRef = collection(this.firestore, `users/${uid}/favoriteCategories`);
@@ -173,7 +207,15 @@ export class UserService {
         });
     }
 
-
+    /**
+     * @method addFavCategory
+     * @description Fügt eine Kategorie zu den Favoriten eines Benutzers hinzu.
+     * @param {string} uid - Die Benutzer-ID.
+     * @param {string} categoryId - Die Kategorie-ID.
+     * @param {string} categoryName - Der Name der Kategorie.
+     * @param {number} questionCount - Die Anzahl der Fragen in der Kategorie.
+     * @returns {Promise<void>} - Ein Promise, das aufgelöst wird, wenn die Kategorie erfolgreich hinzugefügt wurde.
+     */
 //mit subcollection
     async addFavCategory(uid: string, categoryId: string, categoryName: string, questionCount: number): Promise<void> {
         try {
@@ -200,6 +242,13 @@ export class UserService {
         }
     }
 
+    /**
+     * @method removeFavCategory
+     * @description Entfernt eine Kategorie aus den Favoriten eines Benutzers.
+     * @param {string} uid - Die Benutzer-ID.
+     * @param {string} categoryId - Die Kategorie-ID.
+     * @returns {Promise<void>} - Ein Promise, das aufgelöst wird, wenn die Kategorie erfolgreich entfernt wurde.
+     */
     //Subcollection
     async removeFavCategory(uid: string, categoryId: string): Promise<void> {
         try {
@@ -228,7 +277,10 @@ export class UserService {
         }
     };
 
-
+    /**
+     * @constant userConverter
+     * @description Konverter für die Umwandlung von Firestore-Dokumenten in User-Objekte und umgekehrt.
+     */
     private userConverter = {
         fromFirestore: (snapshot: QueryDocumentSnapshot, options: SnapshotOptions): User => {
             const user = Object.assign(new User(), snapshot.data(options));
@@ -241,7 +293,12 @@ export class UserService {
             return copy;
         }
     };
-
+    /**
+     * @method deleteAlert
+     * @description Zeigt einen Bestätigungs-Alert an und entfernt eine Favoritenkategorie, wenn bestätigt.
+     * @param {string} uid - Die Benutzer-ID.
+     * @param {string} categoryId - Die Kategorie-ID.
+     */
     async deleteAlert(uid: string, categoryId: string) {
             const alert = await this.alertController.create({
                 header: 'Favorit entfernen',
@@ -273,6 +330,12 @@ export class UserService {
         await alert.present();
     }
 
+    /**
+     * @method showAlert
+     * @description Zeigt einen Alert mit einer benutzerdefinierten Nachricht an.
+     * @param {string} header - Der Header des Alerts.
+     * @param {string} message - Die Nachricht des Alerts.
+     */
     async showAlert(header: string, message: string) {
         const alert = await this.alertController.create({
             header,

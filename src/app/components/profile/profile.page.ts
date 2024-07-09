@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Diese Datei enthält die Implementierung der ProfilePage-Komponente,
+ * die das Benutzerprofil anzeigt und ermöglicht, das Profil zu aktualisieren oder zu löschen.
+ */
+
 import {Component} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -18,6 +23,11 @@ import {User} from "../../models/user.model";
 import {FooterPage} from "../footer/footer.page";
 import {onAuthStateChanged} from "@angular/fire/auth";
 
+/**
+ * @component ProfilePage
+ * @description Diese Komponente zeigt das Benutzerprofil an und ermöglicht es,
+ * das Profil zu aktualisieren oder zu löschen.
+ */
 @Component({
     selector: 'app-profile',
     templateUrl: './profile.page.html',
@@ -32,6 +42,14 @@ export class ProfilePage {
     private user: User = new User();
 
 
+    /**
+     * @constructor
+     * @param {LoadingController} loadingController - Controller für Ladeanzeigen.
+     * @param {AuthService} authService - Service für Authentifizierungsoperationen.
+     * @param {Router} router - Router zum Navigieren zwischen Seiten.
+     * @param {UserService} userService - Service für Benutzeroperationen.
+     * @param {FormBuilder} fb - Formular-Builder zum Erstellen von reaktiven Formularen.
+     */
     constructor(private loadingController: LoadingController,
                 private authService: AuthService,
                 private router: Router,
@@ -47,6 +65,10 @@ export class ProfilePage {
         this.fetchUser();
     }
 
+    /**
+     * @method fetchUser
+     * @description Holt die Benutzerdaten aus der Datenbank und aktualisiert das Formular.
+     */
     fetchUser() {
         const uid = this.authService.auth.currentUser.uid;
         this.userService.getUser(uid).then(user => {
@@ -64,6 +86,10 @@ export class ProfilePage {
         });
     }
 
+    /**
+     * @method logout
+     * @description Loggt den Benutzer aus und navigiert zur Onboarding-Seite.
+     */
     async logout() {
         const loading = await this.loadingController.create({
             message: 'Ausloggen...',
@@ -74,6 +100,10 @@ export class ProfilePage {
         await this.router.navigateByUrl('/onboarding', {replaceUrl: true});
     }
 
+    /**
+     * @method deleteProfile
+     * @description Löscht das Benutzerprofil aus der Datenbank.
+     */
     //TODO: Add ConfirmAlert before deleting profile
     async deleteProfile() {
         const loading = await this.loadingController.create({
@@ -85,6 +115,11 @@ export class ProfilePage {
         await loading.dismiss();
 
     }
+
+    /**
+     * @method updateProfile
+     * @description Aktualisiert das Benutzerprofil in der Datenbank.
+     */
 
     //TODO: Fix updateProfile
     //TODO: when updating profile, password is stored in db without hashing
@@ -106,6 +141,10 @@ export class ProfilePage {
         }
     }
 
+    /**
+     * @method ionViewWillEnter
+     * @description Lebenszyklus-Hook, der aufgerufen wird, wenn die Ansicht in den Vordergrund tritt.
+     */
     ionViewWillEnter() {
         this.fetchUser();
         console.log('AuthService.auth:', this.authService.auth);
@@ -120,6 +159,10 @@ export class ProfilePage {
         });
     }
 
+    /**
+     * @method ionViewDidLeave
+     * @description Lebenszyklus-Hook, der aufgerufen wird, wenn die Ansicht verlassen wird.
+     */
     ionViewDidLeave(){
         onAuthStateChanged(this.authService.auth, (user) => {
             if (user) {
