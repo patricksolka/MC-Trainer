@@ -35,6 +35,7 @@ export class AchievementsComponent implements OnInit {
     /**
      * @constructor
      * @param {AchievementService} achievementService - Service für Errungenschaften.
+     * @param authService
      */
     constructor(public achievementService: AchievementService, private authService: AuthService) {
         this.achievementService.setAchievements();
@@ -48,15 +49,13 @@ export class AchievementsComponent implements OnInit {
         this.loadAchievements();
         this.achievementService.setAchievements();
         this.achievements = this.achievementService.getAchievements();
-        console.log('Achievements', this.achievements);
     }
 
     loadAchievements() {
         this.achievementService.loadAchievements(this.authService.auth.currentUser.uid).subscribe(achievements => {
             console.log('Achievements loaded:', achievements);
-            this.achievementService.setAchievements(); // Set achievements in the service
+            this.achievementService.setAchievements();
             this.achievements = this.achievementService.getAchievements();
-            console.log('Achievements after setting:', this.achievements);
         });
     }
 }

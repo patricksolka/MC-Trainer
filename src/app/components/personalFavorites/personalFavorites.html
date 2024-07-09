@@ -18,7 +18,6 @@
                 </ion-button>
             </ion-buttons>
             @if (categoryService.categories) {
-               <!-- <ion-title class="ion-padding-top">Favoriten</ion-title>-->
                 <ion-buttons slot="end">
                     <ion-button (click)="toggleSearch()">
                         <ion-icon  name="search-outline"></ion-icon>
@@ -30,25 +29,6 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-
-    <!--<ion-card
-            *ngIf="favCategories.length === 0">
-        <ion-text>Sie haben noch keine Module favorisiert
-            😢
-        </ion-text>
-    </ion-card>-->
-    <!--<ion-list class="ion-padding" *ngFor="let category of favCategories">
-        <ion-item-sliding>
-        <ion-item lines="none" (click)="categoryService.startQuiz(category.id)">
-            {{ category.name }} {{category.completedCards}} / {{ category.questionCount }}
-        </ion-item>
-            <ion-item-options side="end">
-                <ion-item-option color="danger" (click)="removeFav(category)">
-                    <ion-icon slot="icon-only" name="trash"></ion-icon>
-                </ion-item-option>
-            </ion-item-options>
-        </ion-item-sliding>
-    </ion-list>-->
     <div class="Module">
         <ion-grid>
             <ion-row class="header-row-m">
@@ -150,38 +130,6 @@
             </ion-list>
         </ion-grid>
     </div>
-    <!--<h2>Entdecken</h2>
-    <ion-list *ngFor="let category of
-    categoryService.pendingCategories">
-        <ion-item lines="none" (click)="addFav(category.id, category.name,
-        category.questionCount)">
-            {{ category.name }} ({{ category.questionCount }})
-        </ion-item>
-    </ion-list>
--->
-
-
-    <!--<div class="categories-container">
-        <h2>Absolviert</h2>
-
-        <ion-list *ngIf="completedCategories.length > 0">
-            <ion-item *ngFor="let category of completedCategories">
-                <ion-label>{{ category.name }}</ion-label>
-            </ion-item>
-        </ion-list>
-
-        <p *ngIf="completedCategories.length === 0">Keine abgeschlossenen Kategorien vorhanden.</p>
-
-        <h2>Entdecken</h2>
-
-        <ion-list *ngIf="pendingCategories.length > 0">
-            <ion-item *ngFor="let category of pendingCategories">
-                <ion-label>{{ category.name }}</ion-label>
-            </ion-item>
-        </ion-list>
-
-        <p *ngIf="pendingCategories.length === 0">Alle Kategorien entdeckt!</p>
-    </div>-->
 </ion-content>
 
 

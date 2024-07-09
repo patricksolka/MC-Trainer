@@ -3,7 +3,6 @@
  * die eine Einführung in die App mit interaktiven Lernmöglichkeiten, Wissensmodi und Achievements bietet.
  */
 
-
 import {Component, CUSTOM_ELEMENTS_SCHEMA, OnInit} from '@angular/core';
 import {
     IonButton, IonButtons, IonCol,

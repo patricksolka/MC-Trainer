@@ -2,7 +2,6 @@
  * @fileoverview Diese Datei enthält die Implementierung der ProfilePage-Komponente,
  * die das Benutzerprofil anzeigt und ermöglicht, das Profil zu aktualisieren oder zu löschen.
  */
-
 import {Component} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -18,7 +17,7 @@ import {
 import {LoadingController} from "@ionic/angular";
 import {AuthService} from "../../services/auth.service";
 import {UserService} from "../../services/user.service";
-import {Router, RouterLink, RouterModule} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {User} from "../../models/user.model";
 import {FooterPage} from "../footer/footer.page";
 import {onAuthStateChanged} from "@angular/fire/auth";
@@ -104,7 +103,6 @@ export class ProfilePage {
      * @method deleteProfile
      * @description Löscht das Benutzerprofil aus der Datenbank.
      */
-    //TODO: Add ConfirmAlert before deleting profile
     async deleteProfile() {
         const loading = await this.loadingController.create({
             message: 'Profil wird gelöscht...',
@@ -120,11 +118,6 @@ export class ProfilePage {
      * @method updateProfile
      * @description Aktualisiert das Benutzerprofil in der Datenbank.
      */
-
-    //TODO: Fix updateProfile
-    //TODO: when updating profile, password is stored in db without hashing
-    //TODO: Synchronize Auth with Firestore
-
     async updateProfile() {
         if (this.credentials.valid) {
             const loading = await this.loadingController.create({

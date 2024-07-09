@@ -27,7 +27,6 @@ import {CommonModule} from "@angular/common";
 import {Router, RouterModule} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 import {CardService} from "../../services/card.service";
-import {collection, Firestore, onSnapshot, Unsubscribe} from "@angular/fire/firestore";
 
 
 @Component({
@@ -63,8 +62,6 @@ export class ProgressBarComponent {
             });
         }
     }
-
-    //ProgressBar berechnen
     calcPercentage() {
         const displayedMinutes = Math.max(this.learnedMinutes, 1);
         const progressPercentage = (displayedMinutes / this.totalMinutes) * 100;
