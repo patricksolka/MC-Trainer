@@ -1,14 +1,11 @@
 /**
  * @fileoverview Diese Datei enthält den CategoryService, der die Verwaltung und Operationen von Kategorien übernimmt.
  */
-
 import { Injectable } from '@angular/core';
 import {
     Firestore,
     collection,
     doc,
-    addDoc,
-    updateDoc,
     deleteDoc,
     getDoc,
     DocumentData,
@@ -17,17 +14,15 @@ import {
     limit,
     QueryDocumentSnapshot,
     SnapshotOptions,
-    orderBy, onSnapshot, getDocs, Unsubscribe, setDoc, where, collectionData
+    orderBy, getDocs, where, collectionData
 } from '@angular/fire/firestore';
 import { Category } from '../models/categories.model';
-import { AlertController } from '@ionic/angular'; // Import AlertController
+import { AlertController } from '@ionic/angular';
 import {Router} from "@angular/router";
-import {Storage} from "@angular/fire/storage";
 import {UserService} from "./user.service";
 import {Card} from "../models/card.model";
 import {Observable} from "rxjs";
 import {AuthService} from "./auth.service";
-import {User} from "../models/user.model";
 import {TotalStatsService} from "./total-stats.service";
 
 /**
@@ -42,11 +37,8 @@ export class CategoryService {
     public filteredCategories: Category[] = [];
     public completedCategories: Category[] = [];
     public pendingCategories: Category[] = [];
-
-
     public searchCategory: string = '';
     public startTime: Date |null = null;
-
     categoriesCollectionRef: CollectionReference<DocumentData>;
     cardsCollectionRef: CollectionReference<Card>;
 
@@ -57,6 +49,7 @@ export class CategoryService {
      * @param {UserService} userService - Service für Benutzeroperationen.
      * @param {AlertController} alertController - Controller für Alerts.
      * @param {AuthService} authService - Service für Authentifizierungsoperationen.
+     * @param ts
      */
     constructor(private firestore: Firestore, private router: Router, private userService: UserService,
                 private alertController: AlertController, private authService: AuthService, private ts: TotalStatsService) {
@@ -71,86 +64,16 @@ export class CategoryService {
      * @param {string} categoryId - Die ID der Kategorie.
      * @returns {Observable<Card[]>} - Ein Observable mit den Karten.
      */
-
     getAllCardsForCategory(categoryId: string): Observable<Card[]> {
         const filterQuery = query(this.cardsCollectionRef, where('categoryId', '==', categoryId));
         return collectionData(filterQuery, {idField: 'id'}) as Observable<Card[]>;
     }
-
-    // get category by id -> Wird nicht verwendet: Maybe löschen?
-    /*
-    async getCategoryById(id: string): Promise<Category | null> {
-        try {
-            const docRef = doc(this.firestore, 'categories', id);
-            const docSnap = await getDoc(docRef);
-
-            if (docSnap.exists()) {
-                //const category = categorySnap.data() as Category;
-                return this.categoryConverter.fromFirestore(docSnap, {});
-
-            } else {
-                return null;
-            }
-        } catch (error) {
-            console.error('Error fetching category by id:', error);
-            return null;
-        }
-    } */
-
-    //get all categories
-  /*  async getCategories(): Promise<Category[] | null> {
-        try {
-            const filterQuery = query(this.categoriesCollectionRef, orderBy('name'));
-            const refWithConverter = filterQuery.withConverter(this.categoryConverter);
-
-            const categoryDocs = await getDocs(refWithConverter);
-            const categories: Category[] = [];
-
-            // Laden der doneCategories des aktuellen Benutzers
-            const userDocRef = doc(this.firestore, `users/${this.authService.auth.currentUser.uid}`);
-            const doneCategoriesRef = collection(userDocRef, 'categories');
-            console.log('doneCategoriesRef:', doneCategoriesRef.path)
-            const doneCategoriesSnap = await getDocs(doneCategoriesRef);
-            console.log( 'doneCategoriesSnap:', doneCategoriesSnap.docs)
-
-
-            // Setzen der doneCategories als Map für schnelleren Zugriff
-            const userDoneCategories: Map<string, boolean> = new Map();
-            doneCategoriesSnap.forEach(doc => {
-                const categoryId = doc.id;
-                const done = doc.data()['done'];
-                console.log('done:', done)
-                userDoneCategories.set(categoryId, done);
-            });
-
-            categoryDocs.forEach(categoryDoc => {
-                const category = categoryDoc.data() as Category;
-                category.id = categoryDoc.id;
-
-                // Prüfen, ob die Kategorie als abgeschlossen markiert ist
-                //category.done = !!userDoneCategories[category.id];
-                category.done = userDoneCategories.get(category.id) || false;
-
-                categories.push(category);
-            });
-
-            this.categories = categories;
-            this.filterCategories(); // Filterung aktualisieren
-
-            return categories;
-        } catch (error) {
-            console.error('Error fetching categories:', error);
-            return null;
-        }
-    }*/
-
 
     /**
      * @method getCategories
      * @description Holt alle Kategorien aus Firestore.
      * @returns {Promise<Category[] | null>} - Eine Liste von Kategorien oder null bei einem Fehler.
      */
-
     async getCategories(): Promise<Category[] | null> {
         try {
             const filterQuery = query(this.categoriesCollectionRef, orderBy('name'));
@@ -159,28 +82,21 @@ export class CategoryService {
             const categoryDocs = await getDocs(refWithConverter);
             const categories: Category[] = [];
 
-            // Laden der stats des aktuellen Benutzers
             const userDocRef = doc(this.firestore, `users/${this.authService.auth.currentUser.uid}`);
             const statsRef = collection(userDocRef, 'stats');
 
             const docSnap = await getDocs(statsRef);
-            console.log('statsSnap:', docSnap.docs);
-
             const userStatsCategories: Map<string, boolean> = new Map();
             docSnap.forEach(doc => {
                 const categoryId = doc.id;
                 const done = doc.data()['done'];
-                console.log('done:', done);
                 userStatsCategories.set(categoryId, done);
             });
 
             categoryDocs.forEach(categoryDoc => {
                 const category = categoryDoc.data() as Category;
                 category.id = categoryDoc.id;
-
-                // Prüfen, ob die Kategorie als abgeschlossen markiert ist
                 category.done = userStatsCategories.get(category.id) || false;
-
                 categories.push(category);
             });
 
@@ -193,7 +109,6 @@ export class CategoryService {
             return null;
         }
     }
-    // Get Categories by Id:
     /**
      * @method getCategoryById
      * @description Holt eine Kategorie anhand ihrer ID aus Firestore.
@@ -208,19 +123,15 @@ export class CategoryService {
     /**
      * @method resetCardAnsweredCounter
      * @description Setzt den Zähler für beantwortete Fragen einer Karte zurück.
-     * @param {string} cardid - Die ID der Karte.
-     * @param {string} counter - Der Zählername.
+     * @param cardId
      */
     async resetCardAnsweredCounter(cardId: string) {
         try {
             const docRef = doc(this.firestore, `users/${this.authService.auth.currentUser.uid}/answers/${cardId}`);
-
             await deleteDoc(docRef);
-
-            console.log(`Counter for card '${cardId}' reset successfully.`);
         } catch (error) {
             console.error('Error resetting counter:', error);
-            throw error; // optional: rethrow the error if needed
+            throw error;
         }
     }
     /**
@@ -228,7 +139,6 @@ export class CategoryService {
      * @description Setzt den Zähler für alle Karten einer Kategorie zurück.
      * @param {string} categoryId - Die ID der Kategorie.
      */
-    //Gleiche Funktion wie vorher nur das "subsribe" nicht durchgestrichen ist
     resetCardCounter(categoryId: string): void {
         const cardsObservable = this.getAllCardsForCategory(categoryId) as Observable<Card[]>;
 
@@ -238,10 +148,9 @@ export class CategoryService {
                     for (const card of cards) {
                         try {
                             await this.resetCardAnsweredCounter(card.id);
-                            console.log(`Counter für Karte mit ID '${card.id}' erfolgreich zurückgesetzt.`);
                         } catch (error) {
                             console.error(`Fehler beim Zurücksetzen des Zählers für Karte mit ID ${card.id}:`, error);
-                            throw error; // Fehler weiterleiten, um das Haupt-Observable zu unterbrechen
+                            throw error;
                         }
                     }
                 } else {
@@ -257,8 +166,6 @@ export class CategoryService {
         });
 
     }
-
-    // get first 4 categories for Preview
     /**
      * @method getPreviewCategories
      * @description Holt die ersten vier Kategorien für eine Vorschau.
@@ -268,7 +175,6 @@ export class CategoryService {
         try {
             const filterQuery = query(this.categoriesCollectionRef, limit(4));
             const refWithConverter = filterQuery.withConverter(this.categoryConverter);
-
             const categoryDocs = await getDocs(refWithConverter);
             const categories: Category[] = [];
             categoryDocs.forEach(categoryDoc => {
@@ -282,25 +188,6 @@ export class CategoryService {
     }
 
     /**
-     * @constant categoryConverter
-     * @description Konverter für die Umwandlung von Firestore-Dokumenten in Category-Objekte und umgekehrt.
-     */
-    // Dokumente in Catgeory-Objekte umwandeln
-        /*
-    private categoryConverter = {
-        fromFirestore: (snapshot: QueryDocumentSnapshot, options: SnapshotOptions): Category => {
-            const result = Object.assign(new Category(), snapshot.data(options));
-            result.id = snapshot.id;
-            return result;
-        },
-        toFirestore: (category: Category): DocumentData => {
-            const copy = {...category};
-            delete copy.id;
-            return copy;
-        }
-    };
-*/
-    /**
      * @method startQuiz
      * @description Startet ein Quiz für eine Kategorie.
      * @param {string} categoryId - Die ID der Kategorie.
@@ -313,9 +200,7 @@ export class CategoryService {
                 console.log('Service Quiz started at:', this.startTime);
                 await this.router.navigate(['/cards', categoryId]);
             } else {
-                //TODO
                 await this.resetAlert(categoryId);
-                console.log("Nichts zu tun!");
             }
         } else {
             console.error('Invalid categoryId:', categoryId);
@@ -360,49 +245,6 @@ export class CategoryService {
             console.error('Fehler beim Zurücksetzen des Fortschritts:', error);
         }
     }
-    /**
-     * @method setDone
-     * @description Setzt den Status einer Kategorie auf 'done'.
-     * @param {string} categoryId - Die ID der Kategorie.
-     * @param {string} attribute - Der Attributname.
-     * @param {boolean} done - Der Status.
-     */
-   /* async setDone(categoryId: string, done: boolean): Promise<void> {
-        try {
-            const docRef = doc(this.firestore, `users/${this.authService.auth.currentUser.uid}`);
-            const statsRef = collection(docRef, 'stats');
-
-            // Füge das Dokument für die Kategorie in der Subcollection stats hinzu oder aktualisiere es
-            await setDoc(doc(statsRef, categoryId), { done }, { merge: true });
-        } catch (error) {
-            console.error('Error setting category done status:', error);
-            throw error;
-        }
-    }*/
-    /**
-     * @method isDone
-     * @description Überprüft, ob eine Kategorie als 'done' markiert ist.
-     * @param {string} categoryId - Die ID der Kategorie.
-     * @returns {Promise<boolean>} - true, wenn die Kategorie 'done' ist, andernfalls false.
-     */
-   /* async isDone(categoryId: string): Promise<boolean> {
-        try {
-            const docRef = doc(this.firestore, `users/${this.authService.auth.currentUser.uid}`);
-            const statsRef = doc(docRef, `stats/${categoryId}`);
-            const docSnap = await getDoc(statsRef);
-
-            if (docSnap.exists()) {
-                const statsData = docSnap.data();
-                console.log('Kategorie ist abgeschlossen:', statsData['done']);
-                return statsData['done'] || false;
-
-            }
-            return false;
-        } catch (error) {
-            console.error('Fehler beim Abrufen des Dokuments:', error);
-            throw error;
-        }
-    }*/
 
     /**
      * @method filterCategories
@@ -413,7 +255,6 @@ export class CategoryService {
         this.filteredCategories = this.categories.filter(category =>
             category.name.toLowerCase().includes(searchQuery)
         );
-
         this.completedCategories = this.categories.filter(category =>
             category.done && category.name.toLowerCase().includes(searchQuery)
         );
@@ -435,5 +276,4 @@ export class CategoryService {
             return copy;
         }
     };
-
 }

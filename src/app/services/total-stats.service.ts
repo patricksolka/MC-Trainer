@@ -1,7 +1,6 @@
 /**
  * @fileoverview Diese Datei enthält den TotalStatsService, der die Gesamtstatistiken der Benutzerquizze verwaltet.
  */
-
 import {Injectable} from '@angular/core';
 import {
     collection,
@@ -9,17 +8,15 @@ import {
     doc,
     DocumentData,
     Firestore,
-    getDoc, getDocs, onSnapshot,
+    getDoc, getDocs,
     QueryDocumentSnapshot,
     setDoc,
     SnapshotOptions, Unsubscribe,
     updateDoc
 } from '@angular/fire/firestore';
-import {Card} from "../models/card.model";
 import {UserService} from "./user.service";
 import {AuthService} from "./auth.service";
 import {Stats} from "../models/stats.model";
-import {CardComponent} from "../components/card/card.component";
 import {AchievementService} from "./achievement.service";
 import {ToastController} from "@ionic/angular/standalone";
 
@@ -31,10 +28,7 @@ import {ToastController} from "@ionic/angular/standalone";
     providedIn: 'root'
 })
 export class TotalStatsService {
-    private totalCorrectAnswers: number = 0;
-    private totalIncorrectAnswers: number = 0;
     private subscription: Unsubscribe | null = null;
-
     userCollectionRef: CollectionReference<DocumentData>;
     /**
      * @constructor
@@ -43,7 +37,8 @@ export class TotalStatsService {
      * @param {AuthService} authService - Service für Authentifizierungsoperationen.
      * @param {AchievementService} authService - Service für AchievementService.
      * @param {ToastController} authService - Service für ToastController.
-     *
+     * @param achievementService
+     * @param toastController
      */
     constructor(
         private firestore: Firestore,
@@ -66,8 +61,8 @@ export class TotalStatsService {
             const toast = await this.toastController.create({
                 header: 'Herzlichen Glückwunsch!',
                 message: `${achievement.name}: ${achievement.description}`,
-                duration: 2000, // Toast duration in milliseconds
-                position: 'top', // Position of the toast
+                duration: 2000,
+                position: 'top',
             });
             toasts.push(toast);
         }
@@ -89,7 +84,6 @@ export class TotalStatsService {
      */
     async persistStats(uid: string, categoryId: string, stats: Stats) {
         const statsCollectionRef = doc(this.userCollectionRef, uid, 'stats', categoryId);
-
         try {
             const docSnap = await getDoc(statsCollectionRef);
 
@@ -102,7 +96,6 @@ export class TotalStatsService {
                     completedCards: currentStats.completedCards + stats.completedCards
                 };
                 await updateDoc(statsCollectionRef, updatedStats);
-                console.log("Existing document updated with stats:", updatedStats);
             } else {
                 const statsData: DocumentData = {
                     ...this.statsConverter.toFirestore(stats),
@@ -110,7 +103,6 @@ export class TotalStatsService {
                     completedCards: stats.completedCards
                 };
                 await setDoc(statsCollectionRef, statsData);
-                console.log("New document created with stats:", statsData);
             }
             const newStats = await this.calcTotalStats(this.authService.auth.currentUser.uid);
             const updatedStats = {
@@ -136,7 +128,6 @@ export class TotalStatsService {
         const refWithConverter = statsCollectionRef.withConverter(this.statsConverter);
         const docSnap = await getDoc(refWithConverter);
 
-
         if (docSnap.exists()) {
             const result = docSnap.data() as Stats;
             console.log("Retrieved stats for id:", result);
@@ -158,7 +149,6 @@ export class TotalStatsService {
         const statsCollectionRef = doc(this.firestore, `users/${uid}/stats/${categoryId}`);
         const refWithConverter = statsCollectionRef.withConverter(this.statsConverter);
         const docSnap = await getDoc(refWithConverter);
-
 
         if (docSnap.exists()) {
             const result = docSnap.data() as Stats;
@@ -208,7 +198,6 @@ export class TotalStatsService {
      * @param {string} uid - Die Benutzer-ID.
      * @returns {Promise<Object>} - Ein Objekt mit den Gesamtstatistiken.
      */
-    //TODO: Subscription evtl rausnehemn
     async calcTotalStats(uid: string) {
         const statsCollectionRef = collection(this.firestore, `users/${uid}/stats/`);
         const refWithConverter = statsCollectionRef.withConverter(this.statsConverter);
@@ -226,8 +215,6 @@ export class TotalStatsService {
             completedQuizzes += stats.completedQuizzes || 0;
             completedCards += stats.completedCards || 0;
         });
-
-        console.log("Ausgabe", totalCorrectAnswers, totalIncorrectAnswers, completedQuizzes, completedCards);
         return {
             totalCorrectAnswers,
             totalIncorrectAnswers,
@@ -256,18 +243,6 @@ export class TotalStatsService {
             return {...stats};
         }
     };
-
-    /**
-     * @method resetStats
-     * @description Setzt die Gesamtstatistiken zurück.
-     */
-    resetStats() {
-        this.totalCorrectAnswers = 0;
-        this.totalIncorrectAnswers = 0;
-        //this.updatedateFirebaseStats(this.authService.auth.currentUser.uid, "correctAnswers", 0);
-        //this.updatedateFirebaseStats(this.authService.auth.currentUser.uid,
-        // "incorrectAnswers", 0);
-    }
 }
 
 

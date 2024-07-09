@@ -1,7 +1,7 @@
+import { __decorate } from "tslib";
 /**
  * @fileoverview Diese Datei enthält den AchievementService, der die Verwaltung von Errungenschaften übernimmt.
  */
-import { __decorate } from "tslib";
 import { Injectable } from '@angular/core';
 import { ACHIEVEMENTS } from '../components/achievements/achievements';
 import { doc, setDoc, collection, getDocs } from "@angular/fire/firestore";
@@ -56,7 +56,6 @@ let AchievementService = class AchievementService {
      * @returns {Array} - Eine Liste der neuen Errungenschaften, die erreicht wurden.
      */
     checkAchievements(stats) {
-        console.log('Checking achievements with stats:', stats);
         const newAchievements = ACHIEVEMENTS.filter(achievement => achievement.condition(stats))
             .filter(achievement => !this.achieved.has(achievement.id))
             .map(achievement => {
@@ -64,7 +63,6 @@ let AchievementService = class AchievementService {
             this.setAchievement(achievement.id);
             return achievement;
         });
-        console.log('New achievements:', newAchievements);
         return newAchievements;
     }
     getAchieved() {
@@ -79,9 +77,7 @@ let AchievementService = class AchievementService {
         const achievementsDocs = getDocs(achievementsCollection);
         return from(achievementsDocs).pipe(map(querySnapshot => {
             const achievements = new Set();
-            console.log(`Received querySnapshot with ${querySnapshot.size} documents.`);
             querySnapshot.forEach(doc => {
-                console.log(`Processing document with id: ${doc.id}`);
                 achievements.add(parseInt(doc.id, 10));
             });
             return achievements;

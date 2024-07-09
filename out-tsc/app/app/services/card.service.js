@@ -17,6 +17,8 @@ let CardService = class CardService {
      * @param {Firestore} firestore - Firebase Firestore-Instanz.
      * @param {AuthService} authService - Service für Authentifizierungsoperationen.
      * @param {CategoryService} categoryService - Service für Kategorieoperationen.
+     * @param ts
+     * @param userService
      */
     constructor(firestore, authService, categoryService, ts, userService) {
         this.firestore = firestore;
@@ -24,10 +26,8 @@ let CardService = class CardService {
         this.categoryService = categoryService;
         this.ts = ts;
         this.userService = userService;
-        // private userCollection: CollectionReference<DocumentData>;
         this.subscription = null;
         this.cardsCollection = collection(firestore, 'cards');
-        // this.userCollection = collection(firestore, 'users') as CollectionReference<DocumentData>;
     }
     /**
      * @method getAllCardsForCategory
@@ -35,7 +35,6 @@ let CardService = class CardService {
      * @param {string} categoryId - Die ID der Kategorie.
      * @returns {Observable<Card[]>} - Ein Observable mit den Karten.
      */
-    // CRUD-Operationen für Karten
     getAllCardsForCategory(categoryId) {
         const categoryCardsQuery = query(this.cardsCollection, where('categoryId', '==', categoryId));
         return collectionData(categoryCardsQuery, { idField: 'id' });
@@ -79,7 +78,7 @@ let CardService = class CardService {
     /**
      * @method resetCardAnsweredCounter
      * @description Setzt den Zähler für beantwortete Fragen einer Karte zurück.
-     * @param {string} cardId - Die ID der Karte.
+     * @param cardid
      * @param {string} counter - Der Zählername.
      */
     async resetCardAnsweredCounter(cardid, counter) {
@@ -92,16 +91,14 @@ let CardService = class CardService {
     /**
      * @method getCardAnsweredCounter
      * @description Holt den Zähler für beantwortete Fragen einer Karte.
-     * @param {string} cardId - Die ID der Karte.
      * @returns {Promise<number>} - Der Zählerwert.
+     * @param cardid
      */
     async getCardAnsweredCounter(cardid) {
         const userDoc = doc(this.firestore, `users/${this.authService.auth.currentUser.uid}/answers/${cardid}`);
         const userSnap = await getDoc(userDoc);
         if (userSnap.exists()) {
             const data = userSnap.data();
-            /*const counter = data?.['counter'] || 0;
-            return counter;*/
             return data?.['counter'] || 0;
         }
         else {
@@ -123,7 +120,6 @@ let CardService = class CardService {
                 observer.next(result);
                 console.log('learningSession', result);
             });
-            // Snapshot-Listeners
             this.subscription = onSnapshot(learningSessionsRef, (snapshot) => {
                 const data = snapshot.docs.map(doc => doc.data());
                 observer.next(data);
@@ -157,7 +153,6 @@ let CardService = class CardService {
                 });
             }
             else {
-                //if learningSessions exists add new duration to existing duration
                 const currentDuration = docSnap.data()['duration'] || 0;
                 const updatedDuration = currentDuration + newDuration;
                 await updateDoc(docRef, {
@@ -165,13 +160,11 @@ let CardService = class CardService {
                     duration: updatedDuration
                 });
             }
-            console.log('Learning session added successfully');
         }
         catch (error) {
             console.error('Error adding learning session:', error);
         }
     }
-    //Reset if older than 24 hours
     /**
      * @method resetLearningSession
      * @description Löscht Lernsitzungen, die älter als 24 Stunden sind.
@@ -182,7 +175,6 @@ let CardService = class CardService {
             const learningSessionsRef = collection(this.firestore, `users/${uid}/learningSessions`);
             const docSnap = await getDocs(learningSessionsRef);
             const currentTime = Date.now();
-            console.log('currentTime', currentTime);
             docSnap.docs.forEach(doc => {
                 const data = doc.data();
                 const endTime = data['endTime'].toDate().getTime();
@@ -203,7 +195,6 @@ let CardService = class CardService {
         if (this.subscription) {
             this.subscription();
             this.subscription = null;
-            console.log('unsubscribe from learning sessions');
         }
     }
 };

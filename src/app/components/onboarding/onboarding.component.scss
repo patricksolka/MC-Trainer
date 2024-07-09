@@ -20,11 +20,8 @@ ion-content {
     font-size: 18px;
     font-weight: bold;
     font-family: Poppins, sans-serif;
-    //letter-spacing: 0.5px;
     padding-top: 0.5rem;
 }
-
-
 .description{
     text-align: center;
     font-size: 16px;
@@ -32,8 +29,6 @@ ion-content {
     font-family: Poppins, sans-serif;
     padding-bottom: 40px;
 }
-
-
 
 swiper-slide {
   text-align: center;
@@ -50,7 +45,6 @@ swiper-container {
   --swiper-pagination-bullet-inactive-opacity: 1;
   --swiper-pagination-bullet-size: 15px;
 }
-
 
 .imageContainer{
   display: flex;

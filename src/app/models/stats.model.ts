@@ -1,16 +1,3 @@
-/*// stats.model.ts
-export class Stats {
-    correctAnswers: number;
-    incorrectAnswers: number;
-    //completedQuizzes: number;
-    //totalQuestions: number;
-
-    constructor(correctAnswers: number, incorrectAnswers: number) {
-        this.correctAnswers = correctAnswers;
-        this.incorrectAnswers = incorrectAnswers;
-    }
-}*/
-
 /**
  * @fileoverview Diese Datei enthält die Implementierung der Stats-Klasse,
  * die die Statistiken der Benutzerquizze speichert.
