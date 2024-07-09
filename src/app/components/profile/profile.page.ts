@@ -60,7 +60,7 @@ export class ProfilePage {
             firstName: ['', Validators.required],
             lastName: ['', Validators.required],
             email: ['', [Validators.required, Validators.email]],
-            password: ['', Validators.required]
+            //password: ['', Validators.required]
         });
         this.fetchUser();
     }
@@ -112,6 +112,7 @@ export class ProfilePage {
         await loading.present();
         const uid = this.authService.auth.currentUser.uid;
         await this.userService.deleteUser(uid);
+        this.authService.deleteProfile();
         await loading.dismiss();
 
     }
