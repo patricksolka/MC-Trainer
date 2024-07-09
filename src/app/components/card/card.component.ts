@@ -271,6 +271,7 @@ export class CardComponent implements OnInit, OnDestroy {
 
             // Optional: Zurücksetzen der Startzeit nach der Erfassung der Lernsitzung
             this.categoryService.startTime = null;
+            this.achievementService.setAchievements();
         } else {
             console.error('Start time is not set.');
         }
