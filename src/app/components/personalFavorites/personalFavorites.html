@@ -112,7 +112,7 @@
             </ion-row>
             <ion-list class="categories">
                 <ion-item-sliding *ngFor="let category of categoryService.completedCategories">
-                    <ion-item lines="none">
+                    <ion-item lines="none" [disabled]="true">
                         <ion-grid>
                             <ion-row class="ion-align-items-center">
                                 <ion-col size="6">
