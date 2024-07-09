@@ -1,7 +1,6 @@
 /**
  * @fileoverview Diese Datei enthält den AuthService, der die Authentifizierungs- und Benutzerverwaltung übernimmt.
  */
-
 import {Injectable} from '@angular/core';
 import {User} from '../models/user.model';
 import {
@@ -26,7 +25,6 @@ import {Router} from "@angular/router";
 })
 
 export class AuthService {
-
     /**
      * @constructor
      * @param {Auth} auth - Firebase Auth-Instanz.
@@ -62,15 +60,10 @@ export class AuthService {
                 lastName,
             };
 
-
-
             const userRef = doc(this.firestore, `users/${user.uid}`);
             await setDoc(userRef, user);
-
-            // Start listening for changes to the user document
             const unsubscribe = onSnapshot(userRef, async (docSnapshot) => {
                 if (!docSnapshot.exists()) {
-                    // doc was deleted from FB, delete user from auth
                     if (this.auth.currentUser) {
                         await deleteUser(this.auth.currentUser);
                     }

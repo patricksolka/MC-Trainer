@@ -14,7 +14,6 @@
         </ion-col>
     </ion-row>
 
-    <!-- Add this block for the no achievements message -->
     <ng-template #noAchievements>
         <ion-row class="noAchievements ion-justify-content-center ion-align-items-center" style="text-align: center;">
             <ion-card class="achievements" style="height: 100px">
@@ -25,7 +24,6 @@
         </ion-row>
     </ng-template>
 
-    <!-- Show the message if there are no achievements -->
     <div *ngIf="achievements.length === 0">
         <ng-container *ngTemplateOutlet="noAchievements"></ng-container>
     </div>

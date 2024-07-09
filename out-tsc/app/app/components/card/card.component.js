@@ -1,7 +1,3 @@
-/**
- * @fileoverview Diese Datei enthält die Implementierung der CardComponent-Komponente,
- * die die Fragen einer ausgewählten Kategorie anzeigt und es dem Benutzer ermöglicht, diese zu beantworten.
- */
 import { __decorate } from "tslib";
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -19,32 +15,24 @@ let CardComponent = class CardComponent {
      * @param {CardService} cardService - Service für Kartenoperationen.
      * @param {ActivatedRoute} route - Aktivierte Route zum Abrufen der Routenparameter.
      * @param {Router} router - Router zum Navigieren zwischen Seiten.
-     * @param {AlertController} alertController - Controller für Alerts.
      * @param {TotalStatsService} totalStatsService - Service zur Verwaltung der Gesamtstatistiken.
      * @param {CategoryService} categoryService - Service für Kategorieoperationen.
      * @param {Auth} auth - Firebase Auth-Instanz.
-     * @param {UserService} userService - Service für Benutzeroperationen.
-     * @param {AchievementService} achievementService - Service für Achievements.
-     * @param {ToastController} toastController - Controller für Toast-Nachrichten.
      */
-    constructor(cardService, route, router, alertController, totalStatsService, categoryService, auth, userService, achievementService, toastController) {
+    constructor(cardService, route, router, totalStatsService, categoryService, auth) {
         this.cardService = cardService;
         this.route = route;
         this.router = router;
-        this.alertController = alertController;
         this.totalStatsService = totalStatsService;
         this.categoryService = categoryService;
         this.auth = auth;
-        this.userService = userService;
-        this.achievementService = achievementService;
-        this.toastController = toastController;
         this.showResult = false;
         this.selectedAnswers = [];
         this.correctAnswersCount = 0;
         this.incorrectAnswersCount = 0;
         this.completedQuizzes = 0;
         this.totalQuestions = 0;
-        this.questions = []; // Array für alle Fragen
+        this.questions = [];
         this.correctAnswer = false;
         this.completedCards = 0;
         this.startTime = null;
@@ -59,7 +47,7 @@ let CardComponent = class CardComponent {
         console.log('Category ID:', this.categoryId);
         if (this.categoryId) {
             const category = await this.categoryService.getCategoryById(this.categoryId);
-            this.categoryName = category.name; // Kategorie-Namen speichern
+            this.categoryName = category.name;
         }
         this.loadCards(this.categoryId);
     }
@@ -92,7 +80,6 @@ let CardComponent = class CardComponent {
     async loadCards(categoryId) {
         this.cards$ = this.cardService.getAllCardsForCategory(categoryId);
         this.cardsSubscription = this.cards$.subscribe(async (cards) => {
-            console.log('Geladene Karten:', cards);
             if (cards.length > 0) {
                 this.questions = this.shuffleArray(cards); // Mische die Fragen
                 this.totalQuestions = this.questions.length;
@@ -101,10 +88,6 @@ let CardComponent = class CardComponent {
                     this.currentQuestion = question;
                     this.shuffleArray(this.currentQuestion.answers);
                 }
-                else {
-                    console.log("Fehler! Alle Karten wurden beantwortet!");
-                }
-                //this.currentQuestion = this.questions[0];
             }
             else {
                 console.warn('Keine Karten gefunden für die Kategorie mit ID:', categoryId);
@@ -120,7 +103,6 @@ let CardComponent = class CardComponent {
      * @returns {any[]} - Das gemischte Array.
      */
     shuffleArray(array) {
-        // Fisher-Yates Shuffle Algorithmus
         for (let i = array.length - 1; i >= 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [array[i], array[j]] = [array[j], array[i]];
@@ -143,7 +125,7 @@ let CardComponent = class CardComponent {
      */
     toggleAnswer(answer) {
         if (this.showResult) {
-            return; // Wenn die Antworten überprüft wurden, keine weiteren Antworten auswählen
+            return;
         }
         if (this.selectedAnswers.includes(answer)) {
             this.selectedAnswers = this.selectedAnswers.filter(a => a !== answer);
@@ -166,11 +148,9 @@ let CardComponent = class CardComponent {
             if (counter < 6) {
                 this.currentQuestion = this.questions[index];
                 this.shuffleArray(this.currentQuestion.answers);
-                console.log("Frage: " + this.currentQuestion.id);
                 return;
             }
         }
-        // if all questions are answered more than 6 times
         const newStats = {
             correctAnswers: this.correctAnswersCount,
             incorrectAnswers: this.incorrectAnswersCount,
@@ -178,9 +158,7 @@ let CardComponent = class CardComponent {
             completedCards: this.completedCards
         };
         const stats = new Stats(newStats);
-        console.log('Stats:', stats);
         await this.totalStatsService.persistStats(this.auth.currentUser.uid, this.categoryId, stats);
-        //check if all questions are answered
         const question = await this.checkAllAnswered();
         if (!question) {
             await this.cardService.setCategoryDone(this.categoryId, "done", true);
@@ -193,53 +171,20 @@ let CardComponent = class CardComponent {
             }
         });
     }
-    //     /**
-    //      * @method checkForNewAchievements
-    //      * @description Überprüft, ob neue Achievements erreicht wurden.
-    //      * @param {any} stats - Die aktuellen Statistiken.
-    //      */
-    //     checkForNewAchievements(stats) {
-    //         const newAchievements = this.achievementService.checkAchievements(stats);
-    //         newAchievements.forEach(achievement => {
-    //             this.showAchievementToast(achievement);
-    //         });
-    //     }
-    //    /**
-    //      * @method showAchievementToast
-    //      * @description Zeigt ein Toast mit den neuen Achievements an.
-    //      * @param {any} achievement - Das erreichte Achievement.
-    //      */
-    //     async showAchievementToast(achievement) {
-    //         const toast = await this.toastController.create({
-    //             header: 'Congratulations!',
-    //             message: `${achievement.name}: ${achievement.description}`,
-    //             duration: 2000, // Toast duration in milliseconds
-    //             position: 'top', // Position of the toast
-    //         });
-    /*
-            async checkAnswers(): Promise<void> {
-            await toast.present();
-        }
-    */
     /**
      * @method checkAnswers
      * @description Überprüft die ausgewählten Antworten.
      */
-    checkAnswers() {
-        // Überprüfen, ob alle ausgewählten Antworten korrekt sind
+    async checkAnswers() {
         const allSelectedCorrect = this.selectedAnswers.every(answer => this.currentQuestion.correctAnswer.includes(answer));
-        // Überprüfen, ob die Anzahl der ausgewählten Antworten der Anzahl der korrekten Antworten entspricht
         const isCorrect = allSelectedCorrect && this.selectedAnswers.length === this.currentQuestion.correctAnswer.length;
         if (isCorrect) {
-            console.log("correct");
             this.correctAnswersCount++;
             this.correctAnswer = true;
             await this.cardService.updateCardAnsweredCounter(this.currentQuestion.id, "counter");
-            console.log('CardComponent', this.correctAnswersCount);
             await this.completeCards();
         }
         else {
-            console.log("not correct");
             this.correctAnswer = false;
             this.incorrectAnswersCount++;
             await this.cardService.resetCardAnsweredCounter(this.currentQuestion.id, "counter");
@@ -248,24 +193,11 @@ let CardComponent = class CardComponent {
     }
     async completeCards() {
         await this.cardService.getCardAnsweredCounter(this.currentQuestion.id).then(counter => {
-            console.log('Counter:', counter);
             if (counter >= 6) {
                 this.completedCards++;
-                console.log('CardComponent', this.completedCards);
-                //this.totalStatsService.completedCards(this.auth.currentUser.uid,
-                // this.completedCards); // Call the method to update Firestore
             }
         });
     }
-    /* async updateAnswerStats() {
-         const counter = await this.cardService.getCardAnsweredCounter(this.currentQuestion.id);
-         console.log('Counter:', counter);
-         if (counter === 1) {
-             this.completedCards++;
-             console.log('CardComponent', this.completedCards);
-             await this.totalStatsService.completedCards(this.categoryId, this.completedCards);
-         }
-     }*/
     /**
      * @method isCorrectAnswer
      * @description Überprüft, ob eine Antwort korrekt ist.
@@ -290,8 +222,7 @@ let CardComponent = class CardComponent {
      */
     startQuiz(categoryId) {
         this.startTime = new Date();
-        this.categoryService.startQuiz(categoryId); // Startet das Quiz
-        console.log('CardComponent', this.startTime);
+        this.categoryService.startQuiz(categoryId);
     }
     /**
      * @method endQuiz
@@ -302,38 +233,16 @@ let CardComponent = class CardComponent {
             const endTime = new Date(); // Aktuelle Zeit als Endzeitpunkt
             console.log('endQuiz', this.categoryService.startTime);
             try {
-                await this.cardService.addLearningSession(this.auth.currentUser.uid, this.categoryId, this.currentQuestion.id, this.categoryService.startTime, // Verwenden der Startzeit aus dem CategoryService
-                endTime // Verwenden der aktuellen Zeit als Endzeitpunkt
-                );
-                console.log('Learning session added successfully.', this.categoryService.startTime, endTime);
+                await this.cardService.addLearningSession(this.auth.currentUser.uid, this.categoryId, this.currentQuestion.id, this.categoryService.startTime, endTime);
             }
             catch (error) {
                 console.error('Error adding learning session:', error);
             }
-            // Optional: Zurücksetzen der Startzeit nach der Erfassung der Lernsitzung
             this.categoryService.startTime = null;
         }
         else {
             console.error('Start time is not set.');
         }
-        /*const newStats = {
-            completedQuizzes: this.completedQuizzes + 1,
-            correctAnswers: this.correctAnswersCount,
-            incorrectAnswers: this.incorrectAnswersCount,
-            totalQuestions: this.totalQuestions
-        };
-
-        const stats = new Stats(newStats);
-        console.log('Stats:', stats);
-        await this.totalStatsService.persistStats(this.auth.currentUser.uid, this.categoryId, stats);
-        //this.checkForNewAchievements(stats); // Check for new achievements
-
-        await this.router.navigate(['/stats'], {
-            state: {
-                correctAnswers: this.correctAnswersCount,
-                incorrectAnswers: this.incorrectAnswersCount,
-            }
-        });*/
     }
     /**
      * @method ngOnDestroy

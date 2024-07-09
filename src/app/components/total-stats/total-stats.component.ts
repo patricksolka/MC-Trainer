@@ -50,8 +50,7 @@ export class TotalStatsComponent implements OnInit {
      * @param {AuthService} authService - Service für Authentifizierungsoperationen.
      * @param {CategoryService} categoryService - Service für Kategorieoperationen.
      */
-    constructor(private totalStatsService: TotalStatsService, private router: Router,
-                private alertController: AlertController, private authService: AuthService, private categoryService: CategoryService) {
+    constructor(private totalStatsService: TotalStatsService, private router: Router, private alertController: AlertController, private authService: AuthService, private categoryService: CategoryService) {
     }
 
     /**
@@ -72,14 +71,6 @@ export class TotalStatsComponent implements OnInit {
         this.completedQuizzes = stats.completedQuizzes;
         this.completedCards = stats.completedCards;
         this.percentageCorrectAnswers = (this.totalCorrectAnswers / (this.totalCorrectAnswers + this.totalIncorrectAnswers)) * 100;
-    }
-
-    /**
-     * @method backToHome
-     * @description Navigiert zurück zur Startseite.
-     */
-    backToHome() {
-        this.router.navigate(['/home']);
     }
 
     /**

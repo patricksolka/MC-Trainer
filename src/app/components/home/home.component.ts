@@ -4,7 +4,7 @@
  */
 import {Component, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {Router, RouterModule} from '@angular/router';
+import {RouterModule} from '@angular/router';
 import {UserService} from 'src/app/services/user.service';
 import {FormsModule} from "@angular/forms";
 import {FooterPage} from "../footer/footer.page";
@@ -13,7 +13,6 @@ import {CategoryService} from 'src/app/services/category.service';
 import {Category} from '../../models/categories.model';
 import {ProgressBarComponent} from "../progress-bar/progress-bar.component";
 import {
-    AlertController,
     IonButton,
     IonButtons,
     IonCard,
@@ -40,15 +39,11 @@ import {CardService} from "../../services/card.service";
 import {Subscription} from "rxjs";
 import {AuthService} from "../../services/auth.service";
 import {User} from "../../models/user.model";
-
-
-import {collection, Firestore, onSnapshot, Unsubscribe} from "@angular/fire/firestore";
 import {TotalStatsService} from "../../services/total-stats.service";
 /**
  * @component HomeComponent
  * @description Diese Komponente stellt die Startseite der Anwendung dar, einschließlich der Anzeige von Kategorien, Fortschrittsbalken und Favoriten.
  */
-
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
@@ -63,47 +58,29 @@ export class HomeComponent  {
     public categories: Category[] = [];
     public loaded: boolean = false;
     public favCategories: { id: string; name: string, questionCount: number, completedCards?: number }[] = [];
-
-    //progressBar
-    public learnedMinutes: number = 0;
-    public totalMinutes: number = 30;
-    public progress: number ;
-
-    private subscription: Subscription | null = null;
-
-    @ViewChild(ProgressBarComponent) progressBarComponent: ProgressBarComponent;
-
     /**
      * @constructor
-     * @param {Router} router - Router zum Navigieren zwischen Seiten.
+     * @param authService
      * @param {Auth} auth - Firebase Auth-Instanz.
      * @param {CategoryService} categoryService - Service für Kategorieoperationen.
      * @param {UserService} userService - Service für Benutzeroperationen.
      * @param {CardService} cardService - Service für Kartenoperationen.
-     * @param {Firestore} firestore - Firebase Firestore-Instanz.
-     * @param {AlertController} alertController - Controller für Alerts.
+     * @param totalStatsService
      */
 
-//TODO: LooadingController fixen sodass er nur beim starten der App angezeigt wird
     constructor(
         private authService: AuthService,
-        private router: Router,
         private auth: Auth,
         public  categoryService: CategoryService,
         private userService: UserService,
         private cardService: CardService,
-        private firestore: Firestore,
-        private alertController: AlertController,
         private totalStatsService: TotalStatsService
-
     ) {
         onAuthStateChanged(this.auth, async (user) => {
             if (user) {
-                console.log('User is logged in:', user.uid);
                 this.user = await this.authService.getUserDetails(user.uid);
                 if (this.user) {
                     localStorage.setItem('userName', this.user.firstName);
-                    console.log('Loaded user details:', this.user);
                     await this.fetchProgress();
                     await this.fetchPreview();
                     await this.loadFavs();
@@ -113,17 +90,18 @@ export class HomeComponent  {
             }
         });
     }
-
+    public learnedMinutes: number = 0;
+    public totalMinutes: number = 30;
+    public progress: number ;
+    private subscription: Subscription | null = null;
+    @ViewChild(ProgressBarComponent) progressBarComponent: ProgressBarComponent;
     async loadFavs(){
         if (this.user) {
-            console.log('Benutzer',this.user)
             this.userService.getFavCategories(this.user.uid).subscribe({
                 next: (favCategories) => {
                     this.favCategories = favCategories;
-                    console.log('Aktualisierte Favoriten:', favCategories);
                     for (const favCategory of this.favCategories) {
                         this.loadCompletedHome(favCategory.id);
-
                     }
                 },
                 error: (error) => {
@@ -155,7 +133,6 @@ export class HomeComponent  {
      * @method fetchPreview
      * @description Lädt die Vorschaukategorien aus dem CategoryService.
      */
-    //TODO: LoadingController vorerst nicht nötig
     async fetchPreview() {
         try {
             this.categories = await this.categoryService.getPreviewCategories();
@@ -163,7 +140,6 @@ export class HomeComponent  {
             console.error('Error fetching preview categories:', e);
         }
     }
-
     /**
      * @method removeFav
      * @description Entfernt eine Kategorie aus den Favoriten des Benutzers.
@@ -175,26 +151,17 @@ export class HomeComponent  {
 
         }
     }
-
     /**
      * @method fetchProgress
      * @description Lädt die Fortschrittsdaten des Benutzers aus dem CardService.
      */
-
-    //als observable
     async fetchProgress(){
         this.loaded = false;
-        //const currentUser = this.authService.auth.currentUser;
         if (this.user) {
             this.cardService.getLearningSession(this.user.uid).subscribe(learningSessions => {
-                //calculate learning Duration
-                //round to nearest minute
                 this.learnedMinutes = Math.round(learningSessions.reduce((total, session) =>
                     total + session['duration'], 0 ));
-                // this.progress = this.learnedMinutes;
                 this.progress = this.calcPercentage();
-                console.log('learnedMinutes', this.learnedMinutes);
-                console.log('progress', this.progress);
                 this.loaded = true;
             });
         }
@@ -205,15 +172,11 @@ export class HomeComponent  {
      * @description Berechnet den Fortschrittsprozentsatz für den Fortschrittsbalken.
      * @returns {number} - Der berechnete Fortschrittsprozentsatz.
      */
-
-    //TODO: Wenn keine learningSessions vorhanden, dann auch keinen progress anzeigen!!
-    //ProgressBar berechnen
     calcPercentage() {
         const displayedMinutes = Math.max(this.learnedMinutes, 1);
         const progressPercentage = (displayedMinutes / this.totalMinutes) * 100;
         return Math.min(progressPercentage, 100); // Begrenze den Wert auf maximal 100%
     }
-
     ngOnDestroy(): void {
         if (this.subscription) {
             this.subscription.unsubscribe();
@@ -225,10 +188,8 @@ export class HomeComponent  {
      * @description Lebenszyklus-Hook, der aufgerufen wird, wenn die Ansicht in den Vordergrund tritt.
      */
     ionViewWillEnter() {
-        //this.fetchPreview();
         this.loadFavs();
         this.userName = localStorage.getItem('userName') || 'User';
-        console.log('IonViewWillEnter');
         if (this.progressBarComponent) {
             this.progressBarComponent.fetchProgress();
         }

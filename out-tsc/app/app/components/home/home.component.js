@@ -18,40 +18,32 @@ import { IonButton, IonButtons, IonCard, IonCardContent, IonCardTitle, IonCol, I
 let HomeComponent = class HomeComponent {
     /**
      * @constructor
-     * @param {Router} router - Router zum Navigieren zwischen Seiten.
+     * @param authService
      * @param {Auth} auth - Firebase Auth-Instanz.
      * @param {CategoryService} categoryService - Service für Kategorieoperationen.
      * @param {UserService} userService - Service für Benutzeroperationen.
      * @param {CardService} cardService - Service für Kartenoperationen.
-     * @param {Firestore} firestore - Firebase Firestore-Instanz.
-     * @param {AlertController} alertController - Controller für Alerts.
+     * @param totalStatsService
      */
-    //TODO: LooadingController fixen sodass er nur beim starten der App angezeigt wird
-    constructor(authService, router, auth, categoryService, userService, cardService, firestore, alertController, totalStatsService) {
+    constructor(authService, auth, categoryService, userService, cardService, totalStatsService) {
         this.authService = authService;
-        this.router = router;
         this.auth = auth;
         this.categoryService = categoryService;
         this.userService = userService;
         this.cardService = cardService;
-        this.firestore = firestore;
-        this.alertController = alertController;
         this.totalStatsService = totalStatsService;
         this.userName = localStorage.getItem('userName') || 'User';
         this.categories = [];
         this.loaded = false;
         this.favCategories = [];
-        //progressBar
         this.learnedMinutes = 0;
         this.totalMinutes = 30;
         this.subscription = null;
         onAuthStateChanged(this.auth, async (user) => {
             if (user) {
-                console.log('User is logged in:', user.uid);
                 this.user = await this.authService.getUserDetails(user.uid);
                 if (this.user) {
                     localStorage.setItem('userName', this.user.firstName);
-                    console.log('Loaded user details:', this.user);
                     await this.fetchProgress();
                     await this.fetchPreview();
                     await this.loadFavs();
@@ -64,11 +56,9 @@ let HomeComponent = class HomeComponent {
     }
     async loadFavs() {
         if (this.user) {
-            console.log('Benutzer', this.user);
             this.userService.getFavCategories(this.user.uid).subscribe({
                 next: (favCategories) => {
                     this.favCategories = favCategories;
-                    console.log('Aktualisierte Favoriten:', favCategories);
                     for (const favCategory of this.favCategories) {
                         this.loadCompletedHome(favCategory.id);
                     }
@@ -104,7 +94,6 @@ let HomeComponent = class HomeComponent {
      * @method fetchPreview
      * @description Lädt die Vorschaukategorien aus dem CategoryService.
      */
-    //TODO: LoadingController vorerst nicht nötig
     async fetchPreview() {
         try {
             this.categories = await this.categoryService.getPreviewCategories();
@@ -127,19 +116,12 @@ let HomeComponent = class HomeComponent {
      * @method fetchProgress
      * @description Lädt die Fortschrittsdaten des Benutzers aus dem CardService.
      */
-    //als observable
     async fetchProgress() {
         this.loaded = false;
-        //const currentUser = this.authService.auth.currentUser;
         if (this.user) {
             this.cardService.getLearningSession(this.user.uid).subscribe(learningSessions => {
-                //calculate learning Duration
-                //round to nearest minute
                 this.learnedMinutes = Math.round(learningSessions.reduce((total, session) => total + session['duration'], 0));
-                // this.progress = this.learnedMinutes;
                 this.progress = this.calcPercentage();
-                console.log('learnedMinutes', this.learnedMinutes);
-                console.log('progress', this.progress);
                 this.loaded = true;
             });
         }
@@ -149,8 +131,6 @@ let HomeComponent = class HomeComponent {
      * @description Berechnet den Fortschrittsprozentsatz für den Fortschrittsbalken.
      * @returns {number} - Der berechnete Fortschrittsprozentsatz.
      */
-    //TODO: Wenn keine learningSessions vorhanden, dann auch keinen progress anzeigen!!
-    //ProgressBar berechnen
     calcPercentage() {
         const displayedMinutes = Math.max(this.learnedMinutes, 1);
         const progressPercentage = (displayedMinutes / this.totalMinutes) * 100;
@@ -166,10 +146,8 @@ let HomeComponent = class HomeComponent {
      * @description Lebenszyklus-Hook, der aufgerufen wird, wenn die Ansicht in den Vordergrund tritt.
      */
     ionViewWillEnter() {
-        //this.fetchPreview();
         this.loadFavs();
         this.userName = localStorage.getItem('userName') || 'User';
-        console.log('IonViewWillEnter');
         if (this.progressBarComponent) {
             this.progressBarComponent.fetchProgress();
         }

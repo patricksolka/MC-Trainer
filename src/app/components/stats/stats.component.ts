@@ -31,10 +31,7 @@ import {
 export class StatsComponent implements OnInit {
     correctAnswers: number = 0;
     incorrectAnswers: number = 0;
-
-    constructor(private router: Router) {
-
-    }
+    constructor(private router: Router) {}
     /**
      * @method ngOnInit
      * @description Lebenszyklus-Hook, der nach der Initialisierung der Komponente aufgerufen wird.

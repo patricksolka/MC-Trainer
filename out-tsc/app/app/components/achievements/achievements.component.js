@@ -16,6 +16,7 @@ let AchievementsComponent = class AchievementsComponent {
     /**
      * @constructor
      * @param {AchievementService} achievementService - Service für Errungenschaften.
+     * @param authService
      */
     constructor(achievementService, authService) {
         this.achievementService = achievementService;
@@ -32,14 +33,12 @@ let AchievementsComponent = class AchievementsComponent {
         this.loadAchievements();
         this.achievementService.setAchievements();
         this.achievements = this.achievementService.getAchievements();
-        console.log('Achievements', this.achievements);
     }
     loadAchievements() {
         this.achievementService.loadAchievements(this.authService.auth.currentUser.uid).subscribe(achievements => {
             console.log('Achievements loaded:', achievements);
             this.achievementService.setAchievements(); // Set achievements in the service
             this.achievements = this.achievementService.getAchievements();
-            console.log('Achievements after setting:', this.achievements);
         });
     }
 };

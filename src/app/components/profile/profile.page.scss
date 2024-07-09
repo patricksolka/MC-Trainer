@@ -75,12 +75,12 @@
 // DARK MODE
 @media (prefers-color-scheme: dark) {
   .header-ios ion-toolbar {
-    --border-width: 0 !important; /* Entfernen der Border für iOS Modus */
-    --box-shadow: none !important; /* Entfernen des Shadows für MD Modus */
+    --border-width: 0 !important;
+    --box-shadow: none !important;
   }
   .header-md ion-toolbar {
-    --border-width: 0 !important; /* Entfernen der Border für iOS Modus */
-    --box-shadow: none !important; /* Entfernen des Shadows für MD Modus */
+    --border-width: 0 !important;
+    --box-shadow: none !important;
     --border-style: none;
   }
 

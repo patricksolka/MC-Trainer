@@ -65,7 +65,6 @@ let CategoriesComponent = class CategoriesComponent {
             if (imageLoaded) {
                 this.categoryService.filterCategories();
                 this.loaded = true;
-                console.log('Ladezustand2', this.loaded);
             }
         }
         catch (error) {
@@ -89,15 +88,6 @@ let CategoriesComponent = class CategoriesComponent {
             this.categoryService.filterCategories();
         }
     }
-    /*
-    shareRecords() {
-        // Implementiere deine Funktion hier
-    }
-
-    navigateHome() {
-        // Implementiere deine Funktion hier
-    }
-    */
     /**
      * @method selectCategory
      * @description Navigiert zur Kartenansicht der ausgewählten Kategorie.
@@ -109,7 +99,6 @@ let CategoriesComponent = class CategoriesComponent {
         }
         else {
             console.error('Invalid categoryId:', categoryId);
-            // Handle invalid categoryId case, e.g., show error message or navigate to a default route
         }
     }
     /**
