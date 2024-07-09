@@ -39,24 +39,32 @@
     }
   }
 
-  ion-header {
-    ion-toolbar {
-      --background: transparent;
-      --box-shadow: none !important;
-      --border-style: none;
-    }
-
-    ion-title {
-      font-size: x-large;
-      color: var(--ion-text-color);
-    }
-
-    ion-searchbar {
-      --cancel-button-color: var(--ion-text-color);
-      box-shadow: none;
-      padding: 10px;
-      width: auto;
-      color: white;
-    }
+  .favoriteItem {
+    border-radius: 10px;
+    --border-color: var(--ion-background-color-lightdark);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
   }
+
+  .categories{
+    border-radius: 10px;
+    --border-color: var(--ion-background-color-lightdark);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .entdecken {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--ion-text-color);
+  }
+
+  .header-row-m {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 40px;
+    margin-bottom: 5px;
+  }
+
+
+
 }

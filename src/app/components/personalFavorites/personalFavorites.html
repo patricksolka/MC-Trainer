@@ -1,6 +1,6 @@
 <ion-header class="ion-no-border">
     @if (searchBarVisible) {
-        <ion-toolbar class="ion-padding ion-no-border" >
+        <ion-toolbar class="ion-padding ion-no-border">
             <ion-searchbar class="ion-no-border" [(ngModel)]="categoryService.searchCategory"
                            (ionInput)="categoryService.filterCategories()"
                            (ionCancel)="toggleSearch()"
@@ -11,16 +11,17 @@
         </ion-toolbar>
     } @else {
         <ion-toolbar>
+            <ion-title class="ion-padding-top">Favoriten</ion-title>
             <ion-buttons slot="start">
                 <ion-button class="button-solid ion-padding-top" [routerLink]="['/home']">
                     <ion-icon name="arrow-back-outline" class="arrowBack"></ion-icon>
                 </ion-button>
             </ion-buttons>
             @if (categoryService.categories) {
-                <ion-title class="ion-padding-top">Meine Module</ion-title>
+               <!-- <ion-title class="ion-padding-top">Favoriten</ion-title>-->
                 <ion-buttons slot="end">
                     <ion-button (click)="toggleSearch()">
-                        <ion-icon slot="icon-only" name="search-outline"></ion-icon>
+                        <ion-icon  name="search-outline"></ion-icon>
                     </ion-button>
                 </ion-buttons>
             }
@@ -29,13 +30,13 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-    <h2>Meine Module</h2>
-    <ion-card
+
+    <!--<ion-card
             *ngIf="favCategories.length === 0">
         <ion-text>Sie haben noch keine Module favorisiert
             😢
         </ion-text>
-    </ion-card>
+    </ion-card>-->
     <!--<ion-list class="ion-padding" *ngFor="let category of favCategories">
         <ion-item-sliding>
         <ion-item lines="none" (click)="categoryService.startQuiz(category.id)">
@@ -48,76 +49,116 @@
             </ion-item-options>
         </ion-item-sliding>
     </ion-list>-->
-    <ion-list class="favoriteItem" *ngIf="favCategories.length > 0">
-        <ion-item-sliding *ngFor="let category of favCategories">
-            <ion-item lines="none">
-                <ion-grid>
-                    <ion-row class="ion-align-items-center">
-                        <ion-col class="centerCircle" size="2">
-                            <svg class="progressCircle" width="30" height="30" viewBox="0 0 50 50">
-                                <circle class="progressCircleBack" cx="25" cy="25" r="20"
-                                        fill="none" stroke="#eee" stroke-width="7"/>
-                                <circle class="progressCircleFront" cx="25" cy="25" r="20"
-                                        fill="none" stroke="#ff6f61" stroke-width="7"
-                                        [attr.stroke-dasharray]="125.6"
-                                        [attr.stroke-dashoffset]="125.6 -
-                                        (category.completedCards /
-                                        category.questionCount * 125.6)"/>
-                            </svg>
-                        </ion-col>
-                        <ion-col size="6">
-                            {{ category.name }}
-                        </ion-col>
-                        <ion-col size="4" class="ion-text-right">
-                            <ng-container *ngIf="loaded; else loading">
-                                {{category.completedCards}} / {{ category.questionCount }}
-                            </ng-container>
-                            <ng-template #loading>
-                                <ion-skeleton-text animated></ion-skeleton-text>
-                            </ng-template>
-                        </ion-col>
+    <div class="Module">
+        <ion-grid>
+            <ion-row class="header-row-m">
+                <ion-col size="auto">
+                    <ion-text class="entdecken">Favoriten</ion-text>
+                </ion-col>
+            </ion-row>
 
-                    </ion-row>
-                </ion-grid>
-            </ion-item>
-            <ion-item-options side="end">
-                <ion-item-option color="danger" (click)="removeFav(category)">
-                    <ion-icon slot="icon-only" name="trash"></ion-icon>
-                </ion-item-option>
-            </ion-item-options>
-        </ion-item-sliding>
-    </ion-list>
+            <ion-list class="favoriteItem" *ngIf="favCategories.length > 0">
+                <ion-item-sliding *ngFor="let category of favCategories">
+                    <ion-item lines="none">
+                        <ion-grid>
+                            <ion-row class="ion-align-items-center">
+                                <ion-col class="centerCircle" size="2">
+                                    <svg class="progressCircle" width="30" height="30"
+                                         viewBox="0 0 50 50">
+                                        <circle class="progressCircleBack" cx="25" cy="25" r="20"
+                                                fill="none" stroke="#eee" stroke-width="5"/>
+                                        <circle class="progressCircleFront" cx="25" cy="25" r="20"
+                                                fill="none" stroke="#ff6f61" stroke-width="5"
+                                                [attr.stroke-dasharray]="125.6"
+                                                [attr.stroke-dashoffset]="125.6 - (category.completedCards / category.questionCount * 125.6)"/>
+                                    </svg>
+                                </ion-col>
+                                <ion-col size="6" (click)="categoryService.startQuiz(category.id)">
+                                    {{ category.name }}
+                                </ion-col>
+                                <ion-col size="4" class="ion-text-right">
+                                    {{ category.completedCards }} / {{ category.questionCount }}
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+                    </ion-item>
+                    <ion-item-options side="end">
+                        <ion-item-option color="danger" (click)="removeFav(category)">
+                            <ion-icon slot="icon-only" name="trash"></ion-icon>
+                        </ion-item-option>
+                    </ion-item-options>
+                </ion-item-sliding>
+            </ion-list>
 
 
-    <div *ngIf="categoryService.completedCategories.length > 0">
-        <h2>Absolviert</h2>
-        <ion-list class="ion-padding" *ngFor="let category of categoryService.completedCategories">
-            <ion-item-sliding>
-                <ion-item lines="none" [disabled]="true">
-                    {{ category.name }} ({{ category.questionCount }})
+            <ion-list class="favoriteItem" *ngIf="favCategories.length === 0">
+                <ion-item lines="none">
+                    <ion-text>Du hast noch keine Favoriten 😢
+                    </ion-text>
                 </ion-item>
-                <ion-item-options side="end">
-                    <ion-item-option color="danger" (click)="removeFav(category)">
-                        <ion-icon slot="icon-only" name="trash"></ion-icon>
-                    </ion-item-option>
-                </ion-item-options>
-            </ion-item-sliding>
-        </ion-list>
+            </ion-list>
+        </ion-grid>
     </div>
 
-    <h2>Entdecken</h2>
-    <ion-list class="ion-padding" *ngFor="let category of categoryService.pendingCategories">
-        <ion-item (click)="addFav(category.id, category.name, category.questionCount)">
+
+
+
+    <div class="ion-margin-top">
+        <ion-grid *ngIf="categoryService.completedCategories.length > 0">
+            <ion-row class="header-row-m">
+                <ion-col size="auto">
+                    <ion-text class="entdecken">Absolviert</ion-text>
+                </ion-col>
+            </ion-row>
+            <ion-list class="categories">
+                <ion-item-sliding *ngFor="let category of categoryService.completedCategories">
+                    <ion-item lines="none">
+                        <ion-grid>
+                            <ion-row class="ion-align-items-center">
+                                <ion-col size="6">
+                                    {{ category.name }}
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+                    </ion-item>
+                </ion-item-sliding>
+            </ion-list>
+        </ion-grid>
+    </div>
+
+    <div class="ion-margin-top" *ngIf="categoryService.pendingCategories.length > 0">
+        <ion-grid>
+            <ion-row class="header-row-m">
+                <ion-col size="auto">
+                    <ion-text class="entdecken">Entdecken</ion-text>
+                </ion-col>
+            </ion-row>
+            <ion-list class="categories">
+                <ion-item-sliding *ngFor="let category of categoryService.pendingCategories">
+                    <ion-item lines="none" (click)="addFav(category.id, category.name, category.questionCount)">
+                        <ion-grid>
+                            <ion-row class="ion-align-items-center">
+                                <ion-col size="6">
+                                    {{ category.name }}
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+                    </ion-item>
+                    <ion-item-options side="end">
+                    </ion-item-options>
+                </ion-item-sliding>
+            </ion-list>
+        </ion-grid>
+    </div>
+    <!--<h2>Entdecken</h2>
+    <ion-list *ngFor="let category of
+    categoryService.pendingCategories">
+        <ion-item lines="none" (click)="addFav(category.id, category.name,
+        category.questionCount)">
             {{ category.name }} ({{ category.questionCount }})
         </ion-item>
     </ion-list>
-
-
-
-
-
-
-
+-->
 
 
     <!--<div class="categories-container">
