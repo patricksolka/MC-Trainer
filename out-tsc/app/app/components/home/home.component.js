@@ -4,40 +4,83 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from "@angular/forms";
 import { FooterPage } from "../footer/footer.page";
+import { onAuthStateChanged } from "@angular/fire/auth";
 import { ProgressBarComponent } from "../progress-bar/progress-bar.component";
 import { IonButton, IonButtons, IonCard, IonCardContent, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonList, IonProgressBar, IonRadio, IonRow, IonSkeletonText, IonText, IonToolbar } from "@ionic/angular/standalone";
-import { collection, onSnapshot } from "@angular/fire/firestore";
 let HomeComponent = class HomeComponent {
     //TODO: LooadingController fixen sodass er nur beim starten der App angezeigt wird
-    constructor(auth, categoryService, userService, cardService, firestore) {
+    constructor(authService, router, auth, categoryService, userService, cardService, firestore, alertController, totalStatsService) {
+        this.authService = authService;
+        this.router = router;
         this.auth = auth;
         this.categoryService = categoryService;
         this.userService = userService;
         this.cardService = cardService;
         this.firestore = firestore;
+        this.alertController = alertController;
+        this.totalStatsService = totalStatsService;
         this.userName = localStorage.getItem('userName') || 'User';
         this.categories = [];
+        this.loaded = false;
         this.favCategories = [];
+        //progressBar
+        this.learnedMinutes = 0;
+        this.totalMinutes = 30;
         this.subscription = null;
-        this.auth.onAuthStateChanged(user => {
+        onAuthStateChanged(this.auth, async (user) => {
             if (user) {
-                console.log('onAuthStateChanged changed', user.uid);
-                this.userService.getUser(user.uid).then(user => {
-                    localStorage.setItem('userName', user.firstName);
-                });
-                this.fetchPreview();
-                this.observeFavCategories(user.uid);
-                this.cardService.resetLearningSession(user.uid);
+                console.log('User is logged in:', user.uid);
+                this.user = await this.authService.getUserDetails(user.uid);
+                if (this.user) {
+                    localStorage.setItem('userName', this.user.firstName);
+                    console.log('Loaded user details:', this.user);
+                    await this.fetchProgress();
+                    await this.fetchPreview();
+                    await this.loadFavs();
+                }
+            }
+            else {
+                console.log('User is logged out');
             }
         });
     }
-    // In HomeComponent
-    observeFavCategories(uid) {
-        const favCategoriesRef = collection(this.firestore, `users/${uid}/favoriteCategories`);
-        this.subscription = onSnapshot(favCategoriesRef, (snapshot) => {
-            this.favCategories = snapshot.docs.map(doc => ({ id: doc.id, name: doc.data()['name'], questionCount: doc.data()['questionCount'], completedCards: doc.data()['completedCards'] || 0 }));
-            console.log(this.favCategories);
-        });
+    async loadFavs() {
+        if (this.user) {
+            console.log('Benutzer', this.user);
+            this.userService.getFavCategories(this.user.uid).subscribe({
+                next: (favCategories) => {
+                    this.favCategories = favCategories;
+                    console.log('Aktualisierte Favoriten:', favCategories);
+                    for (const favCategory of this.favCategories) {
+                        this.loadCompletedHome(favCategory.id);
+                    }
+                },
+                error: (error) => {
+                    console.error('Fehler beim Laden der Favoriten:', error);
+                }
+            });
+        }
+    }
+    async loadCompletedHome(categoryId) {
+        const favCategory = this.favCategories.find(cat => cat.id === categoryId);
+        if (favCategory) {
+            try {
+                const stats = await this.totalStatsService.getStatsById(this.user.uid, categoryId);
+                if (stats) {
+                    favCategory.completedCards = stats.completedCards || 0;
+                }
+                else {
+                    favCategory.completedCards = 0;
+                }
+            }
+            catch (error) {
+                console.error(`Fehler beim Laden der abgeschlossenen Karten für Kategorie ${categoryId}:`, error);
+                favCategory.completedCards = 0;
+            }
+        }
+        else {
+            console.error(`Favoritenkategorie mit der ID ${categoryId} nicht gefunden.`);
+        }
     }
     //TODO: LoadingController vorerst nicht nötig
     async fetchPreview() {
@@ -49,12 +92,42 @@ let HomeComponent = class HomeComponent {
         }
     }
     async removeFav(category) {
-        const currentUser = this.auth.currentUser;
-        if (currentUser) {
-            await this.userService.deleteAlert(currentUser.uid, category.id);
+        if (this.user) {
+            await this.userService.deleteAlert(this.user.uid, category.id);
+        }
+    }
+    //als observable
+    async fetchProgress() {
+        this.loaded = false;
+        //const currentUser = this.authService.auth.currentUser;
+        if (this.user) {
+            this.cardService.getLearningSession(this.user.uid).subscribe(learningSessions => {
+                //calculate learning Duration
+                //round to nearest minute
+                this.learnedMinutes = Math.round(learningSessions.reduce((total, session) => total + session['duration'], 0));
+                // this.progress = this.learnedMinutes;
+                this.progress = this.calcPercentage();
+                console.log('learnedMinutes', this.learnedMinutes);
+                console.log('progress', this.progress);
+                this.loaded = true;
+            });
+        }
+    }
+    //TODO: Wenn keine learningSessions vorhanden, dann auch keinen progress anzeigen!!
+    //ProgressBar berechnen
+    calcPercentage() {
+        const displayedMinutes = Math.max(this.learnedMinutes, 1);
+        const progressPercentage = (displayedMinutes / this.totalMinutes) * 100;
+        return Math.min(progressPercentage, 100); // Begrenze den Wert auf maximal 100%
+    }
+    ngOnDestroy() {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
         }
     }
     ionViewWillEnter() {
+        //this.fetchPreview();
+        this.loadFavs();
         this.userName = localStorage.getItem('userName') || 'User';
         console.log('IonViewWillEnter');
         if (this.progressBarComponent) {

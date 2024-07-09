@@ -5,10 +5,12 @@ import { collection, collectionData, doc, updateDoc, deleteDoc, query, where, ge
 import { Observable, combineLatest } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 let CardService = class CardService {
-    constructor(firestore, authService, categoryService) {
+    constructor(firestore, authService, categoryService, ts, userService) {
         this.firestore = firestore;
         this.authService = authService;
         this.categoryService = categoryService;
+        this.ts = ts;
+        this.userService = userService;
         // private userCollection: CollectionReference<DocumentData>;
         this.subscription = null;
         this.cardsCollection = collection(firestore, 'cards');
@@ -32,9 +34,10 @@ let CardService = class CardService {
         await updateDoc(userDoc, {
             [`${counter}`]: newCount
         });
+        console.log('newCount', newCount);
     }
     async setCategoryDone(categoryId, attribute, done) {
-        await this.categoryService.setDone(categoryId, attribute, done);
+        await this.ts.setDone(categoryId, done);
     }
     async resetCardAnsweredCounter(cardid, counter) {
         const userDoc = doc(this.firestore, `users/${this.authService.auth.currentUser.uid}/answers/${cardid}`);

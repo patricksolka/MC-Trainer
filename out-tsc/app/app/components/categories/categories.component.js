@@ -19,8 +19,9 @@ let CategoriesComponent = class CategoriesComponent {
         this.fb = fb;
         this.cdr = cdr;
         this.loaded = false;
+        this.searchCategory = '';
         this.searchBarVisible = false;
-        this.loadCategories();
+        // this.loadCategories();
     }
     async loadCategories() {
         console.log('Ladezustand1', this.loaded);
