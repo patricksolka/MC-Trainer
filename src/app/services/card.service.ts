@@ -34,7 +34,6 @@ import {UserService} from "./user.service";
 })
 export class CardService {
     private readonly cardsCollection: CollectionReference<Card>;
-    // private userCollection: CollectionReference<DocumentData>;
     private subscription: Unsubscribe | null = null;
 
     /**
@@ -42,10 +41,11 @@ export class CardService {
      * @param {Firestore} firestore - Firebase Firestore-Instanz.
      * @param {AuthService} authService - Service für Authentifizierungsoperationen.
      * @param {CategoryService} categoryService - Service für Kategorieoperationen.
+     * @param ts
+     * @param userService
      */
     constructor(private firestore: Firestore, private authService: AuthService, private categoryService: CategoryService, private ts: TotalStatsService, private userService: UserService) {
         this.cardsCollection = collection(firestore, 'cards') as CollectionReference<Card>;
-        // this.userCollection = collection(firestore, 'users') as CollectionReference<DocumentData>;
     }
 
     /**
@@ -54,7 +54,6 @@ export class CardService {
      * @param {string} categoryId - Die ID der Kategorie.
      * @returns {Observable<Card[]>} - Ein Observable mit den Karten.
      */
-    // CRUD-Operationen für Karten
     getAllCardsForCategory(categoryId: string): Observable<Card[]> {
         const categoryCardsQuery = query(this.cardsCollection, where('categoryId', '==', categoryId));
         return collectionData(categoryCardsQuery, {idField: 'id'}) as Observable<Card[]>;
@@ -111,7 +110,7 @@ export class CardService {
     /**
      * @method resetCardAnsweredCounter
      * @description Setzt den Zähler für beantwortete Fragen einer Karte zurück.
-     * @param {string} cardId - Die ID der Karte.
+     * @param cardid
      * @param {string} counter - Der Zählername.
      */
     async resetCardAnsweredCounter(cardid: string, counter: string) {
@@ -126,8 +125,8 @@ export class CardService {
     /**
      * @method getCardAnsweredCounter
      * @description Holt den Zähler für beantwortete Fragen einer Karte.
-     * @param {string} cardId - Die ID der Karte.
      * @returns {Promise<number>} - Der Zählerwert.
+     * @param cardid
      */
     async getCardAnsweredCounter(cardid: string): Promise<number> {
         const userDoc = doc(this.firestore, `users/${this.authService.auth.currentUser.uid}/answers/${cardid}`);
@@ -135,8 +134,6 @@ export class CardService {
 
         if (userSnap.exists()) {
             const data = userSnap.data();
-            /*const counter = data?.['counter'] || 0;
-            return counter;*/
             return data?.['counter'] || 0;
         } else {
             await setDoc(userDoc, {counter: 0});
@@ -159,7 +156,6 @@ export class CardService {
                     observer.next(result);
                     console.log('learningSession',result);
             });
-            // Snapshot-Listeners
             this.subscription = onSnapshot(learningSessionsRef, (snapshot) => {
                 const data: DocumentData[] = snapshot.docs.map(doc => doc.data());
                 observer.next(data);
@@ -181,7 +177,6 @@ export class CardService {
             const learningSessionsRef = collection(this.firestore, `users/${uid}/learningSessions`);
             const docRef = doc(learningSessionsRef, categoryId);
             const docSnap = await getDoc(docRef);
-
             const startTimeStamp = Timestamp.fromDate(startTime);
             const endTimeStamp = Timestamp.fromDate(endTime);
             const newDuration = (endTime.getTime() - startTime.getTime()) / 1000 / 60;
@@ -196,7 +191,6 @@ export class CardService {
 
                 });
             } else {
-                //if learningSessions exists add new duration to existing duration
                 const currentDuration = docSnap.data()['duration'] || 0;
                 const updatedDuration = currentDuration + newDuration;
                 await updateDoc(docRef, {
@@ -204,15 +198,10 @@ export class CardService {
                     duration: updatedDuration
                 });
             }
-
-            console.log('Learning session added successfully');
-
         } catch (error) {
             console.error('Error adding learning session:', error);
         }
     }
-
-    //Reset if older than 24 hours
     /**
      * @method resetLearningSession
      * @description Löscht Lernsitzungen, die älter als 24 Stunden sind.
@@ -223,8 +212,6 @@ export class CardService {
             const learningSessionsRef = collection(this.firestore, `users/${uid}/learningSessions`);
             const docSnap = await getDocs(learningSessionsRef);
             const currentTime = Date.now();
-            console.log('currentTime', currentTime);
-
             docSnap.docs.forEach(doc => {
                 const data = doc.data();
                 const endTime = data['endTime'].toDate().getTime();
@@ -236,7 +223,6 @@ export class CardService {
             console.error('Error resetting learning session:', error);
         }
     }
-
     /**
      * @method ngOnDestroy
      * @description Lebenszyklus-Hook, der bei der Zerstörung der Komponente aufgerufen wird und die Abonnements beendet.
@@ -245,7 +231,6 @@ export class CardService {
         if (this.subscription) {
             this.subscription();
             this.subscription = null;
-            console.log('unsubscribe from learning sessions');
         }
     }
 }

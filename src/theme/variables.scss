@@ -162,8 +162,6 @@ http://ionicframework.com/docs/theming/ */
   /* Background and Text Colors */
   --ion-background-color: #1F1F39;
   --ion-text-color: #ffffff; /* Standard Textfarbe für Dark Mode */
-  // --ion-card-background: #2F2F42;
-  // --ion-card-background: #ffaaee;
 
   /* Button Colors */
   --ion-button-background: var(--ion-color-secondary);
@@ -210,7 +208,6 @@ http://ionicframework.com/docs/theming/ */
     --ion-text-color: #1F1F39; /* dunkler Text */
     --ion-text-color-rgb: 31, 31, 57;
     --ion-border-color: #ddddff; /* helles lila für Border */
-    // --ion-item-background: #f8f8ff; /* sehr helles Lila für Items */
     --ion-toolbar-background: #e0e0ff; /* heller lila Hintergrund für Toolbar */
     --ion-tab-bar-background: #e0e0ff; /* heller lila Hintergrund für Tab-Bar */
     --ion-card-background: #ffffff; /* weißer Hintergrund für Karten */
@@ -239,14 +236,11 @@ http://ionicframework.com/docs/theming/ */
     --ion-icon-achievements: #F0ca00;
     --ion-item-background: #18182d;
      --ion-toolbar-background: transparent;
-    // --ion-toolbar-background: #0f0f1c;
-    // --ion-card-background: #2F2F42;
     --ion-card-background-mockup: #3E3E56;
     --ion-card-background-mockup-text: #c5c5cc;
     --ion-background-color-lightdark: #18182d;
     --ion-background-color-dark: #0f0f1c;
     --ion-background-color-darker: #090911;
-    // --ion-border-color: #fff;
     --ion-background-color-md: #1F1F39;
   }
 
@@ -259,7 +253,6 @@ http://ionicframework.com/docs/theming/ */
     --ion-text-color-light: #696983;
     --ion-text-color-rgb: 255, 255, 255;
     --ion-item-background: #18182d;
-    // --ion-card-background: #2F2F42;
   }
 
   .ios ion-modal {
@@ -278,11 +271,8 @@ http://ionicframework.com/docs/theming/ */
     --ion-background-color-rgb: 31, 31, 57;
     --ion-text-color: #ffffff;
     --ion-text-color-rgb: 255, 255, 255;
-    // --ion-border-color: #fff;
     --ion-item-background: #18182d;
-    // --ion-toolbar-background: #0f0f1c;
     --ion-tab-bar-background: #35354d;
-//    --ion-card-background:  #1d1d2b;
     --ion-card-border-color: #fff;
     --ion-color-primary: #3D5CFF;
   }
@@ -297,12 +287,3 @@ http://ionicframework.com/docs/theming/ */
     color: #ffffff;
   }
 }
-
-/*
-.achievementsButton,
-.stats-button,
-.personalFavorites {
-  --background: var(--ion-button-background);
-  --color: var(--ion-button-color);
-}
-*/

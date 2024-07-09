@@ -8,7 +8,7 @@ import {CommonModule, NgOptimizedImage} from '@angular/common';
 import {Category} from '../../models/categories.model';
 import {CategoryService} from '../../services/category.service';
 import {Router, RouterLink} from '@angular/router';
-import {FormBuilder, FormGroup, FormsModule} from '@angular/forms';
+import {FormBuilder, FormsModule} from '@angular/forms';
 import {FooterPage} from "../footer/footer.page";
 import {ChangeDetectorRef} from "@angular/core";
 import {
@@ -95,7 +95,6 @@ export class CategoriesComponent {
             if (imageLoaded) {
                 this.categoryService.filterCategories();
                 this.loaded = true;
-                console.log('Ladezustand2', this.loaded);
             }
         } catch (error) {
             console.error('Error loading categories:', error);
@@ -118,15 +117,6 @@ export class CategoriesComponent {
             this.categoryService.filterCategories();
         }
     }
-    /*
-    shareRecords() {
-        // Implementiere deine Funktion hier
-    }
-
-    navigateHome() {
-        // Implementiere deine Funktion hier
-    }
-    */
 
     /**
      * @method selectCategory
@@ -138,7 +128,6 @@ export class CategoriesComponent {
             this.router.navigate(['/cards', categoryId]);
         } else {
             console.error('Invalid categoryId:', categoryId);
-            // Handle invalid categoryId case, e.g., show error message or navigate to a default route
         }
     }
 

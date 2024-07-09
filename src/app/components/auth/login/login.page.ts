@@ -86,8 +86,6 @@ export class LoginPage {
      * @description Einfacher Zugriff auf das E-Mail-Feld des Formulars.
      * @returns {FormControl} - Die E-Mail-Formularsteuerung.
      */
-
-    //Easy access for form fields
     get email() {
         return this.credentials.get('email');
     }
@@ -141,9 +139,8 @@ export class LoginPage {
     async onSignInWithGoogle() {
         try {
             const result = await this.authService.loginWithGoogle();
-            // Handle the result
         } catch (error) {
-            // Handle the error
+            return error;
         }
     }
 }

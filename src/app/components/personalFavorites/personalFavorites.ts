@@ -10,7 +10,6 @@ import {UserService} from 'src/app/services/user.service';
 import {CategoryService} from 'src/app/services/category.service';
 import {Category, FavCategory} from 'src/app/models/categories.model';
 import {Auth, onAuthStateChanged} from '@angular/fire/auth';
-
 import {RouterLink} from "@angular/router";
 import {AuthService} from "../../services/auth.service";
 import {FooterPage} from "../footer/footer.page";
@@ -32,7 +31,6 @@ import {
 import {Subscription} from "rxjs";
 import {User} from "../../models/user.model";
 import {TotalStatsService} from "../../services/total-stats.service";
-import {TenantAwareAuth} from "firebase-admin/lib/auth";
 
 /**
  * @component PersonalFavorites
@@ -72,7 +70,7 @@ export class PersonalFavorites implements OnInit{
      * @param {CategoryService} categoryService - Service für Kategorieoperationen.
      * @param {AuthService} authService - Service für Authentifizierungsoperationen.
      * @param {Auth} auth - Firebase Auth-Instanz.
-     * @param {Firestore} firestore - Firebase Firestore-Instanz.
+     * @param totalStatsService
      */
     constructor(
         public userService: UserService,
@@ -107,7 +105,6 @@ export class PersonalFavorites implements OnInit{
         }
     }
 
-
     async loadFavs() {
         if (this.user) {
             this.userService.getFavCategories(this.user.uid).subscribe({
@@ -127,7 +124,6 @@ export class PersonalFavorites implements OnInit{
             });
         }
     }
-
 
     async loadCompletedCards(categoryId: string) {
         const favCategories = this.favCategories.find(cat => cat.id === categoryId);
@@ -186,7 +182,6 @@ export class PersonalFavorites implements OnInit{
 
         }
     }
-
 
     /**
      * @method toggleSearch
