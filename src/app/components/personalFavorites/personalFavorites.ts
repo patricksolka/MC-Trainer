@@ -112,18 +112,18 @@ export class PersonalFavorites implements OnInit{
 
 
     async loadCompletedCards(categoryId: string) {
-        const favCategory = this.favCategories.find(cat => cat.id === categoryId);
-        if (favCategory) {
+        const favCategories = this.favCategories.find(cat => cat.id === categoryId);
+        if (favCategories) {
             try {
                 const stats = await this.totalStatsService.getStatsById(this.user.uid, categoryId);
                 if (stats) {
-                    favCategory.completedCards = stats.completedCards || 0;
+                    favCategories.completedCards = stats.completedCards || 0;
                 } else {
-                    favCategory.completedCards = 0;
+                    favCategories.completedCards = 0;
                 }
             } catch (error) {
                 console.error(`Fehler beim Laden der abgeschlossenen Karten für Kategorie ${categoryId}:`, error);
-                favCategory.completedCards = 0;
+                favCategories.completedCards = 0;
             }
         } else {
             console.error(`Favoritenkategorie mit der ID ${categoryId} nicht gefunden.`);

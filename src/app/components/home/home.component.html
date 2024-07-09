@@ -38,7 +38,7 @@
         <ion-grid>
             <ion-row class="header-row-m">
                 <ion-col size="auto">
-                    <ion-text class="entdecken">Meine Module</ion-text>
+                    <ion-text class="entdecken">Favoriten</ion-text>
                 </ion-col>
                 <ion-col size="auto" class="align-end">
                     <ion-button fill="clear" [routerLink]="['/personalFavorites']"
@@ -85,14 +85,8 @@
 
             <ion-list class="favoriteItem" *ngIf="favCategories.length === 0">
                 <ion-item lines="none">
-                    <ion-text>Du hast noch keine favorisierten Module
-                        😢
+                    <ion-text>Du hast noch keine Favoriten 😢
                     </ion-text>
-
-                    <ion-button color="warning" slot="end"
-                                [routerLink]="['/personalFavorites']"
-                                class="meine-module"> Module hinzufügen
-                    </ion-button>
                 </ion-item>
             </ion-list>
         </ion-grid>
