@@ -11,7 +11,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     },
     {
         id: 2,
-        name: 'Schneller Lerner',
+        name: 'Schneller Lernen',
         description: 'Fünf richtige Antworten!',
         icon: 'flash-outline',
         condition: (stats: Stats) => stats.correctAnswers >= 5

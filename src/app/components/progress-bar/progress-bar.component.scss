@@ -62,7 +62,8 @@ $secondary-color: var(--ion-color-secondary, $secondary-color-fallback);
   .progressCard {
     --background: var(--ion-card-background);
     border-radius: 10px;
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 3px 3px 3px var(--ion-background-color-dark);
+    //    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
     display: flex;
     flex-direction: column;
     background-color: #b3b3cc;
@@ -383,7 +384,8 @@ $secondary-color: var(--ion-color-secondary, $secondary-color-fallback);
   .progressCard {
     --background: var(--ion-card-background);
     border-radius: 10px;
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 3px 3px 3px var(--ion-background-color-dark);
+    // box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
     display: flex;
     flex-direction: column;
     background-color: var(--ion-background-color-lightdark);
