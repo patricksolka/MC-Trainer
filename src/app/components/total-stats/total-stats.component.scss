@@ -2,7 +2,7 @@
 @media (prefers-color-scheme: light) {
   ion-header {
     ion-toolbar {
-      --background: transparent;
+      background-color: transparent; // Beispielhafte Hintergrundfarbe
       --border-width: 0;
       --box-shadow: none !important;
       --border-style: none;
@@ -15,21 +15,36 @@
   }
 
   ion-content {
-    ion-card {
-      border: none;
-      box-shadow: none;
-      margin-top: 0;
-      padding-top: 0;
+    margin-bottom: 0;
 
-      ion-card-header {
-        width: auto;
-        font-weight: bold !important;
-        font-size: var(--ion-font-size, 24px);
-        background-color: #a326e6; // Beispielhafte Hintergrundfarbe
+    ion-card {
+      --background: var(--ion-background-color-dark);
+      color: var(--ion-text-color);
+      padding: 0;
+      --border: none;
+      box-shadow: 3px 3px 3px var(--ion-background-color-dark);
+
+      ion-card-content {
+        ion-item {
+          --background: transparent !important; // Hintergrundfarbe der ion-item auf transparent setzen
+          margin: 0;
+          ion-grid {
+
+            ion-row {
+
+              ion-col {
+                color: white;
+                ion-text {
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
 }
+
 
 /* DARK MODE */
 @media (prefers-color-scheme: dark) {
@@ -46,16 +61,34 @@
       color: var(--ion-text-color);
     }
   }
-}
 
-ion-content ion-card {
-  background-color: var(--ion-background-color-lightdark);
-  color: var(--ion-text-color);
-  --border: none;
-  --box-shadow: none;
-  margin-top: 0;
-  padding-top: 0;
+  ion-content {
+    margin-bottom: 0;
 
-  ion-card-header {
+    ion-card {
+      --background: var(--ion-background-color-lightdark);
+      color: var(--ion-text-color);
+      padding: 0;
+      --border: none;
+      box-shadow: 3px 3px 3px var(--ion-background-color-dark);
+
+      ion-card-content {
+        ion-item {
+          --background: transparent !important; // Hintergrundfarbe der ion-item auf transparent setzen
+          margin: 0;
+          ion-grid {
+
+            ion-row {
+
+              ion-col {
+                color: white;
+                ion-text {
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

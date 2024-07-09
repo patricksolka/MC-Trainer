@@ -2,43 +2,146 @@
 @media (prefers-color-scheme: light) {
   // Kartenkomponente
   ion-card {
+    margin-bottom: 25px;
+    box-shadow: 3px 3px 3px var(--ion-background-color-dark);
+
     .achievements {
-      margin-bottom: 10px;
+      background-color: var(--ion-background-color-dark) !important; // Wichtigkeit erhöhen, um andere Stile zu überschreiben
+      color: var(--ion-text-color-light);
+      padding: 0;
+      margin-bottom: 25px;
+      height: 100%;
+      hyphens: auto !important;
+    }
+
+    &.achievements.md {
+      background-color: var(--ion-background-color-dark) !important; // Wichtigkeit erhöhen, um andere Stile zu überschreiben
+      color: var(--ion-text-color-light);
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      hyphens: auto !important;
     }
 
     // Kartenkopfzeile
     ion-card-header {
+      background-color: var(--ion-background-color-lightdark) !important;
+      color: var(--ion-text-color);
 
       // Text innerhalb der Kartenkopfzeile
       ion-text {
         .achievement-name {
-          font-weight: bold;
+          font-weight: bolder;
+          font-size: small;
+          width: auto;
+          padding: 0;
+          text-align: center;
+          color: var(--ion-text-color-light);
+          white-space: normal; // Normaler Zeilenumbruch
+          word-wrap: break-word; // Wörter umbrechen, wenn sie das Zeilenende erreichen
+          word-break: break-word; // Bricht lange Wörter um
+          hyphens: auto !important;
         }
 
-        font-size: smaller;
+        &.achievement-name.md {
+          font-weight: bolder;
+          font-size: medium;
+          width: auto;
+          margin: 0;
+          padding: 5px !important;
+          text-align: center;
+          color: var(--ion-text-color-light);
+          white-space: normal; // Normaler Zeilenumbruch
+          word-wrap: break-word; // Wörter umbrechen, wenn sie das Zeilenende erreichen
+          word-break: break-word; // Bricht lange Wörter um
+          hyphens: auto !important;
+        }
       }
+
 
       // Icon innerhalb der Kartenkopfzeile
       ion-icon {
+        color: var(--ion-icon-achievements);
+        padding: 0 !important;
+        margin-top: 10px;
       }
     }
 
     // Karteninhalt
     ion-card-content {
+      justify-content: center;
+      // Text innerhalb der Spalte
+      ion-text {
+        justify-content: center;
+        text-align: center;
+
+        .achievement-description {
+          font-size: small;
+          font-weight: lighter;
+          width: 100%;
+          padding: 0 !important;
+          text-align: center;
+          color: var(--ion-text-color-body);
+          white-space: normal; // Normaler Zeilenumbruch
+          word-wrap: break-word; // Wörter umbrechen, wenn sie das Zeilenende erreichen
+          word-break: break-word; // Bricht lange Wörter um
+          hyphens: auto !important;
+        }
+
+        &.achievement-description.md {
+          font-size: small;
+          font-weight: lighter;
+          width: 100%;
+          padding: 0 !important;
+          margin-top: 0;
+          text-align: center;
+          color: var(--ion-text-color-body);
+          white-space: normal; // Normaler Zeilenumbruch
+          word-wrap: break-word; // Wörter umbrechen, wenn sie das Zeilenende erreichen
+          word-break: break-word; // Bricht lange Wörter um
+          hyphens: auto !important;
+        }
+      }
+    }
+
+    &.md {
+      text-align: center;
     }
   }
 
   // Grid-System
+  ion-text {
+    .entdecken {
+      font-size: xx-large;
+    }
+
+    &.entdecken.md {
+      font-size: x-large;
+    }
+  }
+
   ion-grid {
 
     // Grid-Reihe
     ion-row {
-
       // Grid-Spalte
       ion-col {
-
         // Text innerhalb der Spalte
         ion-text {
+          .achievement-description {
+            font-weight: normal;
+            padding: 0 !important;
+            justify-content: center;
+            color: var(--ion-text-color-body);
+          }
+
+          &.achievement-description.md {
+            font-weight: normal;
+            padding: 0 !important;
+            margin-top: 0;
+            justify-content: center;
+            color: var(--ion-text-color-body);
+          }
         }
 
         // Icon innerhalb der Spalte
@@ -47,35 +150,6 @@
       }
     }
   }
-
-  // Kopfzeile
-  ion-header {
-
-    // Werkzeugleiste
-    ion-toolbar {
-
-      // Schaltflächen
-      ion-buttons {
-
-        // Einzelne Schaltfläche
-        ion-button {
-
-          // Icon innerhalb der Schaltfläche
-          ion-icon {
-          }
-        }
-      }
-
-      // Titel
-      ion-title {
-      }
-    }
-  }
-
-  // Inhalt
-  ion-content {
-  }
-
   // Listenitem
   ion-item {
 
@@ -90,7 +164,6 @@
 
   // Container
   div {
-
     // Icon innerhalb des Containers
     ion-icon {
     }
@@ -107,12 +180,15 @@
   // Kartenkomponente
   ion-card {
     margin-bottom: 25px;
+    box-shadow: 3px 3px 3px var(--ion-background-color-dark);
+
     .achievements {
       background-color: var(--ion-background-color-lightdark) !important; // Wichtigkeit erhöhen, um andere Stile zu überschreiben
       color: var(--ion-text-color);
       padding: 0;
       margin-bottom: 25px;
       height: 100%;
+      hyphens: auto !important;
     }
 
     &.achievements.md {
@@ -121,6 +197,7 @@
       padding: 0;
       margin: 0;
       height: 100%;
+      hyphens: auto !important;
     }
 
     // Kartenkopfzeile
@@ -137,9 +214,10 @@
           padding: 0;
           text-align: center;
           color: var(--ion-text-color-title);
-          white-space: normal;  // Normaler Zeilenumbruch
-          word-wrap: break-word;  // Wörter umbrechen, wenn sie das Zeilenende erreichen
-          word-break: break-word;  // Bricht lange Wörter um
+          white-space: normal; // Normaler Zeilenumbruch
+          word-wrap: break-word; // Wörter umbrechen, wenn sie das Zeilenende erreichen
+          word-break: break-word; // Bricht lange Wörter um
+          hyphens: auto !important;
         }
 
         &.achievement-name.md {
@@ -150,20 +228,61 @@
           padding: 5px !important;
           text-align: center;
           color: var(--ion-text-color-title);
-          white-space: normal;  // Normaler Zeilenumbruch
-          word-wrap: break-word;  // Wörter umbrechen, wenn sie das Zeilenende erreichen
-          word-break: break-word;  // Bricht lange Wörter um
+          white-space: normal; // Normaler Zeilenumbruch
+          word-wrap: break-word; // Wörter umbrechen, wenn sie das Zeilenende erreichen
+          word-break: break-word; // Bricht lange Wörter um
+          hyphens: auto !important;
         }
       }
 
 
       // Icon innerhalb der Kartenkopfzeile
       ion-icon {
+        color: var(--ion-icon-achievements);
+        padding: 0 !important;
+        margin-top: 10px;
       }
     }
 
     // Karteninhalt
     ion-card-content {
+      justify-content: center;
+      // Text innerhalb der Spalte
+      ion-text {
+        justify-content: center;
+        text-align: center;
+
+        .achievement-description {
+          font-size: small;
+          font-weight: lighter;
+          width: 100%;
+          padding: 0 !important;
+          text-align: center;
+          color: var(--ion-text-color-body);
+          white-space: normal; // Normaler Zeilenumbruch
+          word-wrap: break-word; // Wörter umbrechen, wenn sie das Zeilenende erreichen
+          word-break: break-word; // Bricht lange Wörter um
+          hyphens: auto !important;
+        }
+
+        &.achievement-description.md {
+          font-size: small;
+          font-weight: lighter;
+          width: 100%;
+          padding: 0 !important;
+          margin-top: 0;
+          text-align: center;
+          color: var(--ion-text-color-body);
+          white-space: normal; // Normaler Zeilenumbruch
+          word-wrap: break-word; // Wörter umbrechen, wenn sie das Zeilenende erreichen
+          word-break: break-word; // Bricht lange Wörter um
+          hyphens: auto !important;
+        }
+      }
+    }
+
+    &.md {
+      text-align: center;
     }
   }
 
@@ -172,27 +291,30 @@
 
     // Grid-Reihe
     ion-row {
-
       // Grid-Spalte
       ion-col {
-
         // Text innerhalb der Spalte
         ion-text {
+          .entdecken {
+            font-size: xx-large;
+          }
+
+          &.entdecken.md {
+            font-size: x-large;
+          }
+
           .achievement-description {
-            font-size: small;
-            font-weight: lighter;
-            width: auto;
+            font-weight: normal;
             padding: 0 !important;
-            text-align: center;
+            justify-content: center;
             color: var(--ion-text-color-body);
           }
 
           &.achievement-description.md {
-            font-size: small;
-            font-weight: lighter;
-            width: auto;
+            font-weight: normal;
             padding: 0 !important;
-            text-align: center;
+            margin-top: 0;
+            justify-content: center;
             color: var(--ion-text-color-body);
           }
         }
@@ -203,34 +325,6 @@
       }
     }
   }
-
-  // Kopfzeile
-  ion-header {
-
-    // Werkzeugleiste
-    ion-toolbar {
-      // Schaltflächen
-      ion-buttons {
-
-        // Einzelne Schaltfläche
-        ion-button {
-
-          // Icon innerhalb der Schaltfläche
-          ion-icon {
-          }
-        }
-      }
-
-      // Titel
-      ion-title {
-      }
-    }
-  }
-
-  // Inhalt
-  ion-content {
-  }
-
   // Listenitem
   ion-item {
 

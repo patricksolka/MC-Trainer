@@ -1,9 +1,5 @@
+<ion-text class="entdecken ion-margin-bottom">Achievements</ion-text>
 <ion-grid>
-    <ion-row>
-        <ion-col size="12">
-            <ion-text class="entdecken ion-margin-bottom">Achievements</ion-text>
-        </ion-col>
-    </ion-row>
     <ion-row>
         <ion-col size="6" *ngFor="let achievement of achievements">
             <ion-card class="achievements">
@@ -11,9 +7,9 @@
                     <ion-text class="achievement-name">{{ achievement.name }}</ion-text>
                     <ion-icon [name]="achievement.icon" style="font-size: 1.5rem;"></ion-icon>
                 </ion-card-header>
-                <ion-card-header class="ion-align-items-center ion-justify-content-between">
+                <ion-card-content class="ion-align-items-center ion-justify-content-between">
                     <ion-text class="achievement-description">{{ achievement.description }}</ion-text>
-                </ion-card-header>
+                </ion-card-content>
             </ion-card>
         </ion-col>
     </ion-row>

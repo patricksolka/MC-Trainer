@@ -71,6 +71,7 @@ http://ionicframework.com/docs/theming/ */
   /* Background and Text Colors */
   --ion-background-color: #ffffff; /* weißer Hintergrund für den Light Mode */
   --ion-text-color: #000000; /* schwarzer Text für den Light Mode */
+  --ion-text-color-light: #fff; /* schwarzer Text für den Light Mode */
   --ion-card-background: #ffffff; /* weißer Hintergrund für Karten */
 
   /* Buttons Colors */
@@ -177,13 +178,12 @@ http://ionicframework.com/docs/theming/ */
     --ion-background-color: #e0e0ff; /* heller lila Hintergrund */
     --ion-background-color-darker: #c9c9e5; /* heller lila Hintergrund */
     --ion-background-color-dark: #b3b3cc; /* heller lila Hintergrund */
+    --ion-icon-achievements: #FF8000;
     --ion-text-color: #35354c; /* dunkler Text */
-    --ion-text-color-title: #626274;
-    --ion-text-color-body: #d2eb99;
-    // --ion-item-background: #f8f8ff; /* sehr helles Lila für Items */
+    --ion-text-color-title: #595966;
+    --ion-text-color-body: #e0e0ea;
     --ion-item-background: #9c9cb2; /* sehr helles Lila für Items */
     --ion-toolbar-background: transparent; /* heller lila Hintergrund für Toolbar */
-    // --ion-card-background: #ffffff; /* weißer Hintergrund für Karten */
     --ion-card-background-mockup: #ececff;
     --ion-border-color: #c9c9e5; /* helles lila für Border */
   }
@@ -210,7 +210,7 @@ http://ionicframework.com/docs/theming/ */
     --ion-text-color: #1F1F39; /* dunkler Text */
     --ion-text-color-rgb: 31, 31, 57;
     --ion-border-color: #ddddff; /* helles lila für Border */
-    --ion-item-background: #f8f8ff; /* sehr helles Lila für Items */
+    // --ion-item-background: #f8f8ff; /* sehr helles Lila für Items */
     --ion-toolbar-background: #e0e0ff; /* heller lila Hintergrund für Toolbar */
     --ion-tab-bar-background: #e0e0ff; /* heller lila Hintergrund für Tab-Bar */
     --ion-card-background: #ffffff; /* weißer Hintergrund für Karten */
@@ -234,8 +234,9 @@ http://ionicframework.com/docs/theming/ */
   :root {
     --ion-background-color: #1F1F39;
     --ion-text-color: #ffffff;
-    --ion-text-color-title: #787888;
-    --ion-text-color-body: #d2d2d7;
+    --ion-text-color-title: #d2d2d7;
+    --ion-text-color-body: #f4f4f4;
+    --ion-icon-achievements: #F0ca00;
     --ion-item-background: #18182d;
      --ion-toolbar-background: transparent;
     // --ion-toolbar-background: #0f0f1c;
