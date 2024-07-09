@@ -11,8 +11,6 @@ import {
     IonToolbar
 } from "@ionic/angular/standalone";
 
-//import {TotalStatsService} from "../../services/total-stats.service";
-
 @Component({
     selector: 'app-stats',
     templateUrl: './stats.component.html',
@@ -29,7 +27,6 @@ export class StatsComponent implements OnInit {
     }
 
     ngOnInit() {
-        /*const stats = this.totalStatsService.getStats();*/
         const navigation = this.router.getCurrentNavigation();
         const state = navigation?.extras.state as { correctAnswers: number; incorrectAnswers: number };
         if (state) {
@@ -39,7 +36,6 @@ export class StatsComponent implements OnInit {
     }
 
     resetQuizHome() {
-        // Setze die Statistiken zurück und navigiere zur Startseite
         this.correctAnswers = 0;
         this.incorrectAnswers = 0;
         this.router.navigate(['/home']);

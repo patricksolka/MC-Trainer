@@ -103,7 +103,7 @@ export class HomeComponent  {
                     this.favCategories = favCategories;
                     console.log('Aktualisierte Favoriten:', favCategories);
                     for (const favCategory of this.favCategories) {
-                        this.loadCompletedCards(favCategory.id);
+                        this.loadCompletedHome(favCategory.id);
 
                     }
                 },
@@ -114,7 +114,7 @@ export class HomeComponent  {
         }
     }
 
-    async loadCompletedCards(categoryId: string) {
+    async loadCompletedHome(categoryId: string) {
         const favCategory = this.favCategories.find(cat => cat.id === categoryId);
         if (favCategory) {
             try {
@@ -184,7 +184,7 @@ export class HomeComponent  {
 
     ionViewWillEnter() {
         //this.fetchPreview();
-        //this.loadFavs();
+        this.loadFavs();
         this.userName = localStorage.getItem('userName') || 'User';
         console.log('IonViewWillEnter');
         if (this.progressBarComponent) {
