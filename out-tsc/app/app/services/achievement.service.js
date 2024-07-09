@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Diese Datei enthält den AchievementService, der die Verwaltung von Errungenschaften übernimmt.
+ */
 import { __decorate } from "tslib";
 import { Injectable } from '@angular/core';
 import { ACHIEVEMENTS } from '../components/achievements/achievements';
@@ -5,7 +8,15 @@ import { doc, setDoc, collection, getDocs } from "@angular/fire/firestore";
 import { from } from "rxjs";
 import { map } from "rxjs/operators";
 import { User } from "../models/user.model";
+/**
+ * @class AchievementService
+ * @description Dieser Service verwaltet die Errungenschaften des Benutzers.
+ */
 let AchievementService = class AchievementService {
+    /**
+     * @constructor
+     * Initialisiert den AchievementService.
+     */
     constructor(firestore, authService) {
         this.firestore = firestore;
         this.authService = authService;
@@ -34,6 +45,16 @@ let AchievementService = class AchievementService {
         };
         this.userCollectionRef = collection(firestore, 'users');
     }
+    /**
+     * @method checkAchievements
+     * @description Überprüft, ob neue Errungenschaften erreicht wurden.
+     * @param {Object} stats - Die aktuellen Statistiken des Benutzers.
+     * @param {number} stats.completedQuizzes - Anzahl der abgeschlossenen Quizze.
+     * @param {number} stats.correctAnswers - Anzahl der richtigen Antworten.
+     * @param {number} stats.incorrectAnswers - Anzahl der falschen Antworten.
+     * @param {number} stats.totalQuestions - Gesamtanzahl der Fragen.
+     * @returns {Array} - Eine Liste der neuen Errungenschaften, die erreicht wurden.
+     */
     checkAchievements(stats) {
         console.log('Checking achievements with stats:', stats);
         const newAchievements = ACHIEVEMENTS.filter(achievement => achievement.condition(stats))
@@ -66,6 +87,11 @@ let AchievementService = class AchievementService {
             return achievements;
         }));
     }
+    /**
+     * @method getAchievements
+     * @description Gibt die Liste der bereits erreichten Errungenschaften zurück.
+     * @returns {Array} - Eine Liste der erreichten Errungenschaften.
+     */
     getAchievements() {
         return ACHIEVEMENTS.filter(achievement => this.achieved.has(achievement.id));
     }

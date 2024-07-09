@@ -30,6 +30,7 @@
     "@capacitor/status-bar": "6.0.0",
     "@ionic/angular": "^7.5.0",
     "@ionic/pwa-elements": "^3.3.0",
+    "@nestjs/swagger": "^7.4.0",
     "firebase": "^10.12.2",
     "firebase-admin": "^12.2.0",
     "firestore-export-import": "^1.4.0",

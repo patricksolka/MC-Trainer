@@ -246,40 +246,12 @@ export class CardComponent implements OnInit, OnDestroy {
             }
         });
     }
-
-//     /**
-//      * @method checkForNewAchievements
-//      * @description Überprüft, ob neue Achievements erreicht wurden.
-//      * @param {any} stats - Die aktuellen Statistiken.
-//      */
-//     checkForNewAchievements(stats) {
-//         const newAchievements = this.achievementService.checkAchievements(stats);
-//         newAchievements.forEach(achievement => {
-//             this.showAchievementToast(achievement);
-//         });
-//     }
-//    /**
-//      * @method showAchievementToast
-//      * @description Zeigt ein Toast mit den neuen Achievements an.
-//      * @param {any} achievement - Das erreichte Achievement.
-//      */
-//     async showAchievementToast(achievement) {
-//         const toast = await this.toastController.create({
-//             header: 'Congratulations!',
-//             message: `${achievement.name}: ${achievement.description}`,
-//             duration: 2000, // Toast duration in milliseconds
-//             position: 'top', // Position of the toast
-//         });
-/*
-        async checkAnswers(): Promise<void> {
-        await toast.present();
-    }
-*/
     /**
      * @method checkAnswers
      * @description Überprüft die ausgewählten Antworten.
      */
-    checkAnswers(): void {
+
+    async checkAnswers(): Promise<void> {
         // Überprüfen, ob alle ausgewählten Antworten korrekt sind
         const allSelectedCorrect = this.selectedAnswers.every(answer => this.currentQuestion.correctAnswer.includes(answer));
         // Überprüfen, ob die Anzahl der ausgewählten Antworten der Anzahl der korrekten Antworten entspricht
@@ -300,6 +272,7 @@ export class CardComponent implements OnInit, OnDestroy {
         }
         this.showResult = true;
     }
+
 
     async completeCards(){
         await this.cardService.getCardAnsweredCounter(this.currentQuestion.id).then(counter => {

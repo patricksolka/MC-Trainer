@@ -1,16 +1,33 @@
+/**
+ * @fileoverview Diese Datei enthält die Implementierung der AchievementsComponent-Komponente,
+ * die die Liste der Errungenschaften anzeigt.
+ */
 import { __decorate } from "tslib";
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FooterPage } from "../footer/footer.page";
 import { IonCard, IonCardContent, IonCardHeader, IonCol, IonContent, IonGrid, IonIcon, IonRow, IonText, IonTitle } from "@ionic/angular/standalone";
+/**
+ * @component AchievementsComponent
+ * @description Diese Komponente zeigt die Liste der Errungenschaften an.
+ */
 let AchievementsComponent = class AchievementsComponent {
+    /**
+     * @constructor
+     * @param {AchievementService} achievementService - Service für Errungenschaften.
+     */
     constructor(achievementService, authService) {
         this.achievementService = achievementService;
         this.authService = authService;
         this.achievements = [];
         this.achievementService.setAchievements();
     }
+    /**
+     * @method ngOnInit
+     * @description Lebenszyklus-Hook, der nach der Initialisierung der Komponente aufgerufen wird.
+     * Lädt die Errungenschaften aus dem AchievementService.
+     */
     async ngOnInit() {
         this.loadAchievements();
         this.achievementService.setAchievements();

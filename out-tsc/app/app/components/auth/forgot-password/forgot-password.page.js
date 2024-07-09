@@ -1,10 +1,22 @@
+/**
+ * @fileoverview Diese Datei enthält die Implementierung der ForgotPasswordPage-Komponente,
+ * die es dem Benutzer ermöglicht, das Passwort zurückzusetzen.
+ */
 import { __decorate } from "tslib";
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonInput, IonItem, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { RouterLink } from "@angular/router";
+/**
+ * @component ForgotPasswordPage
+ * @description Diese Komponente ermöglicht es dem Benutzer, das Passwort zurückzusetzen.
+ */
 let ForgotPasswordPage = class ForgotPasswordPage {
+    /**
+     * @constructor
+     * Initialisiert die ForgotPasswordPage-Komponente.
+     */
     constructor() { }
 };
 ForgotPasswordPage = __decorate([
