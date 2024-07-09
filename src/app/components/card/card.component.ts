@@ -50,18 +50,21 @@ export class CardComponent implements OnInit, OnDestroy {
     totalQuestions = 0;
     questions: Card[] = []; // Array für alle Fragen
     correctAnswer: boolean = false;
+    completedCards: number = 0;
     public startTime: Date | null = null;
 
     private cardsSubscription: Subscription;
 
-    constructor(private cardService: CardService, private route: ActivatedRoute, private router: Router,
+    constructor(private cardService: CardService,
+                private route: ActivatedRoute,
+                private router: Router,
                 private alertController: AlertController,
                 private totalStatsService: TotalStatsService,
                 private categoryService: CategoryService,
                 private auth: Auth,
                 private userService: UserService,
                 private achievementService: AchievementService,
-                private toastController: ToastController
+                private toastController: ToastController,
     ) {
     }
 
@@ -101,6 +104,7 @@ export class CardComponent implements OnInit, OnDestroy {
                     const question = await this.checkAllAnswered();
                     if (question) {
                         this.currentQuestion = question;
+                        this.shuffleArray(this.currentQuestion.answers);
                     } else {
                         console.log("Fehler! Alle Karten wurden beantwortet!")
                     }
@@ -152,26 +156,29 @@ export class CardComponent implements OnInit, OnDestroy {
 
             if (counter < 6) {
                 this.currentQuestion = this.questions[index];
+                this.shuffleArray(this.currentQuestion.answers);
                 console.log("Frage: " + this.currentQuestion.id);
                 return;
             }
         }
-
-        // Wenn alle verbleibenden Fragen mehr als 6 Mal beantwortet wurden
-        const question = await this.checkAllAnswered();
-        if (!question) {
-            await this.cardService.setCategoryDone(this.categoryId, "done", true);
-        }
-
+        // if all questions are answered more than 6 times
         const newStats = {
             correctAnswers: this.correctAnswersCount,
             incorrectAnswers: this.incorrectAnswersCount,
-            completedQuizzes: 1
+            completedQuizzes: 1,
+            completedCards: this.completedCards
         };
 
         const stats = new Stats(newStats);
         console.log('Stats:', stats);
         await this.totalStatsService.persistStats(this.auth.currentUser.uid, this.categoryId, stats);
+
+        //check if all questions are answered
+        const question = await this.checkAllAnswered();
+        if (!question){
+            await this.cardService.setCategoryDone(this.categoryId, "done", true);
+        }
+
         await this.endQuiz();
         await this.router.navigate(['/stats'], {
             state: {
@@ -181,25 +188,8 @@ export class CardComponent implements OnInit, OnDestroy {
         });
     }
 
-    checkForNewAchievements(stats) {
-        const newAchievements = this.achievementService.checkAchievements(stats);
-        newAchievements.forEach(achievement => {
-            this.showAchievementToast(achievement);
-        });
-    }
 
-    async showAchievementToast(achievement) {
-        const toast = await this.toastController.create({
-            header: 'Congratulations!',
-            message: `${achievement.name}: ${achievement.description}`,
-            duration: 2000, // Toast duration in milliseconds
-            position: 'top', // Position of the toast
-        });
-
-        await toast.present();
-    }
-
-    checkAnswers(): void {
+    async checkAnswers(): Promise<void> {
         // Überprüfen, ob alle ausgewählten Antworten korrekt sind
         const allSelectedCorrect = this.selectedAnswers.every(answer => this.currentQuestion.correctAnswer.includes(answer));
         // Überprüfen, ob die Anzahl der ausgewählten Antworten der Anzahl der korrekten Antworten entspricht
@@ -209,30 +199,42 @@ export class CardComponent implements OnInit, OnDestroy {
             console.log("correct");
             this.correctAnswersCount++;
             this.correctAnswer = true;
-            this.cardService.updateCardAnsweredCounter(this.currentQuestion.id, "counter");
-
-            // Call checkForNewAchievements with the updated stats
-            const stats = {
-                completedQuizzes: this.completedQuizzes,
-                correctAnswers: this.correctAnswersCount,
-                incorrectAnswers: this.incorrectAnswersCount,
-                totalQuestions: this.totalQuestions
-            };
-            this.checkForNewAchievements(stats);
+            await this.cardService.updateCardAnsweredCounter(this.currentQuestion.id, "counter");
+            console.log('CardComponent', this.correctAnswersCount);
+            await this.completeCards();
         } else {
             console.log("not correct");
             this.correctAnswer = false;
             this.incorrectAnswersCount++;
-            this.cardService.resetCardAnsweredCounter(this.currentQuestion.id, "counter");
-
-            // this.cardService.updateCardAnsweredCounter(this.currentQuestion.id, "counterIncorrect");
+            await this.cardService.resetCardAnsweredCounter(this.currentQuestion.id, "counter");
         }
         this.showResult = true;
     }
 
+    async completeCards(){
+        await this.cardService.getCardAnsweredCounter(this.currentQuestion.id).then(counter => {
+            console.log('Counter:', counter);
+            if (counter === 1) {
+                this.completedCards++;
+                console.log('CardComponent', this.completedCards);
+                //this.totalStatsService.completedCards(this.auth.currentUser.uid,
+                // this.completedCards); // Call the method to update Firestore
+            }
+        });
+    }
+   /* async updateAnswerStats() {
+        const counter = await this.cardService.getCardAnsweredCounter(this.currentQuestion.id);
+        console.log('Counter:', counter);
+        if (counter === 1) {
+            this.completedCards++;
+            console.log('CardComponent', this.completedCards);
+            await this.totalStatsService.completedCards(this.categoryId, this.completedCards);
+        }
+    }*/
+
+
     isCorrectAnswer(answer: string): boolean {
         return this.currentQuestion.correctAnswer.includes(answer);
-        //return this.correctAnswer;
     }
 
     isAnswerCorrect(): boolean {
@@ -271,7 +273,7 @@ export class CardComponent implements OnInit, OnDestroy {
         } else {
             console.error('Start time is not set.');
         }
-        const newStats = {
+        /*const newStats = {
             completedQuizzes: this.completedQuizzes + 1,
             correctAnswers: this.correctAnswersCount,
             incorrectAnswers: this.incorrectAnswersCount,
@@ -281,14 +283,14 @@ export class CardComponent implements OnInit, OnDestroy {
         const stats = new Stats(newStats);
         console.log('Stats:', stats);
         await this.totalStatsService.persistStats(this.auth.currentUser.uid, this.categoryId, stats);
-        this.checkForNewAchievements(stats); // Check for new achievements
+        //this.checkForNewAchievements(stats); // Check for new achievements
 
         await this.router.navigate(['/stats'], {
             state: {
                 correctAnswers: this.correctAnswersCount,
                 incorrectAnswers: this.incorrectAnswersCount,
             }
-        });
+        });*/
     }
 
     ngOnDestroy(): void {

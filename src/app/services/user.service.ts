@@ -10,11 +10,14 @@ import {
     query,
     orderBy,
     onSnapshot,
-    getDocs, CollectionReference, collection, setDoc, addDoc
+    CollectionReference, collection, setDoc
 } from "@angular/fire/firestore";
 import {Injectable} from "@angular/core";
 import {User} from "../models/user.model";
 import {AlertController} from "@ionic/angular";
+import {FavCategory} from "../models/categories.model";
+import {Observable} from "rxjs";
+
 
 
 @Injectable({
@@ -24,11 +27,22 @@ import {AlertController} from "@ionic/angular";
 export class UserService {
 
     public user: User;
+
     public userCollectionRef: CollectionReference<DocumentData>;
+    public favCollectionRef : CollectionReference<DocumentData>;
+
+    public favCategories: FavCategory[] = [];
 
 
     constructor(private firestore: Firestore, private alertController: AlertController) {
         this.userCollectionRef = collection(firestore, 'users');
+        //this.favCollectionRef = collection(firestore,
+        // `users/${this.user.uid}/favoriteCategories`);
+
+        //const userDocRef = doc(this.userCollectionRef, 'uid');
+
+        console.log(this.favCollectionRef);
+
     }
 
     //get user by ID
@@ -86,19 +100,13 @@ export class UserService {
         }
     }*/
 
-    async getFavCategories(uid: string): Promise<{
-        id: string;
-        name: string;
-        timestamp: number;
-        questionCount: number,
-        completedCards: number
-    }[]> {
+   /* async getFavCategories(uid: string): Promise<FavCategory> {
         try {
             const favCategoriesRef = collection(this.firestore, `users/${uid}/favoriteCategories`);
             const filterQuery = query(favCategoriesRef, orderBy('timestamp'));
 
             const favDocs = await getDocs(filterQuery);
-            const categories: {
+            const favCategories: {
                 id: string;
                 name: string;
                 timestamp: number;
@@ -112,17 +120,61 @@ export class UserService {
                     questionCount: number,
                     completedCards: number
                 };
-                categories.push({id: favoriteDoc.id, ...data});
+                favCategories.push({id: favoriteDoc.id, ...data});
             });
+            console.log('test123', favDocs);
+            console.log('Favoriten', favCategories);
 
-            return categories;
+            return favCategories;
         } catch (error) {
             console.error('Error fetching favorite categories:', error);
             return [];
         }
+    }*/
+
+    // listen to changes
+    /*async getFavCategories(uid: string): Promise<FavCategory[]> {
+        const favCategoriesRef = collection(this.firestore, `users/${uid}/favoriteCategories`);
+        const filterQuery = query(favCategoriesRef, orderBy('timestamp'));
+
+        return getDocs(filterQuery).then(snapshot => {
+            const favCategories = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data() as FavCategory
+            }));
+           this.favCategories = favCategories;
+
+            // Hier der console.log zum Überprüfen der geladenen Favoritenkategorien
+            console.log('Geladene Favoritenkategorien:', favCategories);
+
+            return this.favCategories;
+        }).catch(error => {
+            console.error('Fehler beim Laden der Favoritenkategorien:', error);
+            throw error; // Falls gewünscht, um den Fehler weiterzuleiten
+        });
+    }*/
+
+    getFavCategories(uid: string): Observable<FavCategory[]> {
+        const favCategoriesRef = collection(this.firestore, `users/${uid}/favoriteCategories`);
+        const filterQuery = query(favCategoriesRef, orderBy('timestamp'));
+
+        return new Observable((observer) => {
+            const unsubscribe = onSnapshot(filterQuery, (snapshot) => {
+                const favCategories = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data() as FavCategory,
+                }));
+                observer.next(favCategories);
+            }, (error) => {
+                observer.error(error);
+            });
+
+            return { unsubscribe };
+        });
     }
 
-    //mit subcollection
+
+//mit subcollection
     async addFavCategory(uid: string, categoryId: string, categoryName: string, questionCount: number): Promise<void> {
         try {
             /*const favCategoriesRef = this.getFavcollectionRef(uid);*/
@@ -135,7 +187,7 @@ export class UserService {
                     name: categoryName,
                     timestamp: new Date().getTime(),
                     questionCount: questionCount,
-                    //isFavorite: true
+                    //completedCards: 0
                 });
 
                 console.log(`Category ${categoryId} added to favorites for user ${uid}`);
@@ -162,23 +214,25 @@ export class UserService {
         }
     }
 
-
+    //TODO: Wird der noch gebraucht? evtl für das hinzufügen eines Favoriten
+    private favConverter = {
+        fromFirestore: (snapshot: QueryDocumentSnapshot, options: SnapshotOptions): FavCategory => {
+            const result = Object.assign(new FavCategory(), snapshot.data(options));
+            result.id = snapshot.id;
+            return result;
+        },
+        toFirestore: (fav: FavCategory): DocumentData => {
+            const copy = {...fav};
+            delete copy.id;
+            return copy;
+        }
+    };
 
 
     private userConverter = {
         fromFirestore: (snapshot: QueryDocumentSnapshot, options: SnapshotOptions): User => {
             const user = Object.assign(new User(), snapshot.data(options));
             user.uid = snapshot.id;
-            // const favoriteCategories = snapshot.get('favoriteCategories') || {};
-            // user.favoriteCategories = Object.entries(favoriteCategories).map(([id, data]) => {
-            //     const favData = data as { name: string; timestamp: number, questionCount: number};
-            //     return {
-            //         id,
-            //         name: favData.name || 'Unknown',
-            //         timestamp: favData.timestamp || 0,
-            //         questionCount: favData.questionCount || 0
-            //     };
-            // });
             return user;
         },
         toFirestore: (user: User): DocumentData => {
@@ -187,11 +241,6 @@ export class UserService {
             return copy;
         }
     };
-
-    /*getFavcollectionRef(userId: string): CollectionReference<DocumentData> {
-        const userRef = doc(this.firestore, 'users', userId);
-        return collection(userRef, 'favoriteCategories');
-    }*/
 
     async deleteAlert(uid: string, categoryId: string) {
             const alert = await this.alertController.create({
