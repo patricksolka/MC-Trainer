@@ -16,11 +16,12 @@
 
     <!-- Add this block for the no achievements message -->
     <ng-template #noAchievements>
-        <ion-row class="ion-justify-content-center ion-align-items-center" style="height: 100vh; text-align: center;">
-            <div>
-                <ion-icon name="sad-outline" style="font-size: 3rem;"></ion-icon>
-                <h2>Du hast noch keine Erfolge freigeschaltet 😢</h2>
+        <ion-row class="noAchievements ion-justify-content-center ion-align-items-center" style="text-align: center;">
+            <ion-card class="achievements" style="height: 100px">
+                <div>
+                 <h2>Du hast noch keine Erfolge freigeschaltet 😢</h2>
             </div>
+            </ion-card>
         </ion-row>
     </ng-template>
 
