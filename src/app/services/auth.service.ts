@@ -133,6 +133,14 @@ export class AuthService {
         localStorage.removeItem('userName');
     }
 
+    /**
+     * @method deleteProfile
+     * @description Löscht das Benutzerprofil aus Firestore.Auth
+     */
+    deleteProfile(){
+        deleteUser(this.auth.currentUser);
+    }
+
 
     /**
      * @method getUserDetails
