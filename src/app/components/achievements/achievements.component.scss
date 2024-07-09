@@ -121,6 +121,12 @@
   }
 
   ion-grid {
+    .noAchievements {
+      margin-top: 10px;
+    }
+    &.noAchievements.md {
+      margin-top: 10px;
+    }
 
     // Grid-Reihe
     ion-row {
@@ -177,6 +183,9 @@
 
 /* DARK MODE */
 @media (prefers-color-scheme: dark) {
+  ion-text{
+    font-size: x-large;
+  }
   // Kartenkomponente
   ion-card {
     margin-bottom: 25px;
@@ -288,7 +297,12 @@
 
   // Grid-System
   ion-grid {
-
+    .noAchievements {
+      margin-top: 10px;
+    }
+    &.noAchievements.md {
+      margin-top: 10px;
+    }
     // Grid-Reihe
     ion-row {
       // Grid-Spalte
