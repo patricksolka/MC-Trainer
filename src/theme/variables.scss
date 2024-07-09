@@ -225,7 +225,7 @@ http://ionicframework.com/docs/theming/ */
   }
 
   ion-toolbar ion-icon {
-    color: var(--ion-card-background) /* kräftiges Lila für Icons in der Toolbar */
+    color: var(--ion-text-color-title);
   }
 }
 

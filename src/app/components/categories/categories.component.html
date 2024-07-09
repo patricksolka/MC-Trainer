@@ -1,7 +1,7 @@
 <ion-header class="ion-no-border">
     @if (searchBarVisible) {
     <ion-toolbar class="ion-padding ion-no-border">
-        <ion-searchbar class="ion-no-border" [(ngModel)]="categoryService.searchCategory"
+        <ion-searchbar class="ion-no-border custom" [(ngModel)]="categoryService.searchCategory"
                        (ionInput)="categoryService.filterCategories()"
                        (ionCancel)="toggleSearch()"
                        placeholder="nach Kategorie suchen"
@@ -10,7 +10,7 @@
         ></ion-searchbar>
     </ion-toolbar>
     } @else {
-    <ion-toolbar>
+    <ion-toolbar class="ion-no-border">
         <ion-buttons slot="start">
             <ion-button class="backButton ion-padding-top" [routerLink]="['/home']">
                 <ion-icon name="arrow-back-outline" class="arrowBack"></ion-icon>
@@ -18,8 +18,8 @@
         </ion-buttons>
         <ion-title class="ion-padding-top">Module</ion-title>
         @if (categoryService.categories) {
-    <ion-buttons slot="end">
-        <ion-button (click)="toggleSearch()">
+    <ion-buttons slot="end" >
+        <ion-button (click)="toggleSearch()" class="ion-padding-top">
             <ion-icon slot="icon-only" name="search-outline"></ion-icon>
         </ion-button>
     </ion-buttons>

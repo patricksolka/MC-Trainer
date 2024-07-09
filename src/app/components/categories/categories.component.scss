@@ -25,9 +25,8 @@ DARK MODE
       color: var(--ion-text-color);
     }
     ion-searchbar {
-      --cancel-button-color: var(--ion-text-color);
-      box-shadow: none;
-      padding: 10px;
+      --cancel-button-color: var(--ion-text-color-light);
+      --box-shadow: none;
       color: white;
     }
   }
@@ -87,57 +86,102 @@ DARK MODE
   .card:active {
     transform: scale(0.95);
   }
+  /* Scoped components require higher specificity to customize */
+  ion-searchbar.custom {
+    --background: var(--ion-background-color-dark);
+    --color: var(--ion-text-color-darker);
+    --placeholder-color: #fff;
+    --icon-color: #fff;
+    --clear-button-color: #fff;
+
+    --border-radius: 4px;
+  }
+
+  ion-searchbar.ios.custom {
+    --cancel-button-color: var(--ion-background-color-darker);
+  }
+
+  ion-searchbar.md.custom {
+    --cancel-button-color: #fff;
+  }
 }
 
-/**
-LIGHT MODE
- **/
+/* LIGHT MODE */
 @media (prefers-color-scheme: light) {
   ion-header {
-    .header-ios ion-toolbar:last-of-type {
-      background-color: transparent !important;
-      border: none !important;
-      box-shadow: none !important;
-    }
-
     ion-toolbar {
       background-color: transparent !important;
-      border: none !important;
-      box-shadow: none !important;
+      --border-width: 0;
+      --box-shadow: none !important;
+      --border-style: none;
       --padding-start: var(--ion-padding, 16px);
-      --padding-end: var(--ion-padding, 16px);
-      --padding-top: var(--ion-padding, 16px);
       --padding-bottom: var(--ion-padding, 16px);
 
-      .toolbar-background {
-        background-color: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
-      }
-
+      .toolbar-background,
       .toolbar-container {
         background-color: transparent !important;
         border: none !important;
         box-shadow: none !important;
+        color: var(--ion-text-color);
+      }
 
-        ion-title {
-          font-size: xx-large;
-          color: var(--ion-text-color);
+      ion-title {
+        font-size: x-large;
+        color: var(--ion-text-color);
+      }
+    }
+  }
+
+  ion-content {
+    margin-bottom: 0;
+
+    ion-card {
+      background-color: var(--ion-background-color-dark);
+      color: var(--ion-text-color);
+      padding: 0;
+      --border: none;
+      box-shadow: 3px 3px 3px var(--ion-background-color-dark);
+
+      ion-card-content {
+        background-color: transparent !important;
+
+        ion-item {
+          background-color: transparent !important;
+
+          ion-grid {
+            background-color: transparent !important;
+
+            ion-row {
+              background-color: transparent !important;
+
+              ion-col {
+                background-color: transparent !important;
+
+                ion-text {
+                  background-color: transparent !important;
+                }
+              }
+            }
+          }
         }
       }
     }
+  }
 
-    ion-searchbar {
-      --cancel-button-color: var(--ion-text-color);
-      box-shadow: none;
-      padding: 1px;
-      width: auto;
-    }
-
-    ion-icon {
-      color: var(--ion-text-color-dark);
+  ion-searchbar {
+    --cancel-button-color: blue();
+    box-shadow: none !important;
+    --box-shadow: none!important;
+    ion-input {
+      box-shadow: none !important;
+      --box-shadow: none!important;
     }
   }
+
+  ion-icon {
+    color: var(--ion-text-color-dark);
+  }
+
   .categoryImage {
     width: 100%;
     height: 100px;
@@ -148,8 +192,8 @@ LIGHT MODE
     justify-content: center;
     object-fit: cover;
     opacity: 0.5;
-    //transition: opacity 0.5s ease;
   }
+
   .text-overlay {
     position: absolute;
     top: 50%;
@@ -173,9 +217,9 @@ LIGHT MODE
     .categoryImage {
       height: 150px; /* Erhöhte Höhe für größere Bildschirme */
     }
+
     .categorySkeleton {
       height: 150px; /* Erhöhte Höhe für größere Bildschirme */
-
     }
   }
 
@@ -199,5 +243,23 @@ LIGHT MODE
 
   .card:active {
     transform: scale(0.95);
+  }
+  /* Scoped components require higher specificity to customize */
+  ion-searchbar.custom {
+    --background: var(--ion-background-color-darker);
+    --color: var(--ion-text-color-darker);
+    --placeholder-color: #fff;
+    --icon-color: #fff;
+    --clear-button-color: #fff;
+
+    --border-radius: 4px;
+  }
+
+  ion-searchbar.ios.custom {
+    --cancel-button-color: var(--ion-background-color-darker);
+  }
+
+  ion-searchbar.md.custom {
+    --cancel-button-color: #fff;
   }
 }
