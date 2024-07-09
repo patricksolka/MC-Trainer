@@ -39,6 +39,7 @@ import {User} from "../../models/user.model";
 
 
 import {collection, Firestore, onSnapshot, Unsubscribe} from "@angular/fire/firestore";
+import {TotalStatsService} from "../../services/total-stats.service";
 
 @Component({
     selector: 'app-home',
@@ -73,7 +74,8 @@ export class HomeComponent  {
         private userService: UserService,
         private cardService: CardService,
         private firestore: Firestore,
-        private alertController: AlertController
+        private alertController: AlertController,
+        private totalStatsService: TotalStatsService
 
     ) {
         onAuthStateChanged(this.auth, async (user) => {
@@ -100,11 +102,34 @@ export class HomeComponent  {
                 next: (favCategories) => {
                     this.favCategories = favCategories;
                     console.log('Aktualisierte Favoriten:', favCategories);
+                    for (const favCategory of this.favCategories) {
+                        this.loadCompletedCards(favCategory.id);
+
+                    }
                 },
                 error: (error) => {
                     console.error('Fehler beim Laden der Favoriten:', error);
                 }
             });
+        }
+    }
+
+    async loadCompletedCards(categoryId: string) {
+        const favCategory = this.favCategories.find(cat => cat.id === categoryId);
+        if (favCategory) {
+            try {
+                const stats = await this.totalStatsService.getStatsById(this.user.uid, categoryId);
+                if (stats) {
+                    favCategory.completedCards = stats.completedCards || 0;
+                } else {
+                    favCategory.completedCards = 0;
+                }
+            } catch (error) {
+                console.error(`Fehler beim Laden der abgeschlossenen Karten für Kategorie ${categoryId}:`, error);
+                favCategory.completedCards = 0;
+            }
+        } else {
+            console.error(`Favoritenkategorie mit der ID ${categoryId} nicht gefunden.`);
         }
     }
 
