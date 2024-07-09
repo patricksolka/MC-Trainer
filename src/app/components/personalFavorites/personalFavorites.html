@@ -52,15 +52,23 @@
                                 <circle class="progressCircleFront" cx="25" cy="25" r="20"
                                         fill="none" stroke="#ff6f61" stroke-width="7"
                                         [attr.stroke-dasharray]="125.6"
-                                        [attr.stroke-dashoffset]="125.6 - (category.completedCards / category.questionCount * 125.6)"/>
+                                        [attr.stroke-dashoffset]="125.6 -
+                                        (category.completedCards /
+                                        category.questionCount * 125.6)"/>
                             </svg>
                         </ion-col>
                         <ion-col size="6">
                             {{ category.name }}
                         </ion-col>
                         <ion-col size="4" class="ion-text-right">
-                            {{category.completedCards}} / {{ category.questionCount }}
+                            <ng-container *ngIf="loaded; else loading">
+                                {{category.completedCards}} / {{ category.questionCount }}
+                            </ng-container>
+                            <ng-template #loading>
+                                <ion-skeleton-text animated></ion-skeleton-text>
+                            </ng-template>
                         </ion-col>
+
                     </ion-row>
                 </ion-grid>
             </ion-item>

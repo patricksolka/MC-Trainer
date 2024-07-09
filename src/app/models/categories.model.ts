@@ -16,7 +16,7 @@ export class FavCategory{
 
         id: string;
         name: string;
-        timestamp: number;
+        timestamp?: number;
         questionCount: number;
         completedCards?: number;
        /* constructor() {

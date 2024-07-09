@@ -197,16 +197,7 @@ export class CardComponent implements OnInit, OnDestroy {
             this.correctAnswer = true;
             await this.cardService.updateCardAnsweredCounter(this.currentQuestion.id, "counter");
             console.log('CardComponent', this.correctAnswersCount);
-
-            await this.cardService.getCardAnsweredCounter(this.currentQuestion.id).then(counter => {
-                console.log('Counter:', counter);
-                if (counter > 6) {
-                    this.completedCards++;
-                    console.log('CardComponent', this.completedCards);
-                    //this.totalStatsService.completedCards(this.auth.currentUser.uid,
-                    // this.completedCards); // Call the method to update Firestore
-                }
-            });
+            await this.completeCards();
         } else {
             console.log("not correct");
             this.correctAnswer = false;
@@ -216,6 +207,17 @@ export class CardComponent implements OnInit, OnDestroy {
         this.showResult = true;
     }
 
+    async completeCards(){
+        await this.cardService.getCardAnsweredCounter(this.currentQuestion.id).then(counter => {
+            console.log('Counter:', counter);
+            if (counter === 1) {
+                this.completedCards++;
+                console.log('CardComponent', this.completedCards);
+                //this.totalStatsService.completedCards(this.auth.currentUser.uid,
+                // this.completedCards); // Call the method to update Firestore
+            }
+        });
+    }
    /* async updateAnswerStats() {
         const counter = await this.cardService.getCardAnsweredCounter(this.currentQuestion.id);
         console.log('Counter:', counter);

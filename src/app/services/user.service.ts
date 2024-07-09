@@ -162,7 +162,7 @@ export class UserService {
             const unsubscribe = onSnapshot(filterQuery, (snapshot) => {
                 const favCategories = snapshot.docs.map(doc => ({
                     id: doc.id,
-                    ...doc.data() as FavCategory
+                    ...doc.data() as FavCategory,
                 }));
                 observer.next(favCategories);
             }, (error) => {
@@ -187,7 +187,7 @@ export class UserService {
                     name: categoryName,
                     timestamp: new Date().getTime(),
                     questionCount: questionCount,
-                   /* completedCards: 0*/
+                    //completedCards: 0
                 });
 
                 console.log(`Category ${categoryId} added to favorites for user ${uid}`);
