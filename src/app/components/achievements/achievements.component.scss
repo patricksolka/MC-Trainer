@@ -1,3 +1,256 @@
-.achievement-name {
-  font-weight: bold;
+/* LIGHT MODE */
+@media (prefers-color-scheme: light) {
+  // Kartenkomponente
+  ion-card {
+    .achievements {
+      margin-bottom: 10px;
+    }
+
+    // Kartenkopfzeile
+    ion-card-header {
+
+      // Text innerhalb der Kartenkopfzeile
+      ion-text {
+        .achievement-name {
+          font-weight: bold;
+        }
+
+        font-size: smaller;
+      }
+
+      // Icon innerhalb der Kartenkopfzeile
+      ion-icon {
+      }
+    }
+
+    // Karteninhalt
+    ion-card-content {
+    }
+  }
+
+  // Grid-System
+  ion-grid {
+
+    // Grid-Reihe
+    ion-row {
+
+      // Grid-Spalte
+      ion-col {
+
+        // Text innerhalb der Spalte
+        ion-text {
+        }
+
+        // Icon innerhalb der Spalte
+        ion-icon {
+        }
+      }
+    }
+  }
+
+  // Kopfzeile
+  ion-header {
+
+    // Werkzeugleiste
+    ion-toolbar {
+
+      // Schaltflächen
+      ion-buttons {
+
+        // Einzelne Schaltfläche
+        ion-button {
+
+          // Icon innerhalb der Schaltfläche
+          ion-icon {
+          }
+        }
+      }
+
+      // Titel
+      ion-title {
+      }
+    }
+  }
+
+  // Inhalt
+  ion-content {
+  }
+
+  // Listenitem
+  ion-item {
+
+    // Text innerhalb des Listenitems
+    ion-text {
+    }
+
+    // Icon innerhalb des Listenitems
+    ion-icon {
+    }
+  }
+
+  // Container
+  div {
+
+    // Icon innerhalb des Containers
+    ion-icon {
+    }
+
+    // Überschrift innerhalb des Containers
+    h2 {
+    }
+  }
+}
+
+
+/* DARK MODE */
+@media (prefers-color-scheme: dark) {
+  // Kartenkomponente
+  ion-card {
+    margin-bottom: 25px;
+    .achievements {
+      background-color: var(--ion-background-color-lightdark) !important; // Wichtigkeit erhöhen, um andere Stile zu überschreiben
+      color: var(--ion-text-color);
+      padding: 0;
+      margin-bottom: 25px;
+      height: 100%;
+    }
+
+    &.achievements.md {
+      background-color: var(--ion-background-color-lightdark) !important; // Wichtigkeit erhöhen, um andere Stile zu überschreiben
+      color: var(--ion-text-color);
+      padding: 0;
+      margin: 0;
+      height: 100%;
+    }
+
+    // Kartenkopfzeile
+    ion-card-header {
+      background-color: var(--ion-background-color-lightdark) !important;
+      color: var(--ion-text-color);
+
+      // Text innerhalb der Kartenkopfzeile
+      ion-text {
+        .achievement-name {
+          font-weight: bolder;
+          font-size: small;
+          width: auto;
+          padding: 0;
+          text-align: center;
+          color: var(--ion-text-color-title);
+          white-space: normal;  // Normaler Zeilenumbruch
+          word-wrap: break-word;  // Wörter umbrechen, wenn sie das Zeilenende erreichen
+          word-break: break-word;  // Bricht lange Wörter um
+        }
+
+        &.achievement-name.md {
+          font-weight: bolder;
+          font-size: medium;
+          width: auto;
+          margin: 0;
+          padding: 5px !important;
+          text-align: center;
+          color: var(--ion-text-color-title);
+          white-space: normal;  // Normaler Zeilenumbruch
+          word-wrap: break-word;  // Wörter umbrechen, wenn sie das Zeilenende erreichen
+          word-break: break-word;  // Bricht lange Wörter um
+        }
+      }
+
+
+      // Icon innerhalb der Kartenkopfzeile
+      ion-icon {
+      }
+    }
+
+    // Karteninhalt
+    ion-card-content {
+    }
+  }
+
+  // Grid-System
+  ion-grid {
+
+    // Grid-Reihe
+    ion-row {
+
+      // Grid-Spalte
+      ion-col {
+
+        // Text innerhalb der Spalte
+        ion-text {
+          .achievement-description {
+            font-size: small;
+            font-weight: lighter;
+            width: auto;
+            padding: 0 !important;
+            text-align: center;
+            color: var(--ion-text-color-body);
+          }
+
+          &.achievement-description.md {
+            font-size: small;
+            font-weight: lighter;
+            width: auto;
+            padding: 0 !important;
+            text-align: center;
+            color: var(--ion-text-color-body);
+          }
+        }
+
+        // Icon innerhalb der Spalte
+        ion-icon {
+        }
+      }
+    }
+  }
+
+  // Kopfzeile
+  ion-header {
+
+    // Werkzeugleiste
+    ion-toolbar {
+      // Schaltflächen
+      ion-buttons {
+
+        // Einzelne Schaltfläche
+        ion-button {
+
+          // Icon innerhalb der Schaltfläche
+          ion-icon {
+          }
+        }
+      }
+
+      // Titel
+      ion-title {
+      }
+    }
+  }
+
+  // Inhalt
+  ion-content {
+  }
+
+  // Listenitem
+  ion-item {
+
+    // Text innerhalb des Listenitems
+    ion-text {
+    }
+
+    // Icon innerhalb des Listenitems
+    ion-icon {
+    }
+  }
+
+  // Container
+  div {
+    // Icon innerhalb des Containers
+    ion-icon {
+    }
+
+    // Überschrift innerhalb des Containers
+    h2 {
+    }
+  }
 }

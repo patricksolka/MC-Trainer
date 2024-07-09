@@ -17,7 +17,8 @@ let AchievementService = class AchievementService {
                     id: achievement.id,
                     name: achievement.name,
                     description: achievement.description,
-                    condition: achievement.condition.toString()
+                    condition: achievement.condition.toString(),
+                    icon: achievement.icon
                 };
             },
             fromFirestore(snapshot) {
@@ -26,7 +27,8 @@ let AchievementService = class AchievementService {
                     id: data.id,
                     name: data.name,
                     description: data.description,
-                    condition: eval(data.condition)
+                    condition: eval(data.condition),
+                    icon: data.icon
                 };
             }
         };
