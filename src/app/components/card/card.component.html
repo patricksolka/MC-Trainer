@@ -1,5 +1,10 @@
 <ion-header class="ion-no-border">
     <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button class="backButton ion-padding-top" [routerLink]="['/home']">
+                <ion-icon name="arrow-back-outline" class="arrowBack"></ion-icon>
+            </ion-button>
+        </ion-buttons>
             <ion-title class="ion-padding-top ion-text-center">{{ categoryName || 'Kategorie' }}</ion-title>
     </ion-toolbar>
 </ion-header>
