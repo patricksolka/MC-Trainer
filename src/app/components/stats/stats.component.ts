@@ -1,8 +1,15 @@
 import {Component, OnInit} from '@angular/core';
-import {IonicModule} from '@ionic/angular';
 import {CommonModule} from "@angular/common";
 import {Router, RouterLink} from '@angular/router';
-import {IonButton, IonButtons, IonHeader, IonIcon, IonTitle, IonToolbar} from "@ionic/angular/standalone";
+import {
+    IonButton,
+    IonButtons, IonCard, IonCardContent, IonCardHeader,
+    IonContent,
+    IonHeader,
+    IonIcon,
+    IonTitle,
+    IonToolbar
+} from "@ionic/angular/standalone";
 
 //import {TotalStatsService} from "../../services/total-stats.service";
 
@@ -11,7 +18,7 @@ import {IonButton, IonButtons, IonHeader, IonIcon, IonTitle, IonToolbar} from "@
     templateUrl: './stats.component.html',
     styleUrls: ['./stats.component.scss'],
     standalone: true,
-    imports: [CommonModule, IonicModule, IonHeader, IonToolbar, IonButton, IonButtons, IonIcon, IonTitle, RouterLink, RouterLink]
+    imports: [CommonModule, IonHeader, IonToolbar, IonButton, IonButtons, IonIcon, IonTitle, RouterLink, RouterLink, IonContent, IonCard, IonCardHeader, IonCardContent]
 })
 export class StatsComponent implements OnInit {
     correctAnswers: number = 0;
