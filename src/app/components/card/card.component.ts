@@ -189,7 +189,8 @@ export class CardComponent implements OnInit, OnDestroy {
     }
 
 
-    async checkAnswers(): Promise<void> {
+
+        async checkAnswers(): Promise<void> {
         // Überprüfen, ob alle ausgewählten Antworten korrekt sind
         const allSelectedCorrect = this.selectedAnswers.every(answer => this.currentQuestion.correctAnswer.includes(answer));
         // Überprüfen, ob die Anzahl der ausgewählten Antworten der Anzahl der korrekten Antworten entspricht
@@ -214,7 +215,7 @@ export class CardComponent implements OnInit, OnDestroy {
     async completeCards(){
         await this.cardService.getCardAnsweredCounter(this.currentQuestion.id).then(counter => {
             console.log('Counter:', counter);
-            if (counter === 1) {
+            if (counter > 6) {
                 this.completedCards++;
                 console.log('CardComponent', this.completedCards);
                 //this.totalStatsService.completedCards(this.auth.currentUser.uid,
