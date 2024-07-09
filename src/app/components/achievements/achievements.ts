@@ -71,15 +71,7 @@ export const ACHIEVEMENTS: Achievement[] = [
         description: 'Tausend richtige Antworten!',
         icon: 'trophy',
         condition: (stats: Stats) => stats.correctAnswers >= 1000
-    },
-
-    {
-        id: 10,
-        name: 'Quiz-Meister',
-        description: 'Zehn Quizze abgeschlossen!',
-        icon: 'ribbon',
-        condition: (stats: Stats) => stats.completedQuizzes >= 10
-    },
+    }
 
 ];
 
