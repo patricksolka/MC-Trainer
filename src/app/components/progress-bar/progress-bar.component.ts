@@ -39,7 +39,7 @@ import {CardService} from "../../services/card.service";
 export class ProgressBarComponent {
     public loaded: boolean = false;
     public learnedMinutes: number = 0;
-    public totalMinutes: number = 30;
+    public totalMinutes: number = 10;
     public progress: number
 
     constructor(

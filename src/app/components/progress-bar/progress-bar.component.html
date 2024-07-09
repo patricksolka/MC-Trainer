@@ -5,7 +5,7 @@
                 <ion-col size="8" class="learnedToday">
                     <p>Lernfortschritt heute</p>
                     <h2 *ngIf="loaded; else loading">
-                        {{ learnedMinutes < 1 ? ' 1 min ' : (learnedMinutes > 30 ? '30 min' :
+                        {{ learnedMinutes < 1 ? ' 1 min ' : (learnedMinutes > 10 ? '10 min' :
                         learnedMinutes + ' min') }} / {{ totalMinutes }} min
                     </h2>
                     <ng-template #loading>
@@ -17,7 +17,7 @@
             <ion-row>
                 <ion-col size="12">
                     <div class="progressBarContainer">
-                        <div class="progressBar" [ngClass]="{'full': progress >= 30}"
+                        <div class="progressBar" [ngClass]="{'full': progress >= 10}"
                              [style.width.%]="progress"></div>
                     </div>
                 </ion-col>
