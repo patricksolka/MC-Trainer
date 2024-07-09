@@ -49,7 +49,7 @@ export class TotalStatsService {
         const toasts = [];
         for(const achievement of achievements) {
             const toast = await this.toastController.create({
-                header: 'Congratulations!',
+                header: 'Herzlichen Glückwunsch!',
                 message: `${achievement.name}: ${achievement.description}`,
                 duration: 2000, // Toast duration in milliseconds
                 position: 'top', // Position of the toast
