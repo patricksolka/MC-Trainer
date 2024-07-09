@@ -4,7 +4,7 @@
 }
 
 .progressCircleFront {
-  stroke:  #ff6f61;
+  stroke: #ff6f61;
   transition: stroke-dashoffset 0.3s ease;
 }
 
@@ -20,9 +20,15 @@
 }
 
 @media (prefers-color-scheme: light) {
-}
-
-@media (prefers-color-scheme: dark) {
+  ion-header {
+    margin-bottom: 0;
+    ios-toolbar {
+      margin-bottom: 0;
+      ion-searchbar.custom {
+        margin-bottom: 0;
+      }
+    }
+  }
   .header-ios ion-toolbar {
     --border-width: 0 !important; /* Entfernen der Border für iOS Modus */
     --box-shadow: none !important; /* Entfernen des Shadows für MD Modus */
@@ -31,10 +37,10 @@
     --border-width: 0 !important; /* Entfernen der Border für iOS Modus */
     --box-shadow: none !important; /* Entfernen des Shadows für MD Modus */
     --border-style: none;
+
     ion-searchbar {
       --cancel-button-color: var(--ion-text-color);
       box-shadow: none;
-      padding: 10px;
       color: white;
     }
   }
@@ -45,7 +51,7 @@
     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
   }
 
-  .categories{
+  .categories {
     border-radius: 10px;
     --border-color: var(--ion-background-color-lightdark);
     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
@@ -64,7 +70,99 @@
     height: 40px;
     margin-bottom: 5px;
   }
+  /* Scoped components require higher specificity to customize */
+  ion-searchbar.custom {
+    --background: var(--ion-background-color-dark);
+    --color: var(--ion-text-color-darker);
+    --placeholder-color: #fff;
+    --icon-color: #fff;
+    --clear-button-color: #fff;
+    --padding-bottom: none;
+    --margin-bottom: none;
+    --border-radius: 4px;
+    height: auto;
+    margin: 0;
+  }
 
+  ion-searchbar.ios.custom {
+    --cancel-button-color: var(--ion-background-color-darker);
+  }
 
+  ion-searchbar.md.custom {
+    --cancel-button-color: #fff;
+  }
+}
 
+@media (prefers-color-scheme: dark) {
+  ion-header {
+    margin-bottom: 0;
+    ios-toolbar {
+      margin-bottom: 0;
+      ion-searchbar.custom {
+        margin-bottom: 0;
+      }
+    }
+  }
+  .header-ios ion-toolbar {
+    --border-width: 0 !important; /* Entfernen der Border für iOS Modus */
+    --box-shadow: none !important; /* Entfernen des Shadows für MD Modus */
+  }
+  .header-md ion-toolbar {
+    --border-width: 0 !important; /* Entfernen der Border für iOS Modus */
+    --box-shadow: none !important; /* Entfernen des Shadows für MD Modus */
+    --border-style: none;
+
+    ion-searchbar {
+      --cancel-button-color: var(--ion-text-color);
+      box-shadow: none;
+      color: white;
+    }
+  }
+
+  .favoriteItem {
+    border-radius: 10px;
+    --border-color: var(--ion-background-color-lightdark);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .categories {
+    border-radius: 10px;
+    --border-color: var(--ion-background-color-lightdark);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .entdecken {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--ion-text-color);
+  }
+
+  .header-row-m {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 40px;
+    margin-bottom: 5px;
+  }
+  /* Scoped components require higher specificity to customize */
+  ion-searchbar.custom {
+    --background: var(--ion-background-color-dark);
+    --color: var(--ion-text-color-darker);
+    --placeholder-color: #fff;
+    --icon-color: #fff;
+    --clear-button-color: #fff;
+    --padding-bottom: none;
+    --margin-bottom: none;
+    --border-radius: 4px;
+    height: auto;
+    margin: 0;
+  }
+
+  ion-searchbar.ios.custom {
+    --cancel-button-color: var(--ion-background-color-darker);
+  }
+
+  ion-searchbar.md.custom {
+    --cancel-button-color: #fff;
+  }
 }

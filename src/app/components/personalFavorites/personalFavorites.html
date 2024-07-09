@@ -1,7 +1,7 @@
 <ion-header class="ion-no-border">
     @if (searchBarVisible) {
         <ion-toolbar class="ion-padding ion-no-border">
-            <ion-searchbar class="ion-no-border" [(ngModel)]="categoryService.searchCategory"
+            <ion-searchbar class="ion-no-border custom" [(ngModel)]="categoryService.searchCategory"
                            (ionInput)="categoryService.filterCategories()"
                            (ionCancel)="toggleSearch()"
                            placeholder="nach Kategorie suchen"
