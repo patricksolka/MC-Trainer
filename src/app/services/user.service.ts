@@ -245,7 +245,7 @@ export class UserService {
     async deleteAlert(uid: string, categoryId: string) {
             const alert = await this.alertController.create({
                 header: 'Favorit entfernen',
-                message: `Möchten Sie dieses Modul wirklich aus Ihren Favoriten entfernen? Ihr Fortschritt geht dadurch verloren.`,
+                message: `Möchten Sie dieses Modul wirklich aus Ihren Favoriten entfernen?`,
                 buttons: [
                     {
                         text: 'Abbrechen',

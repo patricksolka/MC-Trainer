@@ -104,13 +104,12 @@ export class TotalStatsService {
         }
     }
 
-    //Get stats for a specific category
+
     async getStats(uid: string, categoryId: string) {
         const statsCollectionRef = doc(this.firestore, `users/${uid}/stats/${categoryId}`);
         const refWithConverter = statsCollectionRef.withConverter(this.statsConverter);
         const docSnap = await getDoc(refWithConverter);
 
-        //const docSnap = await getDoc(statsCollectionRef);
 
         if (docSnap.exists()) {
             const result = docSnap.data() as Stats;
