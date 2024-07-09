@@ -1,17 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AchievementService } from "../../services/achievement.service";
 import { FooterPage } from "../footer/footer.page";
 import {AuthService} from "../../services/auth.service";
 import {Achievement} from "../../models/achievement.model";
+import {
+    IonCard,
+    IonCardContent,
+    IonCardHeader,
+    IonCol,
+    IonContent, IonGrid, IonIcon, IonRow, IonText,
+    IonTitle
+} from "@ionic/angular/standalone";
 
 @Component({
     selector: 'app-achievements',
     templateUrl: './achievements.component.html',
+    styleUrls: ['./achievements.component.scss'],
     standalone: true,
-    imports: [IonicModule, CommonModule, RouterModule, FooterPage]
+    imports: [CommonModule, RouterModule, FooterPage, IonTitle, IonContent, IonCol, IonCard, IonCardHeader, IonCardContent, IonRow, IonIcon, IonGrid, IonText]
 })
 export class AchievementsComponent implements OnInit {
     achievements: Achievement[] = [];
