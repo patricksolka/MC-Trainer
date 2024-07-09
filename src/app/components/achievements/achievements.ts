@@ -27,7 +27,7 @@ export const ACHIEVEMENTS: Achievement[] = [
         id: 4,
         name: 'Durchhaltevermögen II',
         description: 'Zwanzig richtige Antworten!',
-        icon: 'trophy-outline',
+        icon: 'star-outline',
         condition: (stats: Stats) => stats.correctAnswers >= 20
     },
     {
@@ -48,7 +48,7 @@ export const ACHIEVEMENTS: Achievement[] = [
         id: 7,
         name: 'Durchhaltevermögen V',
         description: 'Fünfhundert richtige Antworten!',
-        icon: 'ribbon-outline',
+        icon: 'flower',
         condition: (stats: Stats) => stats.correctAnswers >= 500
     },
     {
@@ -62,7 +62,7 @@ export const ACHIEVEMENTS: Achievement[] = [
         id: 9,
         name: 'Erstes Modul abgeschlossen',
         description: 'Erstes Modul abgeschlossen!',
-        icon: 'checkmark-circle-outline',
+        icon: 'ribbon-outline',
         condition: (stats: Stats) => stats.completedQuizzes >= 1
     },
     {

@@ -22,8 +22,19 @@ import {
     statsChartOutline,
     addOutline,
     searchOutline,
-    trash, search,
-    checkmarkCircle, sadOutline, trophyOutline,
+    trash,
+    search,
+    checkmarkCircle,
+    sadOutline,
+    trophyOutline,
+    flashOutline,
+    medalOutline,
+    starOutline,
+    diamondOutline,
+    podiumOutline,
+    ribbonOutline,
+    trophy,
+    checkmarkCircleOutline, ribbon, happy, heart, flower
 
 
 } from "ionicons/icons";
@@ -76,6 +87,17 @@ export class AppComponent {
             checkmarkCircle,
             sadOutline,
             trophyOutline,
+            flashOutline,
+            medalOutline,
+            starOutline,
+            diamondOutline,
+            podiumOutline,
+            ribbonOutline,
+            trophy,
+            checkmarkCircleOutline,
+            ribbon,
+            happy,
+            flower
         });
 
         //TODO: Beim Quiz evtl verhalten vom footer anpassen
