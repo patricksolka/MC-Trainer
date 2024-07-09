@@ -5,4 +5,5 @@ export interface Achievement {
     description: string;
     id: number;
     name: string;
+    icon: string;
 }

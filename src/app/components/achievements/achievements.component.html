@@ -14,13 +14,15 @@
        </ion-col>
     <ion-col>
         <ion-card class="achievements" *ngFor="let achievement of achievements">
-            <ion-card-header>
-                {{ achievement.name }}
+            <ion-card-header class="ion-align-items-center ion-justify-content-between">
+                <ion-text class="achievement-name">{{ achievement.name }}</ion-text>
+                <ion-icon [name]="achievement.icon" style="font-size: 1.5rem;"></ion-icon>
             </ion-card-header>
-            <ion-card-content>
-                {{ achievement.description }}
-            </ion-card-content>
+            <ion-card-header class="ion-align-items-center ion-justify-content-between">
+                <ion-text class="achievement-description">{{ achievement.description }}</ion-text>
+            </ion-card-header>
         </ion-card>
+
 
         <!-- Add this block for the no achievements message -->
         <ng-template #noAchievements>
