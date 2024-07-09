@@ -15,6 +15,8 @@ import {getFirestore, provideFirestore} from '@angular/fire/firestore';
 import {getAuth, provideAuth} from '@angular/fire/auth';
 import {IonicModule} from "@ionic/angular";
 import {provideHttpClient} from "@angular/common/http";
+import { NestFactory } from '@nestjs/core';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 // Swiper Init
 registerSwiperElements();
@@ -38,4 +40,5 @@ bootstrapApplication(AppComponent, {
         provideStorage(() => getStorage()),
         provideHttpClient()
     ],
+
 });

@@ -10,7 +10,20 @@ export class Stats {
         this.incorrectAnswers = incorrectAnswers;
     }
 }*/
+/**
+ * @fileoverview Diese Datei enthält die Implementierung der Stats-Klasse,
+ * die die Statistiken der Benutzerquizze speichert.
+ */
+/**
+ * @class Stats
+ * @description Diese Klasse speichert die Statistiken der Benutzerquizze, einschließlich der Anzahl der richtigen und falschen Antworten sowie der abgeschlossenen Quizze.
+ */
 export class Stats {
+    /**
+     * @constructor
+     * @param {Stats} [currentStats] - Die aktuellen Statistiken.
+     * @param {Stats} [newStats] - Die neuen Statistiken, die hinzugefügt werden sollen.
+     */
     constructor(currentStats, newStats) {
         this.correctAnswers = (currentStats?.correctAnswers || 0) + (newStats?.correctAnswers || 0);
         this.incorrectAnswers = (currentStats?.incorrectAnswers || 0) + (newStats?.incorrectAnswers || 0);

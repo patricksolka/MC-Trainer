@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Diese Datei enthält die Implementierung der CardComponent-Komponente,
+ * die die Fragen einer ausgewählten Kategorie anzeigt und es dem Benutzer ermöglicht, diese zu beantworten.
+ */
 import { __decorate } from "tslib";
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -5,7 +9,24 @@ import { RouterLink } from '@angular/router';
 import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonContent, IonHeader, IonIcon, IonItem, IonList, IonTitle, IonToolbar } from "@ionic/angular/standalone";
 import { FooterPage } from "../footer/footer.page";
 import { Stats } from "../../models/stats.model";
+/**
+ * @component CardComponent
+ * @description Diese Komponente zeigt die Fragen einer ausgewählten Kategorie an und ermöglicht dem Benutzer, diese zu beantworten.
+ */
 let CardComponent = class CardComponent {
+    /**
+     * @constructor
+     * @param {CardService} cardService - Service für Kartenoperationen.
+     * @param {ActivatedRoute} route - Aktivierte Route zum Abrufen der Routenparameter.
+     * @param {Router} router - Router zum Navigieren zwischen Seiten.
+     * @param {AlertController} alertController - Controller für Alerts.
+     * @param {TotalStatsService} totalStatsService - Service zur Verwaltung der Gesamtstatistiken.
+     * @param {CategoryService} categoryService - Service für Kategorieoperationen.
+     * @param {Auth} auth - Firebase Auth-Instanz.
+     * @param {UserService} userService - Service für Benutzeroperationen.
+     * @param {AchievementService} achievementService - Service für Achievements.
+     * @param {ToastController} toastController - Controller für Toast-Nachrichten.
+     */
     constructor(cardService, route, router, alertController, totalStatsService, categoryService, auth, userService, achievementService, toastController) {
         this.cardService = cardService;
         this.route = route;
@@ -28,6 +49,11 @@ let CardComponent = class CardComponent {
         this.completedCards = 0;
         this.startTime = null;
     }
+    /**
+     * @method ngOnInit
+     * @description Lebenszyklus-Hook, der nach der Initialisierung der Komponente aufgerufen wird.
+     * Lädt die Karten für die ausgewählte Kategorie.
+     */
     async ngOnInit() {
         this.categoryId = this.route.snapshot.paramMap.get('categoryId');
         console.log('Category ID:', this.categoryId);
@@ -37,9 +63,18 @@ let CardComponent = class CardComponent {
         }
         this.loadCards(this.categoryId);
     }
+    /**
+     * @method loadCategories
+     * @description Lädt die Kategorien mit der Anzahl der Fragen.
+     */
     loadCategories() {
         this.categories$ = this.cardService.getCategoriesWithQuestionCounts();
     }
+    /**
+     * @method checkAllAnswered
+     * @description Überprüft, ob alle Fragen einer Kategorie beantwortet wurden.
+     * @returns {Promise<Card | null>} - Die nächste unbeantwortete Frage oder null, wenn alle beantwortet wurden.
+     */
     async checkAllAnswered() {
         for (const card of this.questions) {
             const counter = await this.cardService.getCardAnsweredCounter(card.id);
@@ -49,6 +84,11 @@ let CardComponent = class CardComponent {
         }
         return null;
     }
+    /**
+     * @method loadCards
+     * @description Lädt alle Karten für eine Kategorie und mischt die Fragen.
+     * @param {string} categoryId - Die ID der Kategorie.
+     */
     async loadCards(categoryId) {
         this.cards$ = this.cardService.getAllCardsForCategory(categoryId);
         this.cardsSubscription = this.cards$.subscribe(async (cards) => {
@@ -73,6 +113,12 @@ let CardComponent = class CardComponent {
             console.error('Fehler beim Laden der Karten:', error);
         });
     }
+    /**
+     * @method shuffleArray
+     * @description Mischt ein Array mit dem Fisher-Yates Shuffle Algorithmus.
+     * @param {any[]} array - Das zu mischende Array.
+     * @returns {any[]} - Das gemischte Array.
+     */
     shuffleArray(array) {
         // Fisher-Yates Shuffle Algorithmus
         for (let i = array.length - 1; i >= 0; i--) {
@@ -81,10 +127,20 @@ let CardComponent = class CardComponent {
         }
         return array;
     }
+    /**
+     * @method selectCategory
+     * @description Wählt eine Kategorie aus und lädt die Karten für diese Kategorie.
+     * @param {string} categoryId - Die ID der Kategorie.
+     */
     selectCategory(categoryId) {
         this.selectedCategoryId = categoryId;
         this.loadCards(categoryId);
     }
+    /**
+     * @method toggleAnswer
+     * @description Wählt eine Antwort aus oder hebt die Auswahl auf.
+     * @param {string} answer - Die Antwort, die ausgewählt oder abgewählt werden soll.
+     */
     toggleAnswer(answer) {
         if (this.showResult) {
             return; // Wenn die Antworten überprüft wurden, keine weiteren Antworten auswählen
@@ -96,6 +152,10 @@ let CardComponent = class CardComponent {
             this.selectedAnswers.push(answer);
         }
     }
+    /**
+     * @method getNextQuestion
+     * @description Lädt die nächste unbeantwortete Frage.
+     */
     async getNextQuestion() {
         this.showResult = false;
         this.selectedAnswers = [];
@@ -133,7 +193,39 @@ let CardComponent = class CardComponent {
             }
         });
     }
-    async checkAnswers() {
+    //     /**
+    //      * @method checkForNewAchievements
+    //      * @description Überprüft, ob neue Achievements erreicht wurden.
+    //      * @param {any} stats - Die aktuellen Statistiken.
+    //      */
+    //     checkForNewAchievements(stats) {
+    //         const newAchievements = this.achievementService.checkAchievements(stats);
+    //         newAchievements.forEach(achievement => {
+    //             this.showAchievementToast(achievement);
+    //         });
+    //     }
+    //    /**
+    //      * @method showAchievementToast
+    //      * @description Zeigt ein Toast mit den neuen Achievements an.
+    //      * @param {any} achievement - Das erreichte Achievement.
+    //      */
+    //     async showAchievementToast(achievement) {
+    //         const toast = await this.toastController.create({
+    //             header: 'Congratulations!',
+    //             message: `${achievement.name}: ${achievement.description}`,
+    //             duration: 2000, // Toast duration in milliseconds
+    //             position: 'top', // Position of the toast
+    //         });
+    /*
+            async checkAnswers(): Promise<void> {
+            await toast.present();
+        }
+    */
+    /**
+     * @method checkAnswers
+     * @description Überprüft die ausgewählten Antworten.
+     */
+    checkAnswers() {
         // Überprüfen, ob alle ausgewählten Antworten korrekt sind
         const allSelectedCorrect = this.selectedAnswers.every(answer => this.currentQuestion.correctAnswer.includes(answer));
         // Überprüfen, ob die Anzahl der ausgewählten Antworten der Anzahl der korrekten Antworten entspricht
@@ -174,17 +266,37 @@ let CardComponent = class CardComponent {
              await this.totalStatsService.completedCards(this.categoryId, this.completedCards);
          }
      }*/
+    /**
+     * @method isCorrectAnswer
+     * @description Überprüft, ob eine Antwort korrekt ist.
+     * @param {string} answer - Die zu überprüfende Antwort.
+     * @returns {boolean} - true, wenn die Antwort korrekt ist, andernfalls false.
+     */
     isCorrectAnswer(answer) {
         return this.currentQuestion.correctAnswer.includes(answer);
     }
+    /**
+     * @method isAnswerCorrect
+     * @description Überprüft, ob alle ausgewählten Antworten korrekt sind.
+     * @returns {boolean} - true, wenn alle ausgewählten Antworten korrekt sind, andernfalls false.
+     */
     isAnswerCorrect() {
         return this.currentQuestion.correctAnswer.every((ans) => this.selectedAnswers.includes(ans));
     }
+    /**
+     * @method startQuiz
+     * @description Startet das Quiz und setzt die Startzeit.
+     * @param {string} categoryId - Die ID der Kategorie.
+     */
     startQuiz(categoryId) {
         this.startTime = new Date();
         this.categoryService.startQuiz(categoryId); // Startet das Quiz
         console.log('CardComponent', this.startTime);
     }
+    /**
+     * @method endQuiz
+     * @description Beendet das Quiz und speichert die Lernsitzung.
+     */
     async endQuiz() {
         if (this.categoryService.startTime) {
             const endTime = new Date(); // Aktuelle Zeit als Endzeitpunkt
@@ -223,6 +335,10 @@ let CardComponent = class CardComponent {
             }
         });*/
     }
+    /**
+     * @method ngOnDestroy
+     * @description Lebenszyklus-Hook, der bei der Zerstörung der Komponente aufgerufen wird.
+     */
     ngOnDestroy() {
         if (this.cardsSubscription) {
             this.cardsSubscription.unsubscribe();

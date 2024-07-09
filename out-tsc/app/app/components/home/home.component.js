@@ -1,4 +1,8 @@
 import { __decorate } from "tslib";
+/**
+ * @fileoverview Diese Datei enthält die Implementierung der HomeComponent-Komponente,
+ * die die Startseite der Anwendung darstellt und verschiedene Kategorien sowie Fortschrittsbalken anzeigt.
+ */
 import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -7,7 +11,21 @@ import { FooterPage } from "../footer/footer.page";
 import { onAuthStateChanged } from "@angular/fire/auth";
 import { ProgressBarComponent } from "../progress-bar/progress-bar.component";
 import { IonButton, IonButtons, IonCard, IonCardContent, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonList, IonProgressBar, IonRadio, IonRow, IonSkeletonText, IonText, IonToolbar } from "@ionic/angular/standalone";
+/**
+ * @component HomeComponent
+ * @description Diese Komponente stellt die Startseite der Anwendung dar, einschließlich der Anzeige von Kategorien, Fortschrittsbalken und Favoriten.
+ */
 let HomeComponent = class HomeComponent {
+    /**
+     * @constructor
+     * @param {Router} router - Router zum Navigieren zwischen Seiten.
+     * @param {Auth} auth - Firebase Auth-Instanz.
+     * @param {CategoryService} categoryService - Service für Kategorieoperationen.
+     * @param {UserService} userService - Service für Benutzeroperationen.
+     * @param {CardService} cardService - Service für Kartenoperationen.
+     * @param {Firestore} firestore - Firebase Firestore-Instanz.
+     * @param {AlertController} alertController - Controller für Alerts.
+     */
     //TODO: LooadingController fixen sodass er nur beim starten der App angezeigt wird
     constructor(authService, router, auth, categoryService, userService, cardService, firestore, alertController, totalStatsService) {
         this.authService = authService;
@@ -82,6 +100,10 @@ let HomeComponent = class HomeComponent {
             console.error(`Favoritenkategorie mit der ID ${categoryId} nicht gefunden.`);
         }
     }
+    /**
+     * @method fetchPreview
+     * @description Lädt die Vorschaukategorien aus dem CategoryService.
+     */
     //TODO: LoadingController vorerst nicht nötig
     async fetchPreview() {
         try {
@@ -91,11 +113,20 @@ let HomeComponent = class HomeComponent {
             console.error('Error fetching preview categories:', e);
         }
     }
+    /**
+     * @method removeFav
+     * @description Entfernt eine Kategorie aus den Favoriten des Benutzers.
+     * @param {Category} category - Kategorie, die entfernt werden soll.
+     */
     async removeFav(category) {
         if (this.user) {
             await this.userService.deleteAlert(this.user.uid, category.id);
         }
     }
+    /**
+     * @method fetchProgress
+     * @description Lädt die Fortschrittsdaten des Benutzers aus dem CardService.
+     */
     //als observable
     async fetchProgress() {
         this.loaded = false;
@@ -113,6 +144,11 @@ let HomeComponent = class HomeComponent {
             });
         }
     }
+    /**
+     * @method calcPercentage
+     * @description Berechnet den Fortschrittsprozentsatz für den Fortschrittsbalken.
+     * @returns {number} - Der berechnete Fortschrittsprozentsatz.
+     */
     //TODO: Wenn keine learningSessions vorhanden, dann auch keinen progress anzeigen!!
     //ProgressBar berechnen
     calcPercentage() {
@@ -125,6 +161,10 @@ let HomeComponent = class HomeComponent {
             this.subscription.unsubscribe();
         }
     }
+    /**
+     * @method ionViewWillEnter
+     * @description Lebenszyklus-Hook, der aufgerufen wird, wenn die Ansicht in den Vordergrund tritt.
+     */
     ionViewWillEnter() {
         //this.fetchPreview();
         this.loadFavs();

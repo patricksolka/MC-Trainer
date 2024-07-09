@@ -1,10 +1,27 @@
+/**
+ * @fileoverview Diese Datei enthält die Implementierung der LoginPage-Komponente,
+ * die es dem Benutzer ermöglicht, sich einzuloggen.
+ */
 import { __decorate } from "tslib";
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonButton, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonNote, IonText, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { RouterLink } from "@angular/router";
+/**
+ * @component LoginPage
+ * @description Diese Komponente ermöglicht es dem Benutzer, sich einzuloggen.
+ */
 let LoginPage = class LoginPage {
+    /**
+     * @constructor
+     * @param {FormBuilder} fb - Formular-Builder zum Erstellen von reaktiven Formularen.
+     * @param {LoadingController} loadingController - Controller für Ladeanzeigen.
+     * @param {AlertController} alertController - Controller für Alerts.
+     * @param {Router} router - Router zum Navigieren zwischen Seiten.
+     * @param {AuthService} authService - Service für Authentifizierungsoperationen.
+     * @param {UserService} userService - Service für Benutzeroperationen.
+     */
     constructor(fb, loadingController, alertController, router, authService, userService) {
         this.fb = fb;
         this.loadingController = loadingController;
@@ -17,13 +34,27 @@ let LoginPage = class LoginPage {
             password: ['', [Validators.required, Validators.minLength(6)]]
         });
     }
+    /**
+     * @property email
+     * @description Einfacher Zugriff auf das E-Mail-Feld des Formulars.
+     * @returns {FormControl} - Die E-Mail-Formularsteuerung.
+     */
     //Easy access for form fields
     get email() {
         return this.credentials.get('email');
     }
+    /**
+     * @property password
+     * @description Einfacher Zugriff auf das Passwort-Feld des Formulars.
+     * @returns {FormControl} - Die Passwort-Formularsteuerung.
+     */
     get password() {
         return this.credentials.get('password');
     }
+    /**
+     * @method login
+     * @description Loggt den Benutzer ein, wenn die Anmeldedaten gültig sind.
+     */
     async login() {
         if (this.credentials.valid) {
             const loading = await this.loadingController.create({
@@ -52,6 +83,10 @@ let LoginPage = class LoginPage {
                 ' aus!');
         }
     }
+    /**
+     * @method onSignInWithGoogle
+     * @description Loggt den Benutzer über Google ein.
+     */
     async onSignInWithGoogle() {
         try {
             const result = await this.authService.loginWithGoogle();

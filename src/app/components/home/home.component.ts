@@ -169,7 +169,6 @@ export class HomeComponent  {
      * @description Entfernt eine Kategorie aus den Favoriten des Benutzers.
      * @param {Category} category - Kategorie, die entfernt werden soll.
      */
-
     async removeFav(category: Category) {
         if (this.user) {
             await this.userService.deleteAlert(this.user.uid, category.id);
