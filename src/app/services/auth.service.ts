@@ -10,7 +10,7 @@ import {
     GoogleAuthProvider,
     signInWithEmailAndPassword,
     signInWithPopup,
-    signOut
+    signOut,sendPasswordResetEmail
 } from '@angular/fire/auth';
 import {doc, Firestore, getDoc, onSnapshot, setDoc} from "@angular/fire/firestore";
 import {UserService} from "./user.service";
@@ -131,7 +131,16 @@ export class AuthService {
      * @description Löscht das Benutzerprofil aus Firestore.Auth
      */
     deleteProfile(){
-        deleteUser(this.auth.currentUser);
+       deleteUser(this.auth.currentUser);
+    }
+
+    async sendPasswordReset(email: string){
+        try {
+          await sendPasswordResetEmail(this.auth, email);
+        }
+       catch (e){
+            console.error(e);
+        }
     }
 
 
